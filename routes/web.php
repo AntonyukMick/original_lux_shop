@@ -109,3 +109,38 @@ Route::post('/cart/remove', function (Request $request) {
     session(['cart'=>$cart]);
     return back();
 })->name('cart.remove');
+
+// Избранное (сессия)
+Route::get('/favorites', function () {
+    $favorites = session('favorites', []);
+    return view('favorites', ['favorites' => $favorites]);
+})->name('favorites');
+
+Route::post('/favorites/add', function (Request $request) {
+    $data = $request->validate([
+        'title' => 'required|string',
+        'price' => 'required|numeric|min:0',
+        'image' => 'nullable|string',
+    ]);
+    $favorites = session('favorites', []);
+    $key = md5($data['title'].$data['price'].($data['image'] ?? ''));
+    if (!isset($favorites[$key])) {
+        $favorites[$key] = [
+            'title' => $data['title'],
+            'price' => (float)$data['price'],
+            'image' => $data['image'] ?? null
+        ];
+        session(['favorites' => $favorites]);
+        return back()->with('status', 'Добавлено в избранное');
+    } else {
+        return back()->with('status', 'Товар уже в избранном');
+    }
+})->name('favorites.add');
+
+Route::post('/favorites/remove', function (Request $request) {
+    $request->validate(['key'=>'required']);
+    $favorites = session('favorites', []);
+    unset($favorites[$request->key]);
+    session(['favorites' => $favorites]);
+    return back()->with('status', 'Удалено из избранного');
+})->name('favorites.remove');
