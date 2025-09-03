@@ -12,16 +12,329 @@
         *{box-sizing:border-box}
         body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,"Noto Sans",sans-serif;color:var(--text)}
         .container{max-width:1140px;margin:0 auto;padding:12px}
-        header{background:#d1d5db;border-bottom:1px solid #cbd5e1}
-        header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px}
-        .btn{height:34px;padding:0 12px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
-        .brand{margin-left:8px;background:#e2e8f0;border:1px solid #cbd5e1;border-radius:8px;padding:6px 12px;font-weight:700}
+        header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
+        header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
+        /* Обновленные стили для всех элементов хедера */
+        .btn {
+            height: 40px;
+            padding: 0 12px;
+            border-radius: 8px;
+            border: 2px solid #000;
+            background: #fff;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #000;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Мягкие стили для кнопок товаров */
+        .good .btn {
+            height: 36px;
+            padding: 0 16px;
+            border-radius: 18px;
+            border: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: #475569;
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        
+        .good .btn:hover {
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            color: #1e293b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-color: #cbd5e1;
+        }
+        
+        .good .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Увеличенная иконка для кнопки входа */
+        .btn .login-icon {
+            font-size: 18px;
+        }
+        
+        .brand {
+            margin-left: 8px;
+            background: #e2e8f0;
+            border: 2px solid #000;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-weight: 700;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .brand:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Новые стили для иконок избранного и корзины */
+        .icon-container {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0 4px;
+        }
+        
+        .icon-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .icon-container .icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 22px;
+            color: #FFD700;
+        }
+        
+        .icon-container .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #FFD700;
+            border: 2px solid #000;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: bold;
+            color: #000;
+        }
+        
+        .icon-container .badge.hidden {
+            display: none;
+        }
+        
+        /* Стили для иконки сердца */
+        .heart-icon {
+            color: #FFD700;
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+        }
+        
+        /* Стили для иконки самолетика */
+        .plane-icon {
+            color: #FFD700;
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+        }
+        
+        /* Стили для иконки вопросика */
+        .question-icon {
+            color: #FFD700;
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+        }
+        
+        /* Стили для иконки доставки */
+        .delivery-icon {
+            color: #FFD700;
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+            font-size: 20px;
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+        
+        /* Стили для иконки о нас */
+        .about-icon {
+            color: #FFD700;
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+        }
+        
+        /* Скрываем старые кнопки */
+        .old-icon-btn {
+            display: none;
+        }
+        
         .grid-top{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
-        .tile{background:var(--card);border:1px solid var(--muted);border-radius:10px;padding:16px;position:relative;min-height:100px}
-        .tile h3{margin:0 0 6px 0;font-size:16px}
-        .tile p{margin:0;color:#475569}
-        .search{display:flex;align-items:center;gap:8px;margin:10px 0}
-        .search input{flex:1;height:36px;border-radius:10px;border:1px solid var(--muted);padding:0 12px}
+        .tile{background:var(--card);border:2px solid #000;border-radius:10px;padding:16px;position:relative;min-height:100px;transition:all 0.2s ease}
+        .tile h3{margin:0 0 6px 0;font-size:16px;font-weight:700;color:#1e293b}
+        .tile p{margin:0;color:#475569;font-weight:500}
+        /* Улучшенные стили для поиска - более компактный и сдержанный */
+        .search {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 16px 0;
+            position: relative;
+        }
+        
+        .search input {
+            flex: 1;
+            height: 40px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            padding: 0 12px;
+            font-size: 14px;
+            background: #fff;
+            transition: all 0.2s ease;
+        }
+        
+        .search input:focus {
+            outline: none;
+            border-color: #527ea6;
+            box-shadow: 0 0 0 2px rgba(82, 126, 166, 0.1);
+        }
+        
+        .search input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+        
+        .search-btn {
+            height: 40px;
+            padding: 0 16px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: #527ea6;
+            color: #fff;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+        
+        .search-btn:hover {
+            background: #3b5a7a;
+            transform: translateY(-1px);
+        }
+        
+        /* Стили для результатов поиска - более сдержанные */
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            margin-top: 4px;
+        }
+        
+        .search-result-item {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .search-result-item:hover {
+            background: #f8fafc;
+        }
+        
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .search-result-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .search-result-info {
+            flex: 1;
+        }
+        
+        .search-result-title {
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 2px;
+            font-size: 13px;
+        }
+        
+        .search-result-category {
+            font-size: 11px;
+            color: #64748b;
+        }
+        
+        .search-result-price {
+            font-weight: 600;
+            color: #059669;
+            font-size: 13px;
+        }
+        
+        .no-results {
+            padding: 16px;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .search-filters {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .search-filter {
+            padding: 4px 10px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #64748b;
+        }
+        
+        .search-filter.active {
+            background: #527ea6;
+            border-color: #527ea6;
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        .search-filter:hover {
+            border-color: #527ea6;
+            color: #527ea6;
+        }
         .tabs{display:flex;gap:8px}
         .tab{flex:1;text-align:center;background:#c0cfdd;border:1px solid #99aec2;border-radius:8px;padding:8px 10px;font-weight:600;cursor:pointer}
         .tab.active{background:#527ea6;color:#fff}
@@ -96,13 +409,36 @@
         .custom-note{font-size:11px;color:#059669;margin:0 0 8px 0}
         .add-to-cart-btn{width:100%;height:28px;background:#527ea6;color:#fff;border:none;border-radius:6px;font-size:11px;cursor:pointer;transition:background 0.2s}
         .add-to-cart-btn:hover{background:#3b5a7a}
-        
-        /* Стили для модальных окон кнопок */
         .tile{cursor:pointer;transition:transform 0.2s,box-shadow 0.2s}
-        .tile:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+        .tile:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15);border-color:#FFD700}
         
         /* Стили для избранного */
         .good{position:relative}
+        
+        /* Стили для кликабельных карточек товаров */
+        .good {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        
+        .good:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .good a {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .good a:hover {
+            text-decoration: none;
+        }
         
         /* Стили для кнопок избранного */
         .favorite-btn {
@@ -136,6 +472,17 @@
         
         .favorite-btn.active:hover {
             transform: scale(1.1);
+        }
+        
+        /* Стили для кнопок подкатегорий в модальном окне */
+        .subcat-btn:hover {
+            background: #f8fafc !important;
+            border-color: #527ea6 !important;
+            transform: translateY(-1px);
+        }
+        
+        .subcat-btn:active {
+            transform: translateY(0);
         }
     </style>
     <script>
@@ -374,7 +721,6 @@
             const goods = Array.from(document.querySelectorAll('#goods .good'));
             const categoryList = document.getElementById('categoryList');
             const brandList = document.getElementById('brandList');
-            const subcatList = document.getElementById('subcatList');
             const priceMin = document.getElementById('priceMin');
             const priceMax = document.getElementById('priceMax');
             const resetBtn = document.getElementById('resetFilters');
@@ -414,15 +760,20 @@
 
             categoryList?.addEventListener('click', e => {
                 const el = e.target.closest('.filter-item');
-                if(!el) return; state.category = el.dataset.value; toggleItem(el, null, true);
+                if(!el) return; 
+                
+                const category = el.dataset.value;
+                if (category === 'all') {
+                    state.category = 'all';
+                    toggleItem(el, null, true);
+                } else {
+                    // Открываем модальное окно с подкатегориями для выбранной категории
+                    showSubcategoriesModal(category);
+                }
             });
             brandList?.addEventListener('click', e => {
                 const el = e.target.closest('.filter-item');
                 if(!el) return; toggleItem(el, state.brands);
-            });
-            subcatList?.addEventListener('click', e => {
-                const el = e.target.closest('.filter-item');
-                if(!el) return; toggleItem(el, state.subcats);
             });
             priceMin?.addEventListener('input', e => { state.min = e.target.value; applyFilters(); });
             priceMax?.addEventListener('input', e => { state.max = e.target.value; applyFilters(); });
@@ -435,6 +786,69 @@
                 applyFilters();
             });
 
+            function showSubcategoriesModal(category) {
+                const subcategories = getSubcategoriesForCategory(category);
+                const modalContent = `
+                    <div class="modal-content" style="max-width:500px">
+                        <span class="close" onclick="closeModal('subcategories')">&times;</span>
+                        <h2>Подкатегории: ${category}</h2>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:20px">
+                            ${subcategories.map(subcat => `
+                                <button class="subcat-btn" onclick="selectSubcategory('${category}', '${subcat}')" 
+                                        style="padding:12px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;cursor:pointer;text-align:left;transition:all 0.2s">
+                                    ${subcat}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                // Создаем или обновляем модальное окно
+                let modal = document.getElementById('modal-subcategories');
+                if (!modal) {
+                    modal = document.createElement('div');
+                    modal.id = 'modal-subcategories';
+                    modal.className = 'modal hidden';
+                    document.body.appendChild(modal);
+                }
+                modal.innerHTML = modalContent;
+                modal.classList.remove('hidden');
+            }
+            
+            function getSubcategoriesForCategory(category) {
+                const subcategoriesMap = {
+                    'Одежда': ['Зип-худи', 'Футболки', 'Джинсы', 'Шорты', 'Пальто', 'Куртки', 'Рубашки', 'Свитера'],
+                    'Обувь': ['Лоферы', 'Кеды', 'Кроссовки', 'Ботинки', 'Сандалии', 'Туфли'],
+                    'Сумки': ['Сумка через плечо', 'Рюкзак', 'Клатч', 'Торба', 'Кошелек', 'Дорожная сумка'],
+                    'Часы': ['Механические', 'Кварцевые', 'Автоматические', 'Хронограф', 'Смарт-часы'],
+                    'Украшения': ['Кольца', 'Браслеты', 'Цепочки', 'Серьги', 'Подвески', 'Броши'],
+                    'Аксессуары': ['Очки', 'Ремни', 'Галстуки', 'Шарфы', 'Перчатки', 'Зонты']
+                };
+                return subcategoriesMap[category] || [];
+            }
+            
+            function selectSubcategory(category, subcategory) {
+                // Устанавливаем категорию и подкатегорию
+                state.category = category;
+                state.subcats.clear();
+                state.subcats.add(subcategory);
+                
+                // Обновляем активные элементы в фильтрах
+                document.querySelectorAll('.filter-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Активируем выбранную категорию
+                const categoryItem = categoryList?.querySelector(`[data-value="${category}"]`);
+                if (categoryItem) categoryItem.classList.add('active');
+                
+                // Закрываем модальное окно
+                closeModal('subcategories');
+                
+                // Применяем фильтры
+                applyFilters();
+            }
+            
             function applyFilters(){
                 const min = state.min ? Number(state.min) : -Infinity;
                 const max = state.max ? Number(state.max) : Infinity;
@@ -490,26 +904,75 @@
     </head>
 <body>
     <header>
+        <?php 
+        $favoritesCount = is_countable(session('favorites')) ? count(session('favorites')) : 0;
+        $cartCount = is_countable(session('cart')) ? count(session('cart')) : 0;
+        ?>
         <div class="container bar">
-            <button class="btn">Закрыть</button>
+            <button class="btn" onclick="window.location.href='/'">Закрыть</button>
             <div style="margin-left:auto;display:flex;gap:6px;align-items:center;">
-                <button class="btn" onclick="showModal('faq')" title="FAQ">?</button>
-                                <button class="btn" onclick="showModal('contact')" title="Контакты">✉</button>
+                <!-- Новая иконка FAQ -->
+                <div class="icon-container" onclick="showModal('faq')" title="FAQ">
+                    <div class="icon question-icon">?</div>
+                </div>
+                
+                <!-- Новая иконка контактов (Telegram) -->
+                <div class="icon-container" onclick="window.open('https://t.me/original_lux_shop', '_blank')" title="Telegram канал">
+                    <div class="icon plane-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700" stroke="#000" stroke-width="1">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Скрытые старые кнопки -->
+                <button class="btn old-icon-btn" onclick="showModal('faq')" title="FAQ">?</button>
+                <button class="btn old-icon-btn" onclick="showModal('contact')" title="Контакты">✉</button>
+                
+                <!-- Новая иконка доставки -->
+                <div class="icon-container" onclick="window.location.href='/delivery'" title="Доставка">
+                    <div class="icon delivery-icon">🚚</div>
+                </div>
+                
+                <!-- Новая иконка о нас -->
+                <div class="icon-container" onclick="window.location.href='/about'" title="О нас">
+                    <div class="icon about-icon">ℹ️</div>
+                </div>
+                
+                <!-- Скрытые старые кнопки -->
+                <a class="btn old-icon-btn" href="/delivery" style="text-decoration:none;color:inherit" title="Доставка">🚚 Доставка</a>
+                <a class="btn old-icon-btn" href="/about" style="text-decoration:none;color:inherit" title="О нас">ℹ️ О нас</a>
                 <span class="brand" onclick="location.reload()" style="cursor:pointer" title="Обновить страницу">ORIGINAL | LUX SHOP</span>
-                <a class="btn" href="/favorites" style="text-decoration:none;color:inherit" title="Избранное">❤ <span>(<?php $favoritesCount = is_countable(session('favorites')) ? count(session('favorites')) : 0; echo e($favoritesCount); ?>)</span></a>
-                <?php $cartCount = is_countable(session('cart')) ? count(session('cart')) : 0; ?>
-                <a class="btn" href="/cart" style="text-decoration:none;color:inherit">👜 <span>(<?php echo e($cartCount); ?>)</span></a>
+                
+                <!-- Новая иконка избранного -->
+                <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
+                    <div class="icon heart-icon">❤</div>
+                    <div class="badge <?php echo $favoritesCount > 0 ? '' : 'hidden'; ?>"><?php echo e($favoritesCount); ?></div>
+                </div>
+                
+                <!-- Новая иконка корзины -->
+                <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
+                    <div class="icon bag-icon">👜</div>
+                    <div class="badge <?php echo $cartCount > 0 ? '' : 'hidden'; ?>"><?php echo e($cartCount); ?></div>
+                </div>
+                
+                <!-- Скрытые старые кнопки -->
+                <a class="btn old-icon-btn" href="/favorites" style="text-decoration:none;color:inherit" title="Избранное">❤ <span>(<?php echo e($favoritesCount); ?>)</span></a>
+                <a class="btn old-icon-btn" href="/cart" style="text-decoration:none;color:inherit">👜 <span>(<?php echo e($cartCount); ?>)</span></a>
                 <?php $auth = session('auth'); ?>
                 <?php if(!$auth): ?>
-                    <a class="btn" href="/login" style="text-decoration:none;color:inherit">👤 Войти</a>
+                    <a class="btn" href="/login" style="text-decoration:none;color:inherit">
+                        <span class="login-icon">👤</span> Войти
+                    </a>
                 <?php else: ?>
                     <form method="post" action="/logout" style="display:inline">
                         <?php echo csrf_field(); ?>
                         <button class="btn" type="submit">Выйти (<?php echo e($auth['role']); ?>)</button>
                     </form>
-                    <?php if($auth['role']==='admin'): ?>
-                        <a class="btn" href="#admin-create" onclick="document.getElementById('adminCreate').scrollIntoView({behavior:'smooth'});return false;">+ Товар</a>
+                                                                 <?php if($auth['role']==='admin'): ?>
+                        <a class="btn" href="/admin" style="text-decoration:none;color:inherit" title="Админ-панель">⚙️ Админ-панель</a>
                     <?php endif; ?>
+                         <a class="btn" href="/profile" style="text-decoration:none;color:inherit">👤 Профиль</a>
                 <?php endif; ?>
             </div>
         </div>
@@ -978,7 +1441,31 @@
 
 
         <div class="search">
-            <input placeholder="поиск" />
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Поиск товаров..." 
+                autocomplete="off"
+            />
+            <button class="search-btn" onclick="performSearch()">
+                Найти
+            </button>
+            
+            <!-- Фильтры поиска -->
+            <div class="search-filters" id="searchFilters" style="display: none;">
+                <div class="search-filter active" data-filter="all">Все</div>
+                <div class="search-filter" data-filter="Одежда">Одежда</div>
+                <div class="search-filter" data-filter="Обувь">Обувь</div>
+                <div class="search-filter" data-filter="Сумки">Сумки</div>
+                <div class="search-filter" data-filter="Часы">Часы</div>
+                <div class="search-filter" data-filter="Украшения">Украшения</div>
+                <div class="search-filter" data-filter="Аксессуары">Аксессуары</div>
+            </div>
+            
+            <!-- Результаты поиска -->
+            <div class="search-results" id="searchResults">
+                <!-- Результаты будут добавляться динамически -->
+            </div>
         </div>
 
         <div class="tabs">
@@ -1108,21 +1595,6 @@
                     </div>
                 </div>
 
-                <div class="filter-group open" data-group="subcats">
-                    <div class="filter-head">Подкатегории <span>▾</span></div>
-                    <div class="filter-body">
-                        <div class="filter-list" id="subcatList">
-                            <div class="filter-item" data-value="Лоферы">Лоферы</div>
-                            <div class="filter-item" data-value="Очки">Очки</div>
-                            <div class="filter-item" data-value="Зип-худи">Зип-худи</div>
-                            <div class="filter-item" data-value="Шорты">Шорты</div>
-                            <div class="filter-item" data-value="Сумка через плечо">Сумка через плечо</div>
-                            <div class="filter-item" data-value="Кольца">Кольца</div>
-                            <div class="filter-item" data-value="Браслеты">Браслеты</div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="filter-group open" data-group="price">
                     <div class="filter-head">Диапазон цен: <span>▾</span></div>
                     <div class="filter-body">
@@ -1145,11 +1617,13 @@
                             <input type="hidden" name="image" value="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop">
                             <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
                         </form>
-                        <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop" alt="Кроссовки Nike Air Force 1 x Louis Vuitton">
-                        <div class="meta">
-                            <div>Кроссовки Nike Air Force 1 x Louis Vuitton (синие)</div>
-                            <div class="price">150€</div>
-                        </div>
+                        <a href="/product/1" style="text-decoration:none;color:inherit;display:block">
+                            <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop" alt="Кроссовки Nike Air Force 1 x Louis Vuitton">
+                            <div class="meta">
+                                <div>Кроссовки Nike Air Force 1 x Louis Vuitton (синие)</div>
+                                <div class="price">150€</div>
+                            </div>
+                        </a>
                         <form method="post" action="/cart/add">
                             <?php echo csrf_field(); ?>
                             <input type="hidden" name="title" value="Кроссовки Nike Air Force 1 x Louis Vuitton (синие)">
@@ -1161,20 +1635,23 @@
                     <article class="good" data-category="Сумки" data-brand="Louis Vuitton" data-subcat="Сумка через плечо" data-price="50">
                         <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
                             <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Сумка через плечо Louis Vuitton (зелёная)">
-                            <input type="hidden" name="price" value="50">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1200&auto=format&fit=crop">
+                            <input type="hidden" name="title" value="Кошелек Goyard Saint Sulpice">
+                            <input type="hidden" name="price" value="60">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop">
                             <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
                         </form>
-                        <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1200&auto=format&fit=crop" alt="Сумка через плечо Louis Vuitton (зелёная)">
-                        <div class="meta">
-                            <div>Сумка через плечо Louis Vuitton (зелёная)</div>
-                            <div class="price">50€</div>
-                        </div>
+                        <a href="/product/2" style="text-decoration:none;color:inherit;display:block">
+                            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop" alt="Кошелек Goyard Saint Sulpice">
+                            <div class="meta">
+                                <div>Кошелек Goyard Saint Sulpice</div>
+                                <div class="price">60€</div>
+                            </div>
+                        </a>
                         <form method="post" action="/cart/add">
                             <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Сумка через плечо Louis Vuitton (зелёная)">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1200&auto=format&fit=crop">
+                            <input type="hidden" name="title" value="Кошелек Goyard Saint Sulpice">
+                            <input type="hidden" name="price" value="60">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop">
                             <button class="btn" type="submit">Добавить в корзину</button>
                         </form>
                     </article>
@@ -1186,11 +1663,13 @@
                             <input type="hidden" name="image" value="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop">
                             <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
                         </form>
-                        <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop" alt="Зип‑худи Balenciaga Tape Type (чёрный)">
-                        <div class="meta">
-                            <div>Зип‑худи Balenciaga Tape Type (чёрный)</div>
-                            <div class="price">60€</div>
-                        </div>
+                        <a href="/product/9" style="text-decoration:none;color:inherit;display:block">
+                            <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop" alt="Зип‑худи Balenciaga Tape Type (чёрный)">
+                            <div class="meta">
+                                <div>Зип‑худи Balenciaga Tape Type (чёрный)</div>
+                                <div class="price">60€</div>
+                            </div>
+                        </a>
                         <form method="post" action="/cart/add">
                             <?php echo csrf_field(); ?>
                             <input type="hidden" name="title" value="Зип‑худи Balenciaga Tape Type (чёрный)">
@@ -1207,11 +1686,13 @@
                             <input type="hidden" name="image" value="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop">
                             <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
                         </form>
-                        <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop" alt="Шорты Stone Island (чёрные)">
-                        <div class="meta">
-                            <div>Шорты Stone Island (чёрные)</div>
-                            <div class="price">55€</div>
-                        </div>
+                        <a href="/product/10" style="text-decoration:none;color:inherit;display:block">
+                            <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop" alt="Шорты Stone Island (чёрные)">
+                            <div class="meta">
+                                <div>Шорты Stone Island (чёрные)</div>
+                                <div class="price">55€</div>
+                            </div>
+                        </a>
                         <form method="post" action="/cart/add">
                             <?php echo csrf_field(); ?>
                             <input type="hidden" name="title" value="Шорты Stone Island (чёрные)">
@@ -1220,7 +1701,210 @@
                             <button class="btn" type="submit">Добавить в корзину</button>
                         </form>
                     </article>
+                    
+                    <!-- Дополнительные товары для демонстрации фильтрации -->
+                    <article class="good" data-category="Обувь" data-brand="Adidas" data-subcat="Кеды" data-price="120">
+                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Кеды Adidas Stan Smith (белые)">
+                            <input type="hidden" name="price" value="120">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop">
+                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
+                        </form>
+                        <a href="/product/3" style="text-decoration:none;color:inherit;display:block">
+                            <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop" alt="Кеды Adidas Stan Smith">
+                            <div class="meta">
+                                <div>Кеды Adidas Stan Smith (белые)</div>
+                                <div class="price">120€</div>
+                            </div>
+                        </a>
+                        <form method="post" action="/cart/add">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Кеды Adidas Stan Smith (белые)">
+                            <input type="hidden" name="price" value="120">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop">
+                            <button class="btn" type="submit">Добавить в корзину</button>
+                        </form>
+                    </article>
+                    
+                    <article class="good" data-category="Обувь" data-brand="Puma" data-subcat="Кроссовки" data-price="95">
+                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Кроссовки Puma RS-X (красные)">
+                            <input type="hidden" name="price" value="95">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1200&auto=format&fit=crop">
+                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
+                        </form>
+                        <a href="/product/4" style="text-decoration:none;color:inherit;display:block">
+                            <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1200&auto=format&fit=crop" alt="Кроссовки Puma RS-X">
+                            <div class="meta">
+                                <div>Кроссовки Puma RS-X (красные)</div>
+                                <div class="price">95€</div>
+                            </div>
+                        </a>
+                        <form method="post" action="/cart/add">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Кроссовки Puma RS-X (красные)">
+                            <input type="hidden" name="price" value="95">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1200&auto=format&fit=crop">
+                            <button class="btn" type="submit">Добавить в корзину</button>
+                        </form>
+                    </article>
+                    
+                    <article class="good" data-category="Одежда" data-brand="Nike" data-subcat="Футболки" data-price="45">
+                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Футболка Nike Dri-FIT (синяя)">
+                            <input type="hidden" name="price" value="45">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop">
+                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
+                        </form>
+                        <a href="/product/11" style="text-decoration:none;color:inherit;display:block">
+                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop" alt="Футболка Nike Dri-FIT">
+                            <div class="meta">
+                                <div>Футболка Nike Dri-FIT (синяя)</div>
+                                <div class="price">45€</div>
+                            </div>
+                        </a>
+                        <form method="post" action="/cart/add">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Футболка Nike Dri-FIT (синяя)">
+                            <input type="hidden" name="price" value="45">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop">
+                            <button class="btn" type="submit">Добавить в корзину</button>
+                        </form>
+                    </article>
+                    
+                    <article class="good" data-category="Сумки" data-brand="Gucci" data-subcat="Рюкзак" data-price="180">
+                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Рюкзак Gucci Marmont (чёрный)">
+                            <input type="hidden" name="price" value="180">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop">
+                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
+                        </form>
+                        <a href="/product/17" style="text-decoration:none;color:inherit;display:block">
+                            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop" alt="Рюкзак Gucci Marmont">
+                            <div class="meta">
+                                <div>Рюкзак Gucci Marmont (чёрный)</div>
+                                <div class="price">180€</div>
+                            </div>
+                        </a>
+                        <form method="post" action="/cart/add">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Рюкзак Gucci Marmont (чёрный)">
+                            <input type="hidden" name="price" value="180">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop">
+                            <button class="btn" type="submit">Добавить в корзину</button>
+                        </form>
+                    </article>
+                    
+                    <article class="good" data-category="Часы" data-brand="Rolex" data-subcat="Механические" data-price="8500">
+                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Часы Rolex Submariner (стальные)">
+                            <input type="hidden" name="price" value="8500">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop">
+                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
+                        </form>
+                        <a href="/product/21" style="text-decoration:none;color:inherit;display:block">
+                            <img src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop" alt="Часы Rolex Submariner">
+                            <div class="meta">
+                                <div>Часы Rolex Submariner (стальные)</div>
+                                <div class="price">8500€</div>
+                            </div>
+                        </a>
+                        <form method="post" action="/cart/add">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Часы Rolex Submariner (стальные)">
+                            <input type="hidden" name="price" value="8500">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop">
+                            <button class="btn" type="submit">Добавить в корзину</button>
+                        </form>
+                    </article>
+                    
+                    <article class="good" data-category="Украшения" data-brand="Cartier" data-subcat="Кольца" data-price="3200">
+                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Кольцо Cartier Love (золотое)">
+                            <input type="hidden" name="price" value="3200">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop">
+                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
+                        </form>
+                        <a href="/product/26" style="text-decoration:none;color:inherit;display:block">
+                            <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop" alt="Кольцо Cartier Love">
+                            <div class="meta">
+                                <div>Кольцо Cartier Love (золотое)</div>
+                                <div class="price">3200€</div>
+                            </div>
+                        </a>
+                        <form method="post" action="/cart/add">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Кольцо Cartier Love (золотое)">
+                            <input type="hidden" name="price" value="3200">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop">
+                            <button class="btn" type="submit">Добавить в корзину</button>
+                        </form>
+                    </article>
+                    
+                    <article class="good" data-category="Аксессуары" data-brand="Ray-Ban" data-subcat="Очки" data-price="180">
+                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Очки Ray-Ban Aviator (золотые)">
+                            <input type="hidden" name="price" value="180">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=1200&auto=format&fit=crop">
+                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
+                        </form>
+                        <a href="/product/32" style="text-decoration:none;color:inherit;display:block">
+                            <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=1200&auto=format&fit=crop" alt="Очки Ray-Ban Aviator">
+                            <div class="meta">
+                                <div>Очки Ray-Ban Aviator (золотые)</div>
+                                <div class="price">180€</div>
+                            </div>
+                        </a>
+                        <form method="post" action="/cart/add">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Очки Ray-Ban Aviator (золотые)">
+                            <input type="hidden" name="price" value="180">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=1200&auto=format&fit=crop">
+                            <button class="btn" type="submit">Добавить в корзину</button>
+                        </form>
+                    </article>
+                    
+                    <article class="good" data-category="Часы" data-brand="Rolex" data-subcat="Механические" data-price="8500">
+                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Часы Omega Speedmaster (чёрные)">
+                            <input type="hidden" name="price" value="4200">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop">
+                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
+                        </form>
+                                                <a href="/product/22" style="text-decoration:none;color:inherit;display:block">
+                            <img src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop" alt="Часы Omega Speedmaster">
+                            <div class="meta">
+                                <div>Часы Omega Speedmaster (чёрные)</div>
+                                <div class="price">4200€</div>
+                            </div>
+                        </a>
+                        <form method="post" action="/cart/add">
+                            <?php echo csrf_field(); ?>
+                            <input type="hidden" name="title" value="Часы Omega Speedmaster (чёрные)">
+                            <input type="hidden" name="price" value="4200">
+                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop">
+                            <button class="btn" type="submit">Добавить в корзину</button>
+                        </form>
+                    </article>
                 </div>
+                
+                <!-- Кнопка "Перейти к другим" -->
+                <div style="text-align:center;margin-top:32px;padding:24px;background:#fff;border:1px solid #e2e8f0;border-radius:12px">
+                    <h3 style="margin:0 0 16px 0;color:#0f172a;font-size:20px">Хотите увидеть больше товаров?</h3>
+                    <p style="margin:0 0 20px 0;color:#64748b">В нашем каталоге более 30 товаров в разных категориях</p>
+                    <a href="/catalog" style="display:inline-block;padding:12px 24px;background:#527ea6;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;transition:background 0.2s" onmouseover="this.style.background='#3b5a7a'" onmouseout="this.style.background='#527ea6'">
+                        ПЕРЕЙТИ К ДРУГИМ ТОВАРАМ →
+                    </a>
+                </div>
+                
                 <?php if($auth && $auth['role']==='admin'): ?>
                 <div id="adminCreate" class="section-title" style="margin-top:24px">Добавить товар (админ)</div>
                 <form method="post" action="/admin/products" enctype="multipart/form-data" style="background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:12px;display:grid;gap:10px">
@@ -1259,7 +1943,282 @@
             </div>
         </div>
     </section>
+    
+    <!-- JavaScript для функционального поиска -->
+    <script>
+        // Данные всех товаров для поиска
+        const allProducts = [
+            {
+                id: '1',
+                title: 'Кроссовки Nike Air Max 270 (белые)',
+                price: 120,
+                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop',
+                category: 'Обувь',
+                brand: 'Nike',
+                subcategory: 'Кроссовки'
+            },
+            {
+                id: '2',
+                title: 'Куртка Stone Island (чёрная)',
+                price: 450,
+                image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1200&auto=format&fit=crop',
+                category: 'Одежда',
+                brand: 'Stone Island',
+                subcategory: 'Куртки'
+            },
+            {
+                id: '3',
+                title: 'Сумка Balenciaga City (серая)',
+                price: 1200,
+                image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop',
+                category: 'Сумки',
+                brand: 'Balenciaga',
+                subcategory: 'Сумки'
+            },
+            {
+                id: '4',
+                title: 'Ремень Gucci (коричневый)',
+                price: 280,
+                image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop',
+                category: 'Аксессуары',
+                brand: 'Gucci',
+                subcategory: 'Ремни'
+            },
+            {
+                id: '5',
+                title: 'Кольцо Cartier Love (золотое)',
+                price: 3200,
+                image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop',
+                category: 'Украшения',
+                brand: 'Cartier',
+                subcategory: 'Кольца'
+            },
+            {
+                id: '6',
+                title: 'Часы Rolex Daytona (золотые)',
+                price: 15000,
+                image: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop',
+                category: 'Часы',
+                brand: 'Rolex',
+                subcategory: 'Хронограф'
+            },
+            {
+                id: '7',
+                title: 'Кроссовки Adidas Ultraboost (синие)',
+                price: 180,
+                image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1200&auto=format&fit=crop',
+                category: 'Обувь',
+                brand: 'Adidas',
+                subcategory: 'Кроссовки'
+            },
+            {
+                id: '8',
+                title: 'Футболка Balenciaga (белая)',
+                price: 350,
+                image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop',
+                category: 'Одежда',
+                brand: 'Balenciaga',
+                subcategory: 'Футболки'
+            },
+            {
+                id: '9',
+                title: 'Кроссовки Puma RS-X (красные)',
+                price: 95,
+                image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1200&auto=format&fit=crop',
+                category: 'Обувь',
+                brand: 'Puma',
+                subcategory: 'Кроссовки'
+            },
+            {
+                id: '11',
+                title: 'Футболка Nike Dri-FIT (синяя)',
+                price: 45,
+                image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop',
+                category: 'Одежда',
+                brand: 'Nike',
+                subcategory: 'Футболки'
+            },
+            {
+                id: '17',
+                title: 'Рюкзак Gucci Marmont (чёрный)',
+                price: 180,
+                image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop',
+                category: 'Сумки',
+                brand: 'Gucci',
+                subcategory: 'Рюкзак'
+            },
+            {
+                id: '21',
+                title: 'Часы Rolex Submariner (стальные)',
+                price: 8500,
+                image: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop',
+                category: 'Часы',
+                brand: 'Rolex',
+                subcategory: 'Механические'
+            },
+            {
+                id: '22',
+                title: 'Часы Omega Speedmaster (чёрные)',
+                price: 4200,
+                image: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop',
+                category: 'Часы',
+                brand: 'Omega',
+                subcategory: 'Хронограф'
+            },
+            {
+                id: '26',
+                title: 'Кольцо Cartier Love (золотое)',
+                price: 3200,
+                image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop',
+                category: 'Украшения',
+                brand: 'Cartier',
+                subcategory: 'Кольца'
+            },
+            {
+                id: '32',
+                title: 'Очки Ray-Ban Aviator (золотые)',
+                price: 180,
+                image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=1200&auto=format&fit=crop',
+                category: 'Аксессуары',
+                brand: 'Ray-Ban',
+                subcategory: 'Очки'
+            }
+        ];
+
+        let currentFilter = 'all';
+        let searchTimeout;
+
+        // Инициализация поиска
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchFilters = document.getElementById('searchFilters');
+            const searchResults = document.getElementById('searchResults');
+
+            // Обработчик ввода в поиск
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const query = this.value.trim().toLowerCase();
+                    if (query.length >= 2) {
+                        performSearch(query);
+                        searchFilters.style.display = 'flex';
+                        searchResults.style.display = 'block';
+                    } else if (query.length === 0) {
+                        // Показываем все товары только если поле пустое
+                        showAllProducts();
+                        searchResults.style.display = 'none';
+                        // НЕ скрываем фильтры, если они уже были показаны
+                    }
+                }, 300);
+            });
+
+            // Обработчик клика вне поиска
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target) && !searchFilters.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                    // НЕ скрываем фильтры при клике вне поиска
+                }
+            });
+
+            // Обработчики фильтров
+            document.querySelectorAll('.search-filter').forEach(filter => {
+                filter.addEventListener('click', function() {
+                    document.querySelectorAll('.search-filter').forEach(f => f.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    performSearch(searchInput.value.trim());
+                });
+            });
+        });
+
+        // Функция поиска
+        function performSearch(query = '') {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            const searchFilters = document.getElementById('searchFilters');
+            
+            if (!query) {
+                query = searchInput.value.trim().toLowerCase();
+            }
+
+            // Показываем фильтры при любом поиске
+            searchFilters.style.display = 'flex';
+
+            let filteredProducts = allProducts;
+
+            // Фильтрация по категории
+            if (currentFilter !== 'all') {
+                filteredProducts = filteredProducts.filter(product => 
+                    product.category === currentFilter
+                );
+            }
+
+            // Поиск по тексту
+            if (query) {
+                filteredProducts = filteredProducts.filter(product => 
+                    product.title.toLowerCase().includes(query) ||
+                    product.brand.toLowerCase().includes(query) ||
+                    product.category.toLowerCase().includes(query) ||
+                    product.subcategory.toLowerCase().includes(query)
+                );
+            }
+
+            // Отображение результатов
+            displaySearchResults(filteredProducts);
+        }
+
+        // Отображение результатов поиска
+        function displaySearchResults(products) {
+            const searchResults = document.getElementById('searchResults');
+            
+            if (products.length === 0) {
+                searchResults.innerHTML = `
+                    <div class="no-results">
+                        <div style="font-size: 24px; margin-bottom: 8px;">🔍</div>
+                        <div>Товары не найдены</div>
+                        <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">
+                            Попробуйте изменить запрос или категорию
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const resultsHTML = products.map(product => `
+                <div class="search-result-item" onclick="goToProduct('${product.id}')">
+                    <img src="${product.image}" alt="${product.title}" class="search-result-img">
+                    <div class="search-result-info">
+                        <div class="search-result-title">${product.title}</div>
+                        <div class="search-result-category">${product.brand} • ${product.category}</div>
+                    </div>
+                    <div class="search-result-price">${product.price}€</div>
+                </div>
+            `).join('');
+
+            searchResults.innerHTML = resultsHTML;
+        }
+
+        // Переход к товару
+        function goToProduct(productId) {
+            window.location.href = `/product/${productId}`;
+        }
+
+        // Показать все товары на главной странице
+        function showAllProducts() {
+            // На главной странице просто скрываем результаты поиска
+            const searchResults = document.getElementById('searchResults');
+            if (searchResults) {
+                searchResults.style.display = 'none';
+            }
+        }
+
+        // Поиск по Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    </script>
 </body>
-</html>
 
 
