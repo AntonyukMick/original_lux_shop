@@ -4,10 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Корзина | ORIGINAL | LUX SHOP</title>
+    <link rel="stylesheet" href="{{ asset('css/empty-states.css') }}">
     <style>
         body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial;background:#f1f5f9;color:#0f172a}
         .container{max-width:1200px;margin:0 auto;padding:12px}
-        .panel{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:12px}
+        .panel{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:24px;text-align:left}
         .row{display:grid;grid-template-columns:1fr 120px 120px 40px;gap:10px;align-items:center;border-bottom:1px solid #e2e8f0;padding:8px 0}
         .row:last-child{border-bottom:none}
         .thumb{width:70px;height:70px;border-radius:8px;background:#e5e7eb;object-fit:cover;margin-right:10px}
@@ -33,8 +34,6 @@
             font-weight: 600;
         }
         .total{display:flex;justify-content:flex-end;gap:16px;margin-top:12px;font-size:18px}
-        .nav{display:flex;gap:8px;margin-bottom:10px}
-        .link{display:inline-block;padding:6px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;text-decoration:none;color:inherit}
         
         /* Header */
         header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
@@ -182,36 +181,7 @@
             font-size: 18px;
         }
         
-        /* Стили для пустой корзины */
-        .empty-cart {
-            text-align: center;
-            padding: 40px 20px;
-            color: #64748b;
-        }
-        
-        .empty-cart h2 {
-            margin-bottom: 16px;
-            color: #475569;
-        }
-        
-        .empty-cart p {
-            margin-bottom: 24px;
-        }
-        
-        .empty-cart .btn {
-            background: #527ea6;
-            color: white;
-            border-color: #527ea6;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .empty-cart .btn:hover {
-            background: #3b5a7a;
-            border-color: #3b5a7a;
-        }
+        /* Стили для пустых состояний подключены из отдельного файла */
     </style>
 </head>
 <body>
@@ -281,15 +251,7 @@
     </header>
 
     <div class="container">
-        <div class="nav">
-            <a href="/" class="link">Главная</a>
-            <a href="/catalog" class="link">Каталог</a>
-            <a href="/favorites" class="link">Избранное</a>
-        </div>
-        
         <div class="panel">
-            <h1>Корзина</h1>
-            
             <!-- Контейнер для товаров корзины -->
             <div id="cart-items">
                 <!-- Товары будут загружены через JavaScript -->
@@ -403,10 +365,14 @@
             
             if (cart.length === 0) {
                 cartContainer.innerHTML = `
-                    <div class="empty-cart">
-                        <h2>Корзина пуста</h2>
-                        <p>Добавьте товары в корзину, чтобы оформить заказ</p>
-                        <a href="/" class="btn">Перейти к покупкам</a>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🛒</div>
+                        <h2 class="empty-state-title">Корзина пуста</h2>
+                        <p class="empty-state-description">Добавьте товары в корзину, чтобы они отображались здесь</p>
+                        <a href="/catalog" class="empty-state-button">
+                            <span class="button-icon">🛍️</span>
+                            Перейти к покупкам
+                        </a>
                     </div>
                 `;
                 totalContainer.style.display = 'none';

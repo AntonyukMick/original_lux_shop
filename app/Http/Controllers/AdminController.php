@@ -4,35 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Models\VideoLink;
 use App\Services\VideoService;
+use App\Services\StatisticsService;
 use App\Http\Requests\VideoRequest;
 use Illuminate\View\View;
-use App\Models\Product;
-use App\Models\Order;
 
 class AdminController extends Controller
 {
     protected $videoService;
+    protected $statisticsService;
 
-    public function __construct(VideoService $videoService)
+    public function __construct(VideoService $videoService, StatisticsService $statisticsService)
     {
         $this->videoService = $videoService;
+        $this->statisticsService = $statisticsService;
     }
+
     /**
      * Главная страница админ-панели
      */
     public function dashboard(): View
     {
-        $totalProducts = Product::count();
-        $activeProducts = Product::where('is_active', true)->count();
-        $totalOrders = Order::count();
-        $pendingOrders = Order::where('status', 'pending')->count();
-        $totalVideos = VideoLink::count();
-        $activeVideos = VideoLink::where('is_active', true)->count();
+        $statistics = $this->statisticsService->getDashboardStatistics();
+        
+        return view('admin.dashboard', compact('statistics'));
+    }
 
-        return view('admin.dashboard', compact(
-            'totalProducts', 'activeProducts', 'totalOrders', 
-            'pendingOrders', 'totalVideos', 'activeVideos'
-        ));
+    /**
+     * Статистика продаж
+     */
+    public function salesStatistics(string $period = 'month'): View
+    {
+        $salesData = $this->statisticsService->getSalesStatistics($period);
+        $topProducts = $this->statisticsService->getTopSellingProducts();
+        $categoryStats = $this->statisticsService->getCategoryStatistics();
+        
+        return view('admin.statistics', compact('salesData', 'topProducts', 'categoryStats', 'period'));
     }
 
     /**

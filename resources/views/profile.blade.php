@@ -292,13 +292,23 @@ $auth = session('auth');
                     </div>
                     
                     <div class="info-group">
-                        <div class="info-label">Роль</div>
-                        <div class="role-badge role-<?php echo e($auth['role']); ?>"><?php echo e($auth['role']); ?></div>
+                        <div class="info-label">Email</div>
+                        <div class="info-value"><?php echo e($auth['email'] ?? 'Не указан'); ?></div>
                     </div>
                     
                     <div class="info-group">
-                        <div class="info-label">Дата входа</div>
-                        <div class="info-value"><?php echo e(date('d.m.Y H:i')); ?></div>
+                        <div class="info-label">Телефон</div>
+                        <div class="info-value"><?php echo e($auth['phone'] ?? 'Не указан'); ?></div>
+                    </div>
+                    
+                    <div class="info-group">
+                        <div class="info-label">Адрес</div>
+                        <div class="info-value"><?php echo e($auth['address'] ?? 'Не указан'); ?></div>
+                    </div>
+                    
+                    <div class="info-group">
+                        <div class="info-label">Роль</div>
+                        <div class="role-badge role-<?php echo e($auth['role']); ?>"><?php echo e($auth['role']); ?></div>
                     </div>
                     
                     <div class="info-group">
@@ -353,4 +363,43 @@ $auth = session('auth');
         </div>
     </div>
 </div>
+
+<script>
+    // Функция для обновления счетчиков в хедере
+    function updateHeaderCounters() {
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        
+        // Обновляем счетчик избранного
+        const favoriteBadges = document.querySelectorAll('.icon-container .badge');
+        favoriteBadges.forEach(badge => {
+            if (badge.closest('.icon-container').querySelector('.heart-icon')) {
+                if (favorites.length > 0) {
+                    badge.textContent = favorites.length;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        });
+        
+        // Обновляем счетчик корзины
+        const cartBadges = document.querySelectorAll('.icon-container .badge');
+        cartBadges.forEach(badge => {
+            if (badge.closest('.icon-container').querySelector('.bag-icon')) {
+                if (cart.length > 0) {
+                    badge.textContent = cart.length;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        });
+    }
+
+    // Обновляем счетчики при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        updateHeaderCounters();
+    });
+</script>
 @endsection

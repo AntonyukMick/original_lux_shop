@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\OrderPdfController;
 use App\Http\Controllers\TestPdfController;
+use App\Http\Controllers\PromotionsController;
 use App\Models\VideoLink;
 
 // Главная страница
@@ -17,6 +18,9 @@ Route::get('/', function () {
     $featuredProducts = $productService->getFeaturedProducts(8);
     return view('home', compact('featuredProducts'));
 })->name('home');
+
+// Акции
+Route::get('/promotions', [PromotionsController::class, 'index'])->name('promotions');
 
 // Аутентификация
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth.login');
@@ -53,12 +57,12 @@ Route::get('/checkout', [OrderController::class, 'create'])->name('checkout');
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
 
-// Тестовый маршрут для PDF
-Route::get('/test-pdf', [TestPdfController::class, 'test'])->name('test.pdf');
-
 // PDF маршруты
 Route::post('/generate-order-pdf', [OrderPdfController::class, 'generateOrderPdf'])->name('generate.order.pdf');
 Route::post('/preview-order-pdf', [OrderPdfController::class, 'previewOrderPdf'])->name('preview.order.pdf');
+
+// Тестовый маршрут для PDF
+Route::get('/test-pdf', [TestPdfController::class, 'test'])->name('test.pdf');
 
 // Страницы
 Route::get('/about', function () {
@@ -67,7 +71,7 @@ Route::get('/about', function () {
 })->name('about');
 
 Route::get('/delivery', function () {
-    $pickupPoints = [
+    $pickupPoints = config('catalog.pickup_points', [
         [
             'name' => 'ТЦ Европейский',
             'address' => 'пл. Киевского Вокзала, 2',
@@ -92,30 +96,18 @@ Route::get('/delivery', function () {
             'working_hours' => '10:00-22:00',
             'phone' => '+7 (495) 456-78-90'
         ]
-    ];
+    ]);
     
     return view('delivery', ['pickupPoints' => $pickupPoints]);
 })->name('delivery');
 
-// API для отслеживания доставки
-Route::get('/api/tracking/{number}', function ($number) {
-    $tracking = \App\Models\DeliveryTracking::where('tracking_number', $number)->first();
-    
-    if (!$tracking) {
-        return response()->json(['error' => 'Номер отслеживания не найден'], 404);
-    }
-    
-    return response()->json([
-        'status' => $tracking->getStatusText(),
-        'location' => $tracking->location,
-        'estimated_delivery' => $tracking->estimated_delivery,
-        'history' => $tracking->tracking_history ?? []
-    ]);
-})->name('api.tracking');
-
 // Админ-панель (защищена middleware)
 Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+    
+    // Статистика
+    Route::get('/statistics', [AdminController::class, 'salesStatistics'])->name('statistics');
+    Route::get('/statistics/{period}', [AdminController::class, 'salesStatistics'])->name('statistics.period');
     
     // Управление товарами
     Route::resource('products', ProductController::class);

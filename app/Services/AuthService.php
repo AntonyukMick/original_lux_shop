@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AuthService
 {
@@ -11,14 +14,37 @@ class AuthService
      */
     public function authenticate(string $username, string $password): ?array
     {
-        // Простая проверка (в будущем заменить на базу данных)
-        if ($username === 'admin' && $password === 'admin') {
-            return ['username' => $username, 'role' => 'admin'];
-        } elseif ($username === 'user' && $password === 'user') {
-            return ['username' => $username, 'role' => 'user'];
+        // Попытка найти пользователя по email или имени
+        $user = User::where('email', $username)
+                   ->orWhere('name', $username)
+                   ->first();
+
+        if (!$user || !Hash::check($password, $user->password)) {
+            return null;
         }
 
-        return null;
+        if (!$user->is_active) {
+            return null;
+        }
+
+        // Обновляем время последнего входа
+        $user->update(['last_login_at' => now()]);
+
+        // Логируем вход
+        Log::info('User logged in', [
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'role' => $user->role
+        ]);
+
+        return [
+            'id' => $user->id,
+            'username' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'phone' => $user->phone,
+            'address' => $user->address
+        ];
     }
 
     /**
@@ -26,11 +52,28 @@ class AuthService
      */
     public function register(array $data): array
     {
-        // Здесь будет создание пользователя в базе данных
-        // Пока используем простую сессию
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => 'user',
+            'phone' => $data['phone'] ?? null,
+            'address' => $data['address'] ?? null,
+            'is_active' => true
+        ]);
+
+        Log::info('New user registered', [
+            'user_id' => $user->id,
+            'email' => $user->email
+        ]);
+
         return [
-            'username' => $data['name'],
-            'role' => 'user'
+            'id' => $user->id,
+            'username' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'phone' => $user->phone,
+            'address' => $user->address
         ];
     }
 
@@ -39,9 +82,36 @@ class AuthService
      */
     public function updateProfile(array $data, array $currentAuth): array
     {
+        $user = User::find($currentAuth['id']);
+        
+        if (!$user) {
+            throw new \Exception('Пользователь не найден');
+        }
+
+        $updateData = [
+            'name' => $data['name'],
+            'phone' => $data['phone'] ?? $user->phone,
+            'address' => $data['address'] ?? $user->address
+        ];
+
+        if (!empty($data['password'])) {
+            $updateData['password'] = Hash::make($data['password']);
+        }
+
+        $user->update($updateData);
+
+        Log::info('User profile updated', [
+            'user_id' => $user->id,
+            'email' => $user->email
+        ]);
+
         return [
-            'username' => $data['name'],
-            'role' => $currentAuth['role'] ?? 'user'
+            'id' => $user->id,
+            'username' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'phone' => $user->phone,
+            'address' => $user->address
         ];
     }
 
@@ -50,6 +120,44 @@ class AuthService
      */
     public function logout(): void
     {
+        $auth = session('auth');
+        if ($auth) {
+            Log::info('User logged out', [
+                'user_id' => $auth['id'] ?? null,
+                'email' => $auth['email'] ?? null
+            ]);
+        }
+        
         session()->forget('auth');
+    }
+
+    /**
+     * Получить текущего пользователя
+     */
+    public function getCurrentUser(): ?User
+    {
+        $auth = session('auth');
+        if (!$auth || !isset($auth['id'])) {
+            return null;
+        }
+
+        return User::find($auth['id']);
+    }
+
+    /**
+     * Проверить, является ли пользователь администратором
+     */
+    public function isAdmin(): bool
+    {
+        $auth = session('auth');
+        return $auth && ($auth['role'] === 'admin');
+    }
+
+    /**
+     * Проверить, авторизован ли пользователь
+     */
+    public function isAuthenticated(): bool
+    {
+        return session()->has('auth');
     }
 }

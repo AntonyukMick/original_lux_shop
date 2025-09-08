@@ -21,6 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'phone',
+        'address',
+        'is_active',
+        'last_login_at',
     ];
 
     /**
@@ -31,6 +36,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'phone',
+        'address',
     ];
 
     /**
@@ -43,6 +50,50 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
+            'last_login_at' => 'datetime',
+            'phone' => 'encrypted',
+            'address' => 'encrypted',
         ];
+    }
+
+    /**
+     * Проверяет, является ли пользователь администратором
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Проверяет, является ли пользователь обычным пользователем
+     */
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
+    }
+
+    /**
+     * Получить заказы пользователя
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Получить избранные товары пользователя
+     */
+    public function favorites()
+    {
+        return $this->belongsToMany(Product::class, 'user_favorites');
+    }
+
+    /**
+     * Получить роль пользователя с переводом
+     */
+    public function getRoleNameAttribute(): string
+    {
+        return config('catalog.user_roles')[$this->role] ?? $this->role;
     }
 }

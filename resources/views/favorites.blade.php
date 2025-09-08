@@ -3,24 +3,17 @@
 @section('title', 'Избранное')
 
 @section('styles')
+<link rel="stylesheet" href="{{ asset('css/empty-states.css') }}">
 
 @section('content')
 <div class="container">
-    <div class="nav">
-        <a href="/" class="link">Главная</a>
-            <a href="/catalog" class="link">Каталог</a>
-            <a href="/cart" class="link">Корзина</a>
-        </div>
-        
-        <div class="panel">
-            <h1>Избранное</h1>
-            
-            <!-- Контейнер для товаров избранного -->
-            <div id="favorites-items">
-                <!-- Товары будут загружены через JavaScript -->
-            </div>
+    <div class="panel">
+        <!-- Контейнер для товаров избранного -->
+        <div id="favorites-items">
+            <!-- Товары будут загружены через JavaScript -->
         </div>
     </div>
+</div>
 
     <!-- Модальные окна -->
     <div id="modal-faq" class="modal" style="display: none;">
@@ -60,13 +53,14 @@
     <style>
     body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,"Noto Sans",sans-serif;background:#f1f5f9;color:#0f172a}
     .container{max-width:1200px;margin:0 auto;padding:12px}
-    .panel{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:12px}
-    .row{display:grid;grid-template-columns:1fr 120px 120px 40px;gap:10px;align-items:center;border-bottom:1px solid #e2e8f0;padding:8px 0}
+    .panel{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:24px;text-align:left}
+    .panel h1{margin:0 0 24px 0;font-size:28px;font-weight:700;color:#0f172a}
+    .row{display:grid;grid-template-columns:1fr 120px 120px 40px;gap:10px;align-items:center;border-bottom:1px solid #e2e8f0;padding:12px 0;text-align:left}
     .row:last-child{border-bottom:none}
     .thumb{width:70px;height:70px;border-radius:8px;background:#e5e7eb;object-fit:cover;margin-right:10px}
-    .title{font-weight:600}
-    .price{font-weight:700}
-    .panel .btn{height:34px;padding:0 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;color:#000;font-weight:600}
+    .title{font-weight:600;font-size:16px}
+    .price{font-weight:700;font-size:16px;text-align:center}
+    .panel .btn{height:34px;padding:0 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;color:#000;font-weight:600;font-size:14px}
     .panel .btn.primary{background:#527ea6;color:#ffffff;border-color:#527ea6;font-weight:600}
     .panel .btn.primary:hover{background:#3b5a7a}
     
@@ -74,21 +68,22 @@
     .btn[style*="background:#527ea6"], .btn[style*="background: #527ea6"] {
         color: #ffffff !important;
         font-weight: 600;
-        }
-        
-        .btn[style*="background:#48bb78"], .btn[style*="background: #48bb78"] {
-            color: #ffffff !important;
-            font-weight: 600;
-        }
-        
-        .btn[style*="background:#ef4444"], .btn[style*="background: #ef4444"] {
-            color: #ffffff !important;
-            font-weight: 600;
-        }
-        .nav{display:flex;gap:8px;margin-bottom:10px}
-        .link{display:inline-block;padding:6px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;text-decoration:none;color:inherit}
-        .empty{text-align:center;padding:40px 20px;color:#64748b}
-        .empty-icon{font-size:48px;margin-bottom:16px}
+    }
+    
+    .btn[style*="background:#48bb78"], .btn[style*="background: #48bb78"] {
+        color: #ffffff !important;
+        font-weight: 600;
+    }
+    
+    .btn[style*="background:#ef4444"], .btn[style*="background: #ef4444"] {
+        color: #ffffff !important;
+        font-weight: 600;
+    }
+    
+    /* Стили для пустых состояний подключены из отдельного файла */
+    
+    .empty{text-align:center;padding:40px 20px;color:#64748b}
+    .empty-icon{font-size:48px;margin-bottom:16px}
     </style>
         @include('components.header-styles')
         
@@ -119,10 +114,14 @@
             
             if (favorites.length === 0) {
                 favoritesContainer.innerHTML = `
-                    <div class="empty-favorites">
-                        <h2>Избранное пусто</h2>
-                        <p>Добавьте товары в избранное, чтобы они отображались здесь</p>
-                        <a href="/" class="btn">Перейти к покупкам</a>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">❤️</div>
+                        <h2 class="empty-state-title">Избранное пусто</h2>
+                        <p class="empty-state-description">Добавьте товары в избранное, чтобы они отображались здесь</p>
+                        <a href="/catalog" class="empty-state-button">
+                            <span class="button-icon">🛍️</span>
+                            Перейти к покупкам
+                        </a>
                     </div>
                 `;
                 return;
