@@ -165,6 +165,31 @@
             font-size: 13px;
         }
         
+        .search-result-actions {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .search-action-btn {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        
+        .search-action-btn:hover {
+            background: #f8fafc;
+            border-color: #527ea6;
+            transform: scale(1.1);
+        }
+        
         .no-results {
             padding: 16px;
             text-align: center;
@@ -448,6 +473,31 @@
         }
         
         .subcat-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Стили для кнопки Telegram */
+        .telegram-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #0088cc;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .telegram-btn:hover {
+            background: #006699;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
+        }
+        
+        .telegram-btn:active {
             transform: translateY(0);
         }
     </style>
@@ -941,10 +991,16 @@
 
             function showSubcategoriesModal(category) {
                 const subcategories = getSubcategoriesForCategory(category);
+                
+                if (subcategories.length === 0) {
+                    console.log('Подкатегории не найдены для категории:', category);
+                    return;
+                }
+                
                 const modalContent = `
-                    <div class="modal-content" style="max-width:500px">
+                    <div class="modal-content" style="max-width:500px;position:relative">
                         <span class="close" onclick="closeModal('subcategories')">&times;</span>
-                        <h2>Подкатегории: ${category}</h2>
+                        <h2 style="margin:20px 0;padding-right:40px">Подкатегории: ${category}</h2>
                         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:20px">
                             ${subcategories.map(subcat => `
                                 <button class="subcat-btn" onclick="selectSubcategory('${category}', '${subcat}')" 
@@ -961,7 +1017,7 @@
                 if (!modal) {
                     modal = document.createElement('div');
                     modal.id = 'modal-subcategories';
-                    modal.className = 'modal hidden';
+                    modal.className = 'modal';
                     document.body.appendChild(modal);
                 }
                 modal.innerHTML = modalContent;
@@ -981,6 +1037,8 @@
             }
             
             function selectSubcategory(category, subcategory) {
+                console.log('Выбрана подкатегория:', category, subcategory);
+                
                 // Устанавливаем категорию и подкатегорию
                 state.category = category;
                 state.subcats.clear();
@@ -993,7 +1051,9 @@
                 
                 // Активируем выбранную категорию
                 const categoryItem = categoryList?.querySelector(`[data-value="${category}"]`);
-                if (categoryItem) categoryItem.classList.add('active');
+                if (categoryItem) {
+                    categoryItem.classList.add('active');
+                }
                 
                 // Закрываем модальное окно
                 closeModal('subcategories');
@@ -1129,6 +1189,15 @@ $auth = session('auth');
                         <p style="margin:0;font-size:14px">
                             При заказе от 3-х товаров - скидка 15%! 
                             При заказе от 5-ти товаров - скидка 25%!
+                        </p>
+                    </div>
+                    
+                    <div style="margin-top:20px;text-align:center">
+                        <a href="https://t.me/OLS_Managerr" target="_blank" class="telegram-btn">
+                            💬 Написать менеджеру в Telegram
+                        </a>
+                        <p style="margin-top:8px;font-size:12px;color:#64748b">
+                            @OLS_Managerr - быстрые ответы и консультации
                         </p>
                     </div>
                 </div>
@@ -1460,6 +1529,19 @@ $auth = session('auth');
                         <h3 style="color:#0f172a;margin-bottom:8px">❓ Есть ли гарантия качества?</h3>
                         <p>Да, все товары проходят проверку качества перед отправкой.</p>
                     </div>
+                    
+                    <div style="margin-top:30px;padding:20px;background:#f8fafc;border-radius:12px;border:2px solid #e2e8f0;text-align:center">
+                        <h3 style="color:#0f172a;margin-bottom:12px">💬 Есть вопросы?</h3>
+                        <p style="margin-bottom:16px;color:#64748b">
+                            Не нашли ответ на свой вопрос? Наш менеджер всегда готов помочь!
+                        </p>
+                        <a href="https://t.me/OLS_Managerr" target="_blank" class="telegram-btn">
+                            💬 Обратиться к менеджеру
+                        </a>
+                        <p style="margin-top:8px;font-size:12px;color:#64748b">
+                            @OLS_Managerr - быстрые ответы и консультации
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1499,6 +1581,15 @@ $auth = session('auth');
                         <p style="margin:0;font-size:14px">
                             Для быстрого ответа используйте Telegram или WhatsApp. 
                             Среднее время ответа - 5-10 минут.
+                        </p>
+                    </div>
+                    
+                    <div style="margin-top:20px;text-align:center">
+                        <a href="https://t.me/OLS_Managerr" target="_blank" class="telegram-btn">
+                            💬 Написать менеджеру в Telegram
+                        </a>
+                        <p style="margin-top:8px;font-size:12px;color:#64748b">
+                            @OLS_Managerr - персональная поддержка
                         </p>
                     </div>
                 </div>
@@ -1614,10 +1705,10 @@ $auth = session('auth');
                 <p>Перед заказом можно ознакомиться с реальными отзывами наших покупателей</p>
                 <div style="margin-top:8px;color:#f59e0b">★★★★★</div>
             </div>
-            <div class="tile">
-                <h3>Акции от OLS</h3>
-                <p>Будьте в курсе новых акций нашего магазина и делайте покупки ещё выгоднее</p>
-            </div>
+             <div class="tile" onclick="window.location.href='/promotions'">
+                 <h3>Акции от OLS</h3>
+                 <p>Будьте в курсе новых акций нашего магазина и делайте покупки ещё выгоднее</p>
+             </div>
         </div>
 
         <div class="promo">
@@ -2071,6 +2162,42 @@ $auth = session('auth');
                 subcategory: 'Футболки'
             },
             {
+                id: '12',
+                title: 'Кроссовки Nike Air Force 1 (белые)',
+                price: 100,
+                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop',
+                category: 'Обувь',
+                brand: 'Nike',
+                subcategory: 'Кроссовки'
+            },
+            {
+                id: '13',
+                title: 'Кроссовки Nike Dunk Low (чёрные)',
+                price: 110,
+                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop',
+                category: 'Обувь',
+                brand: 'Nike',
+                subcategory: 'Кроссовки'
+            },
+            {
+                id: '14',
+                title: 'Кроссовки Nike Air Max 90 (серые)',
+                price: 130,
+                image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop',
+                category: 'Обувь',
+                brand: 'Nike',
+                subcategory: 'Кроссовки'
+            },
+            {
+                id: '15',
+                title: 'Худи Nike Sportswear (чёрное)',
+                price: 80,
+                image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=1200&auto=format&fit=crop',
+                category: 'Одежда',
+                brand: 'Nike',
+                subcategory: 'Худи'
+            },
+            {
                 id: '17',
                 title: 'Рюкзак Gucci Marmont (чёрный)',
                 price: 180,
@@ -2129,19 +2256,21 @@ $auth = session('auth');
             // Обработчик ввода в поиск
             searchInput.addEventListener('input', function() {
                 clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    const query = this.value.trim().toLowerCase();
-                    if (query.length >= 2) {
+                const query = this.value.trim().toLowerCase();
+                
+                if (query.length >= 1) {
+                    // Показываем результаты сразу при вводе
+                    searchTimeout = setTimeout(() => {
                         performSearch(query);
                         searchFilters.style.display = 'flex';
                         searchResults.style.display = 'block';
-                    } else if (query.length === 0) {
-                        // Показываем все товары только если поле пустое
-                        showAllProducts();
-                        searchResults.style.display = 'none';
-                        // НЕ скрываем фильтры, если они уже были показаны
-                    }
-                }, 300);
+                    }, 150); // Уменьшили задержку для более быстрого отклика
+                } else if (query.length === 0) {
+                    // Показываем все товары только если поле пустое
+                    showAllProducts();
+                    searchResults.style.display = 'none';
+                    searchFilters.style.display = 'none';
+                }
             });
 
             // Обработчик клика вне поиска
@@ -2217,13 +2346,21 @@ $auth = session('auth');
             }
 
             const resultsHTML = products.map(product => `
-                <div class="search-result-item" onclick="goToProduct('${product.id}')">
+                <div class="search-result-item">
                     <img src="${product.image}" alt="${product.title}" class="search-result-img">
                     <div class="search-result-info">
                         <div class="search-result-title">${product.title}</div>
                         <div class="search-result-category">${product.brand} • ${product.category}</div>
                     </div>
                     <div class="search-result-price">${product.price}€</div>
+                    <div class="search-result-actions">
+                        <button class="search-action-btn" onclick="toggleCart('${product.title}', '${product.price}', '${product.image}')" title="Добавить в корзину">
+                            🛒
+                        </button>
+                        <button class="search-action-btn" onclick="toggleFavorite('${product.title}', '${product.price}', '${product.image}')" title="Добавить в избранное">
+                            ❤️
+                        </button>
+                    </div>
                 </div>
             `).join('');
 
@@ -2265,6 +2402,9 @@ $auth = session('auth');
                 }
             });
         }
+        
+        // Обновляем счетчики в хедере
+        updateHeaderCounters();
     });
 </script>
 @endsection

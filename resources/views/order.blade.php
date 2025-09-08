@@ -363,4 +363,43 @@
             </div>
         </div>
     </main>
+
+<script>
+    // Функция для обновления счетчиков в хедере
+    function updateHeaderCounters() {
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        
+        // Обновляем счетчик избранного
+        const favoriteBadges = document.querySelectorAll('.icon-container .badge');
+        favoriteBadges.forEach(badge => {
+            if (badge.closest('.icon-container').querySelector('.heart-icon')) {
+                if (favorites.length > 0) {
+                    badge.textContent = favorites.length;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        });
+        
+        // Обновляем счетчик корзины
+        const cartBadges = document.querySelectorAll('.icon-container .badge');
+        cartBadges.forEach(badge => {
+            if (badge.closest('.icon-container').querySelector('.bag-icon')) {
+                if (cart.length > 0) {
+                    badge.textContent = cart.length;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+        });
+    }
+
+    // Обновляем счетчики при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        updateHeaderCounters();
+    });
+</script>
 @endsection
