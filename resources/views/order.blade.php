@@ -1,23 +1,16 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Заказ {{ $order->order_number }} | ORIGINAL | LUX SHOP</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: Inter, system-ui, Segoe UI, Arial, sans-serif; 
-            background: #f8fafc; 
-            color: #0f172a; 
-            line-height: 1.6;
-        }
-        
-        /* Header */
-        header{background:#d1d5db;border-bottom:1px solid #cbd5e1}
-        header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px}
-        .btn{height:34px;padding:0 12px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
-        .brand{margin-left:8px;background:#e2e8f0;border:1px solid #cbd5e1;border-radius:8px;padding:6px 12px;font-weight:700}
+@extends('layouts.app')
+
+@section('title', 'Заказ ' . $order->order_number . ' | ORIGINAL | LUX SHOP')
+
+@section('styles')
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, "Noto Sans", sans-serif; 
+        background: #f8fafc; 
+        color: #0f172a; 
+        line-height: 1.6;
+    }
         
         .container {
             max-width: 900px;
@@ -251,36 +244,10 @@
             }
         }
     </style>
-</head>
-<body>
-    <header>
-        <div class="container bar">
-            <button class="btn" onclick="window.location.href='/'">Закрыть</button>
-            <div style="margin-left:auto;display:flex;gap:6px;align-items:center;">
-                <button class="btn" onclick="showModal('faq')" title="FAQ">?</button>
-                <button class="btn" onclick="showModal('contact')" title="Контакты">✉</button>
-                <span class="brand" onclick="location.reload()" style="cursor:pointer" title="Обновить страницу">ORIGINAL | LUX SHOP</span>
-                <a class="btn" href="/favorites" style="text-decoration:none;color:inherit" title="Избранное">❤ <span>(<?php $favoritesCount = is_countable(session('favorites')) ? count(session('favorites')) : 0; echo e($favoritesCount); ?>)</span></a>
-                <?php $cartCount = is_countable(session('cart')) ? count(session('cart')) : 0; ?>
-                <a class="btn" href="/cart" style="text-decoration:none;color:inherit">👜 <span>(<?php echo e($cartCount); ?>)</span></a>
-                <?php $auth = session('auth'); ?>
-                <?php if(!$auth): ?>
-                    <a class="btn" href="/login" style="text-decoration:none;color:inherit">👤 Войти</a>
-                <?php else: ?>
-                    <form method="post" action="/logout" style="display:inline">
-                        <?php echo csrf_field(); ?>
-                        <button class="btn" type="submit">Выйти (<?php echo e($auth['role']); ?>)</button>
-                    </form>
-                    <a class="btn" href="/profile" style="text-decoration:none;color:inherit">👤 Профиль</a>
-                    <?php if($auth['role'] === 'admin'): ?>
-                        <a class="btn" href="/admin" style="text-decoration:none;color:inherit" title="Админ-панель">⚙️ Админ-панель</a>
-                    <?php endif; ?>
-                <?php endif; ?>
-            </div>
-        </div>
-    </header>
+@endsection
 
-    <main class="main">
+@section('content')
+<main class="main">
         <div class="container">
             @if(session('success'))
             <div class="success-message">
@@ -396,5 +363,4 @@
             </div>
         </div>
     </main>
-</body>
-</html>
+@endsection

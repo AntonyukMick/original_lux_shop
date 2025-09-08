@@ -1,159 +1,23 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Каталог товаров | ORIGINAL | LUX SHOP</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: Inter, system-ui, Segoe UI, Arial, sans-serif; 
-            background: #f8fafc; 
-            color: #0f172a; 
-            line-height: 1.6;
-        }
-        
-        /* Header */
-        header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
-        header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
-        /* Обновленные стили для всех элементов хедера */
-        .btn {
-            height: 40px;
-            padding: 0 12px;
-            border-radius: 8px;
-            border: 2px solid #000;
-            background: #fff;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            color: #000;
-            transition: all 0.2s ease;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        /* Увеличенная иконка для кнопки входа */
-        .btn .login-icon {
-            font-size: 18px;
-        }
-        
-        .brand {
-            margin-left: 8px;
-            background: #e2e8f0;
-            border: 2px solid #000;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-weight: 700;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .brand:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        /* Новые стили для иконок избранного и корзины */
-        .icon-container {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            background: white;
-            border: 2px solid #000;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin: 0 4px;
-        }
-        
-        .icon-container:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .icon-container .icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 22px;
-            color: #FFD700;
-        }
-        
-        .icon-container .badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: #FFD700;
-            border: 2px solid #000;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 9px;
-            font-weight: bold;
-            color: #000;
-        }
-        
-        .icon-container .badge.hidden {
-            display: none;
-        }
-        
-        /* Стили для иконки сердца */
-        .heart-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки самолетика */
-        .plane-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки вопросика */
-        .question-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки доставки */
-        .delivery-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-            font-size: 20px;
-            transform: translate(-50%, -50%) scale(1.2);
-        }
-        
-        /* Стили для иконки о нас */
-        .about-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Скрываем старые кнопки */
-        .old-icon-btn {
-            display: none;
-        }
-        
-        /* Улучшенные стили для поиска в каталоге */
-        .search-section {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+@extends('layouts.app')
+
+@section('title', 'Каталог товаров')
+
+@section('styles')
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, "Noto Sans", sans-serif; 
+        background: #f8fafc; 
+        color: #0f172a; 
+        line-height: 1.6;
+    }
+    
+    /* Улучшенные стили для поиска в каталоге */
+    .search-section {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
         }
         
@@ -477,86 +341,12 @@
             }
         }
     </style>
-</head>
-<body>
-    <header>
-        <?php 
-        $favoritesCount = is_countable(session('favorites')) ? count(session('favorites')) : 0;
-        $cartCount = is_countable(session('cart')) ? count(session('cart')) : 0;
-        ?>
-        <div class="container bar">
-            <button class="btn" onclick="window.location.href='/'">Закрыть</button>
-            <div style="margin-left:auto;display:flex;gap:6px;align-items:center;">
-                <!-- Новая иконка FAQ -->
-                <div class="icon-container" onclick="showModal('faq')" title="FAQ">
-                    <div class="icon question-icon">?</div>
-                </div>
-                
-                <!-- Новая иконка контактов (Telegram) -->
-                <div class="icon-container" onclick="window.open('https://t.me/original_lux_shop', '_blank')" title="Telegram канал">
-                    <div class="icon plane-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700" stroke="#000" stroke-width="1">
-                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                        </svg>
-                    </div>
-                </div>
-                
-                <!-- Новая иконка доставки -->
-                <div class="icon-container" onclick="window.location.href='/delivery'" title="Доставка">
-                    <div class="icon delivery-icon">🚚</div>
-                </div>
-                
-                <!-- Новая иконка о нас -->
-                <div class="icon-container" onclick="window.location.href='/about'" title="О нас">
-                    <div class="icon about-icon">ℹ️</div>
-                </div>
-                
-                <!-- Скрытые старые кнопки -->
-                <button class="btn old-icon-btn" onclick="showModal('faq')" title="FAQ">?</button>
-                <button class="btn old-icon-btn" onclick="showModal('contact')" title="Контакты">✉</button>
-                <a class="btn old-icon-btn" href="/delivery" style="text-decoration:none;color:inherit" title="Доставка">🚚 Доставка</a>
-                <a class="btn old-icon-btn" href="/about" style="text-decoration:none;color:inherit" title="О нас">ℹ️ О нас</a>
-                
-                <span class="brand" onclick="location.reload()" style="cursor:pointer" title="Обновить страницу">ORIGINAL | LUX SHOP</span>
-                
-                <!-- Новая иконка избранного -->
-                <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
-                    <div class="icon heart-icon">❤</div>
-                    <div class="badge <?php echo $favoritesCount > 0 ? '' : 'hidden'; ?>"><?php echo e($favoritesCount); ?></div>
-                </div>
-                
-                <!-- Новая иконка корзины -->
-                <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
-                    <div class="icon bag-icon">👜</div>
-                    <div class="badge <?php echo $cartCount > 0 ? '' : 'hidden'; ?>"><?php echo e($cartCount); ?></div>
-                </div>
-                
-                <!-- Скрытые старые кнопки -->
-                <a class="btn old-icon-btn" href="/favorites" style="text-decoration:none;color:inherit" title="Избранное">❤ <span>(<?php echo e($favoritesCount); ?>)</span></a>
-                <a class="btn old-icon-btn" href="/cart" style="text-decoration:none;color:inherit">👜 <span>(<?php echo e($cartCount); ?>)</span></a>
-                
-                <?php $auth = session('auth'); ?>
-                <?php if(!$auth): ?>
-                    <a class="btn" href="/login" style="text-decoration:none;color:inherit">
-                        <span class="login-icon">👤</span> Войти
-                    </a>
-                <?php else: ?>
-                    <form method="post" action="/logout" style="display:inline">
-                        <?php echo csrf_field(); ?>
-                        <button class="btn" type="submit">Выйти (<?php echo e($auth['role']); ?>)</button>
-                    </form>
-                    <a class="btn" href="/profile" style="text-decoration:none;color:inherit">👤 Профиль</a>
-                    <?php if($auth['role'] === 'admin'): ?>
-                        <a class="btn" href="/admin" style="text-decoration:none;color:inherit" title="Админ-панель">⚙️ Админ-панель</a>
-                    <?php endif; ?>
-                <?php endif; ?>
-            </div>
-        </div>
-    </header>
+@endsection
 
-    <main class="main">
-        <div class="container">
-            <!-- Поиск в каталоге -->
+@section('content')
+<main class="main">
+    <div class="container">
+        <!-- Поиск в каталоге -->
             <div class="search-section" style="margin: 20px 0; padding: 24px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                 <h3 style="margin: 0 0 16px 0; color: #1e293b; font-size: 18px; font-weight: 600;">🔍 Поиск товаров</h3>
                 <div class="search" style="display: flex; align-items: center; gap: 12px; width: 100%;">
@@ -795,10 +585,25 @@
             color: #64748b;
             line-height: 1.6;
         }
+        
+        /* Стили для модального окна подкатегорий */
+        .subcat-btn:hover {
+            background: #f1f5f9 !important;
+            border-color: #527ea6 !important;
+            color: #527ea6 !important;
+        }
+        
+        .subcat-btn:active {
+            background: #527ea6 !important;
+            border-color: #527ea6 !important;
+            color: #fff !important;
+        }
     </style>
+@endsection
 
-    <script>
-        // Данные для фильтров по категориям
+@section('scripts')
+<script>
+    // Данные для фильтров по категориям
         const filterData = {
             'Обувь': {
                 brands: ['Nike', 'Adidas', 'Gucci', 'Puma', 'Dr. Martens', 'Birkenstock', 'Church\'s'],
@@ -835,13 +640,18 @@
         // Category tabs
         document.querySelectorAll('.category-tab').forEach(tab => {
             tab.addEventListener('click', () => {
-                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
                 const category = tab.dataset.category;
-                updateFilters(category);
-                filterProducts();
-                updateSectionTitle(category);
+                
+                if (category === 'all') {
+                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    updateFilters(category);
+                    filterProducts();
+                    updateSectionTitle(category);
+                } else {
+                    // Открываем модальное окно с подкатегориями для выбранной категории
+                    showSubcategoriesModal(category);
+                }
             });
         });
 
@@ -976,6 +786,71 @@
             updateSectionTitle('all');
         }
 
+        // Функции для модального окна подкатегорий
+        function showSubcategoriesModal(category) {
+            const subcategories = getSubcategoriesForCategory(category);
+            const modalContent = `
+                <div class="modal-content" style="max-width:500px">
+                    <span class="close" onclick="closeModal('subcategories')">&times;</span>
+                    <h2>Подкатегории: ${category}</h2>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:20px">
+                        ${subcategories.map(subcat => `
+                            <button class="subcat-btn" onclick="selectSubcategory('${category}', '${subcat}')" 
+                                    style="padding:12px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;cursor:pointer;text-align:left;transition:all 0.2s">
+                                ${subcat}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Создаем или обновляем модальное окно
+            let modal = document.getElementById('modal-subcategories');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'modal-subcategories';
+                modal.className = 'modal';
+                document.body.appendChild(modal);
+            }
+            modal.innerHTML = modalContent;
+            modal.classList.remove('hidden');
+        }
+        
+        function getSubcategoriesForCategory(category) {
+            const subcategoriesMap = {
+                'Одежда': ['Зип-худи', 'Футболки', 'Джинсы', 'Шорты', 'Пальто', 'Куртки', 'Рубашки', 'Свитера'],
+                'Обувь': ['Лоферы', 'Кеды', 'Кроссовки', 'Ботинки', 'Сандалии', 'Туфли'],
+                'Сумки': ['Сумка через плечо', 'Рюкзак', 'Клатч', 'Торба', 'Кошелек', 'Дорожная сумка'],
+                'Часы': ['Механические', 'Кварцевые', 'Автоматические', 'Хронограф', 'Смарт-часы'],
+                'Украшения': ['Кольца', 'Браслеты', 'Цепочки', 'Серьги', 'Подвески', 'Броши'],
+                'Аксессуары': ['Очки', 'Ремни', 'Галстуки', 'Шарфы', 'Перчатки', 'Зонты']
+            };
+            return subcategoriesMap[category] || [];
+        }
+        
+        function selectSubcategory(category, subcategory) {
+            // Обновляем активные элементы в фильтрах
+            document.querySelectorAll('.category-tab').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Активируем выбранную категорию
+            const categoryTab = document.querySelector(`[data-category="${category}"]`);
+            if (categoryTab) categoryTab.classList.add('active');
+            
+            // Устанавливаем подкатегорию в фильтре
+            const subcategorySelect = document.getElementById('subcategoryFilter');
+            subcategorySelect.value = subcategory;
+            
+            // Закрываем модальное окно
+            closeModal('subcategories');
+            
+            // Обновляем фильтры и применяем их
+            updateFilters(category);
+            filterProducts();
+            updateSectionTitle(category);
+        }
+
         // Initialize
         updateFilters('all');
         filterProducts();
@@ -996,11 +871,24 @@
             if (modal) {
                 modal.classList.add('hidden');
             }
+            
+            // Дополнительная обработка для модального окна подкатегорий
+            if (modalId === 'subcategories') {
+                const subcategoriesModal = document.getElementById('modal-subcategories');
+                if (subcategoriesModal) {
+                    subcategoriesModal.classList.add('hidden');
+                }
+            }
         }
         
         // Закрытие модального окна при клике вне его
         document.addEventListener('click', function(event) {
             if (event.target.classList.contains('modal')) {
+                event.target.classList.add('hidden');
+            }
+            
+            // Дополнительная обработка для модального окна подкатегорий
+            if (event.target.id === 'modal-subcategories') {
                 event.target.classList.add('hidden');
             }
         });
@@ -1177,5 +1065,4 @@
             hideNoResultsMessage();
         }
     </script>
-</body>
-</html>
+@endsection
