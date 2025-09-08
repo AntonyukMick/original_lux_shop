@@ -13,6 +13,20 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('category');
+            $table->string('brand');
+            $table->string('subcat')->nullable();
+            $table->decimal('price', 10, 2);
+            $table->decimal('original_price', 10, 2)->nullable();
+            $table->text('description')->nullable();
+            $table->json('images')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->boolean('featured')->default(false);
+            $table->integer('stock_quantity')->default(0);
+            $table->string('sku')->nullable();
+            $table->decimal('weight', 8, 2)->nullable();
+            $table->string('dimensions')->nullable();
             $table->timestamps();
         });
     }

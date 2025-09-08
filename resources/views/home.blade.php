@@ -1,187 +1,53 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ORIGINAL | LUX SHOP</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg:#f1f5f9; --card:#ffffff; --muted:#e2e8f0; --text:#0f172a; --accent:#527ea6; }
-        *{box-sizing:border-box}
-        body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,"Noto Sans",sans-serif;color:var(--text)}
-        .container{max-width:1140px;margin:0 auto;padding:12px}
-        header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
-        header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
-        /* Обновленные стили для всех элементов хедера */
-        .btn {
-            height: 40px;
-            padding: 0 12px;
-            border-radius: 8px;
-            border: 2px solid #000;
-            background: #fff;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            color: #000;
-            transition: all 0.2s ease;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        /* Мягкие стили для кнопок товаров */
-        .good .btn {
-            height: 36px;
-            padding: 0 16px;
-            border-radius: 18px;
-            border: 1px solid #e2e8f0;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            color: #475569;
-            font-weight: 500;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-        }
-        
-        .good .btn:hover {
-            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-            color: #1e293b;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-color: #cbd5e1;
-        }
-        
-        .good .btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Увеличенная иконка для кнопки входа */
-        .btn .login-icon {
-            font-size: 18px;
-        }
-        
-        .brand {
-            margin-left: 8px;
-            background: #e2e8f0;
-            border: 2px solid #000;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-weight: 700;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .brand:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        /* Новые стили для иконок избранного и корзины */
-        .icon-container {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            background: white;
-            border: 2px solid #000;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin: 0 4px;
-        }
-        
-        .icon-container:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .icon-container .icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 22px;
-            color: #FFD700;
-        }
-        
-        .icon-container .badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: #FFD700;
-            border: 2px solid #000;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 9px;
-            font-weight: bold;
-            color: #000;
-        }
-        
-        .icon-container .badge.hidden {
-            display: none;
-        }
-        
-        /* Стили для иконки сердца */
-        .heart-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки самолетика */
-        .plane-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки вопросика */
-        .question-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки доставки */
-        .delivery-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-            font-size: 20px;
-            transform: translate(-50%, -50%) scale(1.2);
-        }
-        
-        /* Стили для иконки о нас */
-        .about-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Скрываем старые кнопки */
-        .old-icon-btn {
-            display: none;
-        }
-        
-        .grid-top{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
-        .tile{background:var(--card);border:2px solid #000;border-radius:10px;padding:16px;position:relative;min-height:100px;transition:all 0.2s ease}
-        .tile h3{margin:0 0 6px 0;font-size:16px;font-weight:700;color:#1e293b}
-        .tile p{margin:0;color:#475569;font-weight:500}
+@extends('layouts.app')
+
+@section('title', 'ORIGINAL | LUX SHOP')
+
+@section('styles')
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    :root { --bg:#f1f5f9; --card:#ffffff; --muted:#e2e8f0; --text:#0f172a; --accent:#527ea6; }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,"Noto Sans",sans-serif;color:var(--text)}
+    .container{max-width:1140px;margin:0 auto;padding:12px}
+    
+    /* Мягкие стили для кнопок товаров */
+    .good .btn {
+        height: 36px;
+        padding: 0 16px;
+        border-radius: 18px;
+        border: 1px solid #e2e8f0;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        color: #475569;
+        font-weight: 500;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+    
+    .good .btn:hover {
+        background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+        color: #1e293b;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-color: #cbd5e1;
+    }
+    
+    .good .btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .grid-top{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+    .tile{background:var(--card);border:2px solid #000;border-radius:10px;padding:16px;position:relative;min-height:100px;transition:all 0.2s ease}
+    .tile h3{margin:0 0 6px 0;font-size:16px;font-weight:700;color:#1e293b}
+    .tile p{margin:0;color:#475569;font-weight:500}
         /* Улучшенные стили для поиска - более компактный и сдержанный */
         .search {
             display: flex;
@@ -397,18 +263,98 @@
         .filter-row select{flex:1;min-width:120px;height:36px;border:1px solid #cbd5e1;border-radius:6px;padding:0 10px;background:#fff}
         
         /* Карточки товаров в модальных окнах */
-        .modal-products{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:20px}
+        .modal-products{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:20px}
         .product-card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;transition:transform 0.2s}
         .product-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
         .product-card img{width:100%;height:120px;object-fit:cover}
+        
+        /* Уменьшенные размеры для карточек в модальных окнах */
+        .modal .product-card {
+            min-width: 140px;
+            max-width: 180px;
+        }
+        
+        .modal .product-card img {
+            width: 100%;
+            height: 80px; /* Уменьшено с 120px до 80px */
+            object-fit: cover;
+        }
+        
+        .modal .product-info {
+            padding: 6px; /* Уменьшено с 8px до 6px */
+        }
+        
+        .modal .product-info h4 {
+            margin: 0 0 3px 0; /* Уменьшено с 4px до 3px */
+            font-size: 11px; /* Уменьшено с 12px до 11px */
+            font-weight: 600;
+        }
+        
+        .modal .product-info .brand {
+            margin: 0 0 2px 0; /* Уменьшено с 3px до 2px */
+            font-size: 9px; /* Уменьшено с 10px до 9px */
+            color: #64748b;
+        }
+        
+        .modal .product-info .price {
+            margin: 0 0 4px 0; /* Уменьшено с 6px до 4px */
+            font-size: 12px; /* Уменьшено с 14px до 12px */
+            font-weight: 700;
+            color: #0f172a;
+        }
+        
+        .modal .add-to-cart-btn {
+            width: 100%;
+            height: 24px; /* Уменьшено с 28px до 24px */
+            background: #527ea6;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px; /* Уменьшено с 6px до 4px */
+            font-size: 10px; /* Уменьшено с 11px до 10px */
+            cursor: pointer;
+            transition: background 0.2s;
+            font-weight: 600;
+        }
+        
+        .modal .add-to-cart-btn:hover {
+            background: #3b5a7a;
+        }
+        
+        /* Стили для кнопки "В корзине" в модальных окнах */
+        .modal .add-to-cart-btn[style*="background:#48bb78"], 
+        .modal .add-to-cart-btn[style*="background: #48bb78"] {
+            background: #48bb78 !important;
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+        
+        .modal .add-to-cart-btn[style*="background:#48bb78"]:hover, 
+        .modal .add-to-cart-btn[style*="background: #48bb78"]:hover {
+            background: #38a169 !important;
+        }
+        
+        /* Общие стили для карточек товаров */
         .product-info{padding:8px}
         .product-info h4{margin:0 0 4px 0;font-size:12px;font-weight:600}
         .product-info .brand{margin:0 0 3px 0;font-size:10px;color:#64748b}
         .product-info .price{margin:0 0 6px 0;font-size:14px;font-weight:700;color:#0f172a}
         .original-price{font-size:12px;color:#94a3b8;text-decoration:line-through;margin-left:8px}
         .custom-note{font-size:11px;color:#059669;margin:0 0 8px 0}
-        .add-to-cart-btn{width:100%;height:28px;background:#527ea6;color:#fff;border:none;border-radius:6px;font-size:11px;cursor:pointer;transition:background 0.2s}
+        .add-to-cart-btn{width:100%;height:28px;background:#527ea6;color:#ffffff;border:none;border-radius:6px;font-size:11px;cursor:pointer;transition:background 0.2s;font-weight:600}
         .add-to-cart-btn:hover{background:#3b5a7a}
+        
+        /* Стили для кнопки "В корзине" */
+        .add-to-cart-btn[style*="background:#48bb78"], 
+        .add-to-cart-btn[style*="background: #48bb78"] {
+            background: #48bb78 !important;
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+        
+        .add-to-cart-btn[style*="background:#48bb78"]:hover, 
+        .add-to-cart-btn[style*="background: #48bb78"]:hover {
+            background: #38a169 !important;
+        }
         .tile{cursor:pointer;transition:transform 0.2s,box-shadow 0.2s}
         .tile:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15);border-color:#FFD700}
         
@@ -472,6 +418,26 @@
         
         .favorite-btn.active:hover {
             transform: scale(1.1);
+        }
+        
+        /* Стили для кнопок корзины */
+        .btn[type="submit"] {
+            transition: all 0.2s ease;
+        }
+        
+        .btn[type="submit"]:disabled {
+            opacity: 0.7;
+        }
+        
+        .btn[type="submit"]:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Специальные стили для кнопки "В корзине" */
+        .btn[type="submit"]:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         /* Стили для кнопок подкатегорий в модальном окне */
@@ -574,6 +540,7 @@
                 favorites.push({ title, price, image });
                 localStorage.setItem('favorites', JSON.stringify(favorites));
                 showNotification('Товар добавлен в избранное!', 'success');
+                updateProductStatuses(); // Обновляем статусы после добавления
             }
         }
         
@@ -582,6 +549,7 @@
             favorites = favorites.filter(item => item.title !== title);
             localStorage.setItem('favorites', JSON.stringify(favorites));
             showNotification('Товар удален из избранного', 'info');
+            updateProductStatuses(); // Обновляем статусы после удаления
         }
         
         function showFavorites() {
@@ -698,20 +666,205 @@
         
         // Инициализация избранного при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
-            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-            const favoriteButtons = document.querySelectorAll('.favorite-btn');
+            updateProductStatuses();
+            updateHeaderCounters(); // Дополнительный вызов для обновления счетчиков
             
+            // Обработчики для форм добавления в корзину
+            const cartForms = document.querySelectorAll('form[action="/cart/add"]');
+            cartForms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(form);
+                    const title = formData.get('title');
+                    const price = formData.get('price');
+                    const image = formData.get('image');
+                    
+                    // Используем функцию переключения
+                    toggleCart(title, price, image);
+                });
+            });
+            
+            // Обработчики для форм избранного
+            const favoriteForms = document.querySelectorAll('form[action="/favorites/add"]');
+            favoriteForms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(form);
+                    const title = formData.get('title');
+                    const price = formData.get('price');
+                    const image = formData.get('image');
+                    
+                    // Проверяем, есть ли уже в избранном
+                    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                    const existingIndex = favorites.findIndex(item => item.title === title);
+                    
+                    if (existingIndex === -1) {
+                        favorites.push({ title, price, image });
+                        localStorage.setItem('favorites', JSON.stringify(favorites));
+                        showNotification('Товар добавлен в избранное!', 'success');
+                    } else {
+                        favorites.splice(existingIndex, 1);
+                        localStorage.setItem('favorites', JSON.stringify(favorites));
+                        showNotification('Товар удален из избранного', 'info');
+                    }
+                    
+                    updateProductStatuses(); // Обновляем статусы
+                    updateHeaderCounters(); // Обновляем счетчики в хедере
+                });
+            });
+        });
+        
+        // Функция для обновления счетчиков в хедере
+        function updateHeaderCounters() {
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            
+            // Обновляем счетчик избранного
+            const favoriteBadges = document.querySelectorAll('.icon-container .badge');
+            favoriteBadges.forEach(badge => {
+                if (badge.closest('.icon-container').querySelector('.heart-icon')) {
+                    if (favorites.length > 0) {
+                        badge.textContent = favorites.length;
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                }
+            });
+            
+            // Обновляем счетчик корзины
+            const cartBadges = document.querySelectorAll('.icon-container .badge');
+            cartBadges.forEach(badge => {
+                if (badge.closest('.icon-container').querySelector('.bag-icon')) {
+                    if (cart.length > 0) {
+                        badge.textContent = cart.length;
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                }
+            });
+            
+            // Обновляем старые счетчики (если есть)
+            const oldFavoriteCounters = document.querySelectorAll('.btn[href="/favorites"] span');
+            oldFavoriteCounters.forEach(counter => {
+                counter.textContent = `(${favorites.length})`;
+            });
+            
+            const oldCartCounters = document.querySelectorAll('.btn[href="/cart"] span');
+            oldCartCounters.forEach(counter => {
+                counter.textContent = `(${cart.length})`;
+            });
+        }
+        
+        // Функция для обновления статуса всех товаров
+        function updateProductStatuses() {
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            
+            // Обновляем кнопки избранного
+            const favoriteButtons = document.querySelectorAll('.favorite-btn');
             favoriteButtons.forEach(button => {
-                const title = button.getAttribute('onclick').split("'")[1];
+                const form = button.closest('form');
+                const titleInput = form.querySelector('input[name="title"]');
+                const title = titleInput ? titleInput.value : '';
+                
                 const isFavorite = favorites.some(item => item.title === title);
                 
                 if (isFavorite) {
                     button.classList.add('active');
                     button.innerHTML = '❤';
                     button.title = 'Удалить из избранного';
+                } else {
+                    button.classList.remove('active');
+                    button.innerHTML = '♡';
+                    button.title = 'Добавить в избранное';
                 }
             });
-        });
+            
+            // Обновляем кнопки корзины
+            const cartButtons = document.querySelectorAll('.btn[type="submit"]');
+            cartButtons.forEach(button => {
+                const form = button.closest('form');
+                const titleInput = form.querySelector('input[name="title"]');
+                const title = titleInput ? titleInput.value : '';
+                
+                const isInCart = cart.some(item => item.title === title);
+                
+                if (isInCart) {
+                    button.innerHTML = 'В корзине';
+                    button.style.background = '#48bb78';
+                    button.style.color = '#ffffff';
+                    button.style.fontWeight = '600';
+                    button.style.cursor = 'pointer';
+                    button.disabled = false;
+                    button.title = 'Нажмите, чтобы удалить из корзины';
+                    
+                    // Удаляем старый обработчик и добавляем новый
+                    button.removeEventListener('click', button.cartRemoveHandler);
+                    button.cartRemoveHandler = function(e) {
+                        e.preventDefault();
+                        removeFromCart(title);
+                    };
+                    button.addEventListener('click', button.cartRemoveHandler);
+                } else {
+                    button.innerHTML = 'Добавить в корзину';
+                    button.style.background = '#527ea6';
+                    button.style.color = '#ffffff';
+                    button.style.fontWeight = '600';
+                    button.style.cursor = 'pointer';
+                    button.disabled = false;
+                    button.title = 'Добавить в корзину';
+                    
+                    // Удаляем обработчик удаления
+                    button.removeEventListener('click', button.cartRemoveHandler);
+                    delete button.cartRemoveHandler;
+                }
+            });
+            
+            // Обновляем счетчики в хедере
+            updateHeaderCounters();
+        }
+        
+        // Функция для удаления из корзины
+        function removeFromCart(title) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart = cart.filter(item => item.title !== title);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            showNotification('Товар удален из корзины', 'info');
+            updateProductStatuses(); // Обновляем статусы
+        }
+        
+        // Функция для переключения состояния корзины
+        function toggleCart(title, price, image) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const existingIndex = cart.findIndex(item => item.title === title);
+            
+            if (existingIndex === -1) {
+                // Добавляем в корзину
+                cart.push({ title, price, image });
+                localStorage.setItem('cart', JSON.stringify(cart));
+                showNotification('Товар добавлен в корзину!', 'success');
+            } else {
+                // Удаляем из корзины
+                cart.splice(existingIndex, 1);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                showNotification('Товар удален из корзины', 'info');
+            }
+            
+            updateProductStatuses(); // Обновляем статусы
+        }
+        
+        // Функция для очистки корзины
+        function clearCart() {
+            if (confirm('Вы уверены, что хотите очистить корзину?')) {
+                localStorage.removeItem('cart');
+                showNotification('Корзина очищена', 'info');
+                updateProductStatuses(); // Обновляем статусы
+            }
+        }
         
         // Простейшие табы + фильтры без перезагрузки
         document.addEventListener('DOMContentLoaded', () => {
@@ -901,87 +1054,15 @@
             }
         }
     </script>
-    </head>
-<body>
-    <header>
-        <?php 
-        $favoritesCount = is_countable(session('favorites')) ? count(session('favorites')) : 0;
-        $cartCount = is_countable(session('cart')) ? count(session('cart')) : 0;
-        ?>
-        <div class="container bar">
-            <button class="btn" onclick="window.location.href='/'">Закрыть</button>
-            <div style="margin-left:auto;display:flex;gap:6px;align-items:center;">
-                <!-- Новая иконка FAQ -->
-                <div class="icon-container" onclick="showModal('faq')" title="FAQ">
-                    <div class="icon question-icon">?</div>
-                </div>
-                
-                <!-- Новая иконка контактов (Telegram) -->
-                <div class="icon-container" onclick="window.open('https://t.me/original_lux_shop', '_blank')" title="Telegram канал">
-                    <div class="icon plane-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700" stroke="#000" stroke-width="1">
-                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                        </svg>
-                    </div>
-                </div>
-                
-                <!-- Скрытые старые кнопки -->
-                <button class="btn old-icon-btn" onclick="showModal('faq')" title="FAQ">?</button>
-                <button class="btn old-icon-btn" onclick="showModal('contact')" title="Контакты">✉</button>
-                
-                <!-- Новая иконка доставки -->
-                <div class="icon-container" onclick="window.location.href='/delivery'" title="Доставка">
-                    <div class="icon delivery-icon">🚚</div>
-                </div>
-                
-                <!-- Новая иконка о нас -->
-                <div class="icon-container" onclick="window.location.href='/about'" title="О нас">
-                    <div class="icon about-icon">ℹ️</div>
-                </div>
-                
-                <!-- Скрытые старые кнопки -->
-                <a class="btn old-icon-btn" href="/delivery" style="text-decoration:none;color:inherit" title="Доставка">🚚 Доставка</a>
-                <a class="btn old-icon-btn" href="/about" style="text-decoration:none;color:inherit" title="О нас">ℹ️ О нас</a>
-                <span class="brand" onclick="location.reload()" style="cursor:pointer" title="Обновить страницу">ORIGINAL | LUX SHOP</span>
-                
-                <!-- Новая иконка избранного -->
-                <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
-                    <div class="icon heart-icon">❤</div>
-                    <div class="badge <?php echo $favoritesCount > 0 ? '' : 'hidden'; ?>"><?php echo e($favoritesCount); ?></div>
-                </div>
-                
-                <!-- Новая иконка корзины -->
-                <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
-                    <div class="icon bag-icon">👜</div>
-                    <div class="badge <?php echo $cartCount > 0 ? '' : 'hidden'; ?>"><?php echo e($cartCount); ?></div>
-                </div>
-                
-                <!-- Скрытые старые кнопки -->
-                <a class="btn old-icon-btn" href="/favorites" style="text-decoration:none;color:inherit" title="Избранное">❤ <span>(<?php echo e($favoritesCount); ?>)</span></a>
-                <a class="btn old-icon-btn" href="/cart" style="text-decoration:none;color:inherit">👜 <span>(<?php echo e($cartCount); ?>)</span></a>
-                <?php $auth = session('auth'); ?>
-                <?php if(!$auth): ?>
-                    <a class="btn" href="/login" style="text-decoration:none;color:inherit">
-                        <span class="login-icon">👤</span> Войти
-                    </a>
-                <?php else: ?>
-                    <form method="post" action="/logout" style="display:inline">
-                        <?php echo csrf_field(); ?>
-                        <button class="btn" type="submit">Выйти (<?php echo e($auth['role']); ?>)</button>
-                    </form>
-                                                                 <?php if($auth['role']==='admin'): ?>
-                        <a class="btn" href="/admin" style="text-decoration:none;color:inherit" title="Админ-панель">⚙️ Админ-панель</a>
-                    <?php endif; ?>
-                         <a class="btn" href="/profile" style="text-decoration:none;color:inherit">👤 Профиль</a>
-                <?php endif; ?>
-            </div>
-        </div>
-    </header>
+@section('content')
+@php
+$auth = session('auth');
+@endphp
 
-    <main class="container">
-        <div class="grid-top">
-            <div class="tile" style="background:#e9e8ff;cursor:pointer" onclick="showModal('order')">
-                <h3>Знакомство. Оформление заказа</h3>
+<div class="container">
+    <div class="grid-top">
+        <div class="tile" style="background:#e9e8ff;cursor:pointer" onclick="showModal('order')">
+            <h3>Знакомство. Оформление заказа</h3>
                 <p>Как мы работаем и как оформить покупку</p>
             </div>
             <div class="tile" style="background:#d7e6f3;cursor:pointer" onclick="showModal('custom')">
@@ -1087,7 +1168,6 @@
                         <img src="https://media.endclothing.com/media/f_auto,q_auto:eco,w_1600/prodmedia/media/catalog/product/0/5/05-08-2021_TH_751560519-V0029_1_1.jpg" alt="Stone Island худи">
                         <div class="product-info">
                             <h4>Stone Island худи</h4>
-                            <p class="brand">Stone Island</p>
                             <p class="price">60€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1097,7 +1177,6 @@
                         <img src="https://media.endclothing.com/media/f_auto,q_auto:eco,w_1600/prodmedia/media/catalog/product/0/5/05-01-2018_stoneisland_juniorgarmentdyedziphoody_black_6716-62040-v0029_th_1x.jpg" alt="Balenciaga худи">
                         <div class="product-info">
                             <h4>Balenciaga худи</h4>
-                            <p class="brand">Balenciaga</p>
                             <p class="price">85€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1107,7 +1186,6 @@
                         <img src="https://media.endclothing.com/media/f_auto,q_auto:eco,w_1600/prodmedia/media/catalog/product/0/5/05-08-2021_TH_751560519-V0029_1_1.jpg" alt="Gucci куртка">
                         <div class="product-info">
                             <h4>Gucci куртка</h4>
-                            <p class="brand">Gucci</p>
                             <p class="price">120€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1145,7 +1223,6 @@
                         <img src="https://i.ebayimg.com/images/g/K6YAAOSw-0pkpWG2/s-l1600.jpg" alt="Nike Air Force 1">
                         <div class="product-info">
                             <h4>Nike Air Force 1</h4>
-                            <p class="brand">Nike</p>
                             <p class="price">45€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1155,7 +1232,6 @@
                         <img src="https://akn-fashfed.a-cdn.akinoncloud.com/products/2024/01/29/72381571/53803750-7e5e-4192-884f-bef928c95a1c_size2000x2000_cropCenter.jpg" alt="Adidas Yeezy">
                         <div class="product-info">
                             <h4>Adidas Yeezy</h4>
-                            <p class="brand">Adidas</p>
                             <p class="price">55€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1165,7 +1241,6 @@
                         <img src="https://i.ebayimg.com/images/g/K6YAAOSw-0pkpWG2/s-l1600.jpg" alt="Balenciaga Triple S">
                         <div class="product-info">
                             <h4>Balenciaga Triple S</h4>
-                            <p class="brand">Balenciaga</p>
                             <p class="price">95€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1203,7 +1278,6 @@
                         <img src="https://s3-eu-west-1.amazonaws.com/img.frmoda.com/borse/balenciaga/4823/4823892JMF71000nero-01.jpg" alt="Balenciaga сумка">
                         <div class="product-info">
                             <h4>Balenciaga сумка</h4>
-                            <p class="brand">Balenciaga</p>
                             <p class="price">80€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1213,7 +1287,6 @@
                         <img src="https://s3-eu-west-1.amazonaws.com/img.frmoda.com/borse/balenciaga/4823/4823892JMF71000nero-01.jpg" alt="Gucci сумка">
                         <div class="product-info">
                             <h4>Gucci сумка</h4>
-                            <p class="brand">Gucci</p>
                             <p class="price">110€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1250,7 +1323,6 @@
                         <img src="https://avatars.mds.yandex.net/i?id=998c7a6e6b4da23a6ace208d71d1df9c_l-6949821-images-thumbs&n=13" alt="Cartier браслет">
                         <div class="product-info">
                             <h4>Cartier браслет</h4>
-                            <p class="brand">Cartier</p>
                             <p class="price">75€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1260,7 +1332,6 @@
                         <img src="https://avatars.mds.yandex.net/i?id=998c7a6e6b4da23a6ace208d71d1df9c_l-6949821-images-thumbs&n=13" alt="Tiffany кольцо">
                         <div class="product-info">
                             <h4>Tiffany кольцо</h4>
-                            <p class="brand">Tiffany</p>
                             <p class="price">90€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1297,7 +1368,6 @@
                         <img src="https://i.ebayimg.com/images/g/eEkAAOSwWCBnxyC~/s-l1600.jpg" alt="Gucci ремень">
                         <div class="product-info">
                             <h4>Gucci ремень</h4>
-                            <p class="brand">Gucci</p>
                             <p class="price">65€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1307,7 +1377,6 @@
                         <img src="https://i.ebayimg.com/images/g/eEkAAOSwWCBnxyC~/s-l1600.jpg" alt="Hermes кошелек">
                         <div class="product-info">
                             <h4>Hermes кошелек</h4>
-                            <p class="brand">Hermes</p>
                             <p class="price">85€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1344,7 +1413,6 @@
                         <img src="https://cdn.staticscc.com/uploads/103804/cart/resources/20241115/A14E3A2E-E65C-D30C-AF26-5919EEDB736F.png" alt="Rolex Daytona">
                         <div class="product-info">
                             <h4>Rolex Daytona</h4>
-                            <p class="brand">Rolex</p>
                             <p class="price">150€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1354,7 +1422,6 @@
                         <img src="https://cdn.staticscc.com/uploads/103804/cart/resources/20241115/A14E3A2E-E65C-D30C-AF26-5919EEDB736F.png" alt="Omega Speedmaster">
                         <div class="product-info">
                             <h4>Omega Speedmaster</h4>
-                            <p class="brand">Omega</p>
                             <p class="price">120€</p>
                             <button class="add-to-cart-btn">В корзину</button>
                         </div>
@@ -1905,41 +1972,6 @@
                     </a>
                 </div>
                 
-                <?php if($auth && $auth['role']==='admin'): ?>
-                <div id="adminCreate" class="section-title" style="margin-top:24px">Добавить товар (админ)</div>
-                <form method="post" action="/admin/products" enctype="multipart/form-data" style="background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:12px;display:grid;gap:10px">
-                    <?php echo csrf_field(); ?>
-                    <div style="display:grid;gap:6px">
-                        <label>Название</label>
-                        <input name="title" required style="height:36px;border:1px solid #cbd5e1;border-radius:8px;padding:0 10px">
-                    </div>
-                    <div style="display:grid;gap:6px">
-                        <label>Категория</label>
-                        <input name="category" required style="height:36px;border:1px solid #cbd5e1;border-radius:8px;padding:0 10px">
-                    </div>
-                    <div style="display:grid;gap:6px">
-                        <label>Бренд</label>
-                        <input name="brand" required style="height:36px;border:1px solid #cbd5e1;border-radius:8px;padding:0 10px">
-                    </div>
-                    <div style="display:grid;gap:6px">
-                        <label>Подкатегория</label>
-                        <input name="subcat" style="height:36px;border:1px solid #cbd5e1;border-radius:8px;padding:0 10px">
-                    </div>
-                    <div style="display:grid;gap:6px">
-                        <label>Цена (€)</label>
-                        <input name="price" type="number" min="0" required style="height:36px;border:1px solid #cbd5e1;border-radius:8px;padding:0 10px">
-                    </div>
-                    <div style="display:grid;gap:6px">
-                        <label>Описание</label>
-                        <textarea name="description" rows="4" style="border:1px solid #cbd5e1;border-radius:8px;padding:8px"></textarea>
-                    </div>
-                    <div style="display:grid;gap:6px">
-                        <label>Фотографии (до 4 шт.)</label>
-                        <input type="file" name="images[]" multiple accept="image/*">
-                    </div>
-                    <button class="btn" type="submit" style="width:180px">Сохранить</button>
-                </form>
-                <?php endif; ?>
             </div>
         </div>
     </section>
@@ -2218,7 +2250,21 @@
                 performSearch();
             }
         });
-    </script>
-</body>
+@endsection
 
-
+@section('scripts')
+<script>
+    // Специфичные скрипты для главной страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        // Логика поиска
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
+    });
+</script>
+@endsection
