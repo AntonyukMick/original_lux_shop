@@ -3,16 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Services\CartService;
+use App\Services\LocalStorageService;
 use App\Http\Requests\CartRequest;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CartController extends Controller
 {
     protected $cartService;
+    protected $localStorageService;
 
-    public function __construct(CartService $cartService)
+    public function __construct(CartService $cartService, LocalStorageService $localStorageService)
     {
         $this->cartService = $cartService;
+        $this->localStorageService = $localStorageService;
     }
 
     /**
@@ -25,7 +29,60 @@ class CartController extends Controller
     }
 
     /**
-     * Добавить товар в корзину
+     * Синхронизировать корзину из localStorage
+     */
+    public function sync(Request $request)
+    {
+        try {
+            $this->localStorageService->syncCartFromLocalStorage($request);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Корзина синхронизирована'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Cart sync error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибка синхронизации корзины'
+            ], 500);
+        }
+    }
+
+    /**
+     * Получить данные корзины для API
+     */
+    public function getCartData()
+    {
+        try {
+            $cart = $this->localStorageService->getCartForApi();
+            $total = $this->cartService->getCartTotal();
+            $count = $this->cartService->getCartCount();
+            
+            return response()->json([
+                'cart' => $cart,
+                'total' => $total,
+                'count' => $count
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Cart data error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибка получения данных корзины'
+            ], 500);
+        }
+    }
+
+    /**
+     * Добавить товар в корзину (legacy для совместимости)
      */
     public function add(CartRequest $request)
     {
@@ -36,7 +93,7 @@ class CartController extends Controller
     }
 
     /**
-     * Обновить количество товара в корзине
+     * Обновить количество товара в корзине (legacy для совместимости)
      */
     public function update(CartRequest $request)
     {
@@ -47,7 +104,7 @@ class CartController extends Controller
     }
 
     /**
-     * Удалить товар из корзины
+     * Удалить товар из корзины (legacy для совместимости)
      */
     public function remove(CartRequest $request)
     {
@@ -58,7 +115,7 @@ class CartController extends Controller
     }
 
     /**
-     * Очистить корзину
+     * Очистить корзину (legacy для совместимости)
      */
     public function clear()
     {

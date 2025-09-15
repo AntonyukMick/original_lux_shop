@@ -383,12 +383,13 @@ $auth = session('auth');
             }
         });
         
-        // Обновляем счетчик корзины
+        // Обновляем счетчик корзины (суммируем количество всех товаров)
         const cartBadges = document.querySelectorAll('.icon-container .badge');
         cartBadges.forEach(badge => {
             if (badge.closest('.icon-container').querySelector('.bag-icon')) {
-                if (cart.length > 0) {
-                    badge.textContent = cart.length;
+                const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                if (totalItems > 0) {
+                    badge.textContent = totalItems;
                     badge.classList.remove('hidden');
                 } else {
                     badge.classList.add('hidden');

@@ -58,10 +58,27 @@ return [
             'ignore_exceptions' => false,
         ],
 
-        'single' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
+        'user_activity' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/user_activity.log'),
             'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
+            'replace_placeholders' => true,
+        ],
+
+        'admin_activity' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/admin_activity.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 30,
+            'replace_placeholders' => true,
+        ],
+
+        'security' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/security.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 90,
             'replace_placeholders' => true,
         ],
 

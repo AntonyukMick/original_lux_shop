@@ -14,6 +14,7 @@ class ProductService
     public function getAllProducts($perPage = 12)
     {
         return Product::where('is_active', true)
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
@@ -25,6 +26,7 @@ class ProductService
     {
         return Product::where('category', $category)
             ->where('is_active', true)
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
@@ -34,7 +36,8 @@ class ProductService
      */
     public function getProductById($id)
     {
-        return Product::findOrFail($id);
+        return Product::select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'description', 'stock_quantity', 'sku', 'weight', 'dimensions', 'created_at'])
+            ->findOrFail($id);
     }
 
     /**
@@ -43,6 +46,7 @@ class ProductService
     public function searchProducts($query, $perPage = 12)
     {
         return Product::where('is_active', true)
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
             ->where(function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
                   ->orWhere('description', 'like', "%{$query}%")
@@ -59,19 +63,22 @@ class ProductService
     {
         return Product::where('is_active', true)
             ->where('featured', true)
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
             ->orderBy('created_at', 'desc')
             ->limit($limit)
             ->get();
     }
 
     /**
-     * Получить похожие товары
+     * Получить похожие товары (оптимизировано)
      */
     public function getSimilarProducts($product, $limit = 3)
     {
         return Product::where('category', $product->category)
             ->where('id', '!=', $product->id)
             ->where('is_active', true)
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
+            ->orderByRaw('RAND()') // Случайный порядок для разнообразия
             ->limit($limit)
             ->get();
     }
@@ -178,6 +185,7 @@ class ProductService
     public function getPopularProducts($limit = 8)
     {
         return Product::where('is_active', true)
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
             ->orderBy('created_at', 'desc')
             ->limit($limit)
             ->get();
@@ -191,6 +199,7 @@ class ProductService
         return Product::where('is_active', true)
             ->whereNotNull('original_price')
             ->where('original_price', '>', 'price')
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
             ->orderBy('created_at', 'desc')
             ->limit($limit)
             ->get();

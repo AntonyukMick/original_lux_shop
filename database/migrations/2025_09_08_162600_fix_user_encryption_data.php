@@ -27,3 +27,9 @@ return new class extends Migration
         // Нечего откатывать, так как мы просто очистили поля
     }
 };
+
+
+
+
+
+

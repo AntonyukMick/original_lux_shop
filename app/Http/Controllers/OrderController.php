@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Services\OrderService;
 use App\Services\CartService;
+use App\Services\LocalStorageService;
 use App\Http\Requests\OrderRequest;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -12,7 +14,8 @@ class OrderController extends Controller
 
     public function __construct(
      protected OrderService $orderService,
-     protected CartService $cartService)
+     protected CartService $cartService,
+     protected LocalStorageService $localStorageService)
     {}
 
     /**
@@ -27,14 +30,29 @@ class OrderController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        if ($this->cartService->isCartEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Корзина пуста');
-        }
+        try {
+            // Синхронизируем корзину из localStorage если есть данные
+            if ($request->has('cart_data')) {
+                $this->localStorageService->syncCartFromLocalStorage($request);
+            }
+            
+            if ($this->cartService->isCartEmpty()) {
+                return redirect()->route('cart.index')->with('error', 'Корзина пуста');
+            }
 
-        $checkoutData = $this->cartService->getCheckoutData();
-        return view('checkout', $checkoutData);
+            $checkoutData = $this->cartService->getCheckoutData();
+            return view('checkout', $checkoutData);
+        } catch (\Exception $e) {
+            \Log::error('Checkout create error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return redirect()->route('cart.index')
+                ->with('error', 'Произошла ошибка при загрузке страницы оформления заказа');
+        }
     }
 
     /**
@@ -42,18 +60,35 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request)
     {
-        if ($this->cartService->isCartEmpty()) {
-            return redirect()->route('cart.index')->with('error', 'Корзина пуста');
+        try {
+            // Синхронизируем корзину из localStorage если есть данные
+            if ($request->has('cart_data')) {
+                $this->localStorageService->syncCartFromLocalStorage($request);
+            }
+            
+            if ($this->cartService->isCartEmpty()) {
+                return redirect()->route('cart.index')->with('error', 'Корзина пуста');
+            }
+
+            $validated = $request->validated();
+            $cart = $this->cartService->getCart();
+            $order = $this->orderService->createOrder($validated, $cart);
+
+            $this->cartService->clearCart();
+
+            return redirect()->route('orders.show', $order->id)
+                ->with('success', 'Заказ успешно оформлен!');
+        } catch (\Exception $e) {
+            \Log::error('Order creation error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->except(['password', 'password_confirmation'])
+            ]);
+            
+            return back()
+                ->withInput()
+                ->with('error', 'Произошла ошибка при оформлении заказа. Попробуйте еще раз.');
         }
-
-        $validated = $request->validated();
-        $cart = $this->cartService->getCart();
-        $order = $this->orderService->createOrder($validated, $cart);
-
-        $this->cartService->clearCart();
-
-        return redirect()->route('orders.show', $order->id)
-            ->with('success', 'Заказ успешно оформлен!');
     }
 
     /**

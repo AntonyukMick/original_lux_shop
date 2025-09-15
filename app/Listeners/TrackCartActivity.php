@@ -44,3 +44,6 @@ class TrackCartActivity
         Log::info('Product popularity updated', ['product_id' => $product->id]);
     }
 }
+
+
+

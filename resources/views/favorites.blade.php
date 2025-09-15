@@ -130,19 +130,22 @@
             let favoritesHTML = '';
             
             favorites.forEach((item, index) => {
-                const price = parseFloat(item.price);
+                // Проверяем наличие цены и изображения
+                const price = item.price ? parseFloat(item.price) : 0;
+                const image = item.image || 'https://via.placeholder.com/100x100?text=No+Image';
+                const displayPrice = price > 0 ? `${price.toFixed(2)}€` : 'Цена не указана';
                 
                 favoritesHTML += `
                     <div class="row">
                         <div style="display:flex;align-items:center">
-                            <img src="${item.image}" alt="${item.title}" class="thumb">
+                            <img src="${image}" alt="${item.title}" class="thumb" onerror="this.src='https://via.placeholder.com/100x100?text=No+Image'">
                             <div>
                                 <div class="title">${item.title}</div>
                             </div>
                         </div>
-                        <div class="price">${price.toFixed(2)}€</div>
+                        <div class="price">${displayPrice}</div>
                         <div>
-                            <button class="btn primary" onclick="addToCart('${item.title}', '${item.price}', '${item.image}')">В корзину</button>
+                            <button class="btn primary" onclick="addToCart('${item.title}', '${item.price || 0}', '${item.image || ''}')">В корзину</button>
                         </div>
                         <div>
                             <button class="btn" onclick="removeFromFavorites(${index})" style="background:#ef4444;color:#fff;border-color:#ef4444">✕</button>
@@ -156,17 +159,63 @@
         
         // Функция для добавления товара в корзину
         function addToCart(title, price, image) {
-            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const existingIndex = cart.findIndex(item => item.title === title);
+            console.log('addToCart called from favorites:', {title, price, image});
             
-            if (existingIndex === -1) {
-                cart.push({ title, price, image });
-                localStorage.setItem('cart', JSON.stringify(cart));
-                alert('Товар добавлен в корзину!');
-                updateHeaderCounters(); // Обновляем счетчики в хедере
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const existingItem = cart.find(item => item.title === title);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
             } else {
-                alert('Товар уже в корзине!');
+                cart.push({ productId: null, quantity: 1, title, price, image });
             }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            console.log('Cart updated:', cart);
+            
+            // Показываем уведомление
+            showNotification('Товар добавлен в корзину', 'success');
+            
+            // Обновляем счетчики
+            updateHeaderCounters();
+        }
+        
+        // Функция для показа уведомлений
+        function showNotification(message, type) {
+            console.log('showNotification called:', message, type);
+            
+            // Создаем уведомление
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#48bb78' : type === 'error' ? '#f56565' : '#4299e1'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Анимация появления
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Удаляем через 3 секунды
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
         }
         
         // Функция для удаления товара из избранного
@@ -187,43 +236,30 @@
             }
         }
         
-        // Функция для обновления счетчиков в хедере
+        // Локальная функция для обновления счетчиков хедера
         function updateHeaderCounters() {
+            console.log('updateHeaderCounters called on favorites page');
+            
             const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             
             // Обновляем счетчик избранного
-            const favoritesCount = document.getElementById('favorites-count');
-            if (favoritesCount) {
-                if (favorites.length > 0) {
-                    favoritesCount.textContent = favorites.length;
-                    favoritesCount.classList.remove('hidden');
-                } else {
-                    favoritesCount.classList.add('hidden');
-                }
+            const favoritesBadge = document.getElementById('favorites-badge');
+            if (favoritesBadge) {
+                favoritesBadge.textContent = favorites.length;
+                favoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
             }
             
             // Обновляем счетчик корзины
-            const cartCount = document.getElementById('cart-count');
-            if (cartCount) {
-                if (cart.length > 0) {
-                    cartCount.textContent = cart.length;
-                    cartCount.classList.remove('hidden');
-                } else {
-                    cartCount.classList.add('hidden');
-                }
+            const cartBadge = document.getElementById('cart-badge');
+            let totalItems = 0;
+            if (cartBadge) {
+                totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                cartBadge.textContent = totalItems;
+                cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
             }
             
-            // Обновляем старые счетчики (если есть)
-            const oldFavoriteCounters = document.querySelectorAll('.btn[href="/favorites"] span');
-            oldFavoriteCounters.forEach(counter => {
-                counter.textContent = `(${favorites.length})`;
-            });
-            
-            const oldCartCounters = document.querySelectorAll('.btn[href="/cart"] span');
-            oldCartCounters.forEach(counter => {
-                counter.textContent = `(${cart.length})`;
-            });
+            console.log('Counters updated:', {favorites: favorites.length, cart: totalItems});
         }
         
         // Загружаем избранное при загрузке страницы

@@ -5,7 +5,7 @@ header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
 
 /* Обновленные стили для всех элементов хедера */
 .btn {
-    height: 40px;
+    height: 44px;
     padding: 0 12px;
     border-radius: 8px;
     border: 2px solid #000;
@@ -33,7 +33,7 @@ header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
     border-radius: 8px;
     padding: 8px 12px;
     font-weight: 700;
-    height: 40px;
+    height: 44px;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -50,8 +50,8 @@ header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
 .icon-container {
     position: relative;
     display: inline-block;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     background: white;
     border: 2px solid #000;
     border-radius: 8px;
@@ -75,22 +75,25 @@ header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
     color: #FFD700;
 }
 
-.icon-container .badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    background: #FFD700;
-    border: 2px solid #000;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 9px;
-    font-weight: bold;
-    color: #000;
-}
+        .icon-container .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #FFD700;
+            border: 2px solid #000;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            font-size: 8px;
+            font-weight: bold;
+            color: #000;
+            z-index: 10;
+            line-height: 14px;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            display: block;
+        }
 
 .icon-container .badge.hidden {
     display: none;
@@ -137,5 +140,22 @@ header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
 /* Увеличенная иконка для кнопки входа */
 .btn .login-icon {
     font-size: 18px;
+}
+
+/* Стили для изображений иконок */
+.icon-image {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 6px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.2s ease;
+}
+
+.icon-container:hover .icon-image {
+    transform: translate(-50%, -50%) scale(1.1);
 }
 </style>

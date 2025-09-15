@@ -40,6 +40,8 @@ Route::get('/product/{id}', [ProductController::class, 'show'])->name('products.
 
 // Корзина
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/sync', [CartController::class, 'sync'])->name('cart.sync');
+Route::get('/cart/data', [CartController::class, 'getCartData'])->name('cart.data');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
@@ -49,6 +51,8 @@ Route::get('/cart/total', [CartController::class, 'total'])->name('cart.total');
 
 // Избранное
 Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+Route::post('/favorites/sync', [FavoriteController::class, 'sync'])->name('favorites.sync');
+Route::get('/favorites/data', [FavoriteController::class, 'getFavoritesData'])->name('favorites.data');
 Route::post('/favorites/add', [FavoriteController::class, 'add'])->name('favorites.add');
 Route::post('/favorites/remove', [FavoriteController::class, 'remove'])->name('favorites.remove');
 
@@ -71,32 +75,10 @@ Route::get('/about', function () {
 })->name('about');
 
 Route::get('/delivery', function () {
-    $pickupPoints = config('catalog.pickup_points', [
-        [
-            'name' => 'ТЦ Европейский',
-            'address' => 'пл. Киевского Вокзала, 2',
-            'working_hours' => '10:00-22:00',
-            'phone' => '+7 (495) 123-45-67'
-        ],
-        [
-            'name' => 'ТЦ Авиапарк',
-            'address' => 'Ходынский бул., 4',
-            'working_hours' => '10:00-23:00',
-            'phone' => '+7 (495) 234-56-78'
-        ],
-        [
-            'name' => 'ТЦ Метрополис',
-            'address' => 'Ленинградское ш., 16А',
-            'working_hours' => '10:00-22:00',
-            'phone' => '+7 (495) 345-67-89'
-        ],
-        [
-            'name' => 'ТЦ Афимолл Сити',
-            'address' => 'Пресненская наб., 2',
-            'working_hours' => '10:00-22:00',
-            'phone' => '+7 (495) 456-78-90'
-        ]
-    ]);
+    $pickupPoints = collect(config('catalog.pickup_points'))
+        ->where('is_active', true)
+        ->values()
+        ->toArray();
     
     return view('delivery', ['pickupPoints' => $pickupPoints]);
 })->name('delivery');

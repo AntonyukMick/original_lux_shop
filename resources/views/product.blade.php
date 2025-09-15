@@ -364,6 +364,17 @@
             color: #ef4444;
         }
         
+        .favorite-btn.active {
+            background: #ef4444;
+            color: #fff;
+            border-color: #ef4444;
+        }
+        
+        .favorite-btn.active:hover {
+            background: #dc2626;
+            border-color: #dc2626;
+        }
+        
         /* Colors */
         .colors-grid {
             display: grid;
@@ -524,8 +535,8 @@
 
                     <!-- Action Buttons -->
                     <div class="action-buttons">
-                        <button class="add-to-cart" onclick="addToCart()">ДОБАВИТЬ В КОРЗИНУ</button>
-                        <button class="favorite-btn" onclick="toggleFavorite()" title="Добавить в избранное">♡</button>
+                        <button class="add-to-cart" data-action="add-to-cart" data-product-id="{{ $productData['id'] }}" data-quantity="1">ДОБАВИТЬ В КОРЗИНУ</button>
+                        <button class="favorite-btn" data-action="toggle-favorite" data-product-id="{{ $productData['id'] }}" title="Добавить в избранное">♡</button>
                     </div>
 
                     <!-- Colors -->
@@ -608,11 +619,66 @@
     </main>
 
     <script>
+        // Показ уведомлений
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : '#3b82f6'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                font-weight: 500;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+
         // Change main image
         function changeMainImage(src, thumbnail) {
+            console.log('changeMainImage вызван:', { src, thumbnail });
+            
             document.getElementById('mainImage').src = src;
             document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
             thumbnail.classList.add('active');
+            
+            // Находим соответствующий цвет по изображению
+            const colorOptions = document.querySelectorAll('.color-option');
+            let foundColorOption = null;
+            
+            console.log('Ищем цвет для изображения:', src);
+            colorOptions.forEach((colorOption, index) => {
+                const colorImg = colorOption.querySelector('img');
+                console.log(`Цвет ${index}:`, colorImg ? colorImg.src : 'нет изображения');
+                if (colorImg && colorImg.src === src) {
+                    foundColorOption = colorOption;
+                    console.log('Найден соответствующий цвет!');
+                }
+            });
+            
+            // Если нашли соответствующий цвет, делаем его активным
+            if (foundColorOption) {
+                colorOptions.forEach(opt => opt.classList.remove('active'));
+                foundColorOption.classList.add('active');
+                console.log('Активный цвет обновлен');
+            } else {
+                console.log('Соответствующий цвет не найден');
+            }
         }
 
         // Change quantity
@@ -622,68 +688,56 @@
             input.value = newValue;
         }
 
-        // Add to cart
-        function addToCart() {
-            const quantity = document.getElementById('quantity').value;
-            const formData = new FormData();
-            formData.append('title', '{{ $productData["title"] }}');
-            formData.append('price', '{{ $productData["price"] }}');
-            formData.append('image', '{{ $productData["image"] }}');
-            formData.append('qty', quantity);
-            formData.append('_token', '{{ csrf_token() }}');
+        // Используем глобальную функцию addToCart из common-functions.js
 
-            fetch('/cart/add', {
-                method: 'POST',
-                body: formData
-            }).then(response => {
-                if (response.ok) {
-                    alert('Товар добавлен в корзину!');
-                }
-            });
-        }
+        // Используем глобальную функцию removeFromCart из common-functions.js
 
-        // Toggle favorite
-        function toggleFavorite() {
-            const btn = document.querySelector('.favorite-btn');
-            const isActive = btn.classList.contains('active');
-            
-            if (!isActive) {
-                const formData = new FormData();
-                formData.append('title', '{{ $productData["title"] }}');
-                formData.append('price', '{{ $productData["price"] }}');
-                formData.append('image', '{{ $productData["image"] }}');
-                formData.append('_token', '{{ csrf_token() }}');
+        // Используем глобальную функцию toggleFavorite из common-functions.js
 
-                fetch('/favorites/add', {
-                    method: 'POST',
-                    body: formData
-                }).then(response => {
-                    if (response.ok) {
-                        btn.classList.add('active');
-                        btn.innerHTML = '❤';
-                        btn.title = 'Удалить из избранного';
-                    }
-                });
-            } else {
-                // Remove from favorites logic here
-                btn.classList.remove('active');
-                btn.innerHTML = '♡';
-                btn.title = 'Добавить в избранное';
-            }
+        // Обновляем статусы товара при загрузке страницы
+        function updateProductStatuses() {
+            const productId = {{ $productData['id'] }};
+            updateProductStatus(productId, 'cart');
+            updateProductStatus(productId, 'favorites');
         }
 
         // Select color
         function selectColor(imageSrc, colorName, element) {
+            console.log('selectColor вызван:', { imageSrc, colorName, element });
+            
+            // Убираем активное состояние со всех цветов
             document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
             element.classList.add('active');
             
-            // Change main image to selected color
+            // Меняем главное изображение на выбранный цвет
             document.getElementById('mainImage').src = imageSrc;
             
-            // Update first thumbnail
-            const firstThumbnail = document.querySelector('.thumbnail');
-            if (firstThumbnail) {
-                firstThumbnail.src = imageSrc;
+            // Находим соответствующий thumbnail по изображению
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            let foundThumbnail = null;
+            
+            console.log('Ищем thumbnail для изображения:', imageSrc);
+            thumbnails.forEach((thumbnail, index) => {
+                console.log(`Thumbnail ${index}:`, thumbnail.src);
+                if (thumbnail.src === imageSrc) {
+                    foundThumbnail = thumbnail;
+                    console.log('Найден соответствующий thumbnail!');
+                }
+            });
+            
+            // Если нашли соответствующий thumbnail, делаем его активным
+            if (foundThumbnail) {
+                thumbnails.forEach(t => t.classList.remove('active'));
+                foundThumbnail.classList.add('active');
+                console.log('Активный thumbnail обновлен');
+            } else {
+                console.log('Соответствующий thumbnail не найден, используем fallback');
+                // Если не нашли точное соответствие, ищем по alt или другим атрибутам
+                // В качестве fallback делаем первый thumbnail активным
+                thumbnails.forEach(t => t.classList.remove('active'));
+                if (thumbnails.length > 0) {
+                    thumbnails[0].classList.add('active');
+                }
             }
         }
         
@@ -712,40 +766,37 @@
             }
         });
 
-        // Функция для обновления счетчиков в хедере
+        // Локальная функция для обновления счетчиков хедера
         function updateHeaderCounters() {
+            console.log('updateHeaderCounters called on product page');
+            
             const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             
             // Обновляем счетчик избранного
-            const favoriteBadges = document.querySelectorAll('.icon-container .badge');
-            favoriteBadges.forEach(badge => {
-                if (badge.closest('.icon-container').querySelector('.heart-icon')) {
-                    if (favorites.length > 0) {
-                        badge.textContent = favorites.length;
-                        badge.classList.remove('hidden');
-                    } else {
-                        badge.classList.add('hidden');
-                    }
-                }
-            });
+            const favoritesBadge = document.getElementById('favorites-badge');
+            if (favoritesBadge) {
+                favoritesBadge.textContent = favorites.length;
+                favoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
+            }
             
             // Обновляем счетчик корзины
-            const cartBadges = document.querySelectorAll('.icon-container .badge');
-            cartBadges.forEach(badge => {
-                if (badge.closest('.icon-container').querySelector('.bag-icon')) {
-                    if (cart.length > 0) {
-                        badge.textContent = cart.length;
-                        badge.classList.remove('hidden');
-                    } else {
-                        badge.classList.add('hidden');
-                    }
-                }
-            });
+            const cartBadge = document.getElementById('cart-badge');
+            let totalItems = 0;
+            if (cartBadge) {
+                totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                cartBadge.textContent = totalItems;
+                cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+            }
+            
+            console.log('Counters updated:', {favorites: favorites.length, cart: totalItems});
         }
 
-        // Обновляем счетчики при загрузке страницы
+        // Используем глобальную функцию updateHeaderCounters из хедера
+
+        // Обновляем статусы при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
+            updateProductStatuses();
             updateHeaderCounters();
         });
     </script>
