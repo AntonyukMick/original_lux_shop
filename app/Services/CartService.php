@@ -141,7 +141,8 @@ class CartService
      */
     private function calculateShippingCost($subtotal)
     {
-        return $subtotal >= 200 ? 0 : 15; // Бесплатная доставка от 200€
+        $pickupService = app(\App\Services\PickupPointService::class);
+        return $pickupService->calculateShippingCost($subtotal);
     }
 }
 

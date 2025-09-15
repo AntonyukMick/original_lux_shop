@@ -14,6 +14,19 @@
         @yield('content')
     </main>
     
+    @vite(['resources/js/app.js'])
+    
+    <!-- Fallback script if Vite doesn't work -->
+    <script>
+        // Проверяем, загрузился ли основной скрипт
+        setTimeout(function() {
+            if (typeof window.addToCart === 'undefined') {
+                console.log('Vite script not loaded, using fallback');
+                // Здесь можно добавить fallback функции
+            }
+        }, 1000);
+    </script>
+    
     @yield('scripts')
 </body>
 </html>

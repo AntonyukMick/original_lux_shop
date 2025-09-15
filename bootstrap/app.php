@@ -13,7 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'monitoring' => \App\Http\Middleware\MonitoringMiddleware::class,
+            'encrypt.sensitive' => \App\Http\Middleware\EncryptSensitiveData::class,
         ]);
+        
+        // Применяем middleware глобально
+        $middleware->append(\App\Http\Middleware\MonitoringMiddleware::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

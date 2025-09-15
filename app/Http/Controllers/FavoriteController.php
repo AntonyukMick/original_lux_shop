@@ -3,16 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Services\FavoriteService;
+use App\Services\LocalStorageService;
 use App\Http\Requests\FavoriteRequest;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class FavoriteController extends Controller
 {
     protected $favoriteService;
+    protected $localStorageService;
 
-    public function __construct(FavoriteService $favoriteService)
+    public function __construct(FavoriteService $favoriteService, LocalStorageService $localStorageService)
     {
         $this->favoriteService = $favoriteService;
+        $this->localStorageService = $localStorageService;
     }
 
     /**
@@ -25,7 +29,34 @@ class FavoriteController extends Controller
     }
 
     /**
-     * Добавить в избранное
+     * Синхронизировать избранное из localStorage
+     */
+    public function sync(Request $request)
+    {
+        $this->localStorageService->syncFavoritesFromLocalStorage($request);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Избранное синхронизировано'
+        ]);
+    }
+
+    /**
+     * Получить данные избранного для API
+     */
+    public function getFavoritesData()
+    {
+        $favorites = $this->localStorageService->getFavoritesForApi();
+        $count = $this->favoriteService->getFavoritesCount();
+        
+        return response()->json([
+            'favorites' => $favorites,
+            'count' => $count
+        ]);
+    }
+
+    /**
+     * Добавить в избранное (legacy для совместимости)
      */
     public function add(FavoriteRequest $request)
     {
@@ -36,7 +67,7 @@ class FavoriteController extends Controller
     }
 
     /**
-     * Удалить из избранного
+     * Удалить из избранного (legacy для совместимости)
      */
     public function remove(FavoriteRequest $request)
     {
@@ -47,7 +78,7 @@ class FavoriteController extends Controller
     }
 
     /**
-     * Очистить избранное
+     * Очистить избранное (legacy для совместимости)
      */
     public function clear()
     {

@@ -6,15 +6,18 @@ use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ProfileRequest;
 use App\Services\AuthService;
+use App\Services\UserActivityService;
 use Illuminate\View\View;
 
 class AuthController extends Controller
 {
     protected $authService;
+    protected $activityService;
 
-    public function __construct(AuthService $authService)
+    public function __construct(AuthService $authService, UserActivityService $activityService)
     {
         $this->authService = $authService;
+        $this->activityService = $activityService;
     }
 
     /**
@@ -38,11 +41,21 @@ class AuthController extends Controller
         );
 
         if (!$authData) {
+            // Логируем неудачную попытку входа
+            $this->activityService->logActivity('login_failed', null, [
+                'username' => $validated['username'],
+                'reason' => 'invalid_credentials'
+            ], $request);
+            
             return back()->withErrors(['username' => 'Неверные логин или пароль'])
                 ->withInput();
         }
 
         session(['auth' => $authData]);
+        
+        // Логируем успешный вход
+        $this->activityService->logLogin($authData['id'], $authData['email'], $request);
+        
         return redirect('/')->with('success', 'Вы успешно вошли в систему');
     }
 
@@ -51,6 +64,12 @@ class AuthController extends Controller
      */
     public function logout()
     {
+        $authData = session('auth');
+        if ($authData) {
+            // Логируем выход
+            $this->activityService->logLogout($authData['id']);
+        }
+        
         $this->authService->logout();
         return redirect('/')->with('success', 'Вы вышли из системы');
     }
@@ -72,6 +91,9 @@ class AuthController extends Controller
         
         $authData = $this->authService->register($validated);
         session(['auth' => $authData]);
+
+        // Логируем регистрацию
+        $this->activityService->logRegistration($authData['id'], $authData['email'], $request);
 
         return redirect('/')->with('success', 'Регистрация успешна!');
     }

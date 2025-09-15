@@ -3,12 +3,16 @@
 @section('title', 'Каталог товаров')
 
 @section('styles')
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
+    :root { --bg:#f1f5f9; --card:#ffffff; --muted:#e2e8f0; --text:#0f172a; --accent:#527ea6; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { 
         font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, "Noto Sans", sans-serif; 
-        background: #f8fafc; 
-        color: #0f172a; 
+        background: var(--bg); 
+        color: var(--text); 
         line-height: 1.6;
     }
     
@@ -50,34 +54,38 @@
             font-weight: 600;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 16px;
-        }
-        
-        /* Main Content */
-        .main {
-            padding: 32px 0;
-        }
-        
-        .catalog-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .catalog-title {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: #0f172a;
-        }
-        
-        .catalog-subtitle {
-            font-size: 16px;
-            color: #64748b;
-            margin-bottom: 24px;
-        }
+    .container {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 12px;
+    }
+    
+    .main {
+        padding: 32px 0;
+    }
+    
+    .catalog-header {
+        text-align: center;
+        margin-bottom: 24px;
+    }
+    
+    .catalog-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--text);
+        background: linear-gradient(135deg, #527ea6, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .catalog-subtitle {
+        font-size: 16px;
+        color: #475569;
+        max-width: 600px;
+        margin: 0 auto;
+    }
         
         /* Category Tabs */
         .category-tabs {
@@ -211,22 +219,26 @@
         
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
         }
         
         .product-card {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
+            background: var(--card);
+            border: 2px solid #000;
+            border-radius: 10px;
             overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.2s ease;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         
         .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
         .product-card a {
@@ -239,17 +251,21 @@
             width: 100%;
             height: 200px;
             object-fit: cover;
+            background: #f8fafc;
         }
         
         .product-info {
             padding: 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         .product-title {
             font-weight: 600;
             margin-bottom: 8px;
-            color: #0f172a;
-            font-size: 14px;
+            color: var(--text);
+            font-size: 16px;
             line-height: 1.4;
         }
         
@@ -268,8 +284,8 @@
         
         .product-price {
             font-weight: 700;
-            color: #0f172a;
-            font-size: 16px;
+            color: var(--accent);
+            font-size: 18px;
         }
         
         .product-actions {
@@ -279,29 +295,20 @@
         
         .add-to-cart-btn {
             flex: 1;
-            height: 36px;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            color: #475569;
-            border: 1px solid #e2e8f0;
-            border-radius: 18px;
-            font-size: 13px;
-            font-weight: 500;
+            height: 40px;
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
         }
         
         .add-to-cart-btn:hover {
-            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-            color: #1e293b;
+            background: #3b5a7a;
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-color: #cbd5e1;
-        }
-        
-        .add-to-cart-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         /* Стили для кнопки "В корзине" */
@@ -318,17 +325,22 @@
         }
         
         .favorite-btn {
-            width: 36px;
-            height: 36px;
-            border: 1px solid #cbd5e1;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--muted);
             border-radius: 8px;
-            background: #fff;
+            background: #ffffff;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            transition: all 0.2s;
+            font-size: 18px;
+            transition: all 0.2s ease;
+        }
+        
+        .favorite-btn:hover {
+            background: #f8fafc;
+            border-color: var(--accent);
         }
         
         .favorite-btn:hover {
@@ -1238,36 +1250,30 @@
             }, 3000);
         }
 
-        // Функция для обновления счетчиков в хедере
+        // Локальная функция для обновления счетчиков хедера
         function updateHeaderCounters() {
+            console.log('updateHeaderCounters called on catalog page');
+            
             const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             
             // Обновляем счетчик избранного
-            const favoriteBadges = document.querySelectorAll('.icon-container .badge');
-            favoriteBadges.forEach(badge => {
-                if (badge.closest('.icon-container').querySelector('.heart-icon')) {
-                    if (favorites.length > 0) {
-                        badge.textContent = favorites.length;
-                        badge.classList.remove('hidden');
-                    } else {
-                        badge.classList.add('hidden');
-                    }
-                }
-            });
+            const favoritesBadge = document.getElementById('favorites-badge');
+            if (favoritesBadge) {
+                favoritesBadge.textContent = favorites.length;
+                favoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
+            }
             
             // Обновляем счетчик корзины
-            const cartBadges = document.querySelectorAll('.icon-container .badge');
-            cartBadges.forEach(badge => {
-                if (badge.closest('.icon-container').querySelector('.bag-icon')) {
-                    if (cart.length > 0) {
-                        badge.textContent = cart.length;
-                        badge.classList.remove('hidden');
-                    } else {
-                        badge.classList.add('hidden');
-                    }
-                }
-            });
+            const cartBadge = document.getElementById('cart-badge');
+            let totalItems = 0;
+            if (cartBadge) {
+                totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                cartBadge.textContent = totalItems;
+                cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+            }
+            
+            console.log('Counters updated:', {favorites: favorites.length, cart: totalItems});
         }
 
         // Добавляем CSS для анимации уведомлений

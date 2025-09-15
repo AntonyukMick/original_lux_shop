@@ -10,71 +10,71 @@ class PromotionsController extends Controller
     /**
      * Показать каталог акций
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Получаем все товары со скидками
-        $products = Product::where('discount', '>', 0)
-            ->orderBy('discount', 'desc')
-            ->get();
+        $perPage = $request->get('per_page', 12);
+        
+        // Получаем все товары со скидками с пагинацией
+        $products = Product::where('is_active', true)
+            ->whereNotNull('original_price')
+            ->where('original_price', '>', 'price')
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
 
         // Если нет товаров со скидками, создаем демо-данные
         if ($products->isEmpty()) {
-            $products = collect([
+            $demoProducts = collect([
                 (object) [
                     'id' => 1,
                     'title' => 'Nike Air Force 1',
                     'price' => 120,
-                    'discount' => 30,
-                    'image' => '/images/nike-air-force.jpg',
+                    'original_price' => 150,
+                    'images' => ['https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop'],
                     'category' => 'Обувь',
-                    'description' => 'Классические кроссовки Nike Air Force 1'
+                    'brand' => 'Nike',
+                    'created_at' => now()
                 ],
                 (object) [
                     'id' => 2,
                     'title' => 'Balenciaga Bag',
                     'price' => 200,
-                    'discount' => 25,
-                    'image' => '/images/balenciaga-bag.jpg',
+                    'original_price' => 250,
+                    'images' => ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop'],
                     'category' => 'Сумки',
-                    'description' => 'Сумка Balenciaga из коллекции 2024'
+                    'brand' => 'Balenciaga',
+                    'created_at' => now()
                 ],
                 (object) [
                     'id' => 3,
                     'title' => 'Supreme Hoodie',
                     'price' => 80,
-                    'discount' => 40,
-                    'image' => '/images/supreme-hoodie.jpg',
+                    'original_price' => 120,
+                    'images' => ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1200&auto=format&fit=crop'],
                     'category' => 'Одежда',
-                    'description' => 'Худи Supreme с логотипом'
+                    'brand' => 'Supreme',
+                    'created_at' => now()
                 ],
                 (object) [
                     'id' => 4,
-                    'title' => 'Rolex Submariner',
-                    'price' => 500,
-                    'discount' => 20,
-                    'image' => '/images/rolex-submariner.jpg',
-                    'category' => 'Часы',
-                    'description' => 'Классические часы Rolex Submariner'
-                ],
-                (object) [
-                    'id' => 5,
-                    'title' => 'Adidas Yeezy Boost',
-                    'price' => 150,
-                    'discount' => 35,
-                    'image' => '/images/yeezy-boost.jpg',
-                    'category' => 'Обувь',
-                    'description' => 'Кроссовки Adidas Yeezy Boost 350'
-                ],
-                (object) [
-                    'id' => 6,
-                    'title' => 'Gucci Belt',
-                    'price' => 300,
-                    'discount' => 15,
-                    'image' => '/images/gucci-belt.jpg',
+                    'title' => 'Rolex Watch',
+                    'price' => 5000,
+                    'original_price' => 6000,
+                    'images' => ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1200&auto=format&fit=crop'],
                     'category' => 'Аксессуары',
-                    'description' => 'Ремень Gucci с классическим дизайном'
+                    'brand' => 'Rolex',
+                    'created_at' => now()
                 ]
             ]);
+            
+            // Создаем пагинацию для демо-данных
+            $products = new \Illuminate\Pagination\LengthAwarePaginator(
+                $demoProducts,
+                $demoProducts->count(),
+                $perPage,
+                1,
+                ['path' => request()->url()]
+            );
         }
 
         return view('promotions', compact('products'));

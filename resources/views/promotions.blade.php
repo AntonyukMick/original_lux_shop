@@ -314,14 +314,22 @@
             <div class="promotions-grid">
                 @foreach($products as $product)
                     <div class="promotion-card">
-                        <div class="discount-badge">-{{ $product->discount }}%</div>
+                        @php
+                            $discount = 0;
+                            $originalPrice = $product->original_price ?? 0;
+                            $currentPrice = $product->price ?? 0;
+                            if ($originalPrice > 0 && $currentPrice > 0 && $originalPrice > $currentPrice) {
+                                $discount = round((($originalPrice - $currentPrice) / $originalPrice) * 100);
+                            }
+                        @endphp
+                        <div class="discount-badge">-{{ $discount }}%</div>
                         
-                        <button class="add-to-favorite-btn" onclick="toggleFavorite('{{ $product->title }}', '{{ $product->price }}', '{{ $product->image }}')" title="Добавить в избранное">
+                        <button class="add-to-favorite-btn" onclick="toggleFavoriteSimple(null, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ $product->image ?? '' }}')" title="Добавить в избранное">
                             ❤️
                         </button>
                         
                         <div class="product-image">
-                            @if($product->image && file_exists(public_path($product->image)))
+                            @if(isset($product->image) && $product->image && file_exists(public_path($product->image)))
                                 <img src="{{ asset($product->image) }}" alt="{{ $product->title }}" style="width: 100%; height: 100%; object-fit: cover;">
                             @else
                                 🛍️
@@ -329,21 +337,21 @@
                         </div>
                         
                         <div class="product-info">
-                            <div class="product-category">{{ $product->category }}</div>
-                            <h3 class="product-title">{{ $product->title }}</h3>
-                            <p class="product-description">{{ $product->description }}</p>
+                            <div class="product-category">{{ $product->category ?? 'Категория не указана' }}</div>
+                            <h3 class="product-title">{{ $product->title ?? 'Название не указано' }}</h3>
+                            <p class="product-description">{{ $product->description ?? 'Описание не указано' }}</p>
                             
                             <div class="price-section">
                                 <div>
-                                    <div class="original-price">{{ $product->price }}€</div>
-                                    <div class="discounted-price">{{ round($product->price * (1 - $product->discount / 100), 2) }}€</div>
+                                    <div class="original-price">{{ $product->original_price ?? 0 }}€</div>
+                                    <div class="discounted-price">{{ $product->price ?? 0 }}€</div>
                                 </div>
                                 <div class="savings">
-                                    Экономия {{ round($product->price * $product->discount / 100, 2) }}€
+                                    Экономия {{ round(($product->original_price ?? 0) - ($product->price ?? 0), 2) }}€
                                 </div>
                             </div>
                             
-                            <button class="add-to-cart-btn" onclick="toggleCart('{{ $product->title }}', '{{ round($product->price * (1 - $product->discount / 100), 2) }}', '{{ $product->image }}')">
+                            <button class="add-to-cart-btn" onclick="addToCartSimple(null, 1, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ $product->image ?? '' }}')">
                                 Добавить в корзину
                             </button>
                         </div>
@@ -473,34 +481,28 @@
 
     // Функция для обновления счетчиков в хедере
     function updateHeaderCounters() {
+        console.log('updateHeaderCounters called on promotions page');
+        
         const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
         
         // Обновляем счетчик избранного
-        const favoriteBadges = document.querySelectorAll('.icon-container .badge');
-        favoriteBadges.forEach(badge => {
-            if (badge.closest('.icon-container').querySelector('.heart-icon')) {
-                if (favorites.length > 0) {
-                    badge.textContent = favorites.length;
-                    badge.classList.remove('hidden');
-                } else {
-                    badge.classList.add('hidden');
-                }
-            }
-        });
+        const favoritesBadge = document.getElementById('favorites-badge');
+        if (favoritesBadge) {
+            favoritesBadge.textContent = favorites.length;
+            favoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
+        }
         
         // Обновляем счетчик корзины
-        const cartBadges = document.querySelectorAll('.icon-container .badge');
-        cartBadges.forEach(badge => {
-            if (badge.closest('.icon-container').querySelector('.bag-icon')) {
-                if (cart.length > 0) {
-                    badge.textContent = cart.length;
-                    badge.classList.remove('hidden');
-                } else {
-                    badge.classList.add('hidden');
-                }
-            }
-        });
+        const cartBadge = document.getElementById('cart-badge');
+        let totalItems = 0;
+        if (cartBadge) {
+            totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            cartBadge.textContent = totalItems;
+            cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+        }
+        
+        console.log('Counters updated:', {favorites: favorites.length, cart: totalItems});
     }
 
     // Добавляем CSS для анимации уведомлений
@@ -522,5 +524,55 @@
         updateProductStatuses();
         updateHeaderCounters();
     });
+    
+    // Простые функции для работы с корзиной и избранным
+    function addToCartSimple(productId, quantity, title, price, image) {
+        console.log('addToCartSimple called:', {productId, quantity, title, price, image});
+        
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const existingItem = cart.find(item => item.title === title);
+        
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.push({ productId, quantity, title, price, image });
+        }
+        
+        localStorage.setItem('cart', JSON.stringify(cart));
+        console.log('Cart updated:', cart);
+        
+        // Показываем уведомление
+        showNotification('Товар добавлен в корзину', 'success');
+        
+        // Обновляем счетчики
+        updateHeaderCounters();
+        
+        // Обновляем статусы кнопок
+        updateProductStatuses();
+    }
+    
+    function toggleFavoriteSimple(productId, title, price, image) {
+        console.log('toggleFavoriteSimple called:', {productId, title, price, image});
+        
+        let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        const existingIndex = favorites.findIndex(item => item.title === title);
+        
+        if (existingIndex > -1) {
+            favorites.splice(existingIndex, 1);
+            showNotification('Товар удален из избранного', 'info');
+        } else {
+            favorites.push({ productId, title, price, image });
+            showNotification('Товар добавлен в избранное', 'success');
+        }
+        
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        console.log('Favorites updated:', favorites);
+        
+        // Обновляем счетчики
+        updateHeaderCounters();
+        
+        // Обновляем статусы кнопок
+        updateProductStatuses();
+    }
 </script>
 @endsection

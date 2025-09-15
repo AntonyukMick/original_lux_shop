@@ -41,7 +41,7 @@
         
         /* Обновленные стили для всех элементов хедера */
         .btn {
-            height: 40px;
+            height: 44px;
             padding: 0 12px;
             border-radius: 8px;
             border: 2px solid #000;
@@ -69,7 +69,7 @@
             border-radius: 8px;
             padding: 8px 12px;
             font-weight: 700;
-            height: 40px;
+            height: 44px;
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -86,8 +86,8 @@
         .icon-container {
             position: relative;
             display: inline-block;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             background: white;
             border: 2px solid #000;
             border-radius: 8px;
@@ -118,18 +118,38 @@
             background: #FFD700;
             border: 2px solid #000;
             border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 9px;
+            width: 14px;
+            height: 14px;
+            font-size: 8px;
             font-weight: bold;
             color: #000;
+            z-index: 10;
+            line-height: 14px;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            display: block;
         }
         
         .icon-container .badge.hidden {
             display: none;
+        }
+        
+        /* Стили для изображений иконок */
+        .icon-image {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 6px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.2s ease;
+        }
+        
+        .icon-container:hover .icon-image {
+            transform: translate(-50%, -50%) scale(1.1);
         }
         
         /* Стили для иконки сердца */
@@ -195,16 +215,12 @@
             <div style="margin-left:auto;display:flex;gap:6px;align-items:center;">
                 <!-- Новая иконка FAQ -->
                 <div class="icon-container" onclick="showModal('faq')" title="FAQ">
-                    <div class="icon question-icon">?</div>
+                    <img src="{{ asset('image/icon-quest.jpg') }}" alt="FAQ" class="icon-image">
                 </div>
                 
                 <!-- Новая иконка контактов (Telegram) -->
                 <div class="icon-container" onclick="window.open('https://t.me/+dKyI7xh_dLwwY2Qy', '_blank')" title="Telegram канал">
-                    <div class="icon plane-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700" stroke="#000" stroke-width="1">
-                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                        </svg>
-                    </div>
+                    <img src="{{ asset('image/icon-tg.jpg') }}" alt="Telegram" class="icon-image">
                 </div>
                 
                 <!-- Новая иконка доставки -->
@@ -221,14 +237,14 @@
                 
                 <!-- Новая иконка избранного -->
                 <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
-                    <div class="icon heart-icon">❤</div>
-                    <div class="badge <?php echo $favoritesCount > 0 ? '' : 'hidden'; ?>"><?php echo e($favoritesCount); ?></div>
+                    <img src="{{ asset('image/icon-heart.jpg') }}" alt="Избранное" class="icon-image">
+                    <div class="badge hidden" id="cart-favorites-badge">0</div>
                 </div>
                 
                 <!-- Новая иконка корзины -->
                 <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
-                    <div class="icon bag-icon">👜</div>
-                    <div class="badge <?php echo $cartCount > 0 ? '' : 'hidden'; ?>"><?php echo e($cartCount); ?></div>
+                    <img src="{{ asset('image/icon-cart.jpg') }}" alt="Корзина" class="icon-image">
+                    <div class="badge hidden" id="cart-cart-badge">0</div>
                 </div>
                 
                 <?php $auth = session('auth'); ?>
@@ -384,7 +400,9 @@
             
             cart.forEach((item, index) => {
                 const price = parseFloat(item.price);
-                total += price;
+                const quantity = parseInt(item.quantity) || 1;
+                const itemTotal = price * quantity;
+                total += itemTotal;
                 
                 cartHTML += `
                     <div class="row">
@@ -396,11 +414,14 @@
                         </div>
                         <div class="price">${price.toFixed(2)}€</div>
                         <div class="qty">
-                            <input type="number" value="1" min="1" max="99" onchange="updateQuantity(${index}, this.value)">
+                            <input type="number" value="${quantity}" min="1" max="99" onchange="updateQuantity(${index}, this.value)">
                         </div>
                         <div>
                             <button class="btn" onclick="removeFromCart(${index})" style="background:#ef4444;color:#fff;border-color:#ef4444">✕</button>
                         </div>
+                    </div>
+                    <div style="text-align:right;margin-top:4px;font-size:14px;color:#64748b">
+                        Итого: ${itemTotal.toFixed(2)}€
                     </div>
                 `;
             });
@@ -536,45 +557,33 @@
             }, 0);
         }
         
-        // Функция для обновления счетчиков в хедере
+        // Локальная функция для обновления счетчиков хедера
         function updateHeaderCounters() {
+            console.log('updateHeaderCounters called on cart page');
+            
             const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             
             // Обновляем счетчик избранного
-            const favoritesCount = document.getElementById('favorites-count');
-            if (favoritesCount) {
-                if (favorites.length > 0) {
-                    favoritesCount.textContent = favorites.length;
-                    favoritesCount.classList.remove('hidden');
-                } else {
-                    favoritesCount.classList.add('hidden');
-                }
+            const favoritesBadge = document.getElementById('favorites-badge');
+            if (favoritesBadge) {
+                favoritesBadge.textContent = favorites.length;
+                favoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
             }
             
             // Обновляем счетчик корзины
-            const cartCount = document.getElementById('cart-count');
-            if (cartCount) {
-                if (cart.length > 0) {
-                    cartCount.textContent = cart.length;
-                    cartCount.classList.remove('hidden');
-                } else {
-                    cartCount.classList.add('hidden');
-                }
+            const cartBadge = document.getElementById('cart-badge');
+            let totalItems = 0;
+            if (cartBadge) {
+                totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                cartBadge.textContent = totalItems;
+                cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
             }
             
-            // Обновляем старые счетчики (если есть)
-            const oldFavoriteCounters = document.querySelectorAll('.btn[href="/favorites"] span');
-            oldFavoriteCounters.forEach(counter => {
-                counter.textContent = `(${favorites.length})`;
-            });
-            
-            const oldCartCounters = document.querySelectorAll('.btn[href="/cart"] span');
-            oldCartCounters.forEach(counter => {
-                counter.textContent = `(${cart.length})`;
-            });
+            console.log('Counters updated:', {favorites: favorites.length, cart: totalItems});
         }
         
+        // Функция для обновления счетчиков в хедере
         // Загружаем корзину при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
             loadCart();

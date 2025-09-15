@@ -239,7 +239,7 @@
                 <p class="checkout-subtitle">Заполните данные для доставки и выберите способ оплаты</p>
             </div>
 
-            <form method="post" action="/orders" id="checkoutForm">
+            <form method="post" action="/orders" id="checkoutForm" data-validate="true">
                 @csrf
                 <div class="checkout-grid">
                     <!-- Форма заказа -->
@@ -249,7 +249,7 @@
                             <h2 class="section-title">Контактная информация</h2>
                             <div class="form-group">
                                 <label class="form-label">Имя и фамилия *</label>
-                                <input type="text" name="customer_name" class="form-input" required>
+                                <input type="text" name="customer_name" class="form-input" required data-validate="name">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Email *</label>
@@ -446,12 +446,13 @@
                 }
             });
             
-            // Обновляем счетчик корзины
+            // Обновляем счетчик корзины (суммируем количество всех товаров)
             const cartBadges = document.querySelectorAll('.icon-container .badge');
             cartBadges.forEach(badge => {
                 if (badge.closest('.icon-container').querySelector('.bag-icon')) {
-                    if (cart.length > 0) {
-                        badge.textContent = cart.length;
+                    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                    if (totalItems > 0) {
+                        badge.textContent = totalItems;
                         badge.classList.remove('hidden');
                     } else {
                         badge.classList.add('hidden');
