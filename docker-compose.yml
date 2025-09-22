@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # База данных PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: lux_shop_postgres
+    environment:
+      POSTGRES_DB: lux_shop
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - lux_network
+    restart: unless-stopped
+
+  # Laravel приложение
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lux_shop_app
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=lux_shop
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - CACHE_DRIVER=file
+      - SESSION_DRIVER=file
+      - QUEUE_CONNECTION=sync
+      - TELEGRAM_BOT_TOKEN=8474557312:AAEe9c4vNqa3KhZj0BSCxQhTKiFrbsirdmk
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+      - ./public:/var/www/html/public
+    depends_on:
+      - postgres
+    networks:
+      - lux_network
+    restart: unless-stopped
+
+  # Nginx веб-сервер
+  nginx:
+    image: nginx:alpine
+    container_name: lux_shop_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./public:/var/www/html/public:ro
+      - ./storage/app/public:/var/www/html/storage/app/public:ro
+    depends_on:
+      - app
+    networks:
+      - lux_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  lux_network:
+    driver: bridge
