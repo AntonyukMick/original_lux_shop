@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Original | Lux Shop - Telegram App</title>
+    
+    <!-- Telegram Web App Script -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0;
+        }
+        
+        .header {
+            background: var(--tg-theme-header-bg-color, #2481cc);
+            color: var(--tg-theme-header-text-color, #ffffff);
+            padding: 15px 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 5px 0 0 0;
+        }
+        
+        .main-content {
+            padding: 20px;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .welcome-section h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--tg-theme-text-color, #000000);
+        }
+        
+        .welcome-section p {
+            font-size: 16px;
+            color: var(--tg-theme-hint-color, #999999);
+            margin-bottom: 20px;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .action-card {
+            background: var(--tg-theme-secondary-bg-color, #f8f9fa);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--tg-theme-text-color, #000000);
+            transition: transform 0.2s ease;
+            border: 1px solid var(--tg-theme-section-separator-color, #e5e5e5);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .action-card .icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .action-card .title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .action-card .description {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #999999);
+        }
+        
+        .full-width-button {
+            width: 100%;
+            background: var(--tg-theme-button-color, #2481cc);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            border-radius: 12px;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: opacity 0.2s ease;
+        }
+        
+        .full-width-button:hover {
+            opacity: 0.9;
+        }
+        
+        .full-width-button.secondary {
+            background: var(--tg-theme-secondary-bg-color, #f8f9fa);
+            color: var(--tg-theme-text-color, #000000);
+            border: 1px solid var(--tg-theme-section-separator-color, #e5e5e5);
+        }
+        
+        .features {
+            margin-top: 30px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--tg-theme-section-separator-color, #e5e5e5);
+        }
+        
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .feature-text {
+            flex: 1;
+        }
+        
+        .feature-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .feature-description {
+            font-size: 14px;
+            color: var(--tg-theme-hint-color, #999999);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--tg-theme-hint-color, #999999);
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        @media (max-width: 480px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛍️ Original | Lux Shop</h1>
+            <p>Эксклюзивные товары премиум-класса</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="welcome-section">
+                <h2>Добро пожаловать!</h2>
+                <p>Откройте для себя мир роскоши и стиля</p>
+            </div>
+            
+            <div class="quick-actions">
+                <a href="/catalog" class="action-card">
+                    <span class="icon">📱</span>
+                    <div class="title">Каталог</div>
+                    <div class="description">Просмотр товаров</div>
+                </a>
+                
+                <a href="/cart" class="action-card">
+                    <span class="icon">🛍️</span>
+                    <div class="title">Корзина</div>
+                    <div class="description">Ваши покупки</div>
+                </a>
+                
+                <a href="/favorites" class="action-card">
+                    <span class="icon">❤️</span>
+                    <div class="title">Избранное</div>
+                    <div class="description">Сохраненные товары</div>
+                </a>
+                
+                <a href="/profile" class="action-card">
+                    <span class="icon">👤</span>
+                    <div class="title">Профиль</div>
+                    <div class="description">Личный кабинет</div>
+                </a>
+            </div>
+            
+            <button class="full-width-button" onclick="openFullSite()">
+                🌐 Открыть полный сайт
+            </button>
+            
+            <button class="full-width-button secondary" onclick="showUserInfo()">
+                ℹ️ Информация о пользователе
+            </button>
+            
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon">✨</span>
+                    <div class="feature-text">
+                        <div class="feature-title">Эксклюзивные товары</div>
+                        <div class="feature-description">Уникальные коллекции премиум-класса</div>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <span class="feature-icon">🚚</span>
+                    <div class="feature-text">
+                        <div class="feature-title">Быстрая доставка</div>
+                        <div class="feature-description">Доставка по всей стране</div>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <span class="feature-icon">💎</span>
+                    <div class="feature-text">
+                        <div class="feature-title">Качество</div>
+                        <div class="feature-description">Только оригинальные товары</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Инициализация Telegram Web App
+        let tg = window.Telegram.WebApp;
+        
+        // Расширяем Web App на весь экран
+        tg.expand();
+        
+        // Настраиваем главную кнопку
+        tg.MainButton.text = "🛒 Перейти в магазин";
+        tg.MainButton.color = "#2481cc";
+        tg.MainButton.show();
+        
+        // Обработчик нажатия главной кнопки
+        tg.MainButton.onClick(function() {
+            openFullSite();
+        });
+        
+        // Функция открытия полного сайта
+        function openFullSite() {
+            tg.openLink(window.location.origin);
+        }
+        
+        // Функция показа информации о пользователе
+        function showUserInfo() {
+            const user = tg.initDataUnsafe.user;
+            if (user) {
+                const message = `👤 Информация о пользователе:\n\n` +
+                    `Имя: ${user.first_name} ${user.last_name || ''}\n` +
+                    `Username: @${user.username || 'не указан'}\n` +
+                    `ID: ${user.id}\n` +
+                    `Язык: ${user.language_code || 'не указан'}`;
+                
+                tg.showAlert(message);
+            } else {
+                tg.showAlert('Информация о пользователе недоступна');
+            }
+        }
+        
+        // Обработка нажатий на кнопки действий
+        document.querySelectorAll('.action-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                tg.openLink(window.location.origin + href);
+            });
+        });
+        
+        // Настройка темы
+        function updateTheme() {
+            document.body.style.setProperty('--tg-theme-bg-color', tg.themeParams.bg_color || '#ffffff');
+            document.body.style.setProperty('--tg-theme-text-color', tg.themeParams.text_color || '#000000');
+            document.body.style.setProperty('--tg-theme-hint-color', tg.themeParams.hint_color || '#999999');
+            document.body.style.setProperty('--tg-theme-link-color', tg.themeParams.link_color || '#2481cc');
+            document.body.style.setProperty('--tg-theme-button-color', tg.themeParams.button_color || '#2481cc');
+            document.body.style.setProperty('--tg-theme-button-text-color', tg.themeParams.button_text_color || '#ffffff');
+            document.body.style.setProperty('--tg-theme-secondary-bg-color', tg.themeParams.secondary_bg_color || '#f8f9fa');
+            document.body.style.setProperty('--tg-theme-header-bg-color', tg.themeParams.header_bg_color || '#2481cc');
+            document.body.style.setProperty('--tg-theme-header-text-color', tg.themeParams.header_text_color || '#ffffff');
+            document.body.style.setProperty('--tg-theme-section-separator-color', tg.themeParams.section_separator_color || '#e5e5e5');
+        }
+        
+        // Применяем тему при загрузке
+        updateTheme();
+        
+        // Обработка изменения темы
+        tg.onEvent('themeChanged', updateTheme);
+        
+        // Показываем уведомление о готовности
+        tg.ready();
+        
+        // Логирование для отладки
+        console.log('Telegram Web App initialized:', {
+            version: tg.version,
+            platform: tg.platform,
+            colorScheme: tg.colorScheme,
+            themeParams: tg.themeParams,
+            initData: tg.initData,
+            initDataUnsafe: tg.initDataUnsafe
+        });
+    </script>
+</body>
+</html>
+

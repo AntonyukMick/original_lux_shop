@@ -63,6 +63,27 @@ services:
       - lux_network
     restart: unless-stopped
 
+  # Telegram бот
+  telegram-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.bot
+    container_name: lux_shop_telegram_bot
+    environment:
+      - TELEGRAM_BOT_TOKEN=8474557312:AAEe9c4vNqa3KhZj0BSCxQhTKiFrbsirdmk
+      - APP_URL=http://100.70.100.188
+      - WAIT_FOR_DB=false
+    volumes:
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+    depends_on:
+      - postgres
+      - app
+    networks:
+      - lux_network
+    restart: unless-stopped
+    command: ["php", "bot_polling.php"]
+
 volumes:
   postgres_data:
 
