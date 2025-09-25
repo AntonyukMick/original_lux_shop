@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Корзина | ORIGINAL | LUX SHOP</title>
-    <link rel="stylesheet" href="{{ asset('css/empty-states.css') }}">
-    <style>
-        body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial;background:#f1f5f9;color:#0f172a}
-        .container{max-width:1200px;margin:0 auto;padding:12px}
+@extends('layouts.app')
+
+@section('title', 'Корзина')
+
+@section('styles')
+<link rel="stylesheet" href="{{ asset('css/empty-states.css') }}">
+<style>
         .panel{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:24px;text-align:left}
         .row{display:grid;grid-template-columns:1fr 120px 120px 40px;gap:10px;align-items:center;border-bottom:1px solid #e2e8f0;padding:8px 0}
         .row:last-child{border-bottom:none}
@@ -35,236 +32,11 @@
         }
         .total{display:flex;justify-content:flex-end;gap:16px;margin-top:12px;font-size:18px}
         
-        /* Header */
-        header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
-        header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
-        
-        /* Обновленные стили для всех элементов хедера */
-        .btn {
-            height: 44px;
-            padding: 0 12px;
-            border-radius: 8px;
-            border: 2px solid #000;
-            background: #fff;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            color: #000;
-            transition: all 0.2s ease;
-            line-height: 1;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .brand {
-            margin-left: 8px;
-            background: #e2e8f0;
-            border: 2px solid #000;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-weight: 700;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            line-height: 1;
-        }
-        
-        .brand:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        /* Новые стили для иконок избранного и корзины */
-        .icon-container {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 44px;
-            background: white;
-            border: 2px solid #000;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin: 0 4px;
-            line-height: 1;
-        }
-        
-        .icon-container:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .icon-container .icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 22px;
-            color: #FFD700;
-        }
-        
-        .icon-container .badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: #FFD700;
-            border: 2px solid #000;
-            border-radius: 50%;
-            width: 14px;
-            height: 14px;
-            font-size: 8px;
-            font-weight: bold;
-            color: #000;
-            z-index: 10;
-            line-height: 14px;
-            text-align: center;
-            padding: 0;
-            margin: 0;
-            display: block;
-        }
-        
-        .icon-container .badge.hidden {
-            display: none;
-        }
-        
-        /* Стили для изображений иконок */
-        .icon-image {
-            width: 32px;
-            height: 32px;
-            object-fit: cover;
-            border-radius: 6px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.2s ease;
-        }
-        
-        .icon-container:hover .icon-image {
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-        
-        /* Стили для иконки сердца */
-        .heart-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки корзины */
-        .bag-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки сердца */
-        .heart-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки самолетика */
-        .plane-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки вопросика */
-        .question-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки доставки */
-        .delivery-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-            font-size: 20px;
-            transform: translate(-50%, -50%) scale(1.2);
-        }
-        
-        /* Стили для иконки о нас */
-        .about-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Увеличенная иконка для кнопки входа */
-        .btn .login-icon {
-            font-size: 18px;
-        }
-        
         /* Стили для пустых состояний подключены из отдельного файла */
     </style>
-</head>
-<body>
-    <header>
-        <?php 
-        $favoritesCount = is_countable(session('favorites')) ? count(session('favorites')) : 0;
-        $cartCount = is_countable(session('cart')) ? count(session('cart')) : 0;
-        ?>
-        <div class="container bar">
-            <a href="/" class="btn">← Назад</a>
-            <div style="margin-left:auto;display:flex;gap:6px;align-items:center;">
-                <!-- Новая иконка FAQ -->
-                <div class="icon-container" onclick="showModal('faq')" title="FAQ">
-                    <img src="{{ asset('image/icon-quest.jpg') }}" alt="FAQ" class="icon-image">
-                </div>
-                
-                <!-- Новая иконка контактов (Telegram) -->
-                <div class="icon-container" onclick="window.open('https://t.me/+dKyI7xh_dLwwY2Qy', '_blank')" title="Telegram канал">
-                    <img src="{{ asset('image/icon-tg.jpg') }}" alt="Telegram" class="icon-image">
-                </div>
-                
-                <!-- Новая иконка доставки -->
-                <div class="icon-container" onclick="window.location.href='/delivery'" title="Доставка">
-                    <div class="icon delivery-icon">🚚</div>
-                </div>
-                
-                <!-- Новая иконка о нас -->
-                <div class="icon-container" onclick="window.location.href='/about'" title="О нас">
-                    <div class="icon about-icon">ℹ️</div>
-                </div>
-                
-                <span class="brand" onclick="location.reload()" style="cursor:pointer" title="Обновить страницу">ORIGINAL | LUX SHOP</span>
-                
-                <!-- Новая иконка избранного -->
-                <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
-                    <img src="{{ asset('image/icon-heart.jpg') }}" alt="Избранное" class="icon-image">
-                    <div class="badge hidden" id="cart-favorites-badge">0</div>
-                </div>
-                
-                <!-- Новая иконка корзины -->
-                <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
-                    <img src="{{ asset('image/icon-cart.jpg') }}" alt="Корзина" class="icon-image">
-                    <div class="badge hidden" id="cart-cart-badge">0</div>
-                </div>
-                
-                <?php $auth = session('auth'); ?>
-                <?php if(!$auth): ?>
-                    <a class="btn" href="/login" style="text-decoration:none;color:inherit">
-                        <span class="login-icon">👤</span> Войти
-                    </a>
-                <?php else: ?>
-                    <form method="post" action="/logout" style="display:inline">
-                        <?php echo csrf_field(); ?>
-                        <button class="btn" type="submit">Выйти (<?php echo e($auth['role']); ?>)</button>
-                    </form>
-                    <?php if($auth['role']==='admin'): ?>
-                        <a class="btn" href="/admin" style="text-decoration:none;color:inherit" title="Админ-панель">⚙️ Админ-панель</a>
-                    <?php endif; ?>
-                    <a class="btn" href="/profile" style="text-decoration:none;color:inherit">👤 Профиль</a>
-                <?php endif; ?>
-            </div>
-        </div>
-    </header>
+@endsection
+
+@section('content')
 
     <div class="container">
         <div class="panel">
@@ -354,9 +126,124 @@
             text-decoration: none;
             cursor: pointer;
         }
+        
+        /* Мобильная адаптивность для корзины */
+        @media (max-width: 768px) {
+            .container {
+                padding: 8px;
+            }
+            
+            .panel {
+                padding: 16px;
+                border-radius: 8px;
+            }
+            
+            .row {
+                grid-template-columns: 1fr 80px 80px 25px;
+                gap: 6px;
+                padding: 6px 0;
+            }
+            
+            .thumb {
+                width: 50px;
+                height: 50px;
+                margin-right: 8px;
+            }
+            
+            .title {
+                font-size: 14px;
+            }
+            
+            .price {
+                font-size: 14px;
+            }
+            
+            input[type=number] {
+                width: 50px;
+                height: 28px;
+                font-size: 12px;
+            }
+            
+            .btn {
+                height: 28px;
+                padding: 0 8px;
+                font-size: 12px;
+            }
+            
+            /* Специальные стили для кнопок удаления на мобильных */
+            .row .btn[style*="background:#ef4444"] {
+                height: 20px !important;
+                width: 20px !important;
+                padding: 0 !important;
+                font-size: 9px !important;
+                min-width: 20px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+            
+            .total {
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 16px;
+                font-size: 16px;
+            }
+            
+            .total .btn {
+                width: 100%;
+                height: 40px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .row {
+                grid-template-columns: 1fr 50px 50px 20px;
+                gap: 4px;
+            }
+            
+            .thumb {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .title {
+                font-size: 12px;
+            }
+            
+            .price {
+                font-size: 12px;
+            }
+            
+            input[type=number] {
+                width: 40px;
+                height: 24px;
+                font-size: 10px;
+            }
+            
+            .btn {
+                height: 24px;
+                padding: 0 6px;
+                font-size: 10px;
+            }
+            
+            /* Еще более компактные кнопки удаления для маленьких экранов */
+            .row .btn[style*="background:#ef4444"] {
+                height: 18px !important;
+                width: 18px !important;
+                padding: 0 !important;
+                font-size: 7px !important;
+                min-width: 18px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+            }
+        }
     </style>
+@endsection
 
-    <script>
+@section('scripts')
+<script>
         // Функции для модальных окон
         function showModal(type) {
             document.getElementById('modal-' + type).style.display = 'block';
@@ -564,14 +451,14 @@
             const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             
-            // Обновляем счетчик избранного
+            // Обновляем счетчик избранного (используем правильные ID)
             const favoritesBadge = document.getElementById('favorites-badge');
             if (favoritesBadge) {
                 favoritesBadge.textContent = favorites.length;
                 favoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
             }
             
-            // Обновляем счетчик корзины
+            // Обновляем счетчик корзины (используем правильные ID)
             const cartBadge = document.getElementById('cart-badge');
             let totalItems = 0;
             if (cartBadge) {
@@ -590,7 +477,6 @@
             updateHeaderCounters();
         });
     </script>
-</body>
-</html>
+@endsection
 
 

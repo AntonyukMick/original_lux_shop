@@ -10,6 +10,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\OrderPdfController;
 use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\PromotionsController;
+use App\Http\Controllers\TelegramBotController;
 use App\Models\VideoLink;
 
 // Главная страница
@@ -104,4 +105,12 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::get('/videos', [AdminController::class, 'videos'])->name('videos.index');
     Route::post('/videos', [AdminController::class, 'storeVideo'])->name('videos.store');
     Route::delete('/videos/{id}', [AdminController::class, 'deleteVideo'])->name('videos.delete');
+});
+
+// Telegram Bot маршруты
+Route::prefix('telegram')->group(function () {
+    Route::post('/webhook', [TelegramBotController::class, 'webhook'])->name('telegram.webhook');
+    Route::post('/set-webhook', [TelegramBotController::class, 'setWebhook'])->name('telegram.set-webhook');
+    Route::post('/delete-webhook', [TelegramBotController::class, 'deleteWebhook'])->name('telegram.delete-webhook');
+    Route::get('/bot-info', [TelegramBotController::class, 'getBotInfo'])->name('telegram.bot-info');
 });
