@@ -61,6 +61,37 @@
     .title{font-weight:600;font-size:16px}
     .price{font-weight:700;font-size:16px;text-align:center}
     .panel .btn{height:34px;padding:0 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;color:#000;font-weight:600;font-size:14px}
+    
+    /* Мобильная адаптация для избранного */
+    @media (max-width: 768px) {
+        .container{padding:8px}
+        .panel{padding:16px}
+        .panel h1{font-size:24px;margin-bottom:16px}
+        .row{grid-template-columns:1fr 80px 80px 30px;gap:6px;padding:8px 0}
+        .thumb{width:50px;height:50px;margin-right:8px}
+        .title{font-size:14px;line-height:1.3}
+        .price{font-size:14px}
+        .panel .btn{height:28px;padding:0 8px;font-size:12px;border-radius:6px}
+        
+        /* Компактные кнопки для мобильных */
+        .panel .btn.primary{height:22px;padding:0 4px;font-size:10px;border-radius:4px}
+        .panel .btn[style*="background:#ef4444"]{height:20px;width:20px;padding:0;font-size:9px;border-radius:3px;display:flex;align-items:center;justify-content:center}
+    }
+    
+    @media (max-width: 480px) {
+        .container{padding:6px}
+        .panel{padding:12px}
+        .panel h1{font-size:20px;margin-bottom:12px}
+        .row{grid-template-columns:1fr 60px 60px 25px;gap:4px;padding:6px 0}
+        .thumb{width:40px;height:40px;margin-right:6px}
+        .title{font-size:12px;line-height:1.2}
+        .price{font-size:12px}
+        .panel .btn{height:24px;padding:0 6px;font-size:10px;border-radius:4px}
+        
+        /* Еще более компактные кнопки для маленьких экранов */
+        .panel .btn.primary{height:18px;padding:0 3px;font-size:9px;border-radius:3px}
+        .panel .btn[style*="background:#ef4444"]{height:16px;width:16px;padding:0;font-size:7px;border-radius:2px;display:flex;align-items:center;justify-content:center}
+    }
     .panel .btn.primary{background:#527ea6;color:#ffffff;border-color:#527ea6;font-weight:600}
     .panel .btn.primary:hover{background:#3b5a7a}
     
@@ -84,6 +115,21 @@
     
     .empty{text-align:center;padding:40px 20px;color:#64748b}
     .empty-icon{font-size:48px;margin-bottom:16px}
+    
+    /* Мобильная адаптация для пустого состояния */
+    @media (max-width: 768px) {
+        .empty{padding:30px 15px}
+        .empty-icon{font-size:40px;margin-bottom:12px}
+        .empty h2{font-size:20px}
+        .empty p{font-size:14px}
+    }
+    
+    @media (max-width: 480px) {
+        .empty{padding:20px 10px}
+        .empty-icon{font-size:36px;margin-bottom:10px}
+        .empty h2{font-size:18px}
+        .empty p{font-size:12px}
+    }
     </style>
         @include('components.header-styles')
         

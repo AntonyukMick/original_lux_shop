@@ -1,0 +1,422 @@
+/* ======================================
+   АДАПТИВНЫЕ ФОРМЫ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ
+   ====================================== */
+
+/* Общие стили для форм */
+.mobile-form {
+    background: var(--card);
+    border: 1px solid var(--muted);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.mobile-form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.mobile-form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 16px;
+}
+
+.mobile-form-input {
+    width: 100%;
+    height: 48px;
+    border: 2px solid var(--muted);
+    border-radius: 8px;
+    padding: 0 16px;
+    font-size: 16px;
+    font-family: var(--font-family);
+    transition: all 0.2s ease;
+    background: white;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.mobile-form-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(82, 126, 166, 0.1);
+}
+
+.mobile-form-input:invalid {
+    border-color: #ef4444;
+}
+
+.mobile-form-input:valid {
+    border-color: #10b981;
+}
+
+.mobile-form-textarea {
+    min-height: 120px;
+    padding: 16px;
+    resize: vertical;
+    font-family: var(--font-family);
+}
+
+.mobile-form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+.mobile-form-checkbox,
+.mobile-form-radio {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.mobile-form-submit {
+    width: 100%;
+    height: 56px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 20px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.mobile-form-submit:hover {
+    background: #3b5a7a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(82, 126, 166, 0.3);
+}
+
+.mobile-form-submit:active {
+    transform: translateY(0);
+}
+
+.mobile-form-submit:disabled {
+    background: var(--muted);
+    color: #64748b;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Валидация */
+.form-error {
+    color: #ef4444;
+    font-size: 14px;
+    margin-top: 4px;
+    display: none;
+}
+
+.form-error.show {
+    display: block;
+}
+
+.form-success {
+    color: #10b981;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+/* Иконки в полях */
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon .input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: 18px;
+    pointer-events: none;
+}
+
+.input-with-icon .mobile-form-input {
+    padding-left: 48px;
+}
+
+/* Floating labels */
+.floating-label {
+    position: relative;
+}
+
+.floating-label .mobile-form-input {
+    padding-top: 24px;
+    padding-bottom: 8px;
+}
+
+.floating-label .mobile-form-label {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.2s ease;
+    pointer-events: none;
+    background: white;
+    padding: 0 4px;
+    margin: 0;
+}
+
+.floating-label .mobile-form-input:focus + .mobile-form-label,
+.floating-label .mobile-form-input:not(:placeholder-shown) + .mobile-form-label {
+    top: 0;
+    font-size: 12px;
+    color: var(--accent);
+    transform: translateY(-50%);
+}
+
+/* ======================================
+   МОБИЛЬНАЯ АДАПТИВНОСТЬ ФОРМ
+   ====================================== */
+
+/* Мобильные устройства (портрет) - до 480px */
+@media (max-width: 480px) {
+    .mobile-form {
+        padding: 16px;
+        border-radius: 8px;
+        margin: 0 8px;
+    }
+    
+    .mobile-form-group {
+        margin-bottom: 16px;
+    }
+    
+    .mobile-form-label {
+        font-size: 15px;
+        margin-bottom: 6px;
+    }
+    
+    .mobile-form-input {
+        height: 52px;
+        padding: 0 14px;
+        font-size: 16px;
+        border-radius: 6px;
+    }
+    
+    .mobile-form-textarea {
+        min-height: 100px;
+        padding: 14px;
+    }
+    
+    .mobile-form-submit {
+        height: 52px;
+        font-size: 17px;
+        margin-top: 16px;
+        border-radius: 6px;
+    }
+    
+    /* Touch-friendly элементы */
+    .mobile-form-checkbox,
+    .mobile-form-radio {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+    }
+    
+    /* Клавиатурные подсказки */
+    .mobile-form-input[type="email"] {
+        -webkit-text-size-adjust: 100%;
+    }
+    
+    .mobile-form-input[type="tel"] {
+        -webkit-text-size-adjust: 100%;
+    }
+    
+    .mobile-form-input[type="number"] {
+        -webkit-text-size-adjust: 100%;
+    }
+    
+    /* Убираем zoom при фокусе */
+    .mobile-form-input,
+    .mobile-form-textarea,
+    .mobile-form-select {
+        font-size: 16px !important;
+    }
+    
+    /* Floating labels для мобильных */
+    .floating-label .mobile-form-input {
+        padding-top: 28px;
+        padding-bottom: 8px;
+    }
+    
+    .input-with-icon .input-icon {
+        font-size: 20px;
+        left: 14px;
+    }
+    
+    .input-with-icon .mobile-form-input {
+        padding-left: 44px;
+    }
+}
+
+/* Мобильные устройства (ландшафт) - 481px до 768px */
+@media (min-width: 481px) and (max-width: 768px) {
+    .mobile-form {
+        padding: 18px;
+        margin: 0 12px;
+    }
+    
+    .mobile-form-group {
+        margin-bottom: 18px;
+    }
+    
+    .mobile-form-input {
+        height: 50px;
+        padding: 0 15px;
+    }
+    
+    .mobile-form-submit {
+        height: 54px;
+        font-size: 17px;
+        margin-top: 18px;
+    }
+    
+    .mobile-form-checkbox,
+    .mobile-form-radio {
+        width: 22px;
+        height: 22px;
+        margin-right: 11px;
+    }
+}
+
+/* Планшеты - 769px до 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .mobile-form {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 24px;
+    }
+    
+    .mobile-form-input {
+        height: 48px;
+    }
+    
+    .mobile-form-submit {
+        height: 56px;
+        max-width: 300px;
+        margin: 20px auto 0;
+        display: block;
+    }
+}
+
+/* Touch устройства */
+@media (hover: none) and (pointer: coarse) {
+    .mobile-form-input:hover {
+        border-color: var(--muted);
+    }
+    
+    .mobile-form-submit:hover {
+        background: var(--accent);
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .mobile-form-input,
+    .mobile-form-submit,
+    .mobile-form-checkbox,
+    .mobile-form-radio {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+}
+
+/* Специальные стили для iOS */
+@supports (-webkit-touch-callout: none) {
+    .mobile-form-input,
+    .mobile-form-textarea,
+    .mobile-form-select {
+        -webkit-appearance: none;
+        border-radius: 8px;
+    }
+    
+    .mobile-form-submit {
+        -webkit-appearance: none;
+        border-radius: 8px;
+    }
+}
+
+/* Анимации для мобильных */
+@media (max-width: 768px) {
+    .mobile-form-input:focus {
+        animation: focusPulse 0.3s ease;
+    }
+    
+    @keyframes focusPulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.02);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+    
+    .mobile-form-submit:active {
+        animation: buttonPress 0.1s ease;
+    }
+    
+    @keyframes buttonPress {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(0.98);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+}
+
+/* Accessibility для мобильных */
+@media (max-width: 768px) {
+    .mobile-form-input:focus {
+        outline: 3px solid rgba(82, 126, 166, 0.3);
+        outline-offset: 2px;
+    }
+    
+    .mobile-form-submit:focus {
+        outline: 3px solid rgba(82, 126, 166, 0.3);
+        outline-offset: 2px;
+    }
+}
+
+/* Темная тема для мобильных */
+@media (prefers-color-scheme: dark) and (max-width: 768px) {
+    .mobile-form {
+        background: #1e293b;
+        border-color: #334155;
+    }
+    
+    .mobile-form-input {
+        background: #1e293b;
+        border-color: #334155;
+        color: #f1f5f9;
+    }
+    
+    .mobile-form-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(82, 126, 166, 0.2);
+    }
+    
+    .mobile-form-label {
+        color: #f1f5f9;
+    }
+}
+

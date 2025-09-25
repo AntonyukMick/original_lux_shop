@@ -1,7 +1,21 @@
 <style>
 /* Общие стили для хедера */
 header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
-header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
+
+/* Десктопный хедер - показываем только на десктопе */
+.desktop-header{display:block}
+.mobile-header{display:none}
+
+/* Десктопный хедер (старый стиль) */
+.desktop-header .bar{display:flex;align-items:center;gap:4px;padding:6px 8px;width:100%;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* Мобильный хедер - показываем только на мобильных */
+.mobile-header .bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;width:100%;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* Новая структура для мобильного хедера */
+.mobile-header .header-left{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.mobile-header .header-center{display:flex;align-items:center;justify-content:center;flex:1;min-width:0}
+.mobile-header .header-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
 
 /* Обновленные стили для всех элементов хедера */
 .btn {
@@ -19,6 +33,8 @@ header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
     color: #000;
     transition: all 0.2s ease;
     line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .btn:hover {
@@ -39,6 +55,8 @@ header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
     cursor: pointer;
     transition: all 0.2s ease;
     line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .brand:hover {
@@ -59,6 +77,7 @@ header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
     transition: all 0.2s ease;
     margin: 0 4px;
     line-height: 1;
+    flex-shrink: 0;
 }
 
 .icon-container:hover {
@@ -73,6 +92,20 @@ header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
     transform: translate(-50%, -50%);
     font-size: 22px;
     color: #FFD700;
+}
+
+/* Стили для эмодзи иконок в десктопном хедере */
+.desktop-header .delivery-icon {
+    color: #FFD700;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+    font-size: 20px;
+    transform: translate(-50%, -50%) scale(1.2);
+}
+
+.desktop-header .about-icon {
+    color: #FFD700;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+    font-size: 18px;
 }
 
         .icon-container .badge {
@@ -155,7 +188,179 @@ header .bar{display:flex;align-items:center;gap:8px;padding:8px 12px;width:100%}
     transition: all 0.2s ease;
 }
 
+/* Стили для мобильного хедера - изображения иконок */
+.mobile-header .icon-image {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Стили для эмодзи иконок в мобильном хедере */
+.mobile-header .home-icon {
+    font-size: 20px;
+    color: #FFD700;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+}
+
+.mobile-header .user-icon {
+    font-size: 20px;
+    color: #0066cc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
 .icon-container:hover .icon-image {
     transform: translate(-50%, -50%) scale(1.1);
 }
+
+/* ======================================
+   МОБИЛЬНАЯ АДАПТИВНОСТЬ ХЕДЕРА
+   ====================================== */
+
+/* Мобильные устройства (портрет) - до 480px */
+@media (max-width: 480px) {
+    /* Переключаем хедеры */
+    .desktop-header{display:none !important}
+    .mobile-header{display:block !important}
+    
+    .mobile-header .bar {
+        padding: 6px 8px;
+        gap: 2px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    
+    /* Компактный бренд */
+    .brand {
+        font-size: 10px;
+        padding: 4px 6px;
+        height: 32px;
+        margin-left: 2px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    /* Компактные кнопки */
+    .btn {
+        height: 32px;
+        padding: 0 6px;
+        font-size: 10px;
+        gap: 2px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    /* Компактные иконки */
+    .icon-container {
+        width: 32px;
+        height: 32px;
+        margin: 0 1px;
+        flex-shrink: 0;
+    }
+    
+    .icon-image {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .icon-container .badge {
+        width: 10px;
+        height: 10px;
+        font-size: 6px;
+        line-height: 10px;
+        top: -2px;
+        right: -2px;
+    }
+    
+    
+    /* Основные иконки остаются видимыми */
+    .mobile-essential {
+        order: 5;
+    }
+    
+    /* Бренд в начале */
+    .brand {
+        order: 1;
+        margin-left: 0;
+        margin-right: auto;
+    }
+}
+
+/* Мобильные устройства (ландшафт) - 481px до 768px */
+@media (min-width: 481px) and (max-width: 768px) {
+    /* Переключаем хедеры */
+    .desktop-header{display:none !important}
+    .mobile-header{display:block !important}
+    
+    .mobile-header .bar {
+        padding: 8px 12px;
+        gap: 4px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    
+    .brand {
+        font-size: 12px;
+        padding: 6px 8px;
+        height: 36px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    .btn {
+        height: 36px;
+        padding: 0 8px;
+        font-size: 12px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    .icon-container {
+        width: 36px;
+        height: 36px;
+        margin: 0 2px;
+        flex-shrink: 0;
+    }
+    
+    .icon-image {
+        width: 24px;
+        height: 24px;
+    }
+    
+    /* Скрываем некоторые второстепенные элементы */
+    .tablet-hidden {
+        display: none !important;
+    }
+    
+}
+
+/* Десктопы - показываем все элементы */
+@media (min-width: 769px) {
+    /* Переключаем хедеры */
+    .desktop-header{display:block !important}
+    .mobile-header{display:none !important}
+    
+    
+    .mobile-hidden,
+    .tablet-hidden {
+        display: inline-flex !important;
+    }
+    
+    
+}
+
 </style>

@@ -2,8 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>@yield('title') | ORIGINAL | LUX SHOP</title>
+    
+    <!-- Основные стили -->
+    <link rel="stylesheet" href="{{ asset('css/common.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mobile-cards.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mobile-forms.css') }}">
+    
     @include('components.header-styles')
     @yield('styles')
 </head>
@@ -15,6 +21,9 @@
     </main>
     
     @vite(['resources/js/app.js'])
+    
+    <!-- Мобильные взаимодействия -->
+    <script src="{{ asset('js/mobile-interactions.js') }}"></script>
     
     <!-- Fallback script if Vite doesn't work -->
     <script>

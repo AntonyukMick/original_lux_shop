@@ -61,12 +61,12 @@
     }
     
     .main {
-        padding: 32px 0;
+        padding: 16px 0;
     }
     
     .catalog-header {
         text-align: center;
-        margin-bottom: 24px;
+        margin-bottom: 16px;
     }
     
     .catalog-title {
@@ -91,19 +91,31 @@
         .category-tabs {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-bottom: 40px;
+            gap: 6px;
+            margin-bottom: 32px;
             flex-wrap: wrap;
         }
         
+        /* Мобильная адаптация для категорий */
+        @media (max-width:768px){
+            .category-tabs{gap:4px;margin-bottom:24px}
+            .category-tab{padding:6px 12px;font-size:13px;border-radius:4px}
+        }
+        
+        @media (max-width:480px){
+            .category-tabs{gap:3px;margin-bottom:20px}
+            .category-tab{padding:5px 10px;font-size:12px;border-radius:3px}
+        }
+        
         .category-tab {
-            padding: 12px 20px;
+            padding: 8px 16px;
             border: 1px solid #cbd5e1;
-            border-radius: 8px;
+            border-radius: 6px;
             background: #fff;
             color: #0f172a;
             text-decoration: none;
             font-weight: 500;
+            font-size: 14px;
             transition: all 0.2s;
             cursor: pointer;
         }
@@ -123,20 +135,21 @@
         .filters-section {
             background: #fff;
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 32px;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
         }
         
         .filters-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
         
         .filters-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: #0f172a;
         }
@@ -144,35 +157,35 @@
         .reset-filters {
             color: #527ea6;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
         }
         
         .filters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
         }
         
         .filter-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
         
         .filter-label {
             font-weight: 500;
             color: #0f172a;
-            font-size: 14px;
+            font-size: 12px;
         }
         
         .filter-select {
-            height: 36px;
+            height: 32px;
             border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 0 12px;
+            border-radius: 6px;
+            padding: 0 8px;
             background: #fff;
-            font-size: 14px;
+            font-size: 12px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -180,17 +193,44 @@
         
         .price-inputs {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
         
         .price-input {
             flex: 1;
-            height: 36px;
+            height: 32px;
             border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            padding: 0 12px;
-            font-size: 14px;
+            border-radius: 6px;
+            padding: 0 8px;
+            font-size: 12px;
             min-width: 0;
+        }
+        
+        /* Мобильная адаптация для фильтров */
+        @media (max-width:768px){
+            .filters-section{padding:8px;margin-bottom:16px}
+            .filters-header{margin-bottom:8px}
+            .filters-title{font-size:14px}
+            .reset-filters{font-size:11px}
+            .filters-grid{grid-template-columns:1fr;gap:8px}
+            .filter-group{gap:4px}
+            .filter-label{font-size:11px}
+            .filter-select{height:28px;font-size:11px;padding:0 6px}
+            .price-inputs{gap:4px}
+            .price-input{height:28px;font-size:11px;padding:0 6px}
+        }
+        
+        @media (max-width:480px){
+            .filters-section{padding:6px;margin-bottom:12px}
+            .filters-header{margin-bottom:6px}
+            .filters-title{font-size:13px}
+            .reset-filters{font-size:10px}
+            .filters-grid{gap:6px}
+            .filter-group{gap:3px}
+            .filter-label{font-size:10px}
+            .filter-select{height:26px;font-size:10px;padding:0 5px}
+            .price-inputs{gap:3px}
+            .price-input{height:26px;font-size:10px;padding:0 5px}
         }
         
         /* Products Grid */
@@ -219,21 +259,30 @@
         
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
+            grid-template-columns: 1fr;
+            gap: 14px;
             margin-bottom: 32px;
         }
         
+        /* Мобильная адаптация для товаров каталога */
+        @media (max-width:768px){
+            .products-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+        }
+        
+        @media (max-width:480px){
+            .products-grid{grid-template-columns:repeat(2,1fr);gap:6px}
+        }
+        
+        @media (min-width:900px){
+            .products-grid{grid-template-columns:repeat(2,1fr)}
+        }
+        
         .product-card {
-            background: var(--card);
-            border: 2px solid #000;
+            background: #fff;
+            border: 1px solid #cbd5e1;
             border-radius: 10px;
-            overflow: hidden;
-            transition: all 0.2s ease;
+            padding: 12px;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
         }
         
         .product-card:hover {
@@ -249,66 +298,81 @@
         
         .product-image {
             width: 100%;
-            height: 200px;
+            border-radius: 8px;
+            aspect-ratio: 4/3;
             object-fit: cover;
-            background: #f8fafc;
+            background: #f1f5f9;
         }
         
         .product-info {
-            padding: 16px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
+            margin: 8px 0 10px 0;
+            font-size: 12px;
+            color: #475569;
         }
         
         .product-title {
             font-weight: 600;
             margin-bottom: 8px;
             color: var(--text);
-            font-size: 16px;
+            font-size: 12px;
             line-height: 1.4;
         }
         
         .product-meta {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
+            gap: 12px;
+            margin: 8px 0 10px 0;
+            font-size: 12px;
+            color: #475569;
         }
         
         .product-brand {
             font-size: 12px;
-            color: #64748b;
+            color: #475569;
             font-weight: 500;
         }
         
         .product-price {
             font-weight: 700;
-            color: var(--accent);
-            font-size: 18px;
+            color: #0f172a;
+            font-size: 12px;
         }
         
         .product-actions {
-            display: flex;
-            gap: 8px;
+            margin-top: 2px;
         }
         
         .add-to-cart-btn {
-            flex: 1;
-            height: 40px;
-            background: var(--accent);
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
+            height: 36px;
+            padding: 0 16px;
+            border-radius: 18px;
+            border: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: #475569;
+            font-weight: 500;
+            font-size: 13px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            width: 100%;
         }
         
         .add-to-cart-btn:hover {
-            background: #3b5a7a;
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            color: #1e293b;
             transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-color: #cbd5e1;
+        }
+        
+        .add-to-cart-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         /* Стили для кнопки "В корзине" */
@@ -325,31 +389,78 @@
         }
         
         .favorite-btn {
-            width: 40px;
-            height: 40px;
-            border: 1px solid var(--muted);
-            border-radius: 8px;
-            background: #ffffff;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
             cursor: pointer;
+            font-size: 14px;
+            z-index: 10;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
             transition: all 0.2s ease;
         }
         
         .favorite-btn:hover {
-            background: #f8fafc;
-            border-color: var(--accent);
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
         }
         
-        .favorite-btn:hover {
-            border-color: #ef4444;
-            color: #ef4444;
+        /* Мобильная адаптация для карточек каталога */
+        @media (max-width:768px){
+            .product-card{padding:8px;border-radius:8px}
+            .product-image{border-radius:6px;aspect-ratio:1/1}
+            .product-meta{font-size:11px;margin:6px 0 8px 0;gap:8px}
+            .product-price{font-size:13px}
+            .product-title{font-size:11px;margin-bottom:6px}
+            .add-to-cart-btn{height:28px;padding:0 12px;font-size:11px;border-radius:14px}
+            .favorite-btn{width:24px;height:24px;font-size:12px;top:6px;right:6px}
+        }
+        
+        @media (max-width:480px){
+            .product-card{padding:6px;border-radius:6px}
+            .product-image{border-radius:4px;aspect-ratio:1/1}
+            .product-meta{font-size:10px;margin:4px 0 6px 0;gap:6px;flex-direction:column;align-items:flex-start}
+            .product-meta > div:first-child{line-height:1.2;margin-bottom:2px}
+            .product-price{font-size:12px;font-weight:600}
+            .product-title{font-size:10px;margin-bottom:4px}
+            .add-to-cart-btn{height:24px;padding:0 8px;font-size:10px;border-radius:12px}
+            .favorite-btn{width:20px;height:20px;font-size:10px;top:4px;right:4px}
         }
         
         /* Responsive */
         @media (max-width: 768px) {
+            .main {
+                padding: 12px 0;
+            }
+            
+            .search-section {
+                margin: 6px 0 !important;
+                padding: 12px !important;
+            }
+            
+            .search-section h3 {
+                font-size: 14px !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .search input {
+                height: 36px !important;
+                font-size: 13px !important;
+                padding: 0 10px !important;
+            }
+            
+            .search-btn {
+                height: 36px !important;
+                padding: 0 12px !important;
+                font-size: 13px !important;
+            }
+            
             .category-tabs {
                 justify-content: flex-start;
                 overflow-x: auto;
@@ -359,10 +470,33 @@
             .filters-grid {
                 grid-template-columns: 1fr;
             }
+        }
+        
+        @media (max-width: 480px) {
+            .main {
+                padding: 8px 0;
+            }
             
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 16px;
+            .search-section {
+                margin: 4px 0 !important;
+                padding: 10px !important;
+            }
+            
+            .search-section h3 {
+                font-size: 13px !important;
+                margin-bottom: 6px !important;
+            }
+            
+            .search input {
+                height: 32px !important;
+                font-size: 12px !important;
+                padding: 0 8px !important;
+            }
+            
+            .search-btn {
+                height: 32px !important;
+                padding: 0 10px !important;
+                font-size: 12px !important;
             }
         }
     </style>
@@ -371,34 +505,6 @@
 @section('content')
 <main class="main">
     <div class="container">
-        <!-- Поиск в каталоге -->
-            <div class="search-section" style="margin: 20px 0; padding: 24px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                <h3 style="margin: 0 0 16px 0; color: #1e293b; font-size: 18px; font-weight: 600;">🔍 Поиск товаров</h3>
-                <div class="search" style="display: flex; align-items: center; gap: 12px; width: 100%;">
-                    <input 
-                        type="text" 
-                        id="catalogSearchInput" 
-                        placeholder="Введите название товара, бренд или категорию..." 
-                        autocomplete="off"
-                        style="flex: 1; height: 48px; border-radius: 12px; border: 1px solid #cbd5e1; padding: 0 16px; font-size: 15px; background: #fff; transition: all 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"
-                    />
-                    <button class="search-btn" onclick="performCatalogSearch()" style="height: 48px; padding: 0 24px; border-radius: 12px; border: 1px solid #cbd5e1; background: #527ea6; color: #fff; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; font-size: 15px; white-space: nowrap;">
-                        🔍 Найти
-                    </button>
-                </div>
-                
-                <!-- Фильтры поиска -->
-                <div class="search-filters" id="catalogSearchFilters" style="display: none; gap: 8px; margin-top: 16px; flex-wrap: wrap;">
-                    <div class="search-filter active" data-filter="all" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">Все товары</div>
-                    <div class="search-filter" data-filter="Одежда" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👕 Одежда</div>
-                    <div class="search-filter" data-filter="Обувь" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👟 Обувь</div>
-                    <div class="search-filter" data-filter="Сумки" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👜 Сумки</div>
-                    <div class="search-filter" data-filter="Часы" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">⌚ Часы</div>
-                    <div class="search-filter" data-filter="Украшения" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">💍 Украшения</div>
-                    <div class="search-filter" data-filter="Аксессуары" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">🕶️ Аксессуары</div>
-                </div>
-            </div>
-
             <div class="catalog-header">
                 <h1 class="catalog-title">Каталог товаров</h1>
                 <p class="catalog-subtitle">Более 30 товаров в разных категориях</p>
@@ -441,6 +547,34 @@
                             <input type="number" class="price-input" id="maxPrice" placeholder="До">
                         </div>
                     </div>
+                </div>
+            </div>
+
+        <!-- Поиск в каталоге -->
+            <div class="search-section" style="margin: 8px 0; padding: 16px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
+                <h3 style="margin: 0 0 12px 0; color: #1e293b; font-size: 16px; font-weight: 600;">🔍 Поиск товаров</h3>
+                <div class="search" style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                    <input 
+                        type="text" 
+                        id="catalogSearchInput" 
+                        placeholder="Введите название товара, бренд или категорию..." 
+                        autocomplete="off"
+                        style="flex: 1; height: 40px; border-radius: 8px; border: 1px solid #cbd5e1; padding: 0 12px; font-size: 14px; background: #fff; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"
+                    />
+                    <button class="search-btn" onclick="performCatalogSearch()" style="height: 40px; padding: 0 16px; border-radius: 8px; border: 1px solid #cbd5e1; background: #527ea6; color: #fff; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px; font-size: 14px; white-space: nowrap;">
+                        🔍 Найти
+                    </button>
+                </div>
+                
+                <!-- Фильтры поиска -->
+                <div class="search-filters" id="catalogSearchFilters" style="display: none; gap: 6px; margin-top: 12px; flex-wrap: wrap;">
+                    <div class="search-filter active" data-filter="all" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">Все товары</div>
+                    <div class="search-filter" data-filter="Одежда" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👕 Одежда</div>
+                    <div class="search-filter" data-filter="Обувь" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👟 Обувь</div>
+                    <div class="search-filter" data-filter="Сумки" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👜 Сумки</div>
+                    <div class="search-filter" data-filter="Часы" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">⌚ Часы</div>
+                    <div class="search-filter" data-filter="Украшения" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">💍 Украшения</div>
+                    <div class="search-filter" data-filter="Аксессуары" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">🕶️ Аксессуары</div>
                 </div>
             </div>
 
