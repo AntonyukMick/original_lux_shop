@@ -1,5 +1,5 @@
-# Оптимизированный Dockerfile в один слой
-FROM php:8.2-fpm-alpine
+# Оптимизированный Dockerfile для Render
+FROM php:8.2-cli-alpine
 
 # Устанавливаем все зависимости и настраиваем PHP в один слой
 RUN apk add --no-cache \
@@ -57,5 +57,5 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 # Переключаемся на пользователя приложения
 USER appuser
 
-# Запускаем PHP-FPM
-CMD ["php-fpm"]
+# Запускаем Laravel сервер
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=10000"]

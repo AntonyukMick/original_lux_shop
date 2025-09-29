@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('css/common.css') }}">
     <link rel="stylesheet" href="{{ asset('css/mobile-cards.css') }}">
     <link rel="stylesheet" href="{{ asset('css/mobile-forms.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/assets/app-BrSR8sCT.css') }}">
     
     @include('components.header-styles')
     @yield('styles')
@@ -20,21 +21,11 @@
         @yield('content')
     </main>
     
-    @vite(['resources/js/app.js'])
+    <!-- Основные скрипты -->
+    <script src="{{ asset('build/assets/app-Qhq6ypDa.js') }}"></script>
     
     <!-- Мобильные взаимодействия -->
     <script src="{{ asset('js/mobile-interactions.js') }}"></script>
-    
-    <!-- Fallback script if Vite doesn't work -->
-    <script>
-        // Проверяем, загрузился ли основной скрипт
-        setTimeout(function() {
-            if (typeof window.addToCart === 'undefined') {
-                console.log('Vite script not loaded, using fallback');
-                // Здесь можно добавить fallback функции
-            }
-        }, 1000);
-    </script>
     
     @yield('scripts')
 </body>
