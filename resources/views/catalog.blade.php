@@ -262,6 +262,7 @@
             grid-template-columns: 1fr;
             gap: 14px;
             margin-bottom: 32px;
+            align-items: stretch;
         }
         
         /* Мобильная адаптация для товаров каталога */
@@ -283,6 +284,10 @@
             border-radius: 10px;
             padding: 12px;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 320px;
         }
         
         .product-card:hover {
@@ -290,8 +295,10 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
-        .product-card a {
-            display: block;
+        .product-link {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
             text-decoration: none;
             color: inherit;
         }
@@ -302,12 +309,18 @@
             aspect-ratio: 4/3;
             object-fit: cover;
             background: #f1f5f9;
+            flex-shrink: 0;
         }
         
         .product-info {
-            margin: 8px 0 10px 0;
+            margin: 8px 0 0 0;
             font-size: 12px;
             color: #475569;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            min-height: 60px;
         }
         
         .product-title {
@@ -316,6 +329,7 @@
             color: var(--text);
             font-size: 12px;
             line-height: 1.4;
+            flex-shrink: 0;
         }
         
         .product-meta {
@@ -325,6 +339,7 @@
             margin: 8px 0 10px 0;
             font-size: 12px;
             color: #475569;
+            flex-shrink: 0;
         }
         
         .product-brand {
@@ -340,7 +355,9 @@
         }
         
         .product-actions {
-            margin-top: 2px;
+            margin-top: auto;
+            flex-shrink: 0;
+            padding-top: 8px;
         }
         
         .add-to-cart-btn {
@@ -413,22 +430,28 @@
         
         /* Мобильная адаптация для карточек каталога */
         @media (max-width:768px){
-            .product-card{padding:8px;border-radius:8px}
-            .product-image{border-radius:6px;aspect-ratio:1/1}
-            .product-meta{font-size:11px;margin:6px 0 8px 0;gap:8px}
-            .product-price{font-size:13px}
-            .product-title{font-size:11px;margin-bottom:6px}
+            .products-grid{grid-template-columns:repeat(2,1fr);gap:8px;align-items:stretch}
+            .product-card{padding:8px;border-radius:8px;min-height:280px}
+            .product-image{border-radius:6px;aspect-ratio:1/1;flex-shrink:0}
+            .product-info{flex-grow:1;min-height:70px;justify-content:space-between}
+            .product-meta{font-size:11px;margin:6px 0 8px 0;gap:8px;flex-shrink:0}
+            .product-price{font-size:13px;flex-shrink:0}
+            .product-title{font-size:11px;margin-bottom:6px;flex-shrink:0}
+            .product-actions{margin-top:auto;flex-shrink:0}
             .add-to-cart-btn{height:28px;padding:0 12px;font-size:11px;border-radius:14px}
             .favorite-btn{width:24px;height:24px;font-size:12px;top:6px;right:6px}
         }
         
         @media (max-width:480px){
-            .product-card{padding:6px;border-radius:6px}
-            .product-image{border-radius:4px;aspect-ratio:1/1}
-            .product-meta{font-size:10px;margin:4px 0 6px 0;gap:6px;flex-direction:column;align-items:flex-start}
+            .products-grid{grid-template-columns:repeat(2,1fr);gap:6px;align-items:stretch}
+            .product-card{padding:6px;border-radius:6px;min-height:240px}
+            .product-image{border-radius:4px;aspect-ratio:1/1;flex-shrink:0}
+            .product-info{flex-grow:1;min-height:60px;justify-content:space-between}
+            .product-meta{font-size:10px;margin:4px 0 6px 0;gap:6px;flex-direction:column;align-items:flex-start;flex-shrink:0}
             .product-meta > div:first-child{line-height:1.2;margin-bottom:2px}
-            .product-price{font-size:12px;font-weight:600}
-            .product-title{font-size:10px;margin-bottom:4px}
+            .product-price{font-size:12px;font-weight:600;flex-shrink:0}
+            .product-title{font-size:10px;margin-bottom:4px;flex-shrink:0}
+            .product-actions{margin-top:auto;flex-shrink:0}
             .add-to-cart-btn{height:24px;padding:0 8px;font-size:10px;border-radius:12px}
             .favorite-btn{width:20px;height:20px;font-size:10px;top:4px;right:4px}
         }
@@ -599,7 +622,7 @@
                             <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
                         </form>
                         
-                        <a href="/product/{{ $product['id'] }}">
+                        <a href="/product/{{ $product['id'] }}" class="product-link">
                             <img src="{{ $product['image'] }}" alt="{{ $product['title'] }}" class="product-image">
                             <div class="product-info">
                                 <div class="product-title">{{ $product['title'] }}</div>
@@ -607,17 +630,18 @@
                                     <span class="product-brand">{{ $product['brand'] }}</span>
                                     <span class="product-price">{{ $product['price'] }}€</span>
                                 </div>
-                                <div class="product-actions">
-                                    <form method="post" action="/cart/add" style="flex:1;margin:0">
-                                        @csrf
-                                        <input type="hidden" name="title" value="{{ $product['title'] }}">
-                                        <input type="hidden" name="price" value="{{ $product['price'] }}">
-                                        <input type="hidden" name="image" value="{{ $product['image'] }}">
-                                        <button type="submit" class="add-to-cart-btn">В корзину</button>
-                                    </form>
-                                </div>
                             </div>
                         </a>
+                        
+                        <div class="product-actions">
+                            <form method="post" action="/cart/add" style="margin:0;width:100%">
+                                @csrf
+                                <input type="hidden" name="title" value="{{ $product['title'] }}">
+                                <input type="hidden" name="price" value="{{ $product['price'] }}">
+                                <input type="hidden" name="image" value="{{ $product['image'] }}">
+                                <button type="submit" class="add-to-cart-btn">В корзину</button>
+                            </form>
+                        </div>
                     </div>
                     @endforeach
                 </div>

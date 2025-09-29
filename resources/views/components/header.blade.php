@@ -22,12 +22,12 @@ $auth = session('auth');
                 
                 <!-- Иконка доставки -->
                 <div class="icon-container" onclick="window.location.href='/delivery'" title="Доставка">
-                    <img src="{{ asset('image/icon-cart.jpg') }}" alt="Доставка" class="icon-image">
+                    <div class="icon delivery-icon">🚚</div>
                 </div>
                 
                 <!-- Иконка о нас -->
                 <div class="icon-container" onclick="window.location.href='/about'" title="О нас">
-                    <img src="{{ asset('image/icon-quest.jpg') }}" alt="О нас" class="icon-image">
+                    <div class="icon about-icon">ℹ️</div>
                 </div>
                 
                 <span class="brand" onclick="location.reload()" style="cursor:pointer" title="Обновить страницу">ORIGINAL | LUX SHOP</span>
@@ -65,7 +65,7 @@ $auth = session('auth');
             <!-- Левая группа иконок -->
             <div class="header-left">
                 <!-- Иконка главной страницы (домик) -->
-                <div class="icon-container" onclick="window.location.href='/'" title="Главная">
+                <div class="icon-container" onclick="window.location.href='/'" title="Главная страница">
                     <div class="home-icon">🏠</div>
                 </div>
                 

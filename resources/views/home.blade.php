@@ -216,20 +216,45 @@
         .promo p{margin:0;color:#475569;font-size:13px}
         .section-title{margin:18px 0 10px 0;font-weight:700;font-size:18px}
         .goods{display:grid;grid-template-columns:1fr;gap:14px;align-items:stretch}
-        .good{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:12px;display:flex;flex-direction:column;height:100%}
-        .good img{width:100%;border-radius:8px;aspect-ratio:4/3;object-fit:cover;background:#f1f5f9}
-        .good .meta{display:flex;justify-content:space-between;gap:12px;margin:8px 0 10px 0;font-size:12px;color:#475569;flex-grow:1}
-        .good form{margin-top:auto}
-        .good .price{font-weight:700;color:#0f172a}
+        .good{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:12px;display:flex;flex-direction:column;height:100%;min-height:280px}
+        .good img{width:100%;border-radius:8px;aspect-ratio:4/3;object-fit:cover;background:#f1f5f9;flex-shrink:0}
+        .good .meta{display:flex;justify-content:space-between;gap:12px;margin:8px 0 10px 0;font-size:12px;color:#475569;flex-grow:1;min-height:40px}
+        .good form{margin-top:auto;flex-shrink:0}
+        .good .price{font-weight:700;color:#0f172a;flex-shrink:0}
+        
+        /* Дополнительные стили для выравнивания кнопок */
+        .good .meta {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .good .meta > div {
+            width: 100%;
+        }
+        
+        .good .meta > div:first-child {
+            margin-bottom: 4px;
+        }
+        
+        .good form {
+            width: 100%;
+        }
+        
+        .good .btn {
+            width: 100%;
+            justify-content: center;
+        }
         
         /* Мобильная адаптация для товаров */
         @media (max-width:768px){
             .goods{grid-template-columns:repeat(2,1fr);gap:8px;align-items:stretch}
-            .good{padding:8px;border-radius:8px;display:flex;flex-direction:column;height:100%}
-            .good img{border-radius:6px;aspect-ratio:1/1}
-            .good .meta{font-size:11px;margin:6px 0 8px 0;gap:8px;flex-grow:1}
-            .good form{margin-top:auto}
-            .good .price{font-size:13px}
+            .good{padding:8px;border-radius:8px;display:flex;flex-direction:column;height:100%;min-height:240px}
+            .good img{border-radius:6px;aspect-ratio:1/1;flex-shrink:0}
+            .good .meta{font-size:11px;margin:6px 0 8px 0;gap:8px;flex-grow:1;min-height:35px}
+            .good form{margin-top:auto;flex-shrink:0}
+            .good .price{font-size:13px;flex-shrink:0}
             .section-title{font-size:16px;margin:12px 0 8px 0}
             .good .btn{height:28px;padding:0 12px;font-size:11px;border-radius:14px}
             .favorite-btn{width:24px;height:24px;font-size:12px;top:6px;right:6px}
@@ -263,12 +288,12 @@
         
         @media (max-width:480px){
             .goods{grid-template-columns:repeat(2,1fr);gap:6px;align-items:stretch}
-            .good{padding:6px;border-radius:6px;display:flex;flex-direction:column;height:100%}
-            .good img{border-radius:4px;aspect-ratio:1/1}
-            .good .meta{font-size:10px;margin:4px 0 6px 0;gap:6px;flex-direction:column;align-items:flex-start;flex-grow:1}
+            .good{padding:6px;border-radius:6px;display:flex;flex-direction:column;height:100%;min-height:200px}
+            .good img{border-radius:4px;aspect-ratio:1/1;flex-shrink:0}
+            .good .meta{font-size:10px;margin:4px 0 6px 0;gap:6px;flex-direction:column;align-items:flex-start;flex-grow:1;min-height:30px}
             .good .meta > div:first-child{line-height:1.2;margin-bottom:2px}
-            .good form{margin-top:auto}
-            .good .price{font-size:12px;font-weight:600}
+            .good form{margin-top:auto;flex-shrink:0}
+            .good .price{font-size:12px;font-weight:600;flex-shrink:0}
             .section-title{font-size:14px;margin:10px 0 6px 0}
             .good .btn{height:24px;padding:0 8px;font-size:10px;border-radius:12px}
             .favorite-btn{width:20px;height:20px;font-size:10px;top:4px;right:4px}

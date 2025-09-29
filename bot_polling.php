@@ -13,6 +13,7 @@ setBotCommands($botToken);
 echo "🤖 Запуск Telegram бота в polling режиме...\n";
 echo "Нажмите Ctrl+C для остановки\n\n";
 
+
 while (true) {
     // Получаем обновления
     $url = "https://api.telegram.org/bot{$botToken}/getUpdates?offset=" . ($lastUpdateId + 1);
