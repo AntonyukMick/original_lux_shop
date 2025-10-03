@@ -45,6 +45,10 @@ RUN apk add --no-cache \
 # Устанавливаем рабочую директорию
 WORKDIR /var/www/html
 
+# Копируем entrypoint скрипт отдельно
+COPY --chown=appuser:appgroup docker-entrypoint.sh /var/www/html/docker-entrypoint.sh
+RUN chmod +x /var/www/html/docker-entrypoint.sh
+
 # Копируем код приложения
 COPY --chown=appuser:appgroup . .
 
@@ -54,19 +58,11 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
     && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
 
-# Создаем entrypoint скрипт
-RUN echo '#!/bin/sh' > /var/www/html/docker-entrypoint.sh && \
-    echo 'set -e' >> /var/www/html/docker-entrypoint.sh && \
-    echo 'php artisan config:cache' >> /var/www/html/docker-entrypoint.sh && \
-    echo 'php artisan route:cache' >> /var/www/html/docker-entrypoint.sh && \
-    echo 'php artisan view:cache' >> /var/www/html/docker-entrypoint.sh && \
-    echo 'php artisan migrate --force' >> /var/www/html/docker-entrypoint.sh && \
-    echo 'php artisan db:seed --force' >> /var/www/html/docker-entrypoint.sh && \
-    echo 'php artisan serve --host=0.0.0.0 --port=${PORT:-10000}' >> /var/www/html/docker-entrypoint.sh && \
-    chmod +x /var/www/html/docker-entrypoint.sh
-
 # Переключаемся на пользователя приложения
 USER appuser
+
+# Expose порт
+EXPOSE 10000
 
 # Запускаем Laravel сервер через entrypoint
 CMD ["/bin/sh", "/var/www/html/docker-entrypoint.sh"]
