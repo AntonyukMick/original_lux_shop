@@ -8,12 +8,18 @@ services:
     plan: free
     healthCheckPath: /
     envVars:
+      - key: APP_NAME
+        value: OLX
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: false
       - key: APP_KEY
-        generateValue: true
+        sync: false
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: debug
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
@@ -36,6 +42,10 @@ services:
         fromDatabase:
           name: olx-database
           property: password
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_DRIVER
+        value: file
       
   # Database Service
   - type: pserv
