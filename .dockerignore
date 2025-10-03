@@ -4,50 +4,41 @@
 .gitattributes
 
 # Docker
-Dockerfile
-docker-compose.yml
 .dockerignore
+docker-compose*.yml
+Dockerfile.nginx
+Dockerfile.bot
 
-# Environment files
-.env.*
-!.env.example
-!.env
-
-# Dependencies
-node_modules
-npm-debug.log
-yarn-error.log
-
-# IDE files
-.vscode
+# IDE
 .idea
+.vscode
 *.swp
 *.swo
-*~
 
-# OS files
-.DS_Store
-Thumbs.db
+# Node
+node_modules
+npm-debug.log
 
-# Logs
-*.log
-storage/logs/*
-
-# Cache
+# Laravel
+/vendor
 storage/framework/cache/*
 storage/framework/sessions/*
 storage/framework/views/*
+storage/logs/*
 bootstrap/cache/*
+.env
+.env.backup
+.env.production
 
-# Testing
+# Tests
 tests
 phpunit.xml
-.phpunit.result.cache
 
 # Documentation
 README.md
-*.md
+CHANGELOG.md
+VIDEO_INSTRUCTIONS.md
 
-# Temporary files
-tmp
-temp
+# Build artifacts
+public/hot
+public/storage

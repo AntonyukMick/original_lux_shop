@@ -45,10 +45,6 @@ RUN apk add --no-cache \
 # Устанавливаем рабочую директорию
 WORKDIR /var/www/html
 
-# Копируем entrypoint скрипт отдельно
-COPY --chown=appuser:appgroup docker-entrypoint.sh /var/www/html/docker-entrypoint.sh
-RUN chmod +x /var/www/html/docker-entrypoint.sh
-
 # Копируем код приложения
 COPY --chown=appuser:appgroup . .
 
@@ -57,6 +53,44 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
     && chmod -R 755 /var/www/html \
     && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
+
+# Создаем entrypoint скрипт напрямую
+RUN printf '#!/bin/sh\n\
+set -e\n\
+\n\
+echo "================================"\n\
+echo "Starting Laravel application..."\n\
+echo "================================"\n\
+\n\
+echo "Checking environment variables..."\n\
+echo "APP_ENV: $APP_ENV"\n\
+echo "DB_CONNECTION: $DB_CONNECTION"\n\
+echo "DB_HOST: $DB_HOST"\n\
+echo "PORT: ${PORT:-10000}"\n\
+\n\
+echo "Clearing caches..."\n\
+php artisan config:clear || echo "Config clear failed"\n\
+php artisan cache:clear || echo "Cache clear failed"\n\
+php artisan view:clear || echo "View clear failed"\n\
+php artisan route:clear || echo "Route clear failed"\n\
+\n\
+echo "Testing database connection..."\n\
+php artisan db:show || echo "Database connection check failed"\n\
+\n\
+echo "Running migrations..."\n\
+php artisan migrate --force || echo "Migration failed, continuing..."\n\
+\n\
+echo "Running seeders..."\n\
+php artisan db:seed --force || echo "Seeding failed, continuing..."\n\
+\n\
+echo "Setting permissions..."\n\
+chmod -R 775 storage bootstrap/cache || echo "Permission setting failed"\n\
+\n\
+echo "================================"\n\
+echo "Starting server on port ${PORT:-10000}..."\n\
+echo "================================"\n\
+exec php artisan serve --host=0.0.0.0 --port=${PORT:-10000}\n' > /var/www/html/docker-entrypoint.sh \
+    && chmod +x /var/www/html/docker-entrypoint.sh
 
 # Переключаемся на пользователя приложения
 USER appuser
