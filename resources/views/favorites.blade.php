@@ -7,13 +7,13 @@
 
 @section('content')
 <div class="container">
-    <div class="panel">
-        <!-- Контейнер для товаров избранного -->
-        <div id="favorites-items">
-            <!-- Товары будут загружены через JavaScript -->
+        <div class="panel">
+            <!-- Контейнер для товаров избранного -->
+            <div id="favorites-items">
+                <!-- Товары будут загружены через JavaScript -->
+            </div>
         </div>
     </div>
-</div>
 
     <!-- Модальные окна -->
     <div id="modal-faq" class="modal" style="display: none;">
@@ -99,22 +99,22 @@
     .btn[style*="background:#527ea6"], .btn[style*="background: #527ea6"] {
         color: #ffffff !important;
         font-weight: 600;
-    }
-    
-    .btn[style*="background:#48bb78"], .btn[style*="background: #48bb78"] {
-        color: #ffffff !important;
-        font-weight: 600;
-    }
-    
-    .btn[style*="background:#ef4444"], .btn[style*="background: #ef4444"] {
-        color: #ffffff !important;
-        font-weight: 600;
-    }
+        }
+        
+        .btn[style*="background:#48bb78"], .btn[style*="background: #48bb78"] {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+        
+        .btn[style*="background:#ef4444"], .btn[style*="background: #ef4444"] {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
     
     /* Стили для пустых состояний подключены из отдельного файла */
     
-    .empty{text-align:center;padding:40px 20px;color:#64748b}
-    .empty-icon{font-size:48px;margin-bottom:16px}
+        .empty{text-align:center;padding:40px 20px;color:#64748b}
+        .empty-icon{font-size:48px;margin-bottom:16px}
     
     /* Мобильная адаптация для пустого состояния */
     @media (max-width: 768px) {
