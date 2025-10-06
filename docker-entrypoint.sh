@@ -42,11 +42,18 @@ php artisan db:show || echo "Database connection check failed"
 
 # Запускаем миграции
 echo "Running migrations..."
-php artisan migrate --force || echo "Migration failed, continuing..."
+php artisan migrate --force
+if [ $? -ne 0 ]; then
+    echo "ERROR: Migration failed!"
+    cat storage/logs/laravel.log | tail -n 20
+fi
 
 # Запускаем сиды (только если таблицы пустые)
 echo "Running seeders..."
-php artisan db:seed --force || echo "Seeding failed, continuing..."
+php artisan db:seed --force
+if [ $? -ne 0 ]; then
+    echo "WARNING: Seeding failed, but continuing..."
+fi
 
 # Кешируем конфигурацию для продакшена
 echo "Caching configuration..."
