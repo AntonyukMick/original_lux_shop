@@ -21,15 +21,13 @@ COPY --chown=botuser:botgroup . .
 # Устанавливаем зависимости
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
-# Создаем entrypoint скрипт
-COPY --chown=botuser:botgroup docker/bot-entrypoint.sh /usr/local/bin/bot-entrypoint.sh
-RUN chmod +x /usr/local/bin/bot-entrypoint.sh
+# Устанавливаем права доступа
+RUN chmod -R 755 /var/www/html \
+    && chmod -R 775 /var/www/html/storage \
+    && chmod -R 775 /var/www/html/bootstrap/cache
 
 # Переключаемся на пользователя бота
 USER botuser
-
-# Устанавливаем entrypoint
-ENTRYPOINT ["/usr/local/bin/bot-entrypoint.sh"]
 
 # Команда по умолчанию
 CMD ["php", "bot_polling.php"]
