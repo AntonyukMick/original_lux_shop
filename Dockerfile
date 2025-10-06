@@ -53,29 +53,7 @@ COPY --chown=appuser:appgroup . .
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts \
     && chmod -R 755 /var/www/html \
     && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache
-
-# Создаем entrypoint скрипт напрямую
-RUN printf '#!/bin/sh\n\
-set -e\n\
-\n\
-echo "================================"\n\
-echo "Starting Laravel application..."\n\
-echo "================================"\n\
-\n\
-echo "Waiting for database..."\n\
-sleep 5\n\
-\n\
-echo "Running migrations..."\n\
-php artisan migrate --force || echo "Migration failed, continuing..."\n\
-\n\
-echo "Running seeders..."\n\
-php artisan db:seed --force || echo "Seeding failed, continuing..."\n\
-\n\
-echo "================================"\n\
-echo "Starting server on port ${PORT:-10000}..."\n\
-echo "================================"\n\
-exec php artisan serve --host=0.0.0.0 --port=${PORT:-10000}\n' > /var/www/html/docker-entrypoint.sh \
+    && chmod -R 775 /var/www/html/bootstrap/cache \
     && chmod +x /var/www/html/docker-entrypoint.sh
 
 # Переключаемся на пользователя приложения
