@@ -10,12 +10,13 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 .desktop-header .bar{display:flex;align-items:center;gap:4px;padding:6px 8px;width:100%;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
 
 /* Мобильный хедер - показываем только на мобильных */
-.mobile-header .bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;width:100%;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.mobile-header .bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;width:100%;flex-wrap:nowrap;position:relative}
 
 /* Новая структура для мобильного хедера */
-.mobile-header .header-left{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.mobile-header .header-center{display:flex;align-items:center;justify-content:center;flex:1;min-width:0}
-.mobile-header .header-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.mobile-header .header-left{display:flex;align-items:center;gap:6px;flex-shrink:0;z-index:2}
+.mobile-header .header-center{display:flex;align-items:center;justify-content:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:1}
+.mobile-header .header-center .brand{pointer-events:auto}
+.mobile-header .header-right{display:flex;align-items:center;gap:6px;flex-shrink:0;z-index:2}
 
 /* Обновленные стили для всех элементов хедера */
 .btn {
@@ -75,6 +76,19 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     font-weight: 400;
     opacity: 0.9;
     white-space: nowrap;
+}
+
+/* Специальный стиль для мобильного бренда (без подзаголовка) */
+.mobile-brand {
+    flex-direction: row !important;
+    height: auto !important;
+    min-height: 36px !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+    gap: 0 !important;
 }
 
 .brand:hover {
@@ -280,6 +294,13 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
         font-size: 8px;
     }
     
+    /* Мобильный бренд - компактный */
+    .mobile-brand {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+        min-height: 32px !important;
+    }
+    
     /* Компактные кнопки */
     .btn {
         height: 32px;
@@ -368,6 +389,13 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     
     .brand-subtitle {
         font-size: 9px;
+    }
+    
+    /* Мобильный бренд для планшетов */
+    .mobile-brand {
+        font-size: 12px !important;
+        padding: 6px 10px !important;
+        min-height: 36px !important;
     }
     
     .btn {

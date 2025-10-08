@@ -82,9 +82,8 @@ $auth = session('auth');
             
             <!-- Название по центру -->
             <div class="header-center">
-                <div class="brand" onclick="location.reload()" style="cursor:pointer" title="Обновить страницу">
-                    <div class="brand-name">Original | Lux Shop</div>
-                    <div class="brand-subtitle">мини-приложение</div>
+                <div class="brand mobile-brand" onclick="location.reload()" style="cursor:pointer" title="Обновить страницу">
+                    ORIGINAL | LUX SHOP
                 </div>
             </div>
             
