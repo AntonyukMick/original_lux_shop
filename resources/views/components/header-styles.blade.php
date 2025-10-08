@@ -44,19 +44,37 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 
 .brand {
     margin-left: 8px;
-    background: #e2e8f0;
+    background: rgb(151, 173, 200);
     border: 2px solid #000;
     border-radius: 8px;
     padding: 8px 12px;
     font-weight: 700;
-    height: 44px;
+    height: auto;
+    min-height: 44px;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
     line-height: 1;
-    white-space: nowrap;
     flex-shrink: 0;
+    color: rgb(21, 36, 35);
+    text-align: center;
+    gap: 2px;
+}
+
+.brand-name {
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.brand-subtitle {
+    font-size: 10px;
+    font-weight: 400;
+    opacity: 0.9;
+    white-space: nowrap;
 }
 
 .brand:hover {
@@ -244,12 +262,22 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     
     /* Компактный бренд */
     .brand {
-        font-size: 10px;
         padding: 4px 6px;
-        height: 32px;
+        height: auto;
+        min-height: 32px;
         margin-left: 2px;
-        white-space: nowrap;
         flex-shrink: 0;
+        justify-content: center;
+        text-align: center;
+        gap: 1px;
+    }
+    
+    .brand-name {
+        font-size: 10px;
+    }
+    
+    .brand-subtitle {
+        font-size: 8px;
     }
     
     /* Компактные кнопки */
@@ -295,6 +323,17 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
         order: 1;
         margin-left: 0;
         margin-right: auto;
+        justify-content: center;
+        text-align: center;
+        gap: 1px;
+    }
+    
+    .brand-name {
+        font-size: 11px;
+    }
+    
+    .brand-subtitle {
+        font-size: 9px;
     }
 }
 
@@ -314,11 +353,21 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     
     
     .brand {
-        font-size: 12px;
         padding: 6px 8px;
-        height: 36px;
-        white-space: nowrap;
+        height: auto;
+        min-height: 36px;
         flex-shrink: 0;
+        justify-content: center;
+        text-align: center;
+        gap: 2px;
+    }
+    
+    .brand-name {
+        font-size: 12px;
+    }
+    
+    .brand-subtitle {
+        font-size: 9px;
     }
     
     .btn {

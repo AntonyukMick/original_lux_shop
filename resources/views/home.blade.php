@@ -48,22 +48,35 @@
     .tile{background:var(--card);border:1px solid #cbd5e1;border-radius:10px;padding:16px;position:relative;min-height:100px;transition:all 0.2s ease}
     .tile h3{margin:0 0 6px 0;font-size:16px;font-weight:700;color:#1e293b}
     .tile p{margin:0;color:#475569;font-weight:500}
-        /* Улучшенные стили для поиска - более компактный и сдержанный */
+    
+    /* Одинаковый размер текста для верхних кнопок */
+    .grid-top .tile h3,
+    .grid-top .tile p {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.4;
+        color: #1e293b;
+    }
+        /* Улучшенные стили для поиска - на всю ширину с лупой */
         .search {
-            display: flex;
-            align-items: center;
-            gap: 8px;
             margin: 16px 0;
             position: relative;
         }
         
+        .search-input-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+        
         .search input {
-            flex: 1;
-            height: 40px;
+            width: 100%;
+            height: 44px;
             border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            padding: 0 12px;
-            font-size: 14px;
+            border: 2px solid #cbd5e1;
+            padding: 0 50px 0 16px;
+            font-size: 15px;
             background: #fff;
             transition: all 0.2s ease;
         }
@@ -71,7 +84,7 @@
         .search input:focus {
             outline: none;
             border-color: #527ea6;
-            box-shadow: 0 0 0 2px rgba(82, 126, 166, 0.1);
+            box-shadow: 0 0 0 3px rgba(82, 126, 166, 0.1);
         }
         
         .search input::placeholder {
@@ -79,25 +92,72 @@
             font-weight: 400;
         }
         
-        .search-btn {
-            height: 40px;
-            padding: 0 16px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            background: #527ea6;
-            color: #fff;
-            font-weight: 500;
+        .search-icon-btn {
+            position: absolute;
+            right: 4px;
+            height: 36px;
+            width: 40px;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-size: 20px;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 14px;
+            justify-content: center;
         }
         
-        .search-btn:hover {
+        .search-icon-btn:hover {
+            background: #f1f5f9;
+            color: #527ea6;
+        }
+        
+        .search-icon-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* Стили для блока "Хотите увидеть больше товаров?" */
+        .more-products-block {
+            text-align: center;
+            margin-top: 32px;
+            padding: 24px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+        }
+        
+        .more-products-title {
+            margin: 0 0 16px 0;
+            color: #0f172a;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .more-products-text {
+            margin: 0 0 20px 0;
+            color: #64748b;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        
+        .more-products-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #527ea6;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .more-products-btn:hover {
             background: #3b5a7a;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
         /* Стили для результатов поиска - более сдержанные */
@@ -278,12 +338,23 @@
             /* Сжатые стили для верхних блоков */
             .grid-top{margin:8px 0;gap:8px}
             .grid-top .tile{padding:10px;min-height:80px}
-            .grid-top .tile h3{font-size:14px;margin:0 0 4px 0;line-height:1.2}
-            .grid-top .tile p{font-size:11px;line-height:1.3}
+            .grid-top .tile h3,
+            .grid-top .tile p{font-size:13px;margin:0 0 4px 0;line-height:1.3;font-weight:600;color:#1e293b}
             
             /* Сжатые стили для кнопок каталога */
             .tabs{gap:6px;margin:8px 0}
             .tab{padding:6px 8px;font-size:12px;border-radius:6px}
+            
+            /* Адаптивные стили для поиска */
+            .search{margin:12px 0}
+            .search input{height:42px;font-size:14px;padding:0 48px 0 14px}
+            .search-icon-btn{height:34px;width:38px;font-size:18px}
+            
+            /* Адаптивные стили для блока "Хотите увидеть больше" */
+            .more-products-block{margin-top:20px;padding:16px;border-radius:10px}
+            .more-products-title{font-size:17px;margin:0 0 12px 0}
+            .more-products-text{font-size:14px;margin:0 0 16px 0;line-height:1.4}
+            .more-products-btn{padding:10px 20px;font-size:13px;border-radius:7px}
         }
         
         @media (max-width:480px){
@@ -317,12 +388,23 @@
             /* Еще более сжатые стили для верхних блоков */
             .grid-top{margin:6px 0;gap:6px}
             .grid-top .tile{padding:8px;min-height:70px}
-            .grid-top .tile h3{font-size:13px;margin:0 0 3px 0;line-height:1.1}
-            .grid-top .tile p{font-size:10px;line-height:1.2}
+            .grid-top .tile h3,
+            .grid-top .tile p{font-size:12px;margin:0 0 3px 0;line-height:1.2;font-weight:600;color:#1e293b}
             
             /* Еще более сжатые стили для кнопок каталога */
             .tabs{gap:4px;margin:6px 0}
             .tab{padding:4px 6px;font-size:11px;border-radius:4px}
+            
+            /* Адаптивные стили для поиска на маленьких экранах */
+            .search{margin:10px 0}
+            .search input{height:40px;font-size:13px;padding:0 46px 0 12px}
+            .search-icon-btn{height:32px;width:36px;font-size:16px}
+            
+            /* Адаптивные стили для блока "Хотите увидеть больше" на маленьких экранах */
+            .more-products-block{margin-top:16px;padding:12px;border-radius:8px}
+            .more-products-title{font-size:15px;margin:0 0 10px 0;line-height:1.3}
+            .more-products-text{font-size:13px;margin:0 0 14px 0;line-height:1.4}
+            .more-products-btn{padding:10px 18px;font-size:12px;border-radius:6px;display:block;width:100%}
         }
         
         @media (min-width:900px){
@@ -1379,11 +1461,11 @@ $auth = session('auth');
 
 <div class="container">
     <div class="grid-top">
-        <div class="tile" style="background:#e9e8ff;cursor:pointer" onclick="showModal('order')">
+        <div class="tile tile-intro" style="background:rgb(226,223,244);cursor:pointer" onclick="showModal('order')">
             <h3>Знакомство. Оформление заказа</h3>
                 <p>Как мы работаем и как оформить покупку</p>
             </div>
-            <div class="tile" style="background:#d7e6f3;cursor:pointer" onclick="showModal('custom')">
+            <div class="tile tile-custom" style="background:rgb(204,215,227);cursor:pointer" onclick="showModal('custom')">
                 <h3>Любая модель под заказ</h3>
                 <p>В 10 раз дешевле</p>
             </div>
@@ -1833,15 +1915,17 @@ $auth = session('auth');
 
 
         <div class="search">
-            <input 
-                type="text" 
-                id="searchInput" 
-                placeholder="Поиск товаров..." 
-                autocomplete="off"
-            />
-            <button class="search-btn" onclick="performSearch()">
-                Найти
-            </button>
+            <div class="search-input-wrapper">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Поиск товаров..." 
+                    autocomplete="off"
+                />
+                <button class="search-icon-btn" onclick="performSearch()" title="Искать">
+                    🔍
+                </button>
+            </div>
             
             <!-- Фильтры поиска -->
             <div class="search-filters" id="searchFilters" style="display: none;">
@@ -1931,21 +2015,21 @@ $auth = session('auth');
     </main>
     
     <section class="container">
-        <div class="banner">СКИДКИ ДО -20%</div>
+        <div class="banner" style="background:rgb(220,215,242)">СКИДКИ ДО -20%</div>
 
         <div class="small-tiles">
-            <div class="tile">
+            <div class="tile" style="background:rgb(211,220,231)">
                 <h3>Отзывы</h3>
                 <p>Перед заказом можно ознакомиться с реальными отзывами наших покупателей</p>
                 <div style="margin-top:8px;color:#f59e0b">★★★★★</div>
             </div>
-            <div class="tile" onclick="window.location.href='/promotions'" style="cursor:pointer">
+            <div class="tile" onclick="window.location.href='/promotions'" style="cursor:pointer;background:rgb(211,220,231)">
                 <h3>Акции от OLS</h3>
                 <p>Будьте в курсе новых акций нашего магазина и делайте покупки ещё выгоднее</p>
             </div>
         </div>
 
-        <div class="promo">
+        <div class="promo" style="background:rgb(220,215,242)">
             <h3>КУПИТЬ ЕЩЁ ДЕШЕВЛЕ!!!</h3>
             <p>Если вам важен только внешний вид, мы можем найти копии обычного (хорошего) качества ещё дешевле, чем под заказ.</p>
         </div>
@@ -2289,10 +2373,10 @@ $auth = session('auth');
                 </div>
                 
                 <!-- Кнопка "Перейти к другим" -->
-                <div style="text-align:center;margin-top:32px;padding:24px;background:#fff;border:1px solid #e2e8f0;border-radius:12px">
-                    <h3 style="margin:0 0 16px 0;color:#0f172a;font-size:20px">Хотите увидеть больше товаров?</h3>
-                    <p style="margin:0 0 20px 0;color:#64748b">В нашем каталоге более 30 товаров в разных категориях</p>
-                    <a href="/catalog" style="display:inline-block;padding:12px 24px;background:#527ea6;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;transition:background 0.2s" onmouseover="this.style.background='#3b5a7a'" onmouseout="this.style.background='#527ea6'">
+                <div class="more-products-block">
+                    <h3 class="more-products-title">Хотите увидеть больше товаров?</h3>
+                    <p class="more-products-text">В нашем каталоге более 30 товаров в разных категориях</p>
+                    <a href="/catalog" class="more-products-btn">
                         ПЕРЕЙТИ К ДРУГИМ ТОВАРАМ →
                     </a>
                 </div>
