@@ -82,7 +82,10 @@ $auth = session('auth');
             
             <!-- Название по центру -->
             <div class="header-center">
-                <span class="brand" onclick="location.reload()" style="cursor:pointer" title="Обновить страницу">ORIGINAL | LUX SHOP</span>
+                <div class="brand" onclick="location.reload()" style="cursor:pointer" title="Обновить страницу">
+                    <div class="brand-name">Original | Lux Shop</div>
+                    <div class="brand-subtitle">мини-приложение</div>
+                </div>
             </div>
             
             <!-- Правая группа иконок -->
