@@ -98,13 +98,13 @@
         
         /* Мобильная адаптация для категорий */
         @media (max-width:768px){
-            .category-tabs{gap:4px;margin-bottom:24px}
-            .category-tab{padding:6px 12px;font-size:13px;border-radius:4px}
+            .category-tabs{gap:4px;margin-bottom:20px;justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+            .category-tab{padding:6px 10px;font-size:12px;border-radius:4px;white-space:nowrap;flex-shrink:0}
         }
         
         @media (max-width:480px){
-            .category-tabs{gap:3px;margin-bottom:20px}
-            .category-tab{padding:5px 10px;font-size:12px;border-radius:3px}
+            .category-tabs{gap:3px;margin-bottom:16px;padding-bottom:4px}
+            .category-tab{padding:5px 8px;font-size:11px;border-radius:3px}
         }
         
         .category-tab {
@@ -487,7 +487,17 @@
             .category-tabs {
                 justify-content: flex-start;
                 overflow-x: auto;
-                padding-bottom: 8px;
+                padding-bottom: 6px;
+                -webkit-overflow-scrolling: touch;
+                gap: 4px;
+                margin-bottom: 20px;
+            }
+            
+            .category-tab {
+                flex-shrink: 0;
+                white-space: nowrap;
+                padding: 6px 10px;
+                font-size: 12px;
             }
             
             .filters-grid {
@@ -544,6 +554,34 @@
                 <div class="category-tab" data-category="Аксессуары">Аксессуары</div>
             </div>
 
+        <!-- Поиск в каталоге -->
+            <div class="search-section" style="margin: 8px 0; padding: 16px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
+                <h3 style="margin: 0 0 12px 0; color: #1e293b; font-size: 16px; font-weight: 600;">🔍 Поиск товаров</h3>
+                <div class="search" style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                    <input 
+                        type="text" 
+                        id="catalogSearchInput" 
+                        placeholder="Введите название товара, бренд или категорию..." 
+                        autocomplete="off"
+                        style="flex: 1; height: 40px; border-radius: 8px; border: 1px solid #cbd5e1; padding: 0 12px; font-size: 14px; background: #fff; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"
+                    />
+                    <button class="search-btn" onclick="performCatalogSearch()" style="height: 40px; padding: 0 16px; border-radius: 8px; border: 1px solid #cbd5e1; background: #527ea6; color: #fff; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px; font-size: 14px; white-space: nowrap;">
+                        🔍 Найти
+                    </button>
+                </div>
+                
+                <!-- Фильтры поиска -->
+                <div class="search-filters" id="catalogSearchFilters" style="display: none; gap: 6px; margin-top: 12px; flex-wrap: wrap;">
+                    <div class="search-filter active" data-filter="all" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">Все товары</div>
+                    <div class="search-filter" data-filter="Одежда" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👕 Одежда</div>
+                    <div class="search-filter" data-filter="Обувь" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👟 Обувь</div>
+                    <div class="search-filter" data-filter="Сумки" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👜 Сумки</div>
+                    <div class="search-filter" data-filter="Часы" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">⌚ Часы</div>
+                    <div class="search-filter" data-filter="Украшения" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">💍 Украшения</div>
+                    <div class="search-filter" data-filter="Аксессуары" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">🕶️ Аксессуары</div>
+                </div>
+            </div>
+
             <!-- Filters -->
             <div class="filters-section">
                 <div class="filters-header">
@@ -570,34 +608,6 @@
                             <input type="number" class="price-input" id="maxPrice" placeholder="До">
                         </div>
                     </div>
-                </div>
-            </div>
-
-        <!-- Поиск в каталоге -->
-            <div class="search-section" style="margin: 8px 0; padding: 16px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
-                <h3 style="margin: 0 0 12px 0; color: #1e293b; font-size: 16px; font-weight: 600;">🔍 Поиск товаров</h3>
-                <div class="search" style="display: flex; align-items: center; gap: 8px; width: 100%;">
-                    <input 
-                        type="text" 
-                        id="catalogSearchInput" 
-                        placeholder="Введите название товара, бренд или категорию..." 
-                        autocomplete="off"
-                        style="flex: 1; height: 40px; border-radius: 8px; border: 1px solid #cbd5e1; padding: 0 12px; font-size: 14px; background: #fff; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"
-                    />
-                    <button class="search-btn" onclick="performCatalogSearch()" style="height: 40px; padding: 0 16px; border-radius: 8px; border: 1px solid #cbd5e1; background: #527ea6; color: #fff; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px; font-size: 14px; white-space: nowrap;">
-                        🔍 Найти
-                    </button>
-                </div>
-                
-                <!-- Фильтры поиска -->
-                <div class="search-filters" id="catalogSearchFilters" style="display: none; gap: 6px; margin-top: 12px; flex-wrap: wrap;">
-                    <div class="search-filter active" data-filter="all" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">Все товары</div>
-                    <div class="search-filter" data-filter="Одежда" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👕 Одежда</div>
-                    <div class="search-filter" data-filter="Обувь" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👟 Обувь</div>
-                    <div class="search-filter" data-filter="Сумки" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👜 Сумки</div>
-                    <div class="search-filter" data-filter="Часы" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">⌚ Часы</div>
-                    <div class="search-filter" data-filter="Украшения" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">💍 Украшения</div>
-                    <div class="search-filter" data-filter="Аксессуары" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">🕶️ Аксессуары</div>
                 </div>
             </div>
 

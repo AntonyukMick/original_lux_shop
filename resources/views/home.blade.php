@@ -50,12 +50,19 @@
     .tile p{margin:0;color:#475569;font-weight:500}
     
     /* Одинаковый размер текста для верхних кнопок */
-    .grid-top .tile h3,
-    .grid-top .tile p {
+    .grid-top .tile h3 {
         font-size: 14px;
         font-weight: 600;
         line-height: 1.4;
         color: #1e293b;
+    }
+    
+    .grid-top .tile p {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.4;
+        color: #64748b;
+        opacity: 0.8;
     }
         /* Улучшенные стили для поиска - на всю ширину с лупой */
         .search {
@@ -338,8 +345,8 @@
             /* Сжатые стили для верхних блоков */
             .grid-top{margin:8px 0;gap:8px}
             .grid-top .tile{padding:10px;min-height:80px}
-            .grid-top .tile h3,
-            .grid-top .tile p{font-size:13px;margin:0 0 4px 0;line-height:1.3;font-weight:600;color:#1e293b}
+            .grid-top .tile h3{font-size:13px;margin:0 0 4px 0;line-height:1.3;font-weight:600;color:#1e293b}
+            .grid-top .tile p{font-size:13px;margin:0 0 4px 0;line-height:1.3;font-weight:600;color:#64748b;opacity:0.8}
             
             /* Сжатые стили для кнопок каталога */
             .tabs{gap:6px;margin:8px 0}
@@ -388,8 +395,8 @@
             /* Еще более сжатые стили для верхних блоков */
             .grid-top{margin:6px 0;gap:6px}
             .grid-top .tile{padding:8px;min-height:70px}
-            .grid-top .tile h3,
-            .grid-top .tile p{font-size:12px;margin:0 0 3px 0;line-height:1.2;font-weight:600;color:#1e293b}
+            .grid-top .tile h3{font-size:12px;margin:0 0 3px 0;line-height:1.2;font-weight:600;color:#1e293b}
+            .grid-top .tile p{font-size:12px;margin:0 0 3px 0;line-height:1.2;font-weight:600;color:#64748b;opacity:0.8}
             
             /* Еще более сжатые стили для кнопок каталога */
             .tabs{gap:4px;margin:6px 0}
@@ -464,8 +471,8 @@
         .modal[style*="display: none"]{display:flex !important}
         .modal[style*="display:none"]{display:flex !important}
         .modal-content{background-color:#fff;padding:20px;border-radius:12px;width:90%;max-width:600px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
-        .close{color:#aaa;float:right;font-size:28px;font-weight:bold;cursor:pointer;line-height:1}
-        .close:hover{color:#000}
+        .close{position:absolute;top:15px;right:20px;color:#94a3b8;font-size:32px;font-weight:bold;cursor:pointer;line-height:1;z-index:10;transition:all 0.2s ease;background:none;border:none;padding:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+        .close:hover{color:#ef4444;transform:scale(1.1)}
         .modal-body{margin-top:20px}
         .modal-body h3{margin:20px 0 10px 0;color:#0f172a}
         .modal-body ul{margin:0;padding-left:20px}
@@ -545,6 +552,49 @@
         .modal .add-to-cart-btn[style*="background:#48bb78"]:hover, 
         .modal .add-to-cart-btn[style*="background: #48bb78"]:hover {
             background: #38a169 !important;
+        }
+        
+        /* Стили для кнопки Telegram в модальных окнах */
+        .telegram-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #0088cc;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .telegram-btn:hover {
+            background: #006ba1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 136, 204, 0.3);
+        }
+        
+        /* Адаптивные стили для кнопки Telegram */
+        @media (max-width: 768px) {
+            .telegram-btn {
+                padding: 10px 18px;
+                gap: 6px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .telegram-btn {
+                padding: 8px 14px;
+                gap: 4px;
+                font-size: 13px;
+                border-radius: 6px;
+            }
+            
+            .telegram-btn span:first-child {
+                font-size: 16px;
+            }
         }
         
         /* Общие стили для карточек товаров */
@@ -767,14 +817,22 @@
         }
     </style>
     <script>
-        // Функции для модальных окон категорий
-        function showCategoryModal(category) {
-            document.getElementById('modal-' + category).classList.remove('hidden');
-        }
+        // Функции для модальных окон категорий - делаем глобальными
+        window.showCategoryModal = function(category) {
+            const modal = document.getElementById('modal-' + category);
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+            }
+        };
         
-        function closeCategoryModal(category) {
-            document.getElementById('modal-' + category).classList.add('hidden');
-        }
+        window.closeCategoryModal = function(category) {
+            const modal = document.getElementById('modal-' + category);
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            }
+        };
         
         // Функция фильтрации товаров в категориях
         function filterCategoryProducts(category) {
@@ -1420,39 +1478,43 @@
             }, 100);
         });
         
-        // Функции для модальных окон кнопок
-        function showModal(modalId) {
+        // Функции для модальных окон кнопок - делаем глобальными
+        window.showModal = function(modalId) {
             console.log('showModal вызван с modalId:', modalId);
             const modal = document.getElementById('modal-' + modalId);
             console.log('Найденный модальный элемент:', modal);
             if (modal) {
                 modal.classList.remove('hidden');
+                modal.style.display = 'flex';
                 console.log('Модальное окно показано');
             } else {
                 console.error('Модальный элемент не найден:', 'modal-' + modalId);
             }
-        }
+        };
         
-        function closeModal(modalId) {
+        window.closeModal = function(modalId) {
             if (modalId === 'favorites') {
                 const modal = document.getElementById('modal-favorites');
                 if (modal) {
                     modal.classList.add('hidden');
+                    modal.style.display = 'none';
                 }
             } else {
                 const modal = document.getElementById('modal-' + modalId);
                 if (modal) {
                     modal.classList.add('hidden');
+                    modal.style.display = 'none';
                 }
             }
-        }
+        };
         
         // Закрытие модального окна при клике вне его
-        window.onclick = function(event) {
+        window.addEventListener('click', function(event) {
             if (event.target.classList.contains('modal')) {
                 event.target.classList.add('hidden');
+                event.target.style.display = 'none';
             }
-        }
+        });
     </script>
 @section('content')
 @php
@@ -1533,7 +1595,7 @@ $auth = session('auth');
                     </div>
                     
                     <div style="margin-top:20px;text-align:center">
-                        <a href="https://t.me/OLS_Managerr" target="_blank" class="telegram-btn" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:#0088cc;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;transition:all 0.3s ease">
+                        <a href="https://t.me/OLS_Managerr" target="_blank" class="telegram-btn">
                             <span>📱</span>
                             <span>Связаться с менеджером в Telegram</span>
                         </a>

@@ -9,19 +9,13 @@ services:
     healthCheckPath: /
     envVars:
       - key: APP_NAME
-        value: Original Lux Shop
+        value: OLX
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
         value: false
       - key: APP_KEY
         sync: false
-      - key: APP_URL
-        value: https://original-lux-shop-4vnw.onrender.com
-      - key: APP_LOCALE
-        value: ru
-      - key: APP_FALLBACK_LOCALE
-        value: en
       - key: LOG_CHANNEL
         value: stack
       - key: LOG_LEVEL
@@ -50,14 +44,8 @@ services:
           property: password
       - key: SESSION_DRIVER
         value: file
-      - key: SESSION_LIFETIME
-        value: 120
       - key: CACHE_DRIVER
         value: file
-      - key: QUEUE_CONNECTION
-        value: sync
-      - key: BCRYPT_ROUNDS
-        value: 12
       
   # Database Service
   - type: pserv
