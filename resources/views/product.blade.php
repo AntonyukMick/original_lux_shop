@@ -460,21 +460,246 @@
         
         /* Responsive */
         @media (max-width: 768px) {
+            .main {
+                padding: 12px 0;
+            }
+            
+            .container {
+                padding: 0 12px;
+            }
+            
             .product-grid {
                 grid-template-columns: 1fr;
-                gap: 24px;
+                gap: 16px;
             }
             
             .gallery {
                 position: static;
             }
             
+            .main-image {
+                height: 350px;
+                border-radius: 8px;
+                margin-bottom: 12px;
+            }
+            
             .thumbnails {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(5, 1fr);
+                gap: 6px;
+            }
+            
+            .thumbnail {
+                height: 60px;
+                border-radius: 6px;
+            }
+            
+            .product-info {
+                padding: 16px;
+                border-radius: 8px;
+            }
+            
+            .product-title {
+                font-size: 18px;
+                margin-bottom: 12px;
+                line-height: 1.3;
+            }
+            
+            .product-price {
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 16px;
+            }
+            
+            .current-price {
+                font-size: 22px;
+            }
+            
+            .original-price {
+                font-size: 14px;
+            }
+            
+            .discount {
+                font-size: 11px;
+                padding: 3px 6px;
+            }
+            
+            .product-description {
+                font-size: 14px;
+                margin-bottom: 16px;
+                line-height: 1.5;
+            }
+            
+            .option-group {
+                margin-bottom: 16px;
+            }
+            
+            .option-title {
+                font-size: 13px;
+            }
+            
+            .option-label {
+                margin-bottom: 10px;
+            }
+            
+            .size-btn {
+                padding: 10px 14px;
+                font-size: 13px;
+                border-radius: 6px;
+            }
+            
+            .size-link {
+                font-size: 11px;
+            }
+            
+            .quantity-group {
+                gap: 10px;
+                margin-bottom: 16px;
+            }
+            
+            .quantity-controls {
+                border-radius: 6px;
+            }
+            
+            .quantity-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+            
+            .quantity-input {
+                width: 40px;
+                height: 36px;
+                font-size: 14px;
+            }
+            
+            .action-buttons {
+                gap: 10px;
+                margin-bottom: 16px;
+            }
+            
+            .add-to-cart {
+                font-size: 13px;
+                padding: 12px 16px;
+                border-radius: 6px;
+                height: 44px;
+            }
+            
+            .favorite-btn {
+                width: 44px;
+                height: 44px;
+                border-radius: 6px;
+                font-size: 20px;
             }
             
             .colors-grid {
                 grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            
+            .color-option {
+                border-radius: 6px;
+            }
+            
+            .similar-section {
+                margin-top: 24px;
+                padding-top: 24px;
+            }
+            
+            .similar-title {
+                font-size: 18px;
+                margin-bottom: 16px;
+            }
+            
+            .similar-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            
+            .similar-product {
+                border-radius: 8px;
+            }
+            
+            .similar-product img {
+                height: 180px;
+                border-radius: 8px 8px 0 0;
+            }
+            
+            .similar-info {
+                padding: 10px;
+            }
+            
+            .similar-title-text {
+                font-size: 13px;
+                margin-bottom: 6px;
+                line-height: 1.3;
+            }
+            
+            .similar-price {
+                font-size: 15px;
+            }
+            
+            .similar-original-price {
+                font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main {
+                padding: 8px 0;
+            }
+            
+            .container {
+                padding: 0 8px;
+            }
+            
+            .main-image {
+                height: 280px;
+            }
+            
+            .thumbnails {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 4px;
+            }
+            
+            .thumbnail {
+                height: 50px;
+            }
+            
+            .product-info {
+                padding: 12px;
+            }
+            
+            .product-title {
+                font-size: 16px;
+            }
+            
+            .current-price {
+                font-size: 20px;
+            }
+            
+            .product-description {
+                font-size: 13px;
+            }
+            
+            .similar-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .similar-product img {
+                height: 150px;
+            }
+            
+            .similar-info {
+                padding: 8px;
+            }
+            
+            .similar-title-text {
+                font-size: 12px;
+            }
+            
+            .similar-price {
+                font-size: 14px;
             }
         }
     </style>

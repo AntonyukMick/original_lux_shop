@@ -278,7 +278,8 @@
         /* Нижняя часть страницы */
         .banner{margin:16px 0;background:#e6eaf2;border:1px solid #cbd5e1;border-radius:10px;padding:14px;text-align:center;font-weight:700;font-size:28px;letter-spacing:.5px}
         .small-tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
-        .promo{margin:8px 0;background:#eef2ff;border:1px solid #cbd5e1;border-radius:10px;padding:14px}
+        .promo{margin:8px 0;background:#eef2ff;border:1px solid #cbd5e1;border-radius:10px;padding:14px;transition:all 0.2s ease}
+        .promo:hover{transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,0.1);border-color:#527ea6}
         .promo h3{margin:0 0 6px 0;font-size:18px}
         .promo p{margin:0;color:#475569;font-size:13px}
         .section-title{margin:18px 0 10px 0;font-weight:700;font-size:18px}
@@ -466,17 +467,98 @@
         }
 
         /* Модальные окна */
+        /* НОВАЯ СТРУКТУРА МОДАЛЬНЫХ ОКОН */
+        .modal-overlay{
+            position:fixed;
+            inset:0;
+            z-index:1000;
+            background-color:rgba(0,0,0,0.75);
+            display:none;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+            opacity:0;
+            transition:opacity 0.3s ease;
+        }
+        .modal-overlay.active{
+            display:flex;
+            opacity:1;
+        }
+        .modal-dialog{
+            background:#fff;
+            border-radius:12px;
+            width:100%;
+            max-width:600px;
+            max-height:90vh;
+            display:flex;
+            flex-direction:column;
+            box-shadow:0 20px 60px rgba(0,0,0,0.3);
+            transform:scale(0.95);
+            transition:transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-dialog{
+            transform:scale(1);
+        }
+        .modal-header{
+            padding:20px 60px 20px 20px;
+            border-bottom:1px solid #e2e8f0;
+            position:relative;
+        }
+        .modal-header h2{
+            margin:0;
+            font-size:20px;
+            color:#0f172a;
+        }
+        .modal-close{
+            position:absolute;
+            top:15px;
+            right:15px;
+            width:40px;
+            height:40px;
+            border:none;
+            background:none;
+            font-size:28px;
+            color:#94a3b8;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            border-radius:50%;
+            transition:all 0.2s ease;
+            line-height:1;
+        }
+        .modal-close:hover{
+            background:#fee;
+            color:#ef4444;
+            transform:rotate(90deg);
+        }
+        .modal-body{
+            padding:20px;
+            overflow-y:auto;
+            color:#475569;
+            line-height:1.6;
+        }
+        .modal-body h3{
+            margin:20px 0 10px 0;
+            color:#0f172a;
+            font-size:16px;
+        }
+        .modal-body ul{
+            margin:0;
+            padding-left:20px;
+        }
+        .modal-body li{
+            margin:8px 0;
+            color:#475569;
+        }
+        
+        /* Старые классы для обратной совместимости */
         .modal{position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box}
         .modal.hidden{display:none !important}
-        .modal[style*="display: none"]{display:flex !important}
-        .modal[style*="display:none"]{display:flex !important}
         .modal-content{background-color:#fff;padding:20px;border-radius:12px;width:90%;max-width:600px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
-        .close{position:absolute;top:15px;right:20px;color:#94a3b8;font-size:32px;font-weight:bold;cursor:pointer;line-height:1;z-index:10;transition:all 0.2s ease;background:none;border:none;padding:0;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
-        .close:hover{color:#ef4444;transform:scale(1.1)}
-        .modal-body{margin-top:20px}
-        .modal-body h3{margin:20px 0 10px 0;color:#0f172a}
-        .modal-body ul{margin:0;padding-left:20px}
-        .modal-body li{margin:8px 0;color:#475569}
+        .close{position:absolute;top:15px;right:20px;color:#94a3b8;font-size:32px;font-weight:bold;cursor:pointer;line-height:1;z-index:1000;transition:all 0.2s ease;background:none;border:none;padding:0;width:40px;height:40px;display:flex;align-items:center;justify-content:center;pointer-events:auto;user-select:none}
+        .close:hover{color:#ef4444;transform:scale(1.1);background:rgba(239,68,68,0.1);border-radius:50%}
+        .close:active{transform:scale(0.95)}
         
         /* Фильтры в модальных окнах */
         .modal-filters{margin:20px 0;padding:15px;background:#f8fafc;border-radius:8px}
@@ -817,20 +899,20 @@
         }
     </style>
     <script>
-        // Функции для модальных окон категорий - делаем глобальными
+        // Функции для модальных окон категорий
         window.showCategoryModal = function(category) {
             const modal = document.getElementById('modal-' + category);
             if (modal) {
-                modal.classList.remove('hidden');
-                modal.style.display = 'flex';
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
             }
         };
         
         window.closeCategoryModal = function(category) {
             const modal = document.getElementById('modal-' + category);
             if (modal) {
-                modal.classList.add('hidden');
-                modal.style.display = 'none';
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
             }
         };
         
@@ -1130,20 +1212,35 @@
             const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             
-            // Обновляем счетчик избранного (работает с обоими хедерами)
+            // Обновляем счетчик избранного - ДЕСКТОП
             const favoritesBadge = document.getElementById('favorites-badge');
             if (favoritesBadge) {
                 favoritesBadge.textContent = favorites.length;
                 favoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
             }
             
-            // Обновляем счетчик корзины (работает с обоими хедерами)
+            // Обновляем счетчик избранного - МОБИЛЬНЫЙ
+            const mobileFavoritesBadge = document.querySelector('.mobile-favorites-badge');
+            if (mobileFavoritesBadge) {
+                mobileFavoritesBadge.textContent = favorites.length;
+                mobileFavoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
+            }
+            
+            // Обновляем счетчик корзины - ДЕСКТОП
             const cartBadge = document.getElementById('cart-badge');
             let totalItems = 0;
             if (cartBadge) {
                 totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
                 cartBadge.textContent = totalItems;
                 cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+            }
+            
+            // Обновляем счетчик корзины - МОБИЛЬНЫЙ
+            const mobileCartBadge = document.querySelector('.mobile-cart-badge');
+            if (mobileCartBadge) {
+                totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                mobileCartBadge.textContent = totalItems;
+                mobileCartBadge.style.display = totalItems > 0 ? 'block' : 'none';
             }
             
             console.log('Counters updated:', {favorites: favorites.length, cart: totalItems});
@@ -1395,7 +1492,7 @@
                 const subcategories = getSubcategoriesForCategory(category);
                 const modalContent = `
                     <div class="modal-content" style="max-width:500px">
-                        <span class="close" onclick="closeModal('subcategories')">&times;</span>
+                        <span class="close">&times;</span>
                         <h2>Подкатегории: ${category}</h2>
                         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:20px">
                             ${subcategories.map(subcat => `
@@ -1478,43 +1575,92 @@
             }, 100);
         });
         
-        // Функции для модальных окон кнопок - делаем глобальными
-        window.showModal = function(modalId) {
-            console.log('showModal вызван с modalId:', modalId);
-            const modal = document.getElementById('modal-' + modalId);
-            console.log('Найденный модальный элемент:', modal);
-            if (modal) {
-                modal.classList.remove('hidden');
-                modal.style.display = 'flex';
-                console.log('Модальное окно показано');
-            } else {
-                console.error('Модальный элемент не найден:', 'modal-' + modalId);
-            }
-        };
-        
-        window.closeModal = function(modalId) {
-            if (modalId === 'favorites') {
-                const modal = document.getElementById('modal-favorites');
-                if (modal) {
-                    modal.classList.add('hidden');
-                    modal.style.display = 'none';
+        // ========== НОВАЯ ЛОГИКА МОДАЛЬНЫХ ОКОН ==========
+        (function() {
+            'use strict';
+            
+            const ModalManager = {
+                // Открыть модальное окно
+                open: function(modalId) {
+                    const modal = document.getElementById('modal-' + modalId);
+                    if (!modal) {
+                        console.error('Modal not found:', modalId);
+                        return;
+                    }
+                    
+                    // Добавляем класс active
+                    modal.classList.add('active');
+                    // Блокируем скролл body
+                    document.body.style.overflow = 'hidden';
+                    
+                    console.log('Modal opened:', modalId);
+                },
+                
+                // Закрыть модальное окно
+                close: function(modalElement) {
+                    if (!modalElement) return;
+                    
+                    // Убираем класс active
+                    modalElement.classList.remove('active');
+                    // Возвращаем скролл body
+                    document.body.style.overflow = '';
+                    
+                    console.log('Modal closed:', modalElement.id);
+                },
+                
+                // Закрыть все модальные окна
+                closeAll: function() {
+                    const modals = document.querySelectorAll('.modal-overlay.active');
+                    modals.forEach(modal => this.close(modal));
+                },
+                
+                // Инициализация
+                init: function() {
+                    // Закрытие по кнопке закрытия
+                    document.addEventListener('click', (e) => {
+                        if (e.target.classList.contains('modal-close')) {
+                            const modal = e.target.closest('.modal-overlay');
+                            if (modal) {
+                                this.close(modal);
+                            }
+                        }
+                    });
+                    
+                    // Закрытие по клику на оверлей (фон)
+                    document.addEventListener('click', (e) => {
+                        if (e.target.classList.contains('modal-overlay')) {
+                            this.close(e.target);
+                        }
+                    });
+                    
+                    // Закрытие по Escape
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape' || e.key === 'Esc') {
+                            this.closeAll();
+                        }
+                    });
+                    
+                    console.log('Modal Manager initialized');
                 }
-            } else {
+            };
+            
+            // Глобальные функции для обратной совместимости
+            window.showModal = function(modalId) {
+                ModalManager.open(modalId);
+            };
+            
+            window.closeModal = function(modalId) {
                 const modal = document.getElementById('modal-' + modalId);
-                if (modal) {
-                    modal.classList.add('hidden');
-                    modal.style.display = 'none';
-                }
+                ModalManager.close(modal);
+            };
+            
+            // Инициализация при загрузке DOM
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => ModalManager.init());
+            } else {
+                ModalManager.init();
             }
-        };
-        
-        // Закрытие модального окна при клике вне его
-        window.addEventListener('click', function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.add('hidden');
-                event.target.style.display = 'none';
-            }
-        });
+        })();
     </script>
 @section('content')
 @php
@@ -1533,12 +1679,14 @@ $auth = session('auth');
             </div>
         </div>
 
-        <!-- Модальные окна для кнопок -->
-        <div id="modal-order" class="modal hidden">
-            <div class="modal-content" style="max-width:600px">
-                <span class="close" onclick="closeModal('order')">&times;</span>
-                <h2>Знакомство. Оформление заказа</h2>
-                <div style="line-height:1.6;color:#475569">
+        <!-- Модальные окна для кнопок - НОВАЯ СТРУКТУРА -->
+        <div id="modal-order" class="modal-overlay">
+            <div class="modal-dialog">
+                <div class="modal-header">
+                    <h2>Знакомство. Оформление заказа</h2>
+                    <button class="modal-close" data-modal="modal-order" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
                     <h3>Как мы работаем:</h3>
                     <ul style="margin:16px 0;padding-left:20px">
                         <li>Выбираете товар из нашего каталога</li>
@@ -1564,11 +1712,13 @@ $auth = session('auth');
             </div>
         </div>
 
-        <div id="modal-custom" class="modal hidden">
-            <div class="modal-content" style="max-width:600px">
-                <span class="close" onclick="closeModal('custom')">&times;</span>
-                <h2>Любая модель под заказ</h2>
-                <div style="line-height:1.6;color:#475569">
+        <div id="modal-custom" class="modal-overlay">
+            <div class="modal-dialog">
+                <div class="modal-header">
+                    <h2>Любая модель под заказ</h2>
+                    <button class="modal-close" data-modal="modal-custom" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
                     <h3>Почему в 10 раз дешевле:</h3>
                     <ul style="margin:16px 0;padding-left:20px">
                         <li>Работаем напрямую с производителями</li>
@@ -1606,67 +1756,72 @@ $auth = session('auth');
 
 
 
-        <!-- Модальные окна -->
-        <!-- Модальные окна для категорий -->
-        <div id="modal-clothing" class="modal hidden">
-            <div class="modal-content" style="max-width:800px">
-                <span class="close" onclick="closeCategoryModal('clothing')">&times;</span>
-                <h2>Каталог одежды</h2>
-                
-                <!-- Фильтры -->
-                <div class="modal-filters">
-                    <div class="filter-row">
-                        <select id="clothing-brand-filter" onchange="filterCategoryProducts('clothing')">
-                            <option value="">Все бренды</option>
-                            <option value="Stone Island">Stone Island</option>
-                            <option value="Balenciaga">Balenciaga</option>
-                            <option value="Gucci">Gucci</option>
-                        </select>
-                        <select id="clothing-price-filter" onchange="filterCategoryProducts('clothing')">
-                            <option value="">Любая цена</option>
-                            <option value="0-50">До 50€</option>
-                            <option value="50-100">50-100€</option>
-                            <option value="100+">От 100€</option>
-                        </select>
-                    </div>
+        <!-- Модальные окна категорий - НОВАЯ СТРУКТУРА -->
+        <div id="modal-clothing" class="modal-overlay">
+            <div class="modal-dialog" style="max-width:800px">
+                <div class="modal-header">
+                    <h2>Каталог одежды</h2>
+                    <button class="modal-close" data-modal="modal-clothing" type="button">&times;</button>
                 </div>
+                <div class="modal-body">
+                    <!-- Фильтры -->
+                    <div class="modal-filters">
+                        <div class="filter-row">
+                            <select id="clothing-brand-filter" onchange="filterCategoryProducts('clothing')">
+                                <option value="">Все бренды</option>
+                                <option value="Stone Island">Stone Island</option>
+                                <option value="Balenciaga">Balenciaga</option>
+                                <option value="Gucci">Gucci</option>
+                            </select>
+                            <select id="clothing-price-filter" onchange="filterCategoryProducts('clothing')">
+                                <option value="">Любая цена</option>
+                                <option value="0-50">До 50€</option>
+                                <option value="50-100">50-100€</option>
+                                <option value="100+">От 100€</option>
+                            </select>
+                        </div>
+                    </div>
 
-                <!-- Товары -->
-                <div class="modal-products" id="clothing-products">
-                    <div class="product-card" data-brand="Stone Island" data-price="60">
-                        <img src="https://media.endclothing.com/media/f_auto,q_auto:eco,w_1600/prodmedia/media/catalog/product/0/5/05-08-2021_TH_751560519-V0029_1_1.jpg" alt="Stone Island худи">
-                        <div class="product-info">
-                            <h4>Stone Island худи</h4>
-                            <p class="price">60€</p>
-                            <button class="add-to-cart-btn">В корзину</button>
+                    <!-- Товары -->
+                    <div class="modal-products" id="clothing-products">
+                        <div class="product-card" data-brand="Stone Island" data-price="60">
+                            <img src="https://media.endclothing.com/media/f_auto,q_auto:eco,w_1600/prodmedia/media/catalog/product/0/5/05-08-2021_TH_751560519-V0029_1_1.jpg" alt="Stone Island худи">
+                            <div class="product-info">
+                                <h4>Stone Island худи</h4>
+                                <p class="price">60€</p>
+                                <button class="add-to-cart-btn">В корзину</button>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="product-card" data-brand="Balenciaga" data-price="85">
-                        <img src="https://media.endclothing.com/media/f_auto,q_auto:eco,w_1600/prodmedia/media/catalog/product/0/5/05-01-2018_stoneisland_juniorgarmentdyedziphoody_black_6716-62040-v0029_th_1x.jpg" alt="Balenciaga худи">
-                        <div class="product-info">
-                            <h4>Balenciaga худи</h4>
-                            <p class="price">85€</p>
-                            <button class="add-to-cart-btn">В корзину</button>
+                        
+                        <div class="product-card" data-brand="Balenciaga" data-price="85">
+                            <img src="https://media.endclothing.com/media/f_auto,q_auto:eco,w_1600/prodmedia/media/catalog/product/0/5/05-01-2018_stoneisland_juniorgarmentdyedziphoody_black_6716-62040-v0029_th_1x.jpg" alt="Balenciaga худи">
+                            <div class="product-info">
+                                <h4>Balenciaga худи</h4>
+                                <p class="price">85€</p>
+                                <button class="add-to-cart-btn">В корзину</button>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="product-card" data-brand="Gucci" data-price="120">
-                        <img src="https://media.endclothing.com/media/f_auto,q_auto:eco,w_1600/prodmedia/media/catalog/product/0/5/05-08-2021_TH_751560519-V0029_1_1.jpg" alt="Gucci куртка">
-                        <div class="product-info">
-                            <h4>Gucci куртка</h4>
-                            <p class="price">120€</p>
-                            <button class="add-to-cart-btn">В корзину</button>
+                        
+                        <div class="product-card" data-brand="Gucci" data-price="120">
+                            <img src="https://media.endclothing.com/media/f_auto,q_auto:eco,w_1600/prodmedia/media/catalog/product/0/5/05-08-2021_TH_751560519-V0029_1_1.jpg" alt="Gucci куртка">
+                            <div class="product-info">
+                                <h4>Gucci куртка</h4>
+                                <p class="price">120€</p>
+                                <button class="add-to-cart-btn">В корзину</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="modal-shoes" class="modal hidden">
-            <div class="modal-content" style="max-width:800px">
-                <span class="close" onclick="closeCategoryModal('shoes')">&times;</span>
-                <h2>Каталог обуви</h2>
+        <div id="modal-shoes" class="modal-overlay">
+            <div class="modal-dialog" style="max-width:800px">
+                <div class="modal-header">
+                    <h2>Каталог обуви</h2>
+                    <button class="modal-close" data-modal="modal-shoes" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
                 
                 <!-- Фильтры -->
                 <div class="modal-filters">
@@ -1715,13 +1870,17 @@ $auth = session('auth');
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
 
-        <div id="modal-bags" class="modal hidden">
-            <div class="modal-content" style="max-width:800px">
-                <span class="close" onclick="closeCategoryModal('bags')">&times;</span>
-                <h2>Каталог сумок</h2>
+        <div id="modal-bags" class="modal-overlay">
+            <div class="modal-dialog" style="max-width:800px">
+                <div class="modal-header">
+                    <h2>Каталог сумок</h2>
+                    <button class="modal-close" data-modal="modal-bags" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
                 
                 <!-- Фильтры -->
                 <div class="modal-filters">
@@ -1761,13 +1920,17 @@ $auth = session('auth');
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
 
-        <div id="modal-jewelry" class="modal hidden">
-            <div class="modal-content" style="max-width:800px">
-                <span class="close" onclick="closeCategoryModal('jewelry')">&times;</span>
-                <h2>Каталог украшений</h2>
+        <div id="modal-jewelry" class="modal-overlay">
+            <div class="modal-dialog" style="max-width:800px">
+                <div class="modal-header">
+                    <h2>Каталог украшений</h2>
+                    <button class="modal-close" data-modal="modal-jewelry" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
                 
                 <!-- Фильтры -->
                 <div class="modal-filters">
@@ -1806,13 +1969,17 @@ $auth = session('auth');
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
 
-        <div id="modal-accessories" class="modal hidden">
-            <div class="modal-content" style="max-width:800px">
-                <span class="close" onclick="closeCategoryModal('accessories')">&times;</span>
-                <h2>Каталог аксессуаров</h2>
+        <div id="modal-accessories" class="modal-overlay">
+            <div class="modal-dialog" style="max-width:800px">
+                <div class="modal-header">
+                    <h2>Каталог аксессуаров</h2>
+                    <button class="modal-close" data-modal="modal-accessories" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
                 
                 <!-- Фильтры -->
                 <div class="modal-filters">
@@ -1851,13 +2018,17 @@ $auth = session('auth');
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
 
-        <div id="modal-watches" class="modal hidden">
-            <div class="modal-content" style="max-width:800px">
-                <span class="close" onclick="closeCategoryModal('watches')">&times;</span>
-                <h2>Каталог часов</h2>
+        <div id="modal-watches" class="modal-overlay">
+            <div class="modal-dialog" style="max-width:800px">
+                <div class="modal-header">
+                    <h2>Каталог часов</h2>
+                    <button class="modal-close" data-modal="modal-watches" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
                 
                 <!-- Фильтры -->
                 <div class="modal-filters">
@@ -1896,13 +2067,14 @@ $auth = session('auth');
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
 
         <!-- Модальные окна для кнопок шапки -->
         <div id="modal-faq" class="modal hidden">
             <div class="modal-content" style="max-width:600px">
-                <span class="close" onclick="closeModal('faq')">&times;</span>
+                <span class="close">&times;</span>
                 <h2>Часто задаваемые вопросы (FAQ)</h2>
                 <div style="line-height:1.6;color:#475569">
                     <div style="margin-bottom:20px">
@@ -1935,7 +2107,7 @@ $auth = session('auth');
 
         <div id="modal-contact" class="modal hidden">
             <div class="modal-content" style="max-width:600px">
-                <span class="close" onclick="closeModal('contact')">&times;</span>
+                <span class="close">&times;</span>
                 <h2>Контактная информация</h2>
                 <div style="line-height:1.6;color:#475569">
                     <div style="margin-bottom:20px">
@@ -2012,37 +2184,37 @@ $auth = session('auth');
         </div>
 
         <section class="catalog">
-            <div class="card" data-section="men" onclick="showCategoryModal('clothing')" style="cursor:pointer">
+            <div class="card" data-section="men" onclick="window.location.href='/category/clothing'" style="cursor:pointer">
                 <h4>Одежда</h4>
                 <div class="img">
                     <img src="https://media.endclothing.com/media/f_auto,q_auto:eco,w_1600/prodmedia/media/catalog/product/0/5/05-08-2021_TH_751560519-V0029_1_1.jpg" alt="Stone Island худи" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
                 </div>
             </div>
-            <div class="card" data-section="men" onclick="showCategoryModal('shoes')" style="cursor:pointer">
+            <div class="card" data-section="men" onclick="window.location.href='/category/shoes'" style="cursor:pointer">
                 <h4>Обувь</h4>
                 <div class="img">
                     <img src="https://i.ebayimg.com/images/g/K6YAAOSw-0pkpWG2/s-l1600.jpg" alt="Обувь" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
                 </div>
             </div>
-            <div class="card" data-section="men" onclick="showCategoryModal('bags')" style="cursor:pointer">
+            <div class="card" data-section="men" onclick="window.location.href='/category/bags'" style="cursor:pointer">
                 <h4>Сумки</h4>
                 <div class="img">
                     <img src="https://s3-eu-west-1.amazonaws.com/img.frmoda.com/borse/balenciaga/4823/4823892JMF71000nero-01.jpg" alt="Сумка Balenciaga" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
                 </div>
             </div>
-            <div class="card" data-section="men" onclick="showCategoryModal('jewelry')" style="cursor:pointer">
+            <div class="card" data-section="men" onclick="window.location.href='/category/jewelry'" style="cursor:pointer">
                 <h4>Украшения</h4>
                 <div class="img">
                     <img src="https://avatars.mds.yandex.net/i?id=998c7a6e6b4da23a6ace208d71d1df9c_l-6949821-images-thumbs&n=13" alt="Украшения" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
                 </div>
             </div>
-            <div class="card" data-section="men" onclick="showCategoryModal('accessories')" style="cursor:pointer">
+            <div class="card" data-section="men" onclick="window.location.href='/category/accessories'" style="cursor:pointer">
                 <h4>Аксессуары</h4>
                 <div class="img">
                     <img src="https://i.ebayimg.com/images/g/eEkAAOSwWCBnxyC~/s-l1600.jpg" alt="Ремень Gucci" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
                 </div>
             </div>
-            <div class="card" data-section="men" onclick="showCategoryModal('watches')" style="cursor:pointer">
+            <div class="card" data-section="men" onclick="window.location.href='/category/watches'" style="cursor:pointer">
                 <h4>Часы</h4>
                 <div class="img">
                     <img src="https://cdn.staticscc.com/uploads/103804/cart/resources/20241115/A14E3A2E-E65C-D30C-AF26-5919EEDB736F.png" alt="Rolex Daytona" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
@@ -2091,9 +2263,9 @@ $auth = session('auth');
             </div>
         </div>
 
-        <div class="promo" style="background:rgb(220,215,242)">
+        <div class="promo" style="background:rgb(220,215,242);cursor:pointer" onclick="window.open('https://t.me/OLS_Managerr', '_blank')">
             <h3>КУПИТЬ ЕЩЁ ДЕШЕВЛЕ!!!</h3>
-            <p>Если вам важен только внешний вид, мы можем найти копии обычного (хорошего) качества ещё дешевле, чем под заказ.</p>
+            <p>💬 Наш менеджер готов ответить на все ваши вопросы</p>
         </div>
 
         <div class="shop-layout">

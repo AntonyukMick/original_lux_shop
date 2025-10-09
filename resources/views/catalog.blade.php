@@ -532,6 +532,263 @@
                 font-size: 12px !important;
             }
         }
+        
+        /* Модальное окно подкатегорий */
+        .subcategory-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .subcategory-modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .subcategory-modal {
+            background: #fff;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .subcategory-modal-overlay.active .subcategory-modal {
+            transform: scale(1) translateY(0);
+        }
+        
+        .subcategory-modal-header {
+            padding: 24px;
+            background: linear-gradient(135deg, #527ea6 0%, #3b82f6 100%);
+            color: #fff;
+            position: relative;
+            border-radius: 16px 16px 0 0;
+        }
+        
+        .subcategory-modal-title {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .subcategory-modal-subtitle {
+            margin: 8px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .subcategory-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            font-size: 28px;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            line-height: 1;
+        }
+        
+        .subcategory-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg) scale(1.1);
+        }
+        
+        .subcategory-modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .subcategory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+        }
+        
+        .subcategory-item {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .subcategory-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #527ea6 0%, #3b82f6 100%);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        
+        .subcategory-item:hover {
+            border-color: #527ea6;
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 24px rgba(82, 126, 166, 0.25);
+        }
+        
+        .subcategory-item:hover::before {
+            opacity: 0.08;
+        }
+        
+        .subcategory-item:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+        
+        .subcategory-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            transition: transform 0.25s ease;
+        }
+        
+        .subcategory-item:hover .subcategory-icon {
+            transform: scale(1.15) rotate(5deg);
+        }
+        
+        .subcategory-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            position: relative;
+            z-index: 1;
+            line-height: 1.3;
+        }
+        
+        @media (max-width: 768px) {
+            .subcategory-modal-overlay {
+                padding: 12px;
+            }
+            
+            .subcategory-modal {
+                max-width: 100%;
+                max-height: 90vh;
+                border-radius: 12px;
+            }
+            
+            .subcategory-modal-header {
+                padding: 20px;
+                border-radius: 12px 12px 0 0;
+            }
+            
+            .subcategory-modal-title {
+                font-size: 20px;
+                gap: 8px;
+            }
+            
+            .subcategory-modal-subtitle {
+                font-size: 12px;
+                margin-top: 6px;
+            }
+            
+            .subcategory-modal-close {
+                width: 36px;
+                height: 36px;
+                top: 16px;
+                right: 16px;
+                font-size: 24px;
+            }
+            
+            .subcategory-modal-body {
+                padding: 16px;
+            }
+            
+            .subcategory-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+            }
+            
+            .subcategory-item {
+                padding: 16px 12px;
+                border-radius: 10px;
+            }
+            
+            .subcategory-icon {
+                font-size: 30px;
+                margin-bottom: 8px;
+            }
+            
+            .subcategory-name {
+                font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .subcategory-modal-overlay {
+                padding: 8px;
+            }
+            
+            .subcategory-modal-title {
+                font-size: 18px;
+                gap: 6px;
+            }
+            
+            .subcategory-modal-subtitle {
+                font-size: 11px;
+            }
+            
+            .subcategory-modal-close {
+                width: 32px;
+                height: 32px;
+                font-size: 20px;
+            }
+            
+            .subcategory-modal-body {
+                padding: 12px;
+            }
+            
+            .subcategory-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .subcategory-item {
+                padding: 14px 10px;
+                border-radius: 8px;
+            }
+            
+            .subcategory-icon {
+                font-size: 26px;
+                margin-bottom: 6px;
+            }
+            
+            .subcategory-name {
+                font-size: 11px;
+            }
+        }
     </style>
 @endsection
 
@@ -794,18 +1051,6 @@
             line-height: 1.6;
         }
         
-        /* Стили для модального окна подкатегорий */
-        .subcat-btn:hover {
-            background: #f1f5f9 !important;
-            border-color: #527ea6 !important;
-            color: #527ea6 !important;
-        }
-        
-        .subcat-btn:active {
-            background: #527ea6 !important;
-            border-color: #527ea6 !important;
-            color: #fff !important;
-        }
     </style>
 @endsection
 
@@ -932,6 +1177,10 @@
             const minPrice = document.getElementById('minPrice').value;
             const maxPrice = document.getElementById('maxPrice').value;
 
+            console.log('=== FILTER DEBUG ===');
+            console.log('Active Category:', activeCategory);
+            console.log('Subcategory Filter:', subcategoryFilter);
+
             const products = document.querySelectorAll('.product-card');
             let visibleCount = 0;
 
@@ -940,6 +1189,7 @@
                 const brand = product.dataset.brand;
                 const subcategory = product.dataset.subcategory;
                 const price = parseInt(product.dataset.price);
+                const title = product.querySelector('.product-title')?.textContent || 'Unknown';
 
                 let show = true;
 
@@ -955,7 +1205,10 @@
 
                 // Subcategory filter
                 if (subcategoryFilter && subcategory !== subcategoryFilter) {
+                    console.log(`❌ ${title}: subcategory="${subcategory}" !== filter="${subcategoryFilter}"`);
                     show = false;
+                } else if (subcategoryFilter) {
+                    console.log(`✅ ${title}: subcategory="${subcategory}" === filter="${subcategoryFilter}"`);
                 }
 
                 // Price filter
@@ -970,6 +1223,7 @@
                 if (show) visibleCount++;
             });
 
+            console.log('Visible products:', visibleCount);
             document.getElementById('productCount').textContent = visibleCount;
         }
 
@@ -994,124 +1248,9 @@
             updateSectionTitle('all');
         }
 
-        // Функции для модального окна подкатегорий
-        function showSubcategoriesModal(category) {
-            const subcategories = getSubcategoriesForCategory(category);
-            
-            if (subcategories.length === 0) {
-                console.log('Подкатегории не найдены для категории:', category);
-                return;
-            }
-            
-            const modalContent = `
-                <div class="modal-content" style="max-width:500px;position:relative">
-                    <span class="close" onclick="closeModal('subcategories')">&times;</span>
-                    <h2 style="margin:20px 0;padding-right:40px">Подкатегории: ${category}</h2>
-                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:20px">
-                        ${subcategories.map(subcat => `
-                            <button class="subcat-btn" onclick="selectSubcategory('${category}', '${subcat}')" 
-                                    style="padding:12px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;cursor:pointer;text-align:left;transition:all 0.2s">
-                                ${subcat}
-                            </button>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-            
-            // Создаем или обновляем модальное окно
-            let modal = document.getElementById('modal-subcategories');
-            if (!modal) {
-                modal = document.createElement('div');
-                modal.id = 'modal-subcategories';
-                modal.className = 'modal';
-                document.body.appendChild(modal);
-            }
-            modal.innerHTML = modalContent;
-            modal.classList.remove('hidden');
-        }
-        
-        function getSubcategoriesForCategory(category) {
-            const subcategoriesMap = {
-                'Одежда': ['Зип-худи', 'Футболки', 'Джинсы', 'Шорты', 'Пальто', 'Куртки', 'Рубашки', 'Свитера'],
-                'Обувь': ['Лоферы', 'Кеды', 'Кроссовки', 'Ботинки', 'Сандалии', 'Туфли'],
-                'Сумки': ['Сумка через плечо', 'Рюкзак', 'Клатч', 'Торба', 'Кошелек', 'Дорожная сумка'],
-                'Часы': ['Механические', 'Кварцевые', 'Автоматические', 'Хронограф', 'Смарт-часы'],
-                'Украшения': ['Кольца', 'Браслеты', 'Цепочки', 'Серьги', 'Подвески', 'Броши'],
-                'Аксессуары': ['Очки', 'Ремни', 'Галстуки', 'Шарфы', 'Перчатки', 'Зонты']
-            };
-            return subcategoriesMap[category] || [];
-        }
-        
-        function selectSubcategory(category, subcategory) {
-            console.log('Выбрана подкатегория:', category, subcategory);
-            
-            // Обновляем активные элементы в фильтрах
-            document.querySelectorAll('.category-tab').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            // Активируем выбранную категорию
-            const categoryTab = document.querySelector(`[data-category="${category}"]`);
-            if (categoryTab) {
-                categoryTab.classList.add('active');
-            }
-            
-            // Устанавливаем подкатегорию в фильтре
-            const subcategorySelect = document.getElementById('subcategoryFilter');
-            if (subcategorySelect) {
-                subcategorySelect.value = subcategory;
-            }
-            
-            // Закрываем модальное окно
-            closeModal('subcategories');
-            
-            // Обновляем фильтры и применяем их
-            updateFilters(category);
-            filterProducts();
-            updateSectionTitle(category);
-        }
-
         // Initialize
         updateFilters('all');
         filterProducts();
-        
-        // Функция для показа модальных окон
-        function showModal(modalId) {
-            console.log('showModal вызван с modalId:', modalId);
-            const modal = document.getElementById('modal-' + modalId);
-            if (modal) {
-                modal.classList.remove('hidden');
-            } else {
-                console.log('Модальное окно не найдено:', modalId);
-            }
-        }
-        
-        function closeModal(modalId) {
-            const modal = document.getElementById('modal-' + modalId);
-            if (modal) {
-                modal.classList.add('hidden');
-            }
-            
-            // Дополнительная обработка для модального окна подкатегорий
-            if (modalId === 'subcategories') {
-                const subcategoriesModal = document.getElementById('modal-subcategories');
-                if (subcategoriesModal) {
-                    subcategoriesModal.classList.add('hidden');
-                }
-            }
-        }
-        
-        // Закрытие модального окна при клике вне его
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.add('hidden');
-            }
-            
-            // Дополнительная обработка для модального окна подкатегорий
-            if (event.target.id === 'modal-subcategories') {
-                event.target.classList.add('hidden');
-            }
-        });
 
         // Функциональный поиск в каталоге
         let catalogSearchTimeout;
@@ -1425,20 +1564,35 @@
             const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             
-            // Обновляем счетчик избранного
+            // Обновляем счетчик избранного - ДЕСКТОП
             const favoritesBadge = document.getElementById('favorites-badge');
             if (favoritesBadge) {
                 favoritesBadge.textContent = favorites.length;
                 favoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
             }
             
-            // Обновляем счетчик корзины
+            // Обновляем счетчик избранного - МОБИЛЬНЫЙ
+            const mobileFavoritesBadge = document.querySelector('.mobile-favorites-badge');
+            if (mobileFavoritesBadge) {
+                mobileFavoritesBadge.textContent = favorites.length;
+                mobileFavoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
+            }
+            
+            // Обновляем счетчик корзины - ДЕСКТОП
             const cartBadge = document.getElementById('cart-badge');
             let totalItems = 0;
             if (cartBadge) {
                 totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
                 cartBadge.textContent = totalItems;
                 cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+            }
+            
+            // Обновляем счетчик корзины - МОБИЛЬНЫЙ
+            const mobileCartBadge = document.querySelector('.mobile-cart-badge');
+            if (mobileCartBadge) {
+                totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                mobileCartBadge.textContent = totalItems;
+                mobileCartBadge.style.display = totalItems > 0 ? 'block' : 'none';
             }
             
             console.log('Counters updated:', {favorites: favorites.length, cart: totalItems});
@@ -1493,6 +1647,216 @@
                     // Используем функцию переключения
                     toggleFavorite(title, price, image);
                 });
+            });
+        });
+        
+        // ===== МОДАЛЬНОЕ ОКНО ПОДКАТЕГОРИЙ =====
+        const subcategoryData = {
+            'Обувь': {
+                emoji: '👟',
+                title: 'Обувь',
+                subtitle: 'Выберите подкатегорию',
+                subcategories: [
+                    {name: 'Кроссовки', icon: '👟'},
+                    {name: 'Кеды', icon: '👞'},
+                    {name: 'Лоферы', icon: '🥿'},
+                    {name: 'Ботинки', icon: '🥾'},
+                    {name: 'Сандалии', icon: '🩴'},
+                    {name: 'Туфли', icon: '👠'}
+                ]
+            },
+            'Одежда': {
+                emoji: '👕',
+                title: 'Одежда',
+                subtitle: 'Выберите тип одежды',
+                subcategories: [
+                    {name: 'Зип-худи', icon: '🧥'},
+                    {name: 'Шорты', icon: '🩳'},
+                    {name: 'Футболки', icon: '👕'},
+                    {name: 'Джинсы', icon: '👖'},
+                    {name: 'Пальто', icon: '🧥'},
+                    {name: 'Куртки', icon: '🧥'},
+                    {name: 'Рубашки', icon: '👔'},
+                    {name: 'Свитера', icon: '🧶'}
+                ]
+            },
+            'Сумки': {
+                emoji: '👜',
+                title: 'Сумки',
+                subtitle: 'Выберите тип сумки',
+                subcategories: [
+                    {name: 'Кошелек', icon: '👛'},
+                    {name: 'Рюкзак', icon: '🎒'},
+                    {name: 'Клатч', icon: '👝'},
+                    {name: 'Торба', icon: '👜'},
+                    {name: 'Дорожная сумка', icon: '🧳'}
+                ]
+            },
+            'Часы': {
+                emoji: '⌚',
+                title: 'Часы',
+                subtitle: 'Выберите тип часов',
+                subcategories: [
+                    {name: 'Механические', icon: '⚙️'},
+                    {name: 'Кварцевые', icon: '⌚'},
+                    {name: 'Автоматические', icon: '🔄'},
+                    {name: 'Хронограф', icon: '⏱️'},
+                    {name: 'Смарт-часы', icon: '⌚'}
+                ]
+            },
+            'Украшения': {
+                emoji: '💍',
+                title: 'Украшения',
+                subtitle: 'Выберите тип украшений',
+                subcategories: [
+                    {name: 'Кольца', icon: '💍'},
+                    {name: 'Браслеты', icon: '📿'},
+                    {name: 'Цепочки', icon: '⛓️'},
+                    {name: 'Серьги', icon: '💎'},
+                    {name: 'Подвески', icon: '🔮'},
+                    {name: 'Броши', icon: '📌'}
+                ]
+            },
+            'Аксессуары': {
+                emoji: '🎒',
+                title: 'Аксессуары',
+                subtitle: 'Выберите тип аксессуаров',
+                subcategories: [
+                    {name: 'Очки', icon: '🕶️'},
+                    {name: 'Ремни', icon: '🔗'},
+                    {name: 'Галстуки', icon: '👔'},
+                    {name: 'Шарфы', icon: '🧣'},
+                    {name: 'Перчатки', icon: '🧤'},
+                    {name: 'Зонты', icon: '☂️'}
+                ]
+            }
+        };
+        
+        function openSubcategoryModal(category) {
+            const data = subcategoryData[category];
+            if (!data) return;
+            
+            // Создаем модальное окно
+            const modal = document.createElement('div');
+            modal.className = 'subcategory-modal-overlay';
+            modal.innerHTML = `
+                <div class="subcategory-modal">
+                    <div class="subcategory-modal-header">
+                        <h2 class="subcategory-modal-title">${data.emoji} ${data.title}</h2>
+                        <p class="subcategory-modal-subtitle">${data.subtitle}</p>
+                        <button class="subcategory-modal-close">&times;</button>
+                    </div>
+                    <div class="subcategory-modal-body">
+                        <div class="subcategory-grid">
+                            ${data.subcategories.map(sub => `
+                                <div class="subcategory-item" data-subcategory="${sub.name}">
+                                    <div class="subcategory-icon">${sub.icon}</div>
+                                    <div class="subcategory-name">${sub.name}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Показываем модальное окно с анимацией
+            setTimeout(() => modal.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+            
+            // Закрытие по крестику
+            modal.querySelector('.subcategory-modal-close').addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeSubcategoryModal(modal);
+            });
+            
+            // Закрытие по клику на фон
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeSubcategoryModal(modal);
+                }
+            });
+            
+            // Закрытие по Escape
+            const escapeHandler = (e) => {
+                if (e.key === 'Escape') {
+                    closeSubcategoryModal(modal);
+                    document.removeEventListener('keydown', escapeHandler);
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
+            
+            // Обработка клика по подкатегории
+            modal.querySelectorAll('.subcategory-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const subcategory = item.dataset.subcategory;
+                    applySubcategoryFilter(category, subcategory);
+                    closeSubcategoryModal(modal);
+                });
+            });
+        }
+        
+        function closeSubcategoryModal(modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                if (modal.parentNode) {
+                    modal.parentNode.removeChild(modal);
+                }
+            }, 300);
+        }
+        
+        function applySubcategoryFilter(category, subcategory) {
+            console.log('Применен фильтр:', category, subcategory);
+            
+            // Устанавливаем активную категорию
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            const categoryTab = document.querySelector(`[data-category="${category}"]`);
+            if (categoryTab) {
+                categoryTab.classList.add('active');
+            }
+            
+            // Сначала обновляем фильтры для категории
+            updateFilters(category);
+            
+            // Затем устанавливаем подкатегорию в фильтр
+            const subcategoryFilter = document.getElementById('subcategoryFilter');
+            if (subcategoryFilter) {
+                // Ищем опцию с таким значением
+                let option = Array.from(subcategoryFilter.options).find(opt => opt.value === subcategory);
+                if (!option) {
+                    // Если нет, добавляем её
+                    option = new Option(subcategory, subcategory);
+                    subcategoryFilter.add(option);
+                }
+                subcategoryFilter.value = subcategory;
+            }
+            
+            // Применяем фильтры - фильтруем товары
+            filterProducts();
+            
+            // Обновляем заголовок секции
+            updateSectionTitle(category);
+            
+            // Показываем уведомление
+            showNotification(`Фильтр применён: ${category} → ${subcategory}`, 'success');
+        }
+        
+        // Добавляем обработчики на категории
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = tab.dataset.category;
+                
+                if (category === 'all') {
+                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    updateFilters(category);
+                } else {
+                    // Открываем модальное окно подкатегорий
+                    openSubcategoryModal(category);
+                }
             });
         });
     </script>

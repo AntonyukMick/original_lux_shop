@@ -14,7 +14,7 @@ class ProductService
     public function getAllProducts($perPage = 12)
     {
         return Product::where('is_active', true)
-            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'created_at'])
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
@@ -26,7 +26,7 @@ class ProductService
     {
         return Product::where('category', $category)
             ->where('is_active', true)
-            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'created_at'])
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
@@ -46,7 +46,7 @@ class ProductService
     public function searchProducts($query, $perPage = 12)
     {
         return Product::where('is_active', true)
-            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'created_at'])
             ->where(function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
                   ->orWhere('description', 'like', "%{$query}%")
@@ -77,7 +77,7 @@ class ProductService
         return Product::where('category', $product->category)
             ->where('id', '!=', $product->id)
             ->where('is_active', true)
-            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'created_at'])
             ->orderByRaw('RAND()') // Случайный порядок для разнообразия
             ->limit($limit)
             ->get();
