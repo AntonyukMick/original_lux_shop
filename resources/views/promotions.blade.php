@@ -281,17 +281,212 @@
     }
     
     @media (max-width: 768px) {
-        .promotions-grid {
-            grid-template-columns: 1fr;
-            gap: 12px;
+        .container {
+            padding: 8px;
+        }
+        
+        .main {
+            padding: 20px 0;
+        }
+        
+        .page-header {
+            margin-bottom: 16px;
         }
         
         .page-title {
-            font-size: 24px;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            font-size: 13px;
+        }
+        
+        .promotion-banner {
+            padding: 12px;
+            margin-bottom: 16px;
+            border-radius: 8px;
         }
         
         .promotion-banner h2 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .promotion-banner p {
+            font-size: 12px;
+        }
+        
+        .promotions-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .promotion-card {
+            border-width: 1px;
+            border-radius: 8px;
+        }
+        
+        .discount-badge {
+            top: 6px;
+            right: 6px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+        }
+        
+        .add-to-favorite-btn {
+            top: 6px;
+            left: 6px;
+            width: 26px;
+            height: 26px;
+            font-size: 12px;
+        }
+        
+        .product-image {
+            height: 120px;
+            font-size: 30px;
+        }
+        
+        .product-info {
+            padding: 10px;
+        }
+        
+        .product-category {
+            font-size: 9px;
+            margin-bottom: 4px;
+        }
+        
+        .product-title {
+            font-size: 13px;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+        
+        .product-description {
+            font-size: 11px;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .price-section {
+            margin-bottom: 8px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+        
+        .original-price {
+            font-size: 11px;
+        }
+        
+        .discounted-price {
+            font-size: 15px;
+        }
+        
+        .savings {
+            font-size: 9px;
+        }
+        
+        .add-to-cart-btn {
+            height: 30px;
+            font-size: 11px;
+            border-radius: 15px;
+            padding: 0 10px;
+        }
+        
+        .empty-state {
+            padding: 30px 15px;
+            border-width: 1px;
+        }
+        
+        .empty-state-icon {
+            font-size: 36px;
+            margin-bottom: 8px;
+        }
+        
+        .empty-state-title {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .empty-state-description {
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .empty-state-button {
+            height: 32px;
+            padding: 0 14px;
+            font-size: 12px;
+            line-height: 30px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .container {
+            padding: 6px;
+        }
+        
+        .main {
+            padding: 16px 0;
+        }
+        
+        .page-title {
             font-size: 18px;
+        }
+        
+        .page-subtitle {
+            font-size: 12px;
+        }
+        
+        .promotion-banner {
+            padding: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .promotion-banner h2 {
+            font-size: 14px;
+        }
+        
+        .promotion-banner p {
+            font-size: 11px;
+        }
+        
+        .promotions-grid {
+            gap: 6px;
+        }
+        
+        .product-image {
+            height: 100px;
+            font-size: 24px;
+        }
+        
+        .product-info {
+            padding: 8px;
+        }
+        
+        .product-title {
+            font-size: 12px;
+        }
+        
+        .product-description {
+            font-size: 10px;
+            -webkit-line-clamp: 2;
+        }
+        
+        .discounted-price {
+            font-size: 14px;
+        }
+        
+        .add-to-cart-btn {
+            height: 28px;
+            font-size: 10px;
         }
     }
 </style>

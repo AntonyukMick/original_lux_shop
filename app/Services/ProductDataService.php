@@ -11,17 +11,29 @@ class ProductDataService
      */
     public function transformForCatalog($products)
     {
-        return $products->map(function ($product) {
-            return [
+        $result = $products->map(function ($product) {
+            $transformed = [
                 'id' => $product->id,
                 'title' => $product->title,
                 'price' => $product->price,
                 'brand' => $product->brand,
                 'category' => $product->category,
-                'subcategory' => $product->subcat,
-                'image' => $product->images[0] ?? 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop'
+                'subcategory' => $product->subcat ?? '',
+                'image' => is_array($product->images) ? ($product->images[0] ?? 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop') : (json_decode($product->images, true)[0] ?? 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop')
             ];
-        });
+            
+            // Debug: логируем первый товар
+            if ($product->id == 10) {
+                \Log::info('Product #10 Debug:', [
+                    'original_subcat' => $product->subcat,
+                    'transformed_subcategory' => $transformed['subcategory']
+                ]);
+            }
+            
+            return $transformed;
+        })->toArray();
+        
+        return $result;
     }
 
     /**

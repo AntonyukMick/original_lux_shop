@@ -17,7 +17,7 @@ class PromotionsController extends Controller
         // Получаем все товары со скидками с пагинацией
         $products = Product::where('is_active', true)
             ->whereNotNull('original_price')
-            ->where('original_price', '>', 'price')
+            ->whereColumn('original_price', '>', 'price')
             ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'created_at'])
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);

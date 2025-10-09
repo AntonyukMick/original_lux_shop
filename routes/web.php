@@ -23,6 +23,9 @@ Route::get('/', function () {
 // Акции
 Route::get('/promotions', [PromotionsController::class, 'index'])->name('promotions');
 
+// Категории
+Route::get('/category/{category}', [App\Http\Controllers\CategoryController::class, 'show'])->name('category.show');
+
 // Аутентификация
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth.login');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login.post');
