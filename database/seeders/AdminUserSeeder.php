@@ -14,6 +14,9 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Удаляем существующих пользователей
+        User::whereIn('telegram_tag', ['@admin_ols', '@testuser_ols'])->delete();
+        
         // Создаем администратора
         User::create([
             'name' => 'Администратор',
