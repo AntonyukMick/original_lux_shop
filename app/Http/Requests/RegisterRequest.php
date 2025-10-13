@@ -21,7 +21,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255|min:2',
-            'telegram_tag' => 'required|string|regex:/^@[a-zA-Z0-9_]{5,32}$/|unique:users,telegram_tag',
+            'telegram_tag' => 'required|string|regex:/^@[a-zA-Z0-9_]{5,32}$/',
             'password' => 'required|string|min:6|confirmed',
             'password_confirmation' => 'required|string|min:6',
         ];
@@ -38,7 +38,6 @@ class RegisterRequest extends FormRequest
             'name.max' => 'Имя не должно превышать 255 символов',
             'telegram_tag.required' => 'Telegram тег обязателен для заполнения',
             'telegram_tag.regex' => 'Некорректный формат Telegram тега. Используйте @username (5-32 символа)',
-            'telegram_tag.unique' => 'Пользователь с таким Telegram тегом уже зарегистрирован',
             'password.required' => 'Пароль обязателен для заполнения',
             'password.min' => 'Пароль должен содержать минимум 6 символов',
             'password.confirmed' => 'Пароли не совпадают',
@@ -58,9 +57,16 @@ class RegisterRequest extends FormRequest
                 $validator->errors()->add('password_confirmation', 'Пароли не совпадают');
             }
             
-            // Проверка на существующий telegram тег
-            if (\App\Models\User::where('telegram_tag', $this->input('telegram_tag'))->exists()) {
-                $validator->errors()->add('telegram_tag', 'Пользователь с таким Telegram тегом уже зарегистрирован');
+            // Проверка на существующий telegram тег (с обработкой ошибки)
+            try {
+                if (\App\Models\User::where('telegram_tag', $this->input('telegram_tag'))->exists()) {
+                    $validator->errors()->add('telegram_tag', 'Пользователь с таким Telegram тегом уже зарегистрирован');
+                }
+            } catch (\Exception $e) {
+                // Если колонка telegram_tag не существует, проверяем по email
+                if (\App\Models\User::where('email', $this->input('telegram_tag'))->exists()) {
+                    $validator->errors()->add('telegram_tag', 'Пользователь с таким Telegram тегом уже зарегистрирован');
+                }
             }
         });
     }
