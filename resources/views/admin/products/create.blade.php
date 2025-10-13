@@ -3,18 +3,8 @@
 @section('title', 'Добавить товар | Админ-панель')
 
 @section('styles')
+@include('admin.admin-styles')
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, "Noto Sans", sans-serif;
-        background: #f8fafc;
-        color: #1a202c;
-    }
 
         .admin-header {
             background: #2d3748;

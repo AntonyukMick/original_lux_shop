@@ -364,12 +364,140 @@
         
         /* Responsive */
         @media (max-width: 768px) {
+            .container {
+                padding: 0 12px;
+            }
+            
+            .main {
+                padding: 20px 0;
+            }
+            
+            .page-title {
+                font-size: 24px;
+            }
+            
+            .page-subtitle {
+                font-size: 14px;
+            }
+            
             .admin-dashboard {
                 grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .admin-card {
+                padding: 20px;
+            }
+            
+            .admin-card-icon {
+                font-size: 36px;
+                margin-bottom: 12px;
+            }
+            
+            .admin-card-title {
+                font-size: 18px;
+            }
+            
+            .admin-card-description {
+                font-size: 13px;
+                margin-bottom: 12px;
+            }
+            
+            .stat-number {
+                font-size: 20px;
+            }
+            
+            .stat-label {
+                font-size: 11px;
+            }
+            
+            .quick-actions {
+                padding: 20px;
+            }
+            
+            .section-title {
+                font-size: 20px;
+                margin-bottom: 16px;
             }
             
             .actions-grid {
                 grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .action-btn {
+                padding: 14px;
+                gap: 10px;
+            }
+            
+            .action-icon {
+                font-size: 20px;
+            }
+            
+            .action-text {
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 8px;
+            }
+            
+            .main {
+                padding: 16px 0;
+            }
+            
+            .page-title {
+                font-size: 20px;
+            }
+            
+            .admin-card {
+                padding: 16px;
+            }
+            
+            .admin-card-icon {
+                font-size: 32px;
+            }
+            
+            .admin-card-title {
+                font-size: 16px;
+            }
+            
+            .admin-card-description {
+                font-size: 12px;
+            }
+            
+            .admin-card-stats {
+                margin-top: 12px;
+            }
+            
+            .stat-number {
+                font-size: 18px;
+            }
+            
+            .stat-label {
+                font-size: 10px;
+            }
+            
+            .quick-actions {
+                padding: 16px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+            }
+            
+            .action-btn {
+                padding: 12px;
+            }
+            
+            .action-icon {
+                font-size: 18px;
+            }
+            
+            .action-text {
+                font-size: 13px;
             }
         }
     </style>

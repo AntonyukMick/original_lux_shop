@@ -64,6 +64,93 @@
             margin-bottom: 24px;
         }
         
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 12px;
+            }
+            
+            .main {
+                padding: 20px 0;
+            }
+            
+            .page-title {
+                font-size: 24px;
+            }
+            
+            .page-subtitle {
+                font-size: 14px;
+            }
+            
+            .admin-panel {
+                padding: 20px;
+            }
+            
+            .section-title {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .form-input, .form-select, .form-textarea {
+                padding: 10px;
+                font-size: 16px; /* Предотвращает зум на iOS */
+            }
+            
+            .form-textarea {
+                min-height: 80px;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 8px;
+            }
+            
+            .main {
+                padding: 16px 0;
+            }
+            
+            .page-title {
+                font-size: 20px;
+            }
+            
+            .admin-panel {
+                padding: 16px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+            }
+            
+            .form-grid {
+                gap: 12px;
+            }
+            
+            .form-input, .form-select, .form-textarea {
+                padding: 8px;
+                font-size: 16px;
+            }
+            
+            .form-textarea {
+                min-height: 60px;
+            }
+            
+            .btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+        }
+        
         .form-group {
             display: flex;
             flex-direction: column;

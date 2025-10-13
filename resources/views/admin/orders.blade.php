@@ -98,6 +98,162 @@
             border-bottom: 1px solid #e2e8f0;
         }
         
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 12px;
+            }
+            
+            .main {
+                padding: 20px 0;
+            }
+            
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+                margin-bottom: 20px;
+            }
+            
+            .admin-title {
+                font-size: 24px;
+            }
+            
+            .admin-nav {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+            
+            .orders-table {
+                overflow-x: auto;
+            }
+            
+            .table {
+                min-width: 800px;
+            }
+            
+            .table th,
+            .table td {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+            
+            .table-header {
+                padding: 12px 16px;
+            }
+            
+            .table-title {
+                font-size: 16px;
+            }
+            
+            .status-badge {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+            
+            .btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            /* Модальные окна для мобильных */
+            #statusModal > div,
+            #paymentModal > div {
+                min-width: 90%;
+                max-width: 400px;
+                margin: 20px;
+                padding: 20px;
+            }
+            
+            #statusModal h3,
+            #paymentModal h3 {
+                font-size: 18px;
+            }
+            
+            #statusModal input,
+            #statusModal select,
+            #paymentModal input,
+            #paymentModal select {
+                height: 44px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 8px;
+            }
+            
+            .main {
+                padding: 16px 0;
+            }
+            
+            .admin-title {
+                font-size: 20px;
+            }
+            
+            .admin-nav {
+                width: 100%;
+            }
+            
+            .nav-link {
+                flex: 1;
+                text-align: center;
+                padding: 8px 6px;
+                font-size: 12px;
+            }
+            
+            .table th,
+            .table td {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+            
+            .table-header {
+                padding: 10px 12px;
+            }
+            
+            .table-title {
+                font-size: 14px;
+            }
+            
+            .status-badge {
+                padding: 3px 6px;
+                font-size: 10px;
+            }
+            
+            .btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+            
+            /* Модальные окна для очень маленьких экранов */
+            #statusModal > div,
+            #paymentModal > div {
+                min-width: 95%;
+                margin: 10px;
+                padding: 16px;
+            }
+            
+            #statusModal h3,
+            #paymentModal h3 {
+                font-size: 16px;
+            }
+            
+            #statusModal input,
+            #statusModal select,
+            #paymentModal input,
+            #paymentModal select {
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+        
         .table td {
             padding: 16px;
             border-bottom: 1px solid #f1f5f9;
