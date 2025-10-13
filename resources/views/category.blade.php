@@ -576,18 +576,35 @@
         const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
         
+        // Обновляем счетчик избранного - ДЕСКТОП
         const favoritesBadge = document.getElementById('favorites-badge');
         if (favoritesBadge) {
             favoritesBadge.textContent = favorites.length;
             favoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
         }
         
+        // Обновляем счетчик избранного - МОБИЛЬНЫЙ
+        const mobileFavoritesBadge = document.querySelector('.mobile-favorites-badge');
+        if (mobileFavoritesBadge) {
+            mobileFavoritesBadge.textContent = favorites.length;
+            mobileFavoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
+        }
+        
+        // Обновляем счетчик корзины - ДЕСКТОП
         const cartBadge = document.getElementById('cart-badge');
         let totalItems = 0;
         if (cartBadge) {
             totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
             cartBadge.textContent = totalItems;
             cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+        }
+        
+        // Обновляем счетчик корзины - МОБИЛЬНЫЙ
+        const mobileCartBadge = document.querySelector('.mobile-cart-badge');
+        if (mobileCartBadge) {
+            totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            mobileCartBadge.textContent = totalItems;
+            mobileCartBadge.style.display = totalItems > 0 ? 'block' : 'none';
         }
         
         console.log('Counters updated:', {favorites: favorites.length, cart: totalItems});

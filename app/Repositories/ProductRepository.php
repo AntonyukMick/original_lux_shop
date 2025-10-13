@@ -62,7 +62,7 @@ class ProductRepository extends BaseRepository
         }
 
         if (isset($filters['subcategory']) && $filters['subcategory']) {
-            $query->where('subcategory', $filters['subcategory']);
+            $query->where('subcat', $filters['subcategory']);
         }
 
         if (isset($filters['min_price']) && $filters['min_price']) {

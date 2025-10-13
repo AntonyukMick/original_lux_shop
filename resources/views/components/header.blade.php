@@ -21,12 +21,12 @@ $auth = session('auth');
                 </div>
                 
                 <!-- Иконка доставки -->
-                <div class="icon-container" onclick="window.location.href='/delivery'" title="Доставка">
+                <div class="icon-container delivery-icon-container" onclick="window.location.href='/delivery'" title="Доставка">
                     <div class="icon delivery-icon">🚚</div>
                 </div>
                 
                 <!-- Иконка о нас -->
-                <div class="icon-container" onclick="window.location.href='/about'" title="О нас">
+                <div class="icon-container about-icon-container" onclick="window.location.href='/about'" title="О нас">
                     <div class="icon about-icon">ℹ️</div>
                 </div>
                 
@@ -49,11 +49,8 @@ $auth = session('auth');
                         <span class="login-icon">👤</span> Войти
                     </a>
                 @else
-                    <a class="btn" href="/logout" style="text-decoration:none;color:inherit">Выйти ({{ $auth['role'] }})</a>
-                    @if($auth['role'] === 'admin')
-                        <a class="btn" href="/admin" style="text-decoration:none;color:inherit" title="Админ-панель">⚙️ Админ-панель</a>
-                    @endif
-                    <a class="btn" href="/profile" style="text-decoration:none;color:inherit">👤 Профиль</a>
+                    <a class="btn" href="/profile" style="text-decoration:none;color:inherit" title="Профиль">👤 {{ $auth['role'] === 'admin' ? 'Админ' : 'Профиль' }}</a>
+                    <a class="btn" href="/logout" style="text-decoration:none;color:inherit" title="Выйти">🚪</a>
                 @endif
             </div>
         </div>
@@ -92,13 +89,13 @@ $auth = session('auth');
                 <!-- Иконка избранного -->
                 <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
                     <img src="{{ asset('image/icon-heart.jpg') }}" alt="Избранное" class="icon-image">
-                    <div class="badge" id="favorites-badge">{{ $favoritesCount }}</div>
+                    <div class="badge mobile-favorites-badge">{{ $favoritesCount }}</div>
                 </div>
                 
                 <!-- Иконка корзины -->
                 <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
                     <img src="{{ asset('image/icon-cart.jpg') }}" alt="Корзина" class="icon-image">
-                    <div class="badge" id="cart-badge">{{ $cartCount }}</div>
+                    <div class="badge mobile-cart-badge">{{ $cartCount }}</div>
                 </div>
                 
                 <!-- Иконка пользователя -->

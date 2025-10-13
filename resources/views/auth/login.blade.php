@@ -50,9 +50,9 @@
         <form method="post" action="/login">
             <?php echo csrf_field(); ?>
             <div class="row">
-                <label>Email или имя пользователя</label>
-                <input name="username" value="<?php echo e(old('username')); ?>" required placeholder="Введите email или имя">
-                <?php if($errors->first('username')): ?><div class="error"><?php echo e($errors->first('username')); ?></div><?php endif; ?>
+                <label>Telegram тег</label>
+                <input name="telegram_tag" value="<?php echo e(old('telegram_tag')); ?>" required placeholder="@username">
+                <?php if($errors->first('telegram_tag')): ?><div class="error"><?php echo e($errors->first('telegram_tag')); ?></div><?php endif; ?>
             </div>
             <div class="row">
                 <label>Пароль</label>
@@ -62,7 +62,7 @@
             <button class="btn" type="submit">Войти</button>
         </form>
         <div class="help-text">
-            Используйте email или имя пользователя для входа
+            Используйте ваш Telegram тег для входа
         </div>
     </div>
 
@@ -76,9 +76,9 @@
                 <?php if($errors->first('name')): ?><div class="error"><?php echo e($errors->first('name')); ?></div><?php endif; ?>
             </div>
             <div class="row">
-                <label>Email</label>
-                <input type="email" name="email" value="<?php echo e(old('email')); ?>" required placeholder="your@email.com">
-                <?php if($errors->first('email')): ?><div class="error"><?php echo e($errors->first('email')); ?></div><?php endif; ?>
+                <label>Telegram тег</label>
+                <input name="telegram_tag" value="<?php echo e(old('telegram_tag')); ?>" required placeholder="@username">
+                <?php if($errors->first('telegram_tag')): ?><div class="error"><?php echo e($errors->first('telegram_tag')); ?></div><?php endif; ?>
             </div>
             <div class="row">
                 <label>Пароль</label>
@@ -88,14 +88,7 @@
             <div class="row">
                 <label>Подтверждение пароля</label>
                 <input type="password" name="password_confirmation" required placeholder="Повторите пароль">
-            </div>
-            <div class="row">
-                <label>Телефон (необязательно)</label>
-                <input type="tel" name="phone" value="<?php echo e(old('phone')); ?>" placeholder="+7 (999) 123-45-67">
-            </div>
-            <div class="row">
-                <label>Адрес (необязательно)</label>
-                <input type="text" name="address" value="<?php echo e(old('address')); ?>" placeholder="Ваш адрес">
+                <?php if($errors->first('password_confirmation')): ?><div class="error"><?php echo e($errors->first('password_confirmation')); ?></div><?php endif; ?>
             </div>
             <button class="btn" type="submit">Зарегистрироваться</button>
         </form>
@@ -135,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const form = registerForm.querySelector('form');
         const password = form.querySelector('input[name="password"]');
         const passwordConfirmation = form.querySelector('input[name="password_confirmation"]');
-        const email = form.querySelector('input[name="email"]');
+        const telegramTag = form.querySelector('input[name="telegram_tag"]');
         
         // Проверка совпадения паролей в реальном времени
         function checkPasswordMatch() {
@@ -153,14 +146,21 @@ document.addEventListener('DOMContentLoaded', function() {
         password.addEventListener('input', checkPasswordMatch);
         passwordConfirmation.addEventListener('input', checkPasswordMatch);
         
-        // Проверка email на уникальность (базовая проверка)
-        email.addEventListener('blur', function() {
-            const emailValue = this.value;
-            if (emailValue && emailValue.includes('@')) {
-                // Здесь можно добавить AJAX проверку на сервере
-                // Пока просто проверяем формат
-                if (!emailValue.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-                    this.setCustomValidity('Некорректный формат email');
+        // Проверка telegram тега
+        telegramTag.addEventListener('input', function() {
+            let value = this.value;
+            // Автоматически добавляем @ если пользователь забыл
+            if (value && !value.startsWith('@')) {
+                this.value = '@' + value;
+            }
+        });
+        
+        telegramTag.addEventListener('blur', function() {
+            const tagValue = this.value;
+            if (tagValue) {
+                // Проверяем формат telegram тега: @username (только латиница, цифры и подчеркивание)
+                if (!tagValue.match(/^@[a-zA-Z0-9_]{5,32}$/)) {
+                    this.setCustomValidity('Некорректный формат Telegram тега. Используйте @username (5-32 символа)');
                     this.style.borderColor = '#dc2626';
                 } else {
                     this.setCustomValidity('');
@@ -187,6 +187,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Проверяем совпадение паролей
             if (password.value !== passwordConfirmation.value) {
                 passwordConfirmation.style.borderColor = '#dc2626';
+                isValid = false;
+            }
+            
+            // Проверяем формат telegram тега
+            if (telegramTag.value && !telegramTag.value.match(/^@[a-zA-Z0-9_]{5,32}$/)) {
+                telegramTag.style.borderColor = '#dc2626';
                 isValid = false;
             }
             

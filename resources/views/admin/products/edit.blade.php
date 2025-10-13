@@ -302,7 +302,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Категория *</label>
-                        <select name="category" class="form-select" required>
+                        <select name="category" id="categorySelect" class="form-select" required>
                             <option value="">Выберите категорию</option>
                             <option value="Обувь" {{ old('category', $product->category) == 'Обувь' ? 'selected' : '' }}>Обувь</option>
                             <option value="Одежда" {{ old('category', $product->category) == 'Одежда' ? 'selected' : '' }}>Одежда</option>
@@ -322,7 +322,9 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Подкатегория</label>
-                        <input type="text" name="subcat" value="{{ old('subcat', $product->subcat) }}" class="form-input" placeholder="Например: Кроссовки, Футболки">
+                        <select name="subcat" id="subcatSelect" class="form-select">
+                            <option value="">Выберите подкатегорию</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -407,6 +409,57 @@
     </div>
 
     <script>
+        // Данные категорий и подкатегорий
+        const categoryData = {
+            'Одежда': ['Худи', 'Футболки', 'Куртки', 'Джинсы', 'Свитшоты'],
+            'Обувь': ['Кроссовки', 'Кеды', 'Лоферы', 'Ботинки', 'Сандалии'],
+            'Сумки': ['Рюкзаки', 'Сумки через плечо', 'Поясные сумки', 'Клатчи', 'Портфели'],
+            'Украшения': ['Браслеты', 'Кольца', 'Цепи', 'Серьги', 'Колье'],
+            'Аксессуары': ['Ремни', 'Кошельки', 'Очки', 'Шарфы', 'Перчатки'],
+            'Часы': ['Наручные часы', 'Умные часы', 'Карманные часы', 'Спортивные часы']
+        };
+
+        // Текущие значения из продукта
+        const currentCategory = "{{ $product->category }}";
+        const currentSubcat = "{{ $product->subcat }}";
+
+        // Функция обновления подкатегорий
+        function updateSubcategories(selectedCategory, selectSubcat = null) {
+            const subcatSelect = document.getElementById('subcatSelect');
+            
+            // Очищаем текущие опции
+            subcatSelect.innerHTML = '<option value="">Выберите подкатегорию</option>';
+            
+            // Если категория выбрана, добавляем подкатегории
+            if (selectedCategory && categoryData[selectedCategory]) {
+                categoryData[selectedCategory].forEach(function(subcat) {
+                    const option = document.createElement('option');
+                    option.value = subcat;
+                    option.textContent = subcat;
+                    
+                    // Выбираем текущую подкатегорию
+                    if (selectSubcat && subcat === selectSubcat) {
+                        option.selected = true;
+                    }
+                    
+                    subcatSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем подкатегории для текущей категории
+            if (currentCategory) {
+                updateSubcategories(currentCategory, currentSubcat);
+            }
+        });
+
+        // Обработчик изменения категории
+        document.getElementById('categorySelect').addEventListener('change', function() {
+            updateSubcategories(this.value);
+        });
+
         // Предварительный просмотр новых изображений
         document.getElementById('imageInput').addEventListener('change', function(e) {
             const preview = document.getElementById('imagePreview');

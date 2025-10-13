@@ -12,12 +12,10 @@ class AuthService
     /**
      * Аутентификация пользователя
      */
-    public function authenticate(string $username, string $password): ?array
+    public function authenticate(string $telegramTag, string $password): ?array
     {
-        // Попытка найти пользователя по email или имени
-        $user = User::where('email', $username)
-                   ->orWhere('name', $username)
-                   ->first();
+        // Попытка найти пользователя по telegram_tag
+        $user = User::where('telegram_tag', $telegramTag)->first();
 
         if (!$user || !Hash::check($password, $user->password)) {
             return null;
@@ -33,13 +31,14 @@ class AuthService
         // Логируем вход
         Log::info('User logged in', [
             'user_id' => $user->id,
-            'email' => $user->email,
+            'telegram_tag' => $user->telegram_tag,
             'role' => $user->role
         ]);
 
         return [
             'id' => $user->id,
             'username' => $user->name,
+            'telegram_tag' => $user->telegram_tag,
             'email' => $user->email,
             'role' => $user->role,
             'phone' => $user->phone,
@@ -54,7 +53,8 @@ class AuthService
     {
         $user = User::create([
             'name' => $data['name'],
-            'email' => $data['email'],
+            'telegram_tag' => $data['telegram_tag'],
+            'email' => $data['email'] ?? null,
             'password' => Hash::make($data['password']),
             'role' => 'user',
             'phone' => $data['phone'] ?? null,
@@ -64,12 +64,13 @@ class AuthService
 
         Log::info('New user registered', [
             'user_id' => $user->id,
-            'email' => $user->email
+            'telegram_tag' => $user->telegram_tag
         ]);
 
         return [
             'id' => $user->id,
             'username' => $user->name,
+            'telegram_tag' => $user->telegram_tag,
             'email' => $user->email,
             'role' => $user->role,
             'phone' => $user->phone,
@@ -102,12 +103,13 @@ class AuthService
 
         Log::info('User profile updated', [
             'user_id' => $user->id,
-            'email' => $user->email
+            'telegram_tag' => $user->telegram_tag
         ]);
 
         return [
             'id' => $user->id,
             'username' => $user->name,
+            'telegram_tag' => $user->telegram_tag,
             'email' => $user->email,
             'role' => $user->role,
             'phone' => $user->phone,

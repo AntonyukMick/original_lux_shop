@@ -17,6 +17,7 @@ class AdminUserSeeder extends Seeder
         // Создаем администратора
         User::create([
             'name' => 'Администратор',
+            'telegram_tag' => '@admin_ols',
             'email' => 'admin@example.com',
             'password' => Hash::make('admin123'),
             'role' => 'admin',
@@ -28,6 +29,7 @@ class AdminUserSeeder extends Seeder
         // Создаем тестового пользователя
         User::create([
             'name' => 'Тестовый Пользователь',
+            'telegram_tag' => '@testuser_ols',
             'email' => 'user@example.com',
             'password' => Hash::make('user123'),
             'role' => 'user',
@@ -37,7 +39,7 @@ class AdminUserSeeder extends Seeder
         ]);
 
         $this->command->info('Пользователи созданы:');
-        $this->command->info('Администратор: admin@example.com / admin123');
-        $this->command->info('Пользователь: user@example.com / user123');
+        $this->command->info('Администратор: @admin_ols / admin123');
+        $this->command->info('Пользователь: @testuser_ols / user123');
     }
 }

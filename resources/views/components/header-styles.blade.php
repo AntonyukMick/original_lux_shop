@@ -7,7 +7,7 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 .mobile-header{display:none}
 
 /* Десктопный хедер (старый стиль) */
-.desktop-header .bar{display:flex;align-items:center;gap:4px;padding:6px 8px;width:100%;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.desktop-header .bar{display:flex;align-items:center;gap:3px;padding:4px 6px;width:100%;flex-wrap:nowrap;overflow:hidden}
 
 /* Мобильный хедер - показываем только на мобильных */
 .mobile-header .bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;width:100%;flex-wrap:nowrap;position:relative}
@@ -20,14 +20,17 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 
 /* Обновленные стили для всех элементов хедера */
 .btn {
-    height: 44px;
-    padding: 0 12px;
-    border-radius: 8px;
+    height: 36px;
+    padding: 0 8px;
+    border-radius: 6px;
     border: 2px solid #000;
     background: #fff;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
@@ -44,14 +47,16 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 }
 
 .brand {
-    margin-left: 8px;
+    margin-left: 4px;
     background: rgb(151, 173, 200);
     border: 2px solid #000;
-    border-radius: 8px;
-    padding: 8px 12px;
+    border-radius: 6px;
+    padding: 6px 8px;
     font-weight: 700;
     height: auto;
-    min-height: 44px;
+    min-height: 36px;
+    font-size: 12px;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -100,16 +105,16 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 .icon-container {
     position: relative;
     display: inline-block;
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     background: white;
     border: 2px solid #000;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    margin: 0 4px;
-    line-height: 1;
     flex-shrink: 0;
+    transition: all 0.2s ease;
+    margin: 0 2px;
+    line-height: 1;
 }
 
 .icon-container:hover {
@@ -209,10 +214,10 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 
 /* Стили для изображений иконок */
 .icon-image {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 4px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -423,6 +428,12 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
         display: none !important;
     }
     
+    /* Скрываем иконки доставки и "о нас" на средних экранах */
+    .delivery-icon-container,
+    .about-icon-container {
+        display: none;
+    }
+    
 }
 
 /* Десктопы - показываем все элементы */
@@ -430,6 +441,14 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     /* Переключаем хедеры */
     .desktop-header{display:block !important}
     .mobile-header{display:none !important}
+    
+    /* Скрываем иконки доставки и "о нас" на маленьких десктопах */
+    @media (max-width: 1200px) {
+        .delivery-icon-container,
+        .about-icon-container {
+            display: none;
+        }
+    }
     
     
     .mobile-hidden,

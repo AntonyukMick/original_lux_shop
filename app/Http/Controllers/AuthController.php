@@ -36,25 +36,25 @@ class AuthController extends Controller
         $validated = $request->validated();
         
         $authData = $this->authService->authenticate(
-            $validated['username'], 
+            $validated['telegram_tag'], 
             $validated['password']
         );
 
         if (!$authData) {
             // Логируем неудачную попытку входа
             $this->activityService->logActivity('login_failed', null, [
-                'username' => $validated['username'],
+                'telegram_tag' => $validated['telegram_tag'],
                 'reason' => 'invalid_credentials'
             ], $request);
             
-            return back()->withErrors(['username' => 'Неверные логин или пароль'])
+            return back()->withErrors(['telegram_tag' => 'Неверный Telegram тег или пароль'])
                 ->withInput();
         }
 
         session(['auth' => $authData]);
         
         // Логируем успешный вход
-        $this->activityService->logLogin($authData['id'], $authData['email'], $request);
+        $this->activityService->logLogin($authData['id'], $authData['telegram_tag'], $request);
         
         return redirect('/')->with('success', 'Вы успешно вошли в систему');
     }
@@ -93,7 +93,7 @@ class AuthController extends Controller
         session(['auth' => $authData]);
 
         // Логируем регистрацию
-        $this->activityService->logRegistration($authData['id'], $authData['email'], $request);
+        $this->activityService->logRegistration($authData['id'], $authData['telegram_tag'], $request);
 
         return redirect('/')->with('success', 'Регистрация успешна!');
     }

@@ -275,7 +275,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Категория *</label>
-                        <select name="category" class="form-select" required>
+                        <select name="category" id="categorySelect" class="form-select" required>
                             <option value="">Выберите категорию</option>
                             <option value="Обувь" {{ old('category') == 'Обувь' ? 'selected' : '' }}>Обувь</option>
                             <option value="Одежда" {{ old('category') == 'Одежда' ? 'selected' : '' }}>Одежда</option>
@@ -295,7 +295,9 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Подкатегория</label>
-                        <input type="text" name="subcat" value="{{ old('subcat') }}" class="form-input" placeholder="Например: Кроссовки, Футболки">
+                        <select name="subcat" id="subcatSelect" class="form-select">
+                            <option value="">Выберите подкатегорию</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -364,6 +366,35 @@
     </div>
 
     <script>
+        // Данные категорий и подкатегорий
+        const categoryData = {
+            'Одежда': ['Худи', 'Футболки', 'Куртки', 'Джинсы', 'Свитшоты'],
+            'Обувь': ['Кроссовки', 'Кеды', 'Лоферы', 'Ботинки', 'Сандалии'],
+            'Сумки': ['Рюкзаки', 'Сумки через плечо', 'Поясные сумки', 'Клатчи', 'Портфели'],
+            'Украшения': ['Браслеты', 'Кольца', 'Цепи', 'Серьги', 'Колье'],
+            'Аксессуары': ['Ремни', 'Кошельки', 'Очки', 'Шарфы', 'Перчатки'],
+            'Часы': ['Наручные часы', 'Умные часы', 'Карманные часы', 'Спортивные часы']
+        };
+
+        // Обработчик изменения категории
+        document.getElementById('categorySelect').addEventListener('change', function() {
+            const category = this.value;
+            const subcatSelect = document.getElementById('subcatSelect');
+            
+            // Очищаем текущие опции
+            subcatSelect.innerHTML = '<option value="">Выберите подкатегорию</option>';
+            
+            // Если категория выбрана, добавляем подкатегории
+            if (category && categoryData[category]) {
+                categoryData[category].forEach(function(subcat) {
+                    const option = document.createElement('option');
+                    option.value = subcat;
+                    option.textContent = subcat;
+                    subcatSelect.appendChild(option);
+                });
+            }
+        });
+
         // Предварительный просмотр изображений
         document.getElementById('imageInput').addEventListener('change', function(e) {
             const preview = document.getElementById('imagePreview');

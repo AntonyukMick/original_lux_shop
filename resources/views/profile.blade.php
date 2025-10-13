@@ -102,14 +102,15 @@
     }
     
     .role-badge {
-        display: inline-block;
+        display: block;
+        margin: 0 auto;
+        width: fit-content;
         padding: 6px 12px;
         border-radius: 20px;
         font-size: 12px;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        width: fit-content;
     }
     
     .role-admin {
@@ -122,6 +123,61 @@
         background: #dbeafe;
         color: #1e40af;
         border: 1px solid #3b82f6;
+    }
+    
+    /* Admin Panel Button */
+    .admin-panel-btn {
+        display: inline-block;
+        padding: 14px 24px;
+        background: linear-gradient(135deg, #527ea6, #3b82f6);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(82, 126, 166, 0.3);
+        text-align: center;
+        width: 100%;
+    }
+    
+    .admin-panel-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(82, 126, 166, 0.4);
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+    }
+    
+    .admin-panel-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(82, 126, 166, 0.3);
+    }
+    
+    /* Logout Button */
+    .logout-btn {
+        display: inline-block;
+        padding: 14px 24px;
+        background: #fff;
+        color: #ef4444;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        border: 2px solid #ef4444;
+        text-align: center;
+        width: 100%;
+    }
+    
+    .logout-btn:hover {
+        background: #ef4444;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+    }
+    
+    .logout-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
     }
     
     /* Favorites Section */
@@ -162,6 +218,12 @@
         height: 200px;
         object-fit: cover;
         background: #f1f5f9;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    
+    .favorite-image:hover {
+        transform: scale(1.05);
     }
     
     .favorite-content {
@@ -254,11 +316,118 @@
         }
         
         .favorites-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .favorite-item {
+            margin-bottom: 0;
+        }
+        
+        .favorite-image {
+            height: 160px;
+        }
+        
+        .favorite-content {
+            padding: 12px;
+        }
+        
+        .favorite-title {
+            font-size: 14px;
+            line-height: 1.3;
+            margin-bottom: 6px;
+        }
+        
+        .favorite-meta {
+            margin-bottom: 12px;
+        }
+        
+        .favorite-brand {
+            font-size: 12px;
+        }
+        
+        .favorite-price {
+            font-size: 16px;
         }
         
         .favorite-actions {
             flex-direction: column;
+            gap: 8px;
+        }
+        
+        .favorite-btn {
+            padding: 10px 12px;
+            font-size: 13px;
+        }
+        
+        .profile-section {
+            padding: 24px 16px;
+        }
+        
+        .favorites-section {
+            padding: 24px 16px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .admin-panel-btn,
+        .logout-btn {
+            font-size: 14px;
+            padding: 12px 20px;
+        }
+    }
+    
+    /* Очень маленькие экраны */
+    @media (max-width: 480px) {
+        .favorites-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .favorite-image {
+            height: 140px;
+        }
+        
+        .favorite-content {
+            padding: 10px;
+        }
+        
+        .favorite-title {
+            font-size: 13px;
+        }
+        
+        .favorite-brand {
+            font-size: 11px;
+        }
+        
+        .favorite-price {
+            font-size: 15px;
+        }
+        
+        .favorite-btn {
+            padding: 8px 10px;
+            font-size: 12px;
+        }
+        
+        .profile-section {
+            padding: 20px 12px;
+        }
+        
+        .favorites-section {
+            padding: 20px 12px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+        }
+        
+        .admin-panel-btn,
+        .logout-btn {
+            font-size: 13px;
+            padding: 10px 16px;
         }
     }
 </style>
@@ -266,8 +435,6 @@
 
 @section('content')
 @php
-$cartCount = is_countable(session('cart')) ? count(session('cart')) : 0;
-$favoritesCount = is_countable(session('favorites')) ? count(session('favorites')) : 0;
 $auth = session('auth');
 @endphp
 <div class="main">
@@ -292,18 +459,8 @@ $auth = session('auth');
                     </div>
                     
                     <div class="info-group">
-                        <div class="info-label">Email</div>
-                        <div class="info-value"><?php echo e($auth['email'] ?? 'Не указан'); ?></div>
-                    </div>
-                    
-                    <div class="info-group">
-                        <div class="info-label">Телефон</div>
-                        <div class="info-value"><?php echo e($auth['phone'] ?? 'Не указан'); ?></div>
-                    </div>
-                    
-                    <div class="info-group">
-                        <div class="info-label">Адрес</div>
-                        <div class="info-value"><?php echo e($auth['address'] ?? 'Не указан'); ?></div>
+                        <div class="info-label">Телеграм-тег</div>
+                        <div class="info-value"><?php echo e($auth['telegram_tag'] ?? 'Не указан'); ?></div>
                     </div>
                     
                     <div class="info-group">
@@ -311,9 +468,23 @@ $auth = session('auth');
                         <div class="role-badge role-<?php echo e($auth['role']); ?>"><?php echo e($auth['role']); ?></div>
                     </div>
                     
+                    <?php if($auth['role'] === 'admin'): ?>
+                    <div class="info-group">
+                        <a href="/admin" class="admin-panel-btn">
+                            ⚙️ Перейти в админ-панель
+                        </a>
+                    </div>
+                    <?php endif; ?>
+                    
                     <div class="info-group">
                         <div class="info-label">Статистика</div>
-                        <div class="info-value">Корзина: <?php echo e($cartCount); ?> | Избранное: <?php echo e($favoritesCount); ?></div>
+                        <div class="info-value">Корзина: <span id="cartCountStats">0</span> | Избранное: <span id="favoritesCountStats">0</span></div>
+                    </div>
+                    
+                    <div class="info-group">
+                        <a href="/logout" class="logout-btn">
+                            🚪 Выйти из аккаунта
+                        </a>
                     </div>
                 </div>
             </div>
@@ -321,86 +492,224 @@ $auth = session('auth');
 
         <!-- Favorites Section -->
         <div class="favorites-section">
-            <h2 class="section-title">Избранное</h2>
+            <h2 class="section-title">Избранное (<span id="favoritesCount">0</span>)</h2>
             
-            <?php $favorites = session('favorites', []); ?>
-            <?php if(!empty($favorites)): ?>
-                <div class="favorites-grid">
-                    <?php foreach($favorites as $item): ?>
-                    <div class="favorite-item">
-                        <img src="<?php echo e($item['image']); ?>" alt="<?php echo e($item['title']); ?>" class="favorite-image">
-                        <div class="favorite-content">
-                            <div class="favorite-title"><?php echo e($item['title']); ?></div>
-                            <div class="favorite-meta">
-                                <span class="favorite-brand"><?php echo e($item['brand'] ?? 'Бренд'); ?></span>
-                                <span class="favorite-price"><?php echo e($item['price']); ?>€</span>
-                            </div>
-                            <div class="favorite-actions">
-                                <form method="post" action="/cart/add" style="flex:1">
-                                    @csrf
-                                    <input type="hidden" name="title" value="<?php echo e($item['title']); ?>">
-                                    <input type="hidden" name="price" value="<?php echo e($item['price']); ?>">
-                                    <input type="hidden" name="image" value="<?php echo e($item['image']); ?>">
-                                    <button type="submit" class="favorite-btn primary">Добавить в корзину</button>
-                                </form>
-                                <form method="post" action="/favorites/remove" style="flex:1">
-                                    @csrf
-                                    <input type="hidden" name="title" value="<?php echo e($item['title']); ?>">
-                                    <button type="submit" class="favorite-btn">Удалить</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <div class="empty-favorites">
-                    <div class="empty-favorites-icon">❤️</div>
-                    <p>У вас пока нет избранных товаров</p>
-                    <a href="/catalog" style="display:inline-block;margin-top:16px;padding:12px 24px;background:#527ea6;color:#fff;text-decoration:none;border-radius:8px;font-weight:600">Перейти в каталог</a>
-                </div>
-            <?php endif; ?>
+            <div id="favoritesContainer">
+                <!-- Контент будет загружен через JavaScript -->
+            </div>
         </div>
     </div>
 </div>
 
 <script>
+    // Функция для загрузки и отображения избранного из localStorage
+    function loadFavorites() {
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        const container = document.getElementById('favoritesContainer');
+        const countElement = document.getElementById('favoritesCount');
+        
+        // Обновляем счетчик
+        countElement.textContent = favorites.length;
+        
+        // Обновляем статистику в профиле
+        const favoritesCountStats = document.getElementById('favoritesCountStats');
+        const cartCountStats = document.getElementById('cartCountStats');
+        if (favoritesCountStats && cartCountStats) {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            cartCountStats.textContent = cartCount;
+            favoritesCountStats.textContent = favorites.length;
+        }
+        
+        // Очищаем контейнер
+        container.innerHTML = '';
+        
+        if (favorites.length === 0) {
+            // Показываем пустое состояние
+            container.innerHTML = `
+                <div class="empty-favorites">
+                    <div class="empty-favorites-icon">❤️</div>
+                    <p>У вас пока нет избранных товаров</p>
+                    <a href="/catalog" style="display:inline-block;margin-top:16px;padding:12px 24px;background:#527ea6;color:#fff;text-decoration:none;border-radius:8px;font-weight:600">Перейти в каталог</a>
+                </div>
+            `;
+        } else {
+            // Создаем сетку с товарами
+            const grid = document.createElement('div');
+            grid.className = 'favorites-grid';
+            
+            favorites.forEach(item => {
+                const favoriteItem = document.createElement('div');
+                favoriteItem.className = 'favorite-item';
+                
+                // Экранируем кавычки для безопасного использования в атрибутах
+                const safeTitle = item.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const safeImage = item.image.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const safeBrand = (item.brand || 'Бренд').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                
+                favoriteItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}" class="favorite-image" onclick="window.location.href='/product/${item.id || ''}'">
+                    <div class="favorite-content">
+                        <div class="favorite-title" onclick="window.location.href='/product/${item.id || ''}'" style="cursor: pointer;">
+                            ${item.title}
+                        </div>
+                        <div class="favorite-meta">
+                            <span class="favorite-brand">${safeBrand}</span>
+                            <span class="favorite-price">${item.price}€</span>
+                        </div>
+                        <div class="favorite-actions">
+                            <button class="favorite-btn primary" onclick="addToCart('${safeTitle}', ${item.price}, '${safeImage}', '${safeBrand}', ${item.id || 'null'})">
+                                Добавить в корзину
+                            </button>
+                            <button class="favorite-btn" onclick="removeFromFavorites('${safeTitle}')">
+                                Удалить
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(favoriteItem);
+            });
+            
+            container.appendChild(grid);
+        }
+    }
+    
+    // Функция для удаления из избранного
+    function removeFromFavorites(title) {
+        let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        favorites = favorites.filter(item => item.title !== title);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        loadFavorites();
+        updateHeaderCounters();
+        showNotification('Товар удален из избранного', 'success');
+    }
+    
+    // Функция для добавления в корзину
+    function addToCart(title, price, image, brand = 'Бренд', id = null) {
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        
+        // Проверяем, есть ли уже товар в корзине
+        const existingItem = cart.find(item => item.title === title);
+        
+        if (existingItem) {
+            existingItem.quantity = (existingItem.quantity || 1) + 1;
+        } else {
+            cart.push({
+                id: id,
+                title: title,
+                price: price,
+                image: image,
+                brand: brand,
+                quantity: 1
+            });
+        }
+        
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateHeaderCounters();
+        
+        // Обновляем статистику в профиле
+        const cartCountStats = document.getElementById('cartCountStats');
+        if (cartCountStats) {
+            const cartCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            cartCountStats.textContent = cartCount;
+        }
+        
+        showNotification('Товар добавлен в корзину!', 'success');
+    }
+    
+    // Показ уведомлений
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background: ${type === 'success' ? '#10b981' : '#3b82f6'};
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        `;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+    
     // Функция для обновления счетчиков в хедере
     function updateHeaderCounters() {
         const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
         
-        // Обновляем счетчик избранного
-        const favoriteBadges = document.querySelectorAll('.icon-container .badge');
-        favoriteBadges.forEach(badge => {
-            if (badge.closest('.icon-container').querySelector('.heart-icon')) {
-                if (favorites.length > 0) {
-                    badge.textContent = favorites.length;
-                    badge.classList.remove('hidden');
-                } else {
-                    badge.classList.add('hidden');
-                }
-            }
-        });
+        // Обновляем счетчик избранного - ДЕСКТОП
+        const favoritesBadge = document.getElementById('favorites-badge');
+        if (favoritesBadge) {
+            favoritesBadge.textContent = favorites.length;
+            favoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
+        }
         
-        // Обновляем счетчик корзины (суммируем количество всех товаров)
-        const cartBadges = document.querySelectorAll('.icon-container .badge');
-        cartBadges.forEach(badge => {
-            if (badge.closest('.icon-container').querySelector('.bag-icon')) {
-                const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-                if (totalItems > 0) {
-                    badge.textContent = totalItems;
-                    badge.classList.remove('hidden');
-                } else {
-                    badge.classList.add('hidden');
-                }
-            }
-        });
+        // Обновляем счетчик избранного - МОБИЛЬНЫЙ
+        const mobileFavoritesBadge = document.querySelector('.mobile-favorites-badge');
+        if (mobileFavoritesBadge) {
+            mobileFavoritesBadge.textContent = favorites.length;
+            mobileFavoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
+        }
+        
+        // Обновляем счетчик корзины - ДЕСКТОП
+        const cartBadge = document.getElementById('cart-badge');
+        let totalItems = 0;
+        if (cartBadge) {
+            totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            cartBadge.textContent = totalItems;
+            cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+        }
+        
+        // Обновляем счетчик корзины - МОБИЛЬНЫЙ
+        const mobileCartBadge = document.querySelector('.mobile-cart-badge');
+        if (mobileCartBadge) {
+            totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            mobileCartBadge.textContent = totalItems;
+            mobileCartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+        }
     }
 
-    // Обновляем счетчики при загрузке страницы
+    // Обновляем избранное и счетчики при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
+        loadFavorites();
         updateHeaderCounters();
     });
+    
+    // Добавляем стили для анимации
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
 </script>
 @endsection

@@ -27,8 +27,8 @@ class CategoryController extends Controller
         foreach ($categoryData['subcategories'] as $subcategory) {
             $products = Product::where('is_active', true)
                 ->where('category', $categoryData['name'])
-                ->where('subcategory', $subcategory)
-                ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'subcategory', 'brand'])
+                ->where('subcat', $subcategory)
+                ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'subcat', 'brand'])
                 ->orderByRaw('CASE WHEN original_price IS NOT NULL AND original_price > price THEN (original_price - price) / original_price ELSE 0 END DESC')
                 ->take($perPage)
                 ->get();
@@ -152,7 +152,7 @@ class CategoryController extends Controller
                 'original_price' => $item['original_price'],
                 'images' => [$item['image']],
                 'category' => $category,
-                'subcategory' => $subcategory,
+                'subcat' => $subcategory,
                 'brand' => $item['brand'],
                 'image' => $item['image']
             ];
