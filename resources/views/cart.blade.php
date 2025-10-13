@@ -4,7 +4,9 @@
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/empty-states.css') }}">
+    @include('components.header-styles')
 <style>
+        body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,"Noto Sans",sans-serif;background:#f1f5f9;color:#0f172a}
         .panel{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:24px;text-align:left}
         .row{display:grid;grid-template-columns:1fr 120px 120px 40px;gap:10px;align-items:center;border-bottom:1px solid #e2e8f0;padding:8px 0}
         .row:last-child{border-bottom:none}
@@ -48,7 +50,6 @@
             <!-- Контейнер для общей суммы -->
             <div id="cart-total" class="total" style="display: none;">
                 <strong>Итого: <span id="total-amount">0</span>€</strong>
-                <button class="btn" onclick="previewOrder()" style="background:#527ea6;color:#ffffff;font-weight:600;">Предварительный просмотр</button>
                 <button class="btn" onclick="checkout()" style="background:#48bb78;color:#ffffff;font-weight:600;">Оформить заказ</button>
             </div>
         </div>
@@ -390,50 +391,7 @@
             }, 1000);
         }
         
-        // Функция для предварительного просмотра заказа
-        function previewOrder() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            if (cart.length === 0) {
-                alert('Корзина пуста');
-                return;
-            }
-            
-            // Создаем форму для предварительного просмотра PDF
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '{{ route("preview.order.pdf") }}';
-            form.target = '_blank';
-            
-            // Добавляем CSRF токен
-            const csrfToken = document.createElement('input');
-            csrfToken.type = 'hidden';
-            csrfToken.name = '_token';
-            csrfToken.value = '{{ csrf_token() }}';
-            form.appendChild(csrfToken);
-            
-            // Добавляем данные корзины
-            const cartItemsInput = document.createElement('input');
-            cartItemsInput.type = 'hidden';
-            cartItemsInput.name = 'cartItems';
-            cartItemsInput.value = JSON.stringify(cart);
-            form.appendChild(cartItemsInput);
-            
-            // Добавляем общую сумму
-            const totalInput = document.createElement('input');
-            totalInput.type = 'hidden';
-            totalInput.name = 'totalAmount';
-            totalInput.value = calculateTotal(cart);
-            form.appendChild(totalInput);
-            
-            // Добавляем форму на страницу и отправляем
-            document.body.appendChild(form);
-            form.submit();
-            
-            // Удаляем форму
-            setTimeout(() => {
-                document.body.removeChild(form);
-            }, 100);
-        }
+        // Предварительный просмотр удален по требованию
         
         // Функция для расчета общей суммы
         function calculateTotal(cart) {

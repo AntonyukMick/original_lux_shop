@@ -4,6 +4,7 @@
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/empty-states.css') }}">
+    @include('components.header-styles')
 
 @section('content')
 <div class="container">
