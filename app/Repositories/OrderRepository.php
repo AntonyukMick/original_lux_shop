@@ -39,12 +39,12 @@ class OrderRepository extends BaseRepository
 
     public function getTotalRevenue(): float
     {
-        return $this->model->where('status', 'completed')->sum('total_amount');
+        return $this->model->where('status', 'delivered')->sum('total');
     }
 
     public function getAverageOrderValue(): float
     {
-        return $this->model->where('status', 'completed')->avg('total_amount');
+        return $this->model->where('status', 'delivered')->avg('total');
     }
 
     public function getOrdersWithItems(): Collection

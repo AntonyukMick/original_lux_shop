@@ -49,10 +49,10 @@ class StatisticsService
         return [
             'total' => Order::count(),
             'pending' => Order::where('status', 'pending')->count(),
-            'completed' => Order::where('status', 'completed')->count(),
+            'completed' => Order::where('status', 'delivered')->count(), // Используем 'delivered' вместо 'completed'
             'cancelled' => Order::where('status', 'cancelled')->count(),
-            'total_revenue' => Order::where('status', 'completed')->sum('total_amount'),
-            'average_order_value' => Order::where('status', 'completed')->avg('total_amount')
+            'total_revenue' => Order::where('status', 'delivered')->sum('total'), // Используем 'total' вместо 'total_amount'
+            'average_order_value' => Order::where('status', 'delivered')->avg('total') // Используем 'total' вместо 'total_amount'
         ];
     }
 
@@ -116,12 +116,12 @@ class StatisticsService
             default => '%Y-%m'
         };
 
-        return Order::where('status', 'completed')
+        return Order::where('status', 'delivered')
             ->select(
                 DB::raw("DATE_FORMAT(created_at, '{$dateFormat}') as period"),
                 DB::raw('COUNT(*) as orders_count'),
-                DB::raw('SUM(total_amount) as total_revenue'),
-                DB::raw('AVG(total_amount) as avg_order_value')
+                DB::raw('SUM(total) as total_revenue'),
+                DB::raw('AVG(total) as avg_order_value')
             )
             ->groupBy('period')
             ->orderBy('period', 'desc')

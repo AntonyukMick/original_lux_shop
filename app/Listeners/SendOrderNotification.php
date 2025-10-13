@@ -29,7 +29,7 @@ class SendOrderNotification
         Log::info('New order created', [
             'order_id' => $order->id,
             'user_id' => $order->user_id,
-            'total_amount' => $order->total_amount,
+            'total_amount' => $order->total,
             'status' => $order->status
         ]);
 

@@ -496,10 +496,10 @@ $auth = session('auth');
             
             <div id="favoritesContainer">
                 <!-- Контент будет загружен через JavaScript -->
-            </div>
-        </div>
-    </div>
-</div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
 
 <script>
     // Функция для загрузки и отображения избранного из localStorage
@@ -556,7 +556,7 @@ $auth = session('auth');
                         <div class="favorite-meta">
                             <span class="favorite-brand">${safeBrand}</span>
                             <span class="favorite-price">${item.price}€</span>
-                        </div>
+        </div>
                         <div class="favorite-actions">
                             <button class="favorite-btn primary" onclick="addToCart('${safeTitle}', ${item.price}, '${safeImage}', '${safeBrand}', ${item.id || 'null'})">
                                 Добавить в корзину
@@ -564,8 +564,8 @@ $auth = session('auth');
                             <button class="favorite-btn" onclick="removeFromFavorites('${safeTitle}')">
                                 Удалить
                             </button>
-                        </div>
-                    </div>
+    </div>
+</div>
                 `;
                 grid.appendChild(favoriteItem);
             });
