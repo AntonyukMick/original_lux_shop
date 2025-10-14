@@ -169,41 +169,39 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
             display: none;
         }
 
-        /* Цветовые индикаторы вместо цифр */
-        .favorites-indicator, .mobile-favorites-indicator {
+        /* Цветовые счетчики */
+        .favorites-badge, .mobile-favorites-badge {
             background: #ef4444 !important; /* Красный для избранного */
             border: 2px solid #000 !important;
             border-radius: 50% !important;
-            width: 12px !important;
-            height: 12px !important;
-            position: absolute !important;
-            top: -4px !important;
-            right: -4px !important;
+            width: 14px !important;
+            height: 14px !important;
+            font-size: 8px !important;
+            font-weight: bold !important;
+            color: #fff !important; /* Белый текст на красном фоне */
             z-index: 10 !important;
-            display: block !important;
+            line-height: 14px !important;
+            text-align: center !important;
             padding: 0 !important;
             margin: 0 !important;
-            font-size: 0 !important;
-            line-height: 0 !important;
-            text-align: center !important;
+            display: block !important;
         }
 
-        .cart-indicator, .mobile-cart-indicator {
+        .cart-badge, .mobile-cart-badge {
             background: #fbbf24 !important; /* Желтый для корзины */
             border: 2px solid #000 !important;
             border-radius: 50% !important;
-            width: 12px !important;
-            height: 12px !important;
-            position: absolute !important;
-            top: -4px !important;
-            right: -4px !important;
+            width: 14px !important;
+            height: 14px !important;
+            font-size: 8px !important;
+            font-weight: bold !important;
+            color: #000 !important; /* Черный текст на желтом фоне */
             z-index: 10 !important;
-            display: block !important;
+            line-height: 14px !important;
+            text-align: center !important;
             padding: 0 !important;
             margin: 0 !important;
-            font-size: 0 !important;
-            line-height: 0 !important;
-            text-align: center !important;
+            display: block !important;
         }
 
 /* Стили для иконки сердца */

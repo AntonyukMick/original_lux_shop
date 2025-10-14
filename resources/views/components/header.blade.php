@@ -35,17 +35,13 @@ $auth = session('auth');
                 <!-- Иконка избранного -->
                 <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
                     <img src="{{ asset('image/icon-heart.jpg') }}" alt="Избранное" class="icon-image">
-                    @if($favoritesCount > 0)
-                        <div class="badge favorites-indicator"></div>
-                    @endif
+                    <div class="badge favorites-badge" id="favorites-badge">{{ $favoritesCount }}</div>
                 </div>
                 
                 <!-- Иконка корзины -->
                 <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
                     <img src="{{ asset('image/icon-cart.jpg') }}" alt="Корзина" class="icon-image">
-                    @if($cartCount > 0)
-                        <div class="badge cart-indicator"></div>
-                    @endif
+                    <div class="badge cart-badge" id="cart-badge">{{ $cartCount }}</div>
                 </div>
                 
                 @if(!$auth)
@@ -93,17 +89,13 @@ $auth = session('auth');
                 <!-- Иконка избранного -->
                 <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
                     <img src="{{ asset('image/icon-heart.jpg') }}" alt="Избранное" class="icon-image">
-                    @if($favoritesCount > 0)
-                        <div class="badge mobile-favorites-indicator"></div>
-                    @endif
+                    <div class="badge mobile-favorites-badge">{{ $favoritesCount }}</div>
                 </div>
                 
                 <!-- Иконка корзины -->
                 <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
                     <img src="{{ asset('image/icon-cart.jpg') }}" alt="Корзина" class="icon-image">
-                    @if($cartCount > 0)
-                        <div class="badge mobile-cart-indicator"></div>
-                    @endif
+                    <div class="badge mobile-cart-badge">{{ $cartCount }}</div>
                 </div>
                 
                 <!-- Иконка пользователя -->
