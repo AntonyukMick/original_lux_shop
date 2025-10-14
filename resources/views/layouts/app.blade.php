@@ -27,6 +27,9 @@
     <!-- Мобильные взаимодействия -->
     <script src="{{ asset('js/mobile-interactions.js') }}"></script>
     
+    <!-- Исправление изображений для Android -->
+    <script src="{{ asset('js/android-image-fix.js') }}"></script>
+    
     @yield('scripts')
 </body>
 </html>

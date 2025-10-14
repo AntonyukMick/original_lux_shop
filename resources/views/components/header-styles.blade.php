@@ -156,7 +156,7 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
             height: 14px;
             font-size: 8px;
             font-weight: bold;
-            color: #000;
+            color: rgb(255,215,0);
             z-index: 10;
             line-height: 14px;
             text-align: center;
@@ -165,44 +165,9 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
             display: block;
         }
 
-        .icon-container .badge.hidden {
-            display: none;
-        }
-
-        /* Цветовые счетчики */
-        .favorites-badge, .mobile-favorites-badge {
-            background: #ef4444 !important; /* Красный для избранного */
-            border: 2px solid #000 !important;
-            border-radius: 50% !important;
-            width: 14px !important;
-            height: 14px !important;
-            font-size: 8px !important;
-            font-weight: bold !important;
-            color: #fff !important; /* Белый текст на красном фоне */
-            z-index: 10 !important;
-            line-height: 14px !important;
-            text-align: center !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            display: block !important;
-        }
-
-        .cart-badge, .mobile-cart-badge {
-            background: #fbbf24 !important; /* Желтый для корзины */
-            border: 2px solid #000 !important;
-            border-radius: 50% !important;
-            width: 14px !important;
-            height: 14px !important;
-            font-size: 8px !important;
-            font-weight: bold !important;
-            color: #000 !important; /* Черный текст на желтом фоне */
-            z-index: 10 !important;
-            line-height: 14px !important;
-            text-align: center !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            display: block !important;
-        }
+.icon-container .badge.hidden {
+    display: none;
+}
 
 /* Стили для иконки сердца */
 .heart-icon {
@@ -295,6 +260,23 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     transform: translate(-50%, -50%) scale(1.1);
 }
 
+/* Стили для fallback иконок */
+.icon-fallback {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 20px;
+    color: #FFD700;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+    font-weight: bold;
+}
+
 /* ======================================
    МОБИЛЬНАЯ АДАПТИВНОСТЬ ХЕДЕРА
    ====================================== */
@@ -364,14 +346,15 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
         height: 20px;
     }
     
-    .icon-container .badge {
-        width: 10px;
-        height: 10px;
-        font-size: 6px;
-        line-height: 10px;
-        top: -2px;
-        right: -2px;
-    }
+            .icon-container .badge {
+                width: 10px;
+                height: 10px;
+                font-size: 6px;
+                line-height: 10px;
+                top: -2px;
+                right: -2px;
+                color: rgb(255,215,0);
+            }
     
     
     /* Основные иконки остаются видимыми */
