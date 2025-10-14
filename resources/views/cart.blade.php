@@ -4,8 +4,324 @@
 
 @section('styles')
 <link rel="stylesheet" href="{{ asset('css/empty-states.css') }}">
-    @include('components.header-styles')
 <style>
+        /* Стили хедера (копия с главной страницы) */
+        header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
+
+        /* Десктопный хедер - показываем только на десктопе */
+        .desktop-header{display:block}
+        .mobile-header{display:none}
+
+        /* Десктопный хедер (старый стиль) */
+        .desktop-header .bar{display:flex;align-items:center;gap:3px;padding:4px 6px;width:100%;flex-wrap:nowrap;overflow:hidden}
+
+        /* Мобильный хедер - показываем только на мобильных */
+        .mobile-header .bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;width:100%;flex-wrap:nowrap;position:relative}
+
+        /* Новая структура для мобильного хедера */
+        .mobile-header .header-left{display:flex;align-items:center;gap:6px;flex-shrink:0;z-index:2}
+        .mobile-header .header-center{display:flex;align-items:center;justify-content:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:1}
+        .mobile-header .header-center .brand{pointer-events:auto}
+        .mobile-header .header-right{display:flex;align-items:center;gap:6px;flex-shrink:0;z-index:2}
+
+        /* Обновленные стили для всех элементов хедера */
+        .btn {
+            height: 36px;
+            padding: 0 8px;
+            border-radius: 6px;
+            border: 2px solid #000;
+            background: #fff;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #000;
+            transition: all 0.2s ease;
+            line-height: 1;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .brand {
+            margin-left: 4px;
+            background: rgb(151, 173, 200);
+            border: 2px solid #000;
+            border-radius: 6px;
+            padding: 6px 8px;
+            font-weight: 700;
+            height: auto;
+            min-height: 36px;
+            font-size: 12px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            line-height: 1;
+            flex-shrink: 0;
+            color: rgb(21, 36, 35);
+            text-align: center;
+            gap: 2px;
+        }
+
+        /* Специальный стиль для мобильного бренда (без подзаголовка) */
+        .mobile-brand {
+            flex-direction: row !important;
+            height: auto !important;
+            min-height: 36px !important;
+            padding: 6px 12px !important;
+            font-size: 13px !important;
+            font-weight: 700 !important;
+            white-space: nowrap !important;
+            line-height: 1 !important;
+            gap: 0 !important;
+        }
+
+        .brand:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Новые стили для иконок избранного и корзины */
+        .icon-container {
+            position: relative;
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 6px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            margin: 0 2px;
+            line-height: 1;
+        }
+
+        .icon-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .icon-container .icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 22px;
+            color: #FFD700;
+        }
+
+        .icon-container .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #FFD700;
+            border: 2px solid #000;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            font-size: 8px;
+            font-weight: bold;
+            color: #000;
+            z-index: 10;
+            line-height: 14px;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            display: block;
+        }
+
+        .icon-container .badge.hidden {
+            display: none;
+        }
+
+        /* Стили для изображений иконок */
+        .icon-image {
+            width: 28px;
+            height: 28px;
+            object-fit: cover;
+            border-radius: 4px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.2s ease;
+        }
+
+        /* Стили для мобильного хедера - изображения иконок */
+        .mobile-header .icon-image {
+            width: 28px;
+            height: 28px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* Стили для эмодзи иконок в мобильном хедере */
+        .mobile-header .home-icon {
+            font-size: 20px;
+            color: #FFD700;
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-weight: bold;
+        }
+
+        .mobile-header .user-icon {
+            font-size: 20px;
+            color: #0066cc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .icon-container:hover .icon-image {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        /* МОБИЛЬНАЯ АДАПТИВНОСТЬ ХЕДЕРА */
+        /* Мобильные устройства (портрет) - до 480px */
+        @media (max-width: 480px) {
+            /* Переключаем хедеры */
+            .desktop-header{display:none !important}
+            .mobile-header{display:block !important}
+            
+            .mobile-header .bar {
+                padding: 6px 8px;
+                gap: 2px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* Компактный бренд */
+            .brand {
+                padding: 4px 6px;
+                height: auto;
+                min-height: 32px;
+                margin-left: 2px;
+                flex-shrink: 0;
+                justify-content: center;
+                text-align: center;
+                gap: 1px;
+            }
+            
+            /* Мобильный бренд - компактный */
+            .mobile-brand {
+                font-size: 11px !important;
+                padding: 4px 8px !important;
+                min-height: 32px !important;
+            }
+            
+            /* Компактные кнопки */
+            .btn {
+                height: 32px;
+                padding: 0 6px;
+                font-size: 10px;
+                gap: 2px;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+            
+            /* Компактные иконки */
+            .icon-container {
+                width: 32px;
+                height: 32px;
+                margin: 0 1px;
+                flex-shrink: 0;
+            }
+            
+            .icon-image {
+                width: 20px;
+                height: 20px;
+            }
+            
+            .icon-container .badge {
+                width: 10px;
+                height: 10px;
+                font-size: 6px;
+                line-height: 10px;
+                top: -2px;
+                right: -2px;
+            }
+        }
+
+        /* Мобильные устройства (ландшафт) - 481px до 768px */
+        @media (min-width: 481px) and (max-width: 768px) {
+            /* Переключаем хедеры */
+            .desktop-header{display:none !important}
+            .mobile-header{display:block !important}
+            
+            .mobile-header .bar {
+                padding: 8px 12px;
+                gap: 4px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .brand {
+                padding: 6px 8px;
+                height: auto;
+                min-height: 36px;
+                flex-shrink: 0;
+                justify-content: center;
+                text-align: center;
+                gap: 2px;
+            }
+            
+            /* Мобильный бренд для планшетов */
+            .mobile-brand {
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+                min-height: 36px !important;
+            }
+            
+            .btn {
+                height: 36px;
+                padding: 0 8px;
+                font-size: 12px;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+            
+            .icon-container {
+                width: 36px;
+                height: 36px;
+                margin: 0 2px;
+                flex-shrink: 0;
+            }
+            
+            .icon-image {
+                width: 24px;
+                height: 24px;
+            }
+        }
+
+        /* Десктопы - показываем все элементы */
+        @media (min-width: 769px) {
+            /* Переключаем хедеры */
+            .desktop-header{display:block !important}
+            .mobile-header{display:none !important}
+        }
+
         body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,"Noto Sans",sans-serif;background:#f1f5f9;color:#0f172a}
         .panel{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:24px;text-align:left}
         .row{display:grid;grid-template-columns:1fr 120px 120px 40px;gap:10px;align-items:center;border-bottom:1px solid #e2e8f0;padding:8px 0}
@@ -39,6 +355,106 @@
 @endsection
 
 @section('content')
+
+<!-- Мобильный хедер (копия с главной страницы) -->
+<header>
+    <!-- Десктопный хедер (скрыт на мобильных) -->
+    <div class="desktop-header">
+        <div class="container bar">
+            <button class="btn" onclick="window.location.href='/'">Закрыть</button>
+            <div style="margin-left:auto;display:flex;gap:6px;align-items:center;">
+                <!-- Иконка FAQ -->
+                <div class="icon-container" onclick="showModal('faq')" title="FAQ">
+                    <img src="{{ asset('image/icon-quest.jpg') }}" alt="FAQ" class="icon-image">
+                </div>
+                
+                <!-- Иконка Telegram -->
+                <div class="icon-container" onclick="window.open('https://t.me/+dKyI7xh_dLwwY2Qy', '_blank')" title="Telegram канал">
+                    <img src="{{ asset('image/icon-tg.jpg') }}" alt="Telegram" class="icon-image">
+                </div>
+                
+                <span class="brand" onclick="location.reload()" style="cursor:pointer" title="Обновить страницу">ORIGINAL | LUX SHOP</span>
+                
+                <!-- Иконка избранного -->
+                <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
+                    <img src="{{ asset('image/icon-heart.jpg') }}" alt="Избранное" class="icon-image">
+                    <div class="badge" id="favorites-badge">0</div>
+                </div>
+                
+                <!-- Иконка корзины -->
+                <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
+                    <img src="{{ asset('image/icon-cart.jpg') }}" alt="Корзина" class="icon-image">
+                    <div class="badge" id="cart-badge">0</div>
+                </div>
+                
+                @if(!session('auth'))
+                    <a class="btn" href="/login" style="text-decoration:none;color:inherit">
+                        <span class="login-icon">👤</span> Войти
+                    </a>
+                @else
+                    <a class="btn" href="/profile" style="text-decoration:none;color:inherit" title="Профиль">👤 {{ session('auth')['role'] === 'admin' ? 'Админ' : 'Профиль' }}</a>
+                    <a class="btn" href="/logout" style="text-decoration:none;color:inherit" title="Выйти">🚪</a>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- Мобильный хедер (новый с изображениями) -->
+    <div class="mobile-header">
+        <div class="container bar">
+            <!-- Левая группа иконок -->
+            <div class="header-left">
+                <!-- Иконка главной страницы (домик) -->
+                <div class="icon-container" onclick="window.location.href='/'" title="Главная страница">
+                    <div class="home-icon">🏠</div>
+                </div>
+                
+                <!-- Иконка FAQ -->
+                <div class="icon-container" onclick="showModal('faq')" title="FAQ">
+                    <img src="{{ asset('image/icon-quest.jpg') }}" alt="FAQ" class="icon-image">
+                </div>
+                
+                <!-- Иконка Telegram -->
+                <div class="icon-container" onclick="window.open('https://t.me/+dKyI7xh_dLwwY2Qy', '_blank')" title="Telegram канал">
+                    <img src="{{ asset('image/icon-tg.jpg') }}" alt="Telegram" class="icon-image">
+                </div>
+            </div>
+            
+            <!-- Название по центру -->
+            <div class="header-center">
+                <div class="brand mobile-brand" onclick="location.reload()" style="cursor:pointer" title="Обновить страницу">
+                    ORIGINAL | LUX SHOP
+                </div>
+            </div>
+            
+            <!-- Правая группа иконок -->
+            <div class="header-right">
+                <!-- Иконка избранного -->
+                <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
+                    <img src="{{ asset('image/icon-heart.jpg') }}" alt="Избранное" class="icon-image">
+                    <div class="badge mobile-favorites-badge">0</div>
+                </div>
+                
+                <!-- Иконка корзины -->
+                <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
+                    <img src="{{ asset('image/icon-cart.jpg') }}" alt="Корзина" class="icon-image">
+                    <div class="badge mobile-cart-badge">0</div>
+                </div>
+                
+                <!-- Иконка пользователя -->
+                @if(!session('auth'))
+                    <div class="icon-container" onclick="window.location.href='/login'" title="Войти">
+                        <div class="user-icon">👤</div>
+                    </div>
+                @else
+                    <div class="icon-container" onclick="window.location.href='/profile'" title="Профиль">
+                        <div class="user-icon">👤</div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</header>
 
     <div class="container">
         <div class="panel">
