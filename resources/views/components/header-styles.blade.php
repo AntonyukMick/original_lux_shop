@@ -165,9 +165,10 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
             display: block;
         }
 
-.icon-container .badge.hidden {
-    display: none;
-}
+        .icon-container .badge.hidden,
+        .icon-container .badge[data-count="0"] {
+            display: none !important;
+        }
 
 /* Стили для иконки сердца */
 .heart-icon {

@@ -38,14 +38,14 @@ $auth = session('auth');
                 <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
                     <img src="{{ asset('image/icon-heart.jpg') }}?v={{ time() }}" alt="Избранное" class="icon-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">❤️</div>
-                    <div class="badge" id="favorites-badge">{{ $favoritesCount }}</div>
+                    <div class="badge" id="favorites-badge" data-count="{{ $favoritesCount }}">{{ $favoritesCount }}</div>
                 </div>
                 
                 <!-- Иконка корзины -->
                 <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
                     <img src="{{ asset('image/icon-cart.jpg') }}?v={{ time() }}" alt="Корзина" class="icon-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">🛒</div>
-                    <div class="badge" id="cart-badge">{{ $cartCount }}</div>
+                    <div class="badge" id="cart-badge" data-count="{{ $cartCount }}">{{ $cartCount }}</div>
                 </div>
                 
                 @if(!$auth)
@@ -96,14 +96,14 @@ $auth = session('auth');
                 <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
                     <img src="{{ asset('image/icon-heart.jpg') }}?v={{ time() }}" alt="Избранное" class="icon-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">❤️</div>
-                    <div class="badge mobile-favorites-badge">{{ $favoritesCount }}</div>
+                    <div class="badge mobile-favorites-badge" data-count="{{ $favoritesCount }}">{{ $favoritesCount }}</div>
                 </div>
                 
                 <!-- Иконка корзины -->
                 <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
                     <img src="{{ asset('image/icon-cart.jpg') }}?v={{ time() }}" alt="Корзина" class="icon-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">🛒</div>
-                    <div class="badge mobile-cart-badge">{{ $cartCount }}</div>
+                    <div class="badge mobile-cart-badge" data-count="{{ $cartCount }}">{{ $cartCount }}</div>
                 </div>
                 
                 <!-- Иконка пользователя -->

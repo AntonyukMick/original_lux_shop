@@ -3,6 +3,48 @@
  * Принудительно обновляет кэш изображений и обеспечивает fallback
  */
 
+// Функция для обновления счетчиков и скрытия пустых badges
+function updateHeaderCounters() {
+    console.log('🔄 Обновление счетчиков хедера...');
+    
+    // Получаем данные из localStorage
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    
+    const favoritesCount = favorites.length;
+    const cartCount = cart.length;
+    
+    console.log(`📊 Счетчики: Избранное: ${favoritesCount}, Корзина: ${cartCount}`);
+    
+    // Обновляем все badges
+    const badges = document.querySelectorAll('.badge');
+    badges.forEach(badge => {
+        if (badge.id === 'favorites-badge' || badge.classList.contains('mobile-favorites-badge')) {
+            badge.textContent = favoritesCount;
+            badge.setAttribute('data-count', favoritesCount);
+            
+            // Скрываем если пусто
+            if (favoritesCount === 0) {
+                badge.style.display = 'none';
+            } else {
+                badge.style.display = 'block';
+            }
+        }
+        
+        if (badge.id === 'cart-badge' || badge.classList.contains('mobile-cart-badge')) {
+            badge.textContent = cartCount;
+            badge.setAttribute('data-count', cartCount);
+            
+            // Скрываем если пусто
+            if (cartCount === 0) {
+                badge.style.display = 'none';
+            } else {
+                badge.style.display = 'block';
+            }
+        }
+    });
+}
+
 // Функция для принудительного обновления изображений
 function forceImageReload() {
     const images = document.querySelectorAll('.icon-image');
@@ -112,21 +154,42 @@ function initImageFix() {
     // Добавляем обработчики ошибок
     addImageErrorHandlers();
     
+    // Обновляем счетчики
+    updateHeaderCounters();
+    
     // Проверяем изображения после загрузки DOM
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', checkAndFixImages);
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAndFixImages();
+            updateHeaderCounters();
+        });
     } else {
         checkAndFixImages();
+        updateHeaderCounters();
     }
     
     // Дополнительная проверка через 2 секунды (для медленных соединений)
-    setTimeout(checkAndFixImages, 2000);
+    setTimeout(function() {
+        checkAndFixImages();
+        updateHeaderCounters();
+    }, 2000);
     
     // Принудительное обновление для Android устройств
     if (isAndroidDevice()) {
         console.log('🤖 Android устройство обнаружено, применяем дополнительные исправления...');
-        setTimeout(forceImageReload, 3000);
+        setTimeout(function() {
+            forceImageReload();
+            updateHeaderCounters();
+        }, 3000);
     }
+    
+    // Обновляем счетчики при изменении localStorage
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'favorites' || e.key === 'cart') {
+            console.log('📦 Изменение в localStorage, обновляем счетчики...');
+            updateHeaderCounters();
+        }
+    });
 }
 
 // Запускаем исправления
@@ -135,3 +198,4 @@ initImageFix();
 // Экспортируем функции для глобального использования
 window.forceImageReload = forceImageReload;
 window.checkAndFixImages = checkAndFixImages;
+window.updateHeaderCounters = updateHeaderCounters;
