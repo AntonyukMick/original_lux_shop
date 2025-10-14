@@ -11,6 +11,7 @@ use App\Http\Controllers\OrderPdfController;
 use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\TelegramBotController;
+use App\Http\Controllers\ApiController;
 use App\Models\VideoLink;
 
 // Главная страница
@@ -108,6 +109,12 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::get('/videos', [AdminController::class, 'videos'])->name('videos.index');
     Route::post('/videos', [AdminController::class, 'storeVideo'])->name('videos.store');
     Route::delete('/videos/{id}', [AdminController::class, 'deleteVideo'])->name('videos.delete');
+});
+
+// API маршруты для синхронизации счетчиков
+Route::prefix('api')->group(function () {
+    Route::get('/counters', [ApiController::class, 'getCounters'])->name('api.counters');
+    Route::post('/sync', [ApiController::class, 'syncCounters'])->name('api.sync');
 });
 
 // Telegram Bot маршруты

@@ -3,16 +3,87 @@
  * Принудительно обновляет кэш изображений и обеспечивает fallback
  */
 
-// Функция для обновления счетчиков и скрытия пустых badges
-function updateHeaderCounters() {
-    console.log('🔄 Обновление счетчиков хедера...');
+// Функция для получения счетчиков с сервера
+async function getServerCounters() {
+    try {
+        const response = await fetch('/api/counters');
+        const data = await response.json();
+        
+        if (data.success) {
+            console.log('📡 Получены счетчики с сервера:', data);
+            return {
+                favoritesCount: data.favorites_count,
+                cartCount: data.cart_count
+            };
+        }
+    } catch (error) {
+        console.warn('❌ Ошибка получения счетчиков с сервера:', error);
+    }
     
-    // Получаем данные из localStorage
+    // Fallback к localStorage
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     
-    const favoritesCount = favorites.length;
-    const cartCount = cart.length;
+    return {
+        favoritesCount: favorites.length,
+        cartCount: cart.length
+    };
+}
+
+// Функция для синхронизации localStorage с сервером
+async function syncWithServer() {
+    try {
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        
+        const response = await fetch('/api/sync', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            },
+            body: JSON.stringify({
+                favorites: favorites,
+                cart: cart
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            console.log('🔄 Синхронизация с сервером успешна:', data);
+            return {
+                favoritesCount: data.favorites_count,
+                cartCount: data.cart_count
+            };
+        }
+    } catch (error) {
+        console.warn('❌ Ошибка синхронизации с сервером:', error);
+    }
+    
+    return null;
+}
+
+// Функция для обновления счетчиков и скрытия пустых badges
+async function updateHeaderCounters() {
+    console.log('🔄 Обновление счетчиков хедера...');
+    
+    // Сначала пытаемся получить данные с сервера
+    let counters = await getServerCounters();
+    
+    // Если есть данные в localStorage, синхронизируем с сервером
+    const localFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const localCart = JSON.parse(localStorage.getItem('cart') || '[]');
+    
+    if (localFavorites.length > 0 || localCart.length > 0) {
+        const syncResult = await syncWithServer();
+        if (syncResult) {
+            counters = syncResult;
+        }
+    }
+    
+    const favoritesCount = counters.favoritesCount;
+    const cartCount = counters.cartCount;
     
     console.log(`📊 Счетчики: Избранное: ${favoritesCount}, Корзина: ${cartCount}`);
     
