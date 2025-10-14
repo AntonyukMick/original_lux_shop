@@ -35,13 +35,17 @@ $auth = session('auth');
                 <!-- Иконка избранного -->
                 <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
                     <img src="{{ asset('image/icon-heart.jpg') }}" alt="Избранное" class="icon-image">
-                    <div class="badge" id="favorites-badge">{{ $favoritesCount }}</div>
+                    @if($favoritesCount > 0)
+                        <div class="badge favorites-badge">{{ $favoritesCount }}</div>
+                    @endif
                 </div>
                 
                 <!-- Иконка корзины -->
                 <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
                     <img src="{{ asset('image/icon-cart.jpg') }}" alt="Корзина" class="icon-image">
-                    <div class="badge" id="cart-badge">{{ $cartCount }}</div>
+                    @if($cartCount > 0)
+                        <div class="badge cart-badge">{{ $cartCount }}</div>
+                    @endif
                 </div>
                 
                 @if(!$auth)
@@ -89,13 +93,17 @@ $auth = session('auth');
                 <!-- Иконка избранного -->
                 <div class="icon-container" onclick="window.location.href='/favorites'" title="Избранное">
                     <img src="{{ asset('image/icon-heart.jpg') }}" alt="Избранное" class="icon-image">
-                    <div class="badge mobile-favorites-badge">{{ $favoritesCount }}</div>
+                    @if($favoritesCount > 0)
+                        <div class="badge mobile-favorites-badge">{{ $favoritesCount }}</div>
+                    @endif
                 </div>
                 
                 <!-- Иконка корзины -->
                 <div class="icon-container" onclick="window.location.href='/cart'" title="Корзина">
                     <img src="{{ asset('image/icon-cart.jpg') }}" alt="Корзина" class="icon-image">
-                    <div class="badge mobile-cart-badge">{{ $cartCount }}</div>
+                    @if($cartCount > 0)
+                        <div class="badge mobile-cart-badge">{{ $cartCount }}</div>
+                    @endif
                 </div>
                 
                 <!-- Иконка пользователя -->

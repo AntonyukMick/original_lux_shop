@@ -13,26 +13,49 @@ function updateHeaderCounters() {
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     
-    // Обновляем счетчик избранного
-    const favoritesBadge = document.getElementById('favorites-badge');
+    // Обновляем счетчик избранного - ДЕСКТОП
+    const favoritesBadge = document.querySelector('.favorites-badge');
     if (favoritesBadge) {
         if (favorites.length > 0) {
             favoritesBadge.textContent = favorites.length;
-            favoritesBadge.classList.remove('hidden');
+            favoritesBadge.style.display = 'block';
         } else {
-            favoritesBadge.classList.add('hidden');
+            favoritesBadge.style.display = 'none';
         }
     }
     
-    // Обновляем счетчик корзины (суммируем количество всех товаров)
-    const cartBadge = document.getElementById('cart-badge');
+    // Обновляем счетчик избранного - МОБИЛЬНЫЙ
+    const mobileFavoritesBadge = document.querySelector('.mobile-favorites-badge');
+    if (mobileFavoritesBadge) {
+        if (favorites.length > 0) {
+            mobileFavoritesBadge.textContent = favorites.length;
+            mobileFavoritesBadge.style.display = 'block';
+        } else {
+            mobileFavoritesBadge.style.display = 'none';
+        }
+    }
+    
+    // Обновляем счетчик корзины - ДЕСКТОП
+    const cartBadge = document.querySelector('.cart-badge');
     if (cartBadge) {
         const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
         if (totalItems > 0) {
             cartBadge.textContent = totalItems;
-            cartBadge.classList.remove('hidden');
+            cartBadge.style.display = 'block';
         } else {
-            cartBadge.classList.add('hidden');
+            cartBadge.style.display = 'none';
+        }
+    }
+    
+    // Обновляем счетчик корзины - МОБИЛЬНЫЙ
+    const mobileCartBadge = document.querySelector('.mobile-cart-badge');
+    if (mobileCartBadge) {
+        const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+        if (totalItems > 0) {
+            mobileCartBadge.textContent = totalItems;
+            mobileCartBadge.style.display = 'block';
+        } else {
+            mobileCartBadge.style.display = 'none';
         }
     }
 }

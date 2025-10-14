@@ -165,6 +165,15 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
             display: block;
         }
 
+        /* Специальные цвета для счетчиков */
+        .favorites-badge, .mobile-favorites-badge {
+            background: #ff4444 !important; /* Красный для избранного */
+        }
+
+        .cart-badge, .mobile-cart-badge {
+            background: #FFD700 !important; /* Желтый для корзины */
+        }
+
 .icon-container .badge.hidden {
     display: none;
 }
