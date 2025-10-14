@@ -13,49 +13,26 @@ function updateHeaderCounters() {
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     
-    // Обновляем счетчик избранного - ДЕСКТОП
-    const favoritesBadge = document.querySelector('.favorites-badge');
+    // Обновляем счетчик избранного
+    const favoritesBadge = document.getElementById('favorites-badge');
     if (favoritesBadge) {
         if (favorites.length > 0) {
             favoritesBadge.textContent = favorites.length;
-            favoritesBadge.style.display = 'block';
+            favoritesBadge.classList.remove('hidden');
         } else {
-            favoritesBadge.style.display = 'none';
+            favoritesBadge.classList.add('hidden');
         }
     }
     
-    // Обновляем счетчик избранного - МОБИЛЬНЫЙ
-    const mobileFavoritesBadge = document.querySelector('.mobile-favorites-badge');
-    if (mobileFavoritesBadge) {
-        if (favorites.length > 0) {
-            mobileFavoritesBadge.textContent = favorites.length;
-            mobileFavoritesBadge.style.display = 'block';
-        } else {
-            mobileFavoritesBadge.style.display = 'none';
-        }
-    }
-    
-    // Обновляем счетчик корзины - ДЕСКТОП
-    const cartBadge = document.querySelector('.cart-badge');
+    // Обновляем счетчик корзины (суммируем количество всех товаров)
+    const cartBadge = document.getElementById('cart-badge');
     if (cartBadge) {
         const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
         if (totalItems > 0) {
             cartBadge.textContent = totalItems;
-            cartBadge.style.display = 'block';
+            cartBadge.classList.remove('hidden');
         } else {
-            cartBadge.style.display = 'none';
-        }
-    }
-    
-    // Обновляем счетчик корзины - МОБИЛЬНЫЙ
-    const mobileCartBadge = document.querySelector('.mobile-cart-badge');
-    if (mobileCartBadge) {
-        const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-        if (totalItems > 0) {
-            mobileCartBadge.textContent = totalItems;
-            mobileCartBadge.style.display = 'block';
-        } else {
-            mobileCartBadge.style.display = 'none';
+            cartBadge.classList.add('hidden');
         }
     }
 }

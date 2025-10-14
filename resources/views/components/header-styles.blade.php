@@ -165,18 +165,46 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
             display: block;
         }
 
-        /* Специальные цвета для счетчиков */
-        .favorites-badge, .mobile-favorites-badge {
-            background: #ff4444 !important; /* Красный для избранного */
+        .icon-container .badge.hidden {
+            display: none;
         }
 
-        .cart-badge, .mobile-cart-badge {
-            background: #FFD700 !important; /* Желтый для корзины */
+        /* Цветовые индикаторы вместо цифр */
+        .favorites-indicator, .mobile-favorites-indicator {
+            background: #ef4444 !important; /* Красный для избранного */
+            border: 2px solid #000 !important;
+            border-radius: 50% !important;
+            width: 12px !important;
+            height: 12px !important;
+            position: absolute !important;
+            top: -4px !important;
+            right: -4px !important;
+            z-index: 10 !important;
+            display: block !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            font-size: 0 !important;
+            line-height: 0 !important;
+            text-align: center !important;
         }
 
-.icon-container .badge.hidden {
-    display: none;
-}
+        .cart-indicator, .mobile-cart-indicator {
+            background: #fbbf24 !important; /* Желтый для корзины */
+            border: 2px solid #000 !important;
+            border-radius: 50% !important;
+            width: 12px !important;
+            height: 12px !important;
+            position: absolute !important;
+            top: -4px !important;
+            right: -4px !important;
+            z-index: 10 !important;
+            display: block !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            font-size: 0 !important;
+            line-height: 0 !important;
+            text-align: center !important;
+        }
 
 /* Стили для иконки сердца */
 .heart-icon {
