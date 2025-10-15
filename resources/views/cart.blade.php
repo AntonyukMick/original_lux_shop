@@ -51,7 +51,7 @@
                 <strong>Итого: <span id="total-amount">0</span>€</strong>
                 <div style="display: flex; gap: 12px; margin-top: 16px;">
                     <button class="btn" onclick="checkout()" style="background:#48bb78;color:#ffffff;font-weight:600;flex:1;">Оформить заказ</button>
-                    <a href="{{ route('simple-order.show') }}" class="btn" style="background:#527ea6;color:#ffffff;font-weight:600;flex:1;text-decoration:none;text-align:center;padding:12px;">📱 Простое оформление</a>
+                    <button class="btn" onclick="simpleCheckout()" style="background:#527ea6;color:#ffffff;font-weight:600;flex:1;">📱 Простое оформление</button>
                 </div>
             </div>
         </div>
@@ -396,6 +396,37 @@
             setTimeout(() => {
                 clearCart();
             }, 1000);
+        }
+        
+        // Функция для простого оформления заказа
+        async function simpleCheckout() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (cart.length === 0) {
+                alert('Корзина пуста');
+                return;
+            }
+            
+            try {
+                // Синхронизируем корзину с сервером
+                const response = await fetch('{{ route("cart.sync") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ cart: cart })
+                });
+                
+                if (response.ok) {
+                    // Переходим на страницу простого заказа
+                    window.location.href = '{{ route("simple-order.show") }}';
+                } else {
+                    alert('Ошибка синхронизации корзины. Попробуйте еще раз.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Произошла ошибка. Попробуйте еще раз.');
+            }
         }
         
         // Предварительный просмотр удален по требованию

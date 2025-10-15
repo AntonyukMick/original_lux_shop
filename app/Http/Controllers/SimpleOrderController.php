@@ -68,8 +68,11 @@ class SimpleOrderController extends Controller
         try {
             $cart = session('cart', []);
             if (empty($cart)) {
+                Log::info('Simple order: cart is empty', ['session_cart' => $cart]);
                 return redirect()->route('cart.index')->with('error', 'Корзина пуста');
             }
+
+            Log::info('Simple order: processing cart', ['cart' => $cart]);
 
             $total = array_sum(array_map(function($item) {
                 return $item['price'] * $item['quantity'];

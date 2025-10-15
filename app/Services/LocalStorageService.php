@@ -26,7 +26,7 @@ class LocalStorageService
                             'id' => $product->id,
                             'title' => $product->title,
                             'price' => (float) $product->price,
-                            'qty' => (int) $item['quantity'],
+                            'quantity' => (int) $item['quantity'],
                             'image' => $product->images[0] ?? null
                         ];
                     }

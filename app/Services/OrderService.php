@@ -13,10 +13,14 @@ class OrderService
      */
     public function createOrder($data, $cart)
     {
+        Log::info('OrderService: creating order', ['data' => $data, 'cart' => $cart]);
+        
         // Расчет сумм
         $subtotal = $this->calculateSubtotal($cart);
         $shippingCost = $this->calculateShippingCost($subtotal);
         $total = $subtotal + $shippingCost;
+
+        Log::info('OrderService: calculated amounts', ['subtotal' => $subtotal, 'shipping' => $shippingCost, 'total' => $total]);
 
         // Создание заказа
         $order = Order::create([
@@ -53,7 +57,7 @@ class OrderService
                 'order_id' => $order->id,
                 'product_title' => $item['title'],
                 'price' => $item['price'],
-                'quantity' => $item['qty'],
+                'quantity' => $item['quantity'] ?? $item['qty'] ?? 1,
                 'product_image' => $item['image'] ?? null
             ]);
         }
@@ -66,7 +70,8 @@ class OrderService
     {
         $subtotal = 0;
         foreach ($cart as $item) {
-            $subtotal += $item['price'] * $item['qty'];
+            $quantity = $item['quantity'] ?? $item['qty'] ?? 1;
+            $subtotal += $item['price'] * $quantity;
         }
         return $subtotal;
     }
