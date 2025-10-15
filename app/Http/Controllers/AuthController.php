@@ -150,10 +150,21 @@ class AuthController extends Controller
      */
     public function getCurrentUser()
     {
+        // Добавляем отладочную информацию
+        \Log::info('API getCurrentUser called', [
+            'auth_check' => auth()->check(),
+            'user_id' => auth()->id(),
+            'session_id' => session()->getId()
+        ]);
+
         if (!auth()->check()) {
             return response()->json([
                 'authenticated' => false,
-                'user' => null
+                'user' => null,
+                'debug' => [
+                    'session_id' => session()->getId(),
+                    'auth_check' => auth()->check()
+                ]
             ]);
         }
 
@@ -165,6 +176,10 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'telegram_tag' => $user->telegram_tag ?? ''
+            ],
+            'debug' => [
+                'session_id' => session()->getId(),
+                'auth_check' => auth()->check()
             ]
         ]);
     }

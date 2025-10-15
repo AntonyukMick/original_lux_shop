@@ -35,7 +35,7 @@ Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('
 Route::post('/register', [AuthController::class, 'register'])->name('auth.register.post');
 Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
 Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
-Route::get('/api/current-user', [AuthController::class, 'getCurrentUser'])->name('api.current-user');
+Route::get('/api/current-user', [AuthController::class, 'getCurrentUser'])->middleware('web')->name('api.current-user');
 
 // Товары
 Route::get('/catalog', [ProductController::class, 'index'])->name('products.index');
@@ -78,6 +78,11 @@ Route::get('/test-pdf', [TestPdfController::class, 'test'])->name('test.pdf');
 Route::get('/test-telegram-order', function () {
     return view('test-telegram-order');
 })->name('test.telegram.order');
+
+// Тестовая страница для API авторизации
+Route::get('/test-auth-api', function () {
+    return view('test-auth-api');
+})->name('test.auth.api');
 
 // Страницы
 Route::get('/about', function () {

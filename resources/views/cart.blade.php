@@ -360,9 +360,14 @@
         
         function showCustomerForm(cart) {
             // Сначала проверяем авторизацию пользователя
+            console.log('Checking user authentication...');
             fetch('{{ route("api.current-user") }}')
-                .then(response => response.json())
+                .then(response => {
+                    console.log('API response status:', response.status);
+                    return response.json();
+                })
                 .then(data => {
+                    console.log('API response data:', data);
                     createOrderModal(cart, data);
                 })
                 .catch(error => {

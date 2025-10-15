@@ -78,7 +78,10 @@ class TelegramPdfService
      */
     private function sendMessage(string $message)
     {
-        $response = Http::post("https://api.telegram.org/bot{$this->botToken}/sendMessage", [
+        $response = Http::withOptions([
+            'verify' => false, // Отключаем проверку SSL для локальной разработки
+            'timeout' => 30
+        ])->post("https://api.telegram.org/bot{$this->botToken}/sendMessage", [
             'chat_id' => $this->managerChatId,
             'text' => $message,
             'parse_mode' => 'HTML'
@@ -99,7 +102,10 @@ class TelegramPdfService
      */
     private function sendDocument(string $filePath, string $filename, string $orderNumber)
     {
-        $response = Http::attach('document', file_get_contents($filePath), $filename)
+        $response = Http::withOptions([
+            'verify' => false, // Отключаем проверку SSL для локальной разработки
+            'timeout' => 60
+        ])->attach('document', file_get_contents($filePath), $filename)
             ->post("https://api.telegram.org/bot{$this->botToken}/sendDocument", [
                 'chat_id' => $this->managerChatId,
                 'caption' => "📄 PDF заказа #{$orderNumber}",
