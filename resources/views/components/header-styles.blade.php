@@ -260,6 +260,20 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     transform: translate(-50%, -50%) scale(1.1);
 }
 
+/* Стили для fallback иконок (эмодзи) */
+.icon-fallback {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+}
+
 /* ======================================
    МОБИЛЬНАЯ АДАПТИВНОСТЬ ХЕДЕРА
    ====================================== */
