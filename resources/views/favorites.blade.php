@@ -331,5 +331,37 @@
             updateHeaderCounters();
         });
     </script>
+
+    <!-- FAQ Modal -->
+    <div id="faqModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000">
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:12px;padding:24px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                <h2 style="margin:0;color:#0f172a;font-size:24px;font-weight:700">Часто задаваемые вопросы</h2>
+                <button onclick="closeModal()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#64748b">&times;</button>
+            </div>
+            <div style="color:#374151;line-height:1.6">
+                <div style="margin-bottom:16px">
+                    <h3 style="color:#0f172a;font-size:18px;margin-bottom:8px">Как оформить заказ?</h3>
+                    <p>Выберите товар, добавьте в корзину и перейдите к оформлению заказа. Заполните контактные данные и выберите способ доставки.</p>
+                </div>
+                <div style="margin-bottom:16px">
+                    <h3 style="color:#0f172a;font-size:18px;margin-bottom:8px">Какие способы оплаты доступны?</h3>
+                    <p>Мы принимаем оплату наличными при получении, банковскими картами и электронными платежами.</p>
+                </div>
+                <div style="margin-bottom:16px">
+                    <h3 style="color:#0f172a;font-size:18px;margin-bottom:8px">Сколько стоит доставка?</h3>
+                    <p>Стоимость доставки зависит от региона и способа доставки. Подробную информацию вы найдете в разделе "Доставка".</p>
+                </div>
+                <div style="margin-bottom:16px">
+                    <h3 style="color:#0f172a;font-size:18px;margin-bottom:8px">Можно ли вернуть товар?</h3>
+                    <p>Да, вы можете вернуть товар в течение 14 дней с момента покупки при сохранении товарного вида и упаковки.</p>
+                </div>
+                <div style="margin-bottom:16px">
+                    <h3 style="color:#0f172a;font-size:18px;margin-bottom:8px">Как связаться с поддержкой?</h3>
+                    <p>Вы можете связаться с нами через Telegram канал или написать нам на почту. Мы отвечаем в течение 24 часов.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
