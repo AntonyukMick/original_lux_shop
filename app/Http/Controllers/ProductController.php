@@ -74,28 +74,13 @@ class ProductController extends Controller
      */
     public function show(string $id): View
     {
-        try {
-            \Log::info('ProductController::show called', ['id' => $id]);
-            
-            $product = $this->productService->getProductById($id);
-            \Log::info('Product found', ['product_id' => $product->id, 'title' => $product->title, 'is_active' => $product->is_active]);
-            
-            $similarProducts = $this->productService->getSimilarProducts($product);
-            \Log::info('Similar products found', ['count' => $similarProducts->count()]);
-            
-            // Преобразуем данные товара для совместимости с шаблоном
-            $productData = $this->productDataService->transformForDetail($product);
-            \Log::info('Product data transformed', ['productData' => $productData]);
-            
-            return view('product', compact('productData', 'similarProducts'));
-        } catch (\Exception $e) {
-            \Log::error('ProductController::show error', [
-                'id' => $id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            abort(404);
-        }
+        $product = $this->productService->getProductById($id);
+        $similarProducts = $this->productService->getSimilarProducts($product);
+        
+        // Преобразуем данные товара для совместимости с шаблоном
+        $productData = $this->productDataService->transformForDetail($product);
+        
+        return view('product', compact('productData', 'similarProducts'));
     }
 
     /**

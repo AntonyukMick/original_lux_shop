@@ -2319,291 +2319,37 @@ $auth = session('auth');
             <div>
                 <div class="section-title">ПОПУЛЯРНОЕ</div>
                 <div class="goods" id="goods">
-                    <article class="good" data-category="Обувь" data-brand="Nike" data-subcat="Лоферы" data-price="150">
+                    @if(isset($featuredProducts) && $featuredProducts->count() > 0)
+                        @foreach($featuredProducts as $product)
+                            <article class="good" data-category="{{ $product->category }}" data-brand="{{ $product->brand }}" data-subcat="{{ $product->subcat }}" data-price="{{ $product->price }}">
                         <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
                             <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Кроссовки Nike Air Force 1 x Louis Vuitton (синие)">
-                            <input type="hidden" name="price" value="150">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop">
+                                    <input type="hidden" name="title" value="{{ $product->title }}">
+                                    <input type="hidden" name="price" value="{{ $product->price }}">
+                                    <input type="hidden" name="image" value="{{ is_array($product->images) ? $product->images[0] : $product->image }}">
                             <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
                         </form>
-                        <a href="/product/1" style="text-decoration:none;color:inherit;display:block">
-                            <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop" alt="Кроссовки Nike Air Force 1 x Louis Vuitton">
+                                <a href="/product/{{ $product->id }}" style="text-decoration:none;color:inherit;display:block">
+                                    <img src="{{ is_array($product->images) ? $product->images[0] : $product->image }}" alt="{{ $product->title }}">
                             <div class="meta">
-                                <div>Кроссовки Nike Air Force 1 x Louis Vuitton (синие)</div>
-                                <div class="price">150€</div>
+                                        <div>{{ $product->title }}</div>
+                                        <div class="price">{{ $product->price }}€</div>
                             </div>
                         </a>
-                        <form method="post" action="/cart/add">
+                                <form method="post" action="/cart/add" style="margin-top:8px">
                             <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Кроссовки Nike Air Force 1 x Louis Vuitton (синие)">
-                            <input type="hidden" name="price" value="150">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop">
+                                    <input type="hidden" name="title" value="{{ $product->title }}">
+                                    <input type="hidden" name="price" value="{{ $product->price }}">
+                                    <input type="hidden" name="image" value="{{ is_array($product->images) ? $product->images[0] : $product->image }}">
                             <button class="btn" type="submit">Добавить в корзину</button>
                         </form>
                     </article>
-                    <article class="good" data-category="Сумки" data-brand="Louis Vuitton" data-subcat="Сумка через плечо" data-price="50">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Кошелек Goyard Saint Sulpice">
-                            <input type="hidden" name="price" value="60">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
-                        </form>
-                        <a href="/product/2" style="text-decoration:none;color:inherit;display:block">
-                            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop" alt="Кошелек Goyard Saint Sulpice">
-                            <div class="meta">
-                                <div>Кошелек Goyard Saint Sulpice</div>
-                                <div class="price">60€</div>
+                        @endforeach
+                    @else
+                        <div style="text-align: center; padding: 40px; color: #666;">
+                            <p>Популярные товары скоро появятся</p>
                             </div>
-                        </a>
-                        <form method="post" action="/cart/add">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Кошелек Goyard Saint Sulpice">
-                            <input type="hidden" name="price" value="60">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop">
-                            <button class="btn" type="submit">Добавить в корзину</button>
-                        </form>
-                    </article>
-                    <article class="good" data-category="Одежда" data-brand="Balenciaga" data-subcat="Зип-худи" data-price="60">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Зип‑худи Balenciaga Tape Type (чёрный)">
-                            <input type="hidden" name="price" value="60">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
-                        </form>
-                        <a href="/product/9" style="text-decoration:none;color:inherit;display:block">
-                            <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop" alt="Зип‑худи Balenciaga Tape Type (чёрный)">
-                            <div class="meta">
-                                <div>Зип‑худи Balenciaga Tape Type (чёрный)</div>
-                                <div class="price">60€</div>
-                            </div>
-                        </a>
-                        <form method="post" action="/cart/add">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Зип‑худи Balenciaga Tape Type (чёрный)">
-                            <input type="hidden" name="price" value="60">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop">
-                            <button class="btn" type="submit">Добавить в корзину</button>
-                        </form>
-                    </article>
-                    <article class="good" data-category="Одежда" data-brand="Stone Island" data-subcat="Шорты" data-price="55">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Шорты Stone Island (чёрные)">
-                            <input type="hidden" name="price" value="55">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
-                        </form>
-                        <a href="/product/10" style="text-decoration:none;color:inherit;display:block">
-                            <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop" alt="Шорты Stone Island (чёрные)">
-                            <div class="meta">
-                                <div>Шорты Stone Island (чёрные)</div>
-                                <div class="price">55€</div>
-                            </div>
-                        </a>
-                        <form method="post" action="/cart/add">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Шорты Stone Island (чёрные)">
-                            <input type="hidden" name="price" value="55">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop">
-                            <button class="btn" type="submit">Добавить в корзину</button>
-                        </form>
-                    </article>
-                    
-                    <!-- Дополнительные товары для демонстрации фильтрации -->
-                    <article class="good" data-category="Обувь" data-brand="Adidas" data-subcat="Кеды" data-price="120">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Кеды Adidas Stan Smith (белые)">
-                            <input type="hidden" name="price" value="120">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
-                        </form>
-                        <a href="/product/3" style="text-decoration:none;color:inherit;display:block">
-                            <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop" alt="Кеды Adidas Stan Smith">
-                            <div class="meta">
-                                <div>Кеды Adidas Stan Smith (белые)</div>
-                                <div class="price">120€</div>
-                            </div>
-                        </a>
-                        <form method="post" action="/cart/add">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Кеды Adidas Stan Smith (белые)">
-                            <input type="hidden" name="price" value="120">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop">
-                            <button class="btn" type="submit">Добавить в корзину</button>
-                        </form>
-                    </article>
-                    
-                    <article class="good" data-category="Обувь" data-brand="Puma" data-subcat="Кроссовки" data-price="95">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Кроссовки Puma RS-X (красные)">
-                            <input type="hidden" name="price" value="95">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1200&auto=format&fit=crop">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
-                        </form>
-                        <a href="/product/4" style="text-decoration:none;color:inherit;display:block">
-                            <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1200&auto=format&fit=crop" alt="Кроссовки Puma RS-X">
-                            <div class="meta">
-                                <div>Кроссовки Puma RS-X (красные)</div>
-                                <div class="price">95€</div>
-                            </div>
-                        </a>
-                        <form method="post" action="/cart/add">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Кроссовки Puma RS-X (красные)">
-                            <input type="hidden" name="price" value="95">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1200&auto=format&fit=crop">
-                            <button class="btn" type="submit">Добавить в корзину</button>
-                        </form>
-                    </article>
-                    
-                    <article class="good" data-category="Одежда" data-brand="Nike" data-subcat="Футболки" data-price="45">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Футболка Nike Dri-FIT (синяя)">
-                            <input type="hidden" name="price" value="45">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
-                        </form>
-                        <a href="/product/11" style="text-decoration:none;color:inherit;display:block">
-                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop" alt="Футболка Nike Dri-FIT">
-                            <div class="meta">
-                                <div>Футболка Nike Dri-FIT (синяя)</div>
-                                <div class="price">45€</div>
-                            </div>
-                        </a>
-                        <form method="post" action="/cart/add">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Футболка Nike Dri-FIT (синяя)">
-                            <input type="hidden" name="price" value="45">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop">
-                            <button class="btn" type="submit">Добавить в корзину</button>
-                        </form>
-                    </article>
-                    
-                    <article class="good" data-category="Сумки" data-brand="Gucci" data-subcat="Рюкзак" data-price="180">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Рюкзак Gucci Marmont (чёрный)">
-                            <input type="hidden" name="price" value="180">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
-                        </form>
-                        <a href="/product/17" style="text-decoration:none;color:inherit;display:block">
-                            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop" alt="Рюкзак Gucci Marmont">
-                            <div class="meta">
-                                <div>Рюкзак Gucci Marmont (чёрный)</div>
-                                <div class="price">180€</div>
-                            </div>
-                        </a>
-                        <form method="post" action="/cart/add">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Рюкзак Gucci Marmont (чёрный)">
-                            <input type="hidden" name="price" value="180">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop">
-                            <button class="btn" type="submit">Добавить в корзину</button>
-                        </form>
-                    </article>
-                    
-                    <article class="good" data-category="Часы" data-brand="Rolex" data-subcat="Механические" data-price="8500">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Часы Rolex Submariner (стальные)">
-                            <input type="hidden" name="price" value="8500">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
-                        </form>
-                        <a href="/product/21" style="text-decoration:none;color:inherit;display:block">
-                            <img src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop" alt="Часы Rolex Submariner">
-                            <div class="meta">
-                                <div>Часы Rolex Submariner (стальные)</div>
-                                <div class="price">8500€</div>
-                            </div>
-                        </a>
-                        <form method="post" action="/cart/add">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Часы Rolex Submariner (стальные)">
-                            <input type="hidden" name="price" value="8500">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop">
-                            <button class="btn" type="submit">Добавить в корзину</button>
-                        </form>
-                    </article>
-                    
-                    <article class="good" data-category="Украшения" data-brand="Cartier" data-subcat="Кольца" data-price="3200">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Кольцо Cartier Love (золотое)">
-                            <input type="hidden" name="price" value="3200">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
-                        </form>
-                        <a href="/product/26" style="text-decoration:none;color:inherit;display:block">
-                            <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop" alt="Кольцо Cartier Love">
-                            <div class="meta">
-                                <div>Кольцо Cartier Love (золотое)</div>
-                                <div class="price">3200€</div>
-                            </div>
-                        </a>
-                        <form method="post" action="/cart/add">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Кольцо Cartier Love (золотое)">
-                            <input type="hidden" name="price" value="3200">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop">
-                            <button class="btn" type="submit">Добавить в корзину</button>
-                        </form>
-                    </article>
-                    
-                    <article class="good" data-category="Аксессуары" data-brand="Ray-Ban" data-subcat="Очки" data-price="180">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Очки Ray-Ban Aviator (золотые)">
-                            <input type="hidden" name="price" value="180">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=1200&auto=format&fit=crop">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
-                        </form>
-                        <a href="/product/32" style="text-decoration:none;color:inherit;display:block">
-                            <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=1200&auto=format&fit=crop" alt="Очки Ray-Ban Aviator">
-                            <div class="meta">
-                                <div>Очки Ray-Ban Aviator (золотые)</div>
-                                <div class="price">180€</div>
-                            </div>
-                        </a>
-                        <form method="post" action="/cart/add">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Очки Ray-Ban Aviator (золотые)">
-                            <input type="hidden" name="price" value="180">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=1200&auto=format&fit=crop">
-                            <button class="btn" type="submit">Добавить в корзину</button>
-                        </form>
-                    </article>
-                    
-                    <article class="good" data-category="Часы" data-brand="Rolex" data-subcat="Механические" data-price="8500">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Часы Omega Speedmaster (чёрные)">
-                            <input type="hidden" name="price" value="4200">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
-                        </form>
-                                                <a href="/product/22" style="text-decoration:none;color:inherit;display:block">
-                            <img src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop" alt="Часы Omega Speedmaster">
-                            <div class="meta">
-                                <div>Часы Omega Speedmaster (чёрные)</div>
-                                <div class="price">4200€</div>
-                            </div>
-                        </a>
-                        <form method="post" action="/cart/add">
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" name="title" value="Часы Omega Speedmaster (чёрные)">
-                            <input type="hidden" name="price" value="4200">
-                            <input type="hidden" name="image" value="https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop">
-                            <button class="btn" type="submit">Добавить в корзину</button>
-                        </form>
-                    </article>
+                    @endif
                 </div>
                 
                 <!-- Кнопка "Перейти к другим" -->

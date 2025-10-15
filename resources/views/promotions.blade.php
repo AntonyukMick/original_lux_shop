@@ -95,6 +95,17 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
+    .promotion-card-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+    
+    .promotion-card-link:hover {
+        text-decoration: none;
+        color: inherit;
+    }
+    
     .discount-badge {
         position: absolute;
         top: 12px;
@@ -508,7 +519,8 @@
         @if($products->count() > 0)
             <div class="promotions-grid">
                 @foreach($products as $product)
-                    <div class="promotion-card">
+                    <a href="/product/{{ $product->id }}" class="promotion-card-link">
+                        <div class="promotion-card">
                         @php
                             $discount = 0;
                             $originalPrice = $product->original_price ?? 0;
@@ -519,7 +531,7 @@
                         @endphp
                         <div class="discount-badge">-{{ $discount }}%</div>
                         
-                        <button class="add-to-favorite-btn" onclick="toggleFavoriteSimple(null, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ $product->image ?? '' }}')" title="Добавить в избранное">
+                        <button class="add-to-favorite-btn" onclick="toggleFavoriteSimple(null, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ $product->image ?? '' }}', event)" title="Добавить в избранное">
                             ❤️
                         </button>
                         
@@ -546,11 +558,12 @@
                                 </div>
                             </div>
                             
-                            <button class="add-to-cart-btn" onclick="addToCartSimple(null, 1, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ $product->image ?? '' }}')">
+                            <button class="add-to-cart-btn" onclick="addToCartSimple(null, 1, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ $product->image ?? '' }}', event)">
                                 Добавить в корзину
                             </button>
                         </div>
-                    </div>
+                        </div>
+                    </a>
                 @endforeach
             </div>
         @else
@@ -736,7 +749,11 @@
     });
     
     // Простые функции для работы с корзиной и избранным
-    function addToCartSimple(productId, quantity, title, price, image) {
+    function addToCartSimple(productId, quantity, title, price, image, event) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
         console.log('addToCartSimple called:', {productId, quantity, title, price, image});
         
         let cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -761,7 +778,11 @@
         updateProductStatuses();
     }
     
-    function toggleFavoriteSimple(productId, title, price, image) {
+    function toggleFavoriteSimple(productId, title, price, image, event) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
         console.log('toggleFavoriteSimple called:', {productId, title, price, image});
         
         let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');

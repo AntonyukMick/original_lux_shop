@@ -36,7 +36,7 @@ class ProductService
      */
     public function getProductById($id)
     {
-        return Product::select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'description', 'stock_quantity', 'sku', 'weight', 'dimensions', 'created_at'])
+        return Product::where('is_active', true)
             ->findOrFail($id);
     }
 
@@ -78,7 +78,7 @@ class ProductService
             ->where('id', '!=', $product->id)
             ->where('is_active', true)
             ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'created_at'])
-            ->orderByRaw('RAND()') // Случайный порядок для разнообразия
+            ->inRandomOrder() // Случайный порядок для разнообразия
             ->limit($limit)
             ->get();
     }

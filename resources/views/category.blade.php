@@ -89,6 +89,17 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
+    .product-card-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+    
+    .product-card-link:hover {
+        text-decoration: none;
+        color: inherit;
+    }
+    
     .discount-badge {
         position: absolute;
         top: 12px;
@@ -386,7 +397,8 @@
                 @if(count($subcategory['products']) > 0)
                     <div class="products-grid">
                         @foreach($subcategory['products'] as $product)
-                            <div class="product-card">
+                            <a href="/product/{{ $product->id }}" class="product-card-link">
+                                <div class="product-card">
                                 @php
                                     $discount = 0;
                                     $originalPrice = $product->original_price ?? 0;
@@ -400,7 +412,7 @@
                                     <div class="discount-badge">-{{ $discount }}%</div>
                                 @endif
                                 
-                                <button class="add-to-favorite-btn" onclick="toggleFavoriteSimple({{ $product->id }}, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ is_array($product->images ?? null) ? ($product->images[0] ?? '') : ($product->image ?? '') }}')" title="Добавить в избранное">
+                                <button class="add-to-favorite-btn" onclick="toggleFavoriteSimple({{ $product->id }}, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ is_array($product->images ?? null) ? ($product->images[0] ?? '') : ($product->image ?? '') }}', event)" title="Добавить в избранное">
                                     🤍
                                 </button>
                                 
@@ -433,11 +445,12 @@
                                         </div>
                                     @endif
                                     
-                                    <button class="add-to-cart-btn" onclick="addToCartSimple({{ $product->id }}, 1, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ is_array($product->images ?? null) ? ($product->images[0] ?? '') : ($product->image ?? '') }}')">
+                                    <button class="add-to-cart-btn" onclick="addToCartSimple({{ $product->id }}, 1, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ is_array($product->images ?? null) ? ($product->images[0] ?? '') : ($product->image ?? '') }}', event)">
                                         Добавить в корзину
                                     </button>
                                 </div>
-                            </div>
+                                </div>
+                            </a>
                         @endforeach
                     </div>
                 @else
@@ -452,7 +465,11 @@
 
 <script>
     // Функции для управления корзиной и избранным (аналогично странице акций)
-    function addToCartSimple(productId, quantity, title, price, image) {
+    function addToCartSimple(productId, quantity, title, price, image, event) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
         console.log('addToCartSimple called:', {productId, quantity, title, price, image});
         
         let cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -472,7 +489,11 @@
         updateProductStatuses();
     }
     
-    function toggleFavoriteSimple(productId, title, price, image) {
+    function toggleFavoriteSimple(productId, title, price, image, event) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
         console.log('toggleFavoriteSimple called:', {productId, title, price, image});
         
         let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
