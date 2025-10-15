@@ -19,7 +19,7 @@ $auth = session('auth');
                 <!-- Иконка Telegram -->
                 <div class="icon-container" onclick="window.open('https://t.me/+dKyI7xh_dLwwY2Qy', '_blank')" title="Telegram канал">
                     <img src="{{ asset('image/icon-tg.jpg') }}" alt="Telegram" class="icon-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">✈️</div>
+                    <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">✉️</div>
                 </div>
                 
                 <!-- Иконка доставки -->
@@ -79,7 +79,7 @@ $auth = session('auth');
                 <!-- Иконка Telegram -->
                 <div class="icon-container" onclick="window.open('https://t.me/+dKyI7xh_dLwwY2Qy', '_blank')" title="Telegram канал">
                     <img src="{{ asset('image/icon-tg.jpg') }}" alt="Telegram" class="icon-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">✈️</div>
+                    <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">✉️</div>
                 </div>
             </div>
             
