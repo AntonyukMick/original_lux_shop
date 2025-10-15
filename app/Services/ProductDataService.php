@@ -41,19 +41,28 @@ class ProductDataService
      */
     public function transformForDetail($product)
     {
+        // Обрабатываем изображения
+        $images = $product->images;
+        if (is_string($images)) {
+            $images = json_decode($images, true) ?: [];
+        }
+        if (!is_array($images)) {
+            $images = [];
+        }
+        
         return [
             'id' => $product->id,
             'title' => $product->title,
             'price' => $product->price,
             'original_price' => $product->original_price,
-            'image' => $product->images[0] ?? 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop',
-            'images' => $product->images ?: ['https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop'],
+            'image' => $images[0] ?? 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop',
+            'images' => $images ?: ['https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop'],
             'description' => $product->description ?? 'Описание товара будет добавлено позже.',
             'brand' => $product->brand,
             'category' => $product->category,
             'subcategory' => $product->subcat,
             'size' => 'M',
-            'colors' => $this->generateColorsFromImages($product->images)
+            'colors' => $this->generateColorsFromImages($images)
         ];
     }
 
