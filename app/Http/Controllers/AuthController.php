@@ -144,4 +144,28 @@ class AuthController extends Controller
 
         return back()->with('success', 'Ссылка для сброса пароля отправлена на ваш email');
     }
+
+    /**
+     * Получить данные текущего пользователя для API
+     */
+    public function getCurrentUser()
+    {
+        if (!auth()->check()) {
+            return response()->json([
+                'authenticated' => false,
+                'user' => null
+            ]);
+        }
+
+        $user = auth()->user();
+        
+        return response()->json([
+            'authenticated' => true,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'telegram_tag' => $user->telegram_tag ?? ''
+            ]
+        ]);
+    }
 }

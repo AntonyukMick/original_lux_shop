@@ -354,43 +354,163 @@
                 return;
             }
             
-            // Создаем форму для отправки данных в PDF
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '{{ route("generate.order.pdf") }}';
-            
-            // Добавляем CSRF токен
-            const csrfToken = document.createElement('input');
-            csrfToken.type = 'hidden';
-            csrfToken.name = '_token';
-            csrfToken.value = '{{ csrf_token() }}';
-            form.appendChild(csrfToken);
-            
-            // Добавляем данные корзины
-            const cartItemsInput = document.createElement('input');
-            cartItemsInput.type = 'hidden';
-            cartItemsInput.name = 'cartItems';
-            cartItemsInput.value = JSON.stringify(cart);
-            form.appendChild(cartItemsInput);
-            
-            // Добавляем общую сумму
-            const totalInput = document.createElement('input');
-            totalInput.type = 'hidden';
-            totalInput.name = 'totalAmount';
-            totalInput.value = calculateTotal(cart);
-            form.appendChild(totalInput);
-            
-            // Добавляем форму на страницу и отправляем
-            document.body.appendChild(form);
-            form.submit();
-            
-            // Очищаем корзину после создания PDF
-            setTimeout(() => {
-                clearCart();
-            }, 1000);
+            // Показываем форму для ввода данных клиента
+            showCustomerForm(cart);
         }
         
-        // Предварительный просмотр удален по требованию
+        function showCustomerForm(cart) {
+            // Сначала проверяем авторизацию пользователя
+            fetch('{{ route("api.current-user") }}')
+                .then(response => response.json())
+                .then(data => {
+                    createOrderModal(cart, data);
+                })
+                .catch(error => {
+                    console.error('Error checking user auth:', error);
+                    // Если ошибка, показываем форму для неавторизованного пользователя
+                    createOrderModal(cart, { authenticated: false, user: null });
+                });
+        }
+        
+        function createOrderModal(cart, userData) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            // Определяем значения по умолчанию
+            const defaultValues = userData.authenticated && userData.user ? {
+                name: userData.user.name || '',
+                telegram_tag: userData.user.telegram_tag || ''
+            } : {
+                name: '',
+                telegram_tag: ''
+            };
+            
+            modal.innerHTML = `
+                <div style="background: white; padding: 24px; border-radius: 12px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;">
+                    <h2 style="margin: 0 0 20px 0; color: #0f172a;">📋 Оформление заказа</h2>
+                    
+                    ${userData.authenticated ? `
+                        <div style="margin-bottom: 16px; padding: 12px; background: #d1fae5; border-radius: 8px; border-left: 4px solid #10b981;">
+                            <p style="margin: 0; color: #065f46; font-size: 14px;">
+                                ✅ Вы авторизованы как <strong>${userData.user.name}</strong>. Данные заполнены автоматически.
+                            </p>
+                        </div>
+                    ` : `
+                        <div style="margin-bottom: 16px; padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 4px solid #f59e0b;">
+                            <p style="margin: 0; color: #92400e; font-size: 14px;">
+                                ℹ️ Вы не авторизованы. Заполните данные для оформления заказа.
+                            </p>
+                        </div>
+                    `}
+                    
+                    <div style="margin-bottom: 16px; padding: 16px; background: #f8fafc; border-radius: 8px;">
+                        <h3 style="margin: 0 0 12px 0; color: #374151;">Ваш заказ:</h3>
+                        ${cart.map(item => `
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span>${item.title} x ${item.quantity}</span>
+                                <span>${item.price * item.quantity}€</span>
+                            </div>
+                        `).join('')}
+                        <hr style="margin: 8px 0;">
+                        <div style="display: flex; justify-content: space-between; font-weight: bold;">
+                            <span>Итого:</span>
+                            <span>${calculateTotal(cart)}€</span>
+                        </div>
+                    </div>
+                    
+                    <form id="orderForm">
+                        <div style="margin-bottom: 16px;">
+                            <label style="display: block; margin-bottom: 4px; font-weight: 500;">👤 Ваше имя *</label>
+                            <input type="text" name="customer_name" value="${defaultValues.name}" required 
+                                   style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 4px; font-weight: 500;">📱 Telegram тег *</label>
+                            <input type="text" name="customer_telegram_tag" value="${defaultValues.telegram_tag}" 
+                                   placeholder="@username" required 
+                                   style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
+                            <small style="color: #6b7280; font-size: 12px;">Введите ваш Telegram тег (например: @username)</small>
+                        </div>
+                        
+                        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                            <button type="button" onclick="closeOrderModal()" style="padding: 12px 24px; border: 1px solid #cbd5e1; background: white; border-radius: 6px; cursor: pointer;">
+                                Отмена
+                            </button>
+                            <button type="submit" style="padding: 12px 24px; background: #527ea6; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                                📤 Отправить заказ
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Обработчик отправки формы
+            document.getElementById('orderForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                formData.append('cartItems', JSON.stringify(cart));
+                formData.append('totalAmount', calculateTotal(cart));
+                formData.append('_token', '{{ csrf_token() }}');
+                
+                // Показываем загрузку
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = '⏳ Отправка...';
+                submitBtn.disabled = true;
+                
+                // Отправляем заказ
+                fetch('{{ route("order.pdf.send") }}', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        clearCart();
+                        closeOrderModal();
+                        window.location.href = '/';
+                    } else {
+                        alert('Ошибка: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Произошла ошибка при отправке заказа');
+                })
+                .finally(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                });
+            });
+            
+            // Функция закрытия модального окна
+            window.closeOrderModal = function() {
+                document.body.removeChild(modal);
+            };
+            
+            // Закрытие при клике вне модального окна
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeOrderModal();
+                }
+            });
+        }
         
         // Функция для расчета общей суммы
         function calculateTotal(cart) {

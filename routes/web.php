@@ -35,6 +35,7 @@ Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('
 Route::post('/register', [AuthController::class, 'register'])->name('auth.register.post');
 Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
 Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
+Route::get('/api/current-user', [AuthController::class, 'getCurrentUser'])->name('api.current-user');
 
 // Товары
 Route::get('/catalog', [ProductController::class, 'index'])->name('products.index');
@@ -68,9 +69,15 @@ Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show'
 // PDF маршруты
 Route::post('/generate-order-pdf', [OrderPdfController::class, 'generateOrderPdf'])->name('generate.order.pdf');
 Route::post('/preview-order-pdf', [OrderPdfController::class, 'previewOrderPdf'])->name('preview.order.pdf');
+Route::post('/order/pdf/send', [OrderPdfController::class, 'generateOrderPdfAndSend'])->name('order.pdf.send');
 
 // Тестовый маршрут для PDF
 Route::get('/test-pdf', [TestPdfController::class, 'test'])->name('test.pdf');
+
+// Тестовая страница для Telegram заказов
+Route::get('/test-telegram-order', function () {
+    return view('test-telegram-order');
+})->name('test.telegram.order');
 
 // Страницы
 Route::get('/about', function () {
