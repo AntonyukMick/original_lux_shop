@@ -33,9 +33,17 @@ function testAuth() {
     const resultDiv = document.getElementById('auth-result');
     resultDiv.innerHTML = '<p>⏳ Проверяем авторизацию...</p>';
     
-    fetch('{{ route("api.current-user") }}')
+    fetch('{{ route("api.current-user") }}', {
+        method: 'GET',
+        credentials: 'same-origin', // Важно! Отправляем cookies
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        }
+    })
         .then(response => {
             console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
             return response.json();
         })
         .then(data => {

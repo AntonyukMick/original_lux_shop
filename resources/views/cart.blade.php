@@ -361,9 +361,18 @@
         function showCustomerForm(cart) {
             // Сначала проверяем авторизацию пользователя
             console.log('Checking user authentication...');
-            fetch('{{ route("api.current-user") }}')
+            fetch('{{ route("api.current-user") }}', {
+                method: 'GET',
+                credentials: 'same-origin', // Важно! Отправляем cookies
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
                 .then(response => {
                     console.log('API response status:', response.status);
+                    console.log('API response headers:', response.headers);
                     return response.json();
                 })
                 .then(data => {

@@ -148,13 +148,16 @@ class AuthController extends Controller
     /**
      * Получить данные текущего пользователя для API
      */
-    public function getCurrentUser()
+    public function getCurrentUser(Request $request)
     {
         // Добавляем отладочную информацию
         \Log::info('API getCurrentUser called', [
             'auth_check' => auth()->check(),
             'user_id' => auth()->id(),
-            'session_id' => session()->getId()
+            'session_id' => session()->getId(),
+            'request_cookies' => $request->cookies->all(),
+            'request_headers' => $request->headers->all(),
+            'session_data' => session()->all()
         ]);
 
         if (!auth()->check()) {
@@ -163,7 +166,9 @@ class AuthController extends Controller
                 'user' => null,
                 'debug' => [
                     'session_id' => session()->getId(),
-                    'auth_check' => auth()->check()
+                    'auth_check' => auth()->check(),
+                    'cookies_count' => count($request->cookies->all()),
+                    'session_data_keys' => array_keys(session()->all())
                 ]
             ]);
         }
@@ -179,7 +184,8 @@ class AuthController extends Controller
             ],
             'debug' => [
                 'session_id' => session()->getId(),
-                'auth_check' => auth()->check()
+                'auth_check' => auth()->check(),
+                'cookies_count' => count($request->cookies->all())
             ]
         ]);
     }
