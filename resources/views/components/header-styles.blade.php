@@ -23,7 +23,7 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     height: 36px;
     padding: 0 8px;
     border-radius: 6px;
-    border: 2px solid #000;
+    border: 1px solid #000;
     background: #fff;
     display: inline-flex;
     align-items: center;
@@ -49,7 +49,7 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 .brand {
     margin-left: 4px;
     background: rgb(151, 173, 200);
-    border: 2px solid #000;
+    border: 1px solid #000;
     border-radius: 6px;
     padding: 6px 8px;
     font-weight: 700;
@@ -108,7 +108,7 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     width: 36px;
     height: 36px;
     background: white;
-    border: 2px solid #000;
+    border: 1px solid #000;
     border-radius: 6px;
     cursor: pointer;
     flex-shrink: 0;
@@ -147,10 +147,10 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 
         .icon-container .badge {
             position: absolute;
-            top: -4px;
+            top: -5px;
             right: -4px;
             background: #FFD700;
-            border: 2px solid #000;
+            border: 1px solid #000;
             border-radius: 50%;
             width: 14px;
             height: 14px;
@@ -158,7 +158,7 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
             font-weight: bold;
             color: #000;
             z-index: 10;
-            line-height: 12px;
+            line-height: 14px;
             text-align: center;
             padding: 0;
             margin: 0;
@@ -322,6 +322,7 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
         height: 32px;
         margin: 0 1px;
         flex-shrink: 0;
+        border: 1px solid #000;
     }
     
     .icon-image {
@@ -333,7 +334,7 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
         width: 10px;
         height: 10px;
         font-size: 6px;
-        line-height: 8px;
+        line-height: 10px;
         top: -2px;
         right: -2px;
     }
@@ -416,6 +417,7 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
         height: 36px;
         margin: 0 2px;
         flex-shrink: 0;
+        border: 1px solid #000;
     }
     
     .icon-image {
