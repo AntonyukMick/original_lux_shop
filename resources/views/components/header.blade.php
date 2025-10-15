@@ -11,7 +11,7 @@ $auth = session('auth');
             <button class="btn" onclick="window.location.href='/'">Закрыть</button>
             <div style="margin-left:auto;display:flex;gap:6px;align-items:center;">
                 <!-- Иконка FAQ -->
-                <div class="icon-container" onclick="showModal('faq')" title="FAQ">
+                <div class="icon-container" onclick="document.getElementById('faqModal').style.display='block'; document.body.style.overflow='hidden';" title="FAQ">
                     <img src="{{ asset('image/icon-quest.jpg') }}" alt="FAQ" class="icon-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">❓</div>
                 </div>
@@ -71,7 +71,7 @@ $auth = session('auth');
                 </div>
                 
                 <!-- Иконка FAQ -->
-                <div class="icon-container" onclick="showModal('faq')" title="FAQ">
+                <div class="icon-container" onclick="document.getElementById('faqModal').style.display='block'; document.body.style.overflow='hidden';" title="FAQ">
                     <img src="{{ asset('image/icon-quest.jpg') }}" alt="FAQ" class="icon-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">❓</div>
                 </div>

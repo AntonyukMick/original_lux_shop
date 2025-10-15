@@ -2893,6 +2893,14 @@ $auth = session('auth');
                 performSearch();
             }
         });
+
+        // Обработчик клика вне модального окна FAQ
+        document.getElementById('faqModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
     </script>
 
     <!-- FAQ Modal -->
@@ -2900,7 +2908,7 @@ $auth = session('auth');
         <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:12px;padding:24px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
                 <h2 style="margin:0;color:#0f172a;font-size:24px;font-weight:700">Часто задаваемые вопросы</h2>
-                <button onclick="closeModal()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#64748b">&times;</button>
+                <button onclick="document.getElementById('faqModal').style.display='none'; document.body.style.overflow='auto';" style="background:none;border:none;font-size:24px;cursor:pointer;color:#64748b">&times;</button>
             </div>
             <div style="color:#374151;line-height:1.6">
                 <div style="margin-bottom:16px">
