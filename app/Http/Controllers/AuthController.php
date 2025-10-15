@@ -144,49 +144,4 @@ class AuthController extends Controller
 
         return back()->with('success', 'Ссылка для сброса пароля отправлена на ваш email');
     }
-
-    /**
-     * Получить данные текущего пользователя для API
-     */
-    public function getCurrentUser(Request $request)
-    {
-        // Добавляем отладочную информацию
-        \Log::info('API getCurrentUser called', [
-            'auth_check' => auth()->check(),
-            'user_id' => auth()->id(),
-            'session_id' => session()->getId(),
-            'request_cookies' => $request->cookies->all(),
-            'request_headers' => $request->headers->all(),
-            'session_data' => session()->all()
-        ]);
-
-        if (!auth()->check()) {
-            return response()->json([
-                'authenticated' => false,
-                'user' => null,
-                'debug' => [
-                    'session_id' => session()->getId(),
-                    'auth_check' => auth()->check(),
-                    'cookies_count' => count($request->cookies->all()),
-                    'session_data_keys' => array_keys(session()->all())
-                ]
-            ]);
-        }
-
-        $user = auth()->user();
-        
-        return response()->json([
-            'authenticated' => true,
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'telegram_tag' => $user->telegram_tag ?? ''
-            ],
-            'debug' => [
-                'session_id' => session()->getId(),
-                'auth_check' => auth()->check(),
-                'cookies_count' => count($request->cookies->all())
-            ]
-        ]);
-    }
 }

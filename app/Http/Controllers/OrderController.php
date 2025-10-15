@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\OrderService;
 use App\Services\CartService;
 use App\Services\LocalStorageService;
+use App\Services\AdminNotificationService;
 use App\Http\Requests\OrderRequest;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -15,7 +16,8 @@ class OrderController extends Controller
     public function __construct(
      protected OrderService $orderService,
      protected CartService $cartService,
-     protected LocalStorageService $localStorageService)
+     protected LocalStorageService $localStorageService,
+     protected AdminNotificationService $adminNotificationService)
     {}
 
     /**
@@ -142,7 +144,12 @@ class OrderController extends Controller
     {
         $validated = $request->validated();
         $order = $this->orderService->getOrderById($id);
+        
+        $oldStatus = $order->status;
         $this->orderService->updateOrderStatus($order, $validated['status'], $validated['tracking_number'] ?? null);
+        
+        // Отправляем уведомление о смене статуса
+        $this->adminNotificationService->notifyOrderStatusUpdate($order, $oldStatus, $validated['status']);
 
         return back()->with('success', 'Статус заказа обновлен');
     }
