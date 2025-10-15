@@ -156,19 +156,18 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
             height: 14px;
             font-size: 8px;
             font-weight: bold;
-            color: rgb(255,215,0);
+            color: #000;
             z-index: 10;
-            line-height: 14px;
+            line-height: 12px;
             text-align: center;
             padding: 0;
             margin: 0;
             display: block;
         }
 
-        .icon-container .badge.hidden,
-        .icon-container .badge[data-count="0"] {
-            display: none !important;
-        }
+.icon-container .badge.hidden {
+    display: none;
+}
 
 /* Стили для иконки сердца */
 .heart-icon {
@@ -261,23 +260,6 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* Стили для fallback иконок */
-.icon-fallback {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    font-size: 20px;
-    color: #FFD700;
-    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-    font-weight: bold;
-}
-
 /* ======================================
    МОБИЛЬНАЯ АДАПТИВНОСТЬ ХЕДЕРА
    ====================================== */
@@ -347,15 +329,14 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
         height: 20px;
     }
     
-            .icon-container .badge {
-                width: 10px;
-                height: 10px;
-                font-size: 6px;
-                line-height: 10px;
-                top: -2px;
-                right: -2px;
-                color: rgb(255,215,0);
-            }
+    .icon-container .badge {
+        width: 10px;
+        height: 10px;
+        font-size: 6px;
+        line-height: 8px;
+        top: -2px;
+        right: -2px;
+    }
     
     
     /* Основные иконки остаются видимыми */
