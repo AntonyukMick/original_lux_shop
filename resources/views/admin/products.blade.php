@@ -3,315 +3,322 @@
 @section('title', 'Управление товарами | ORIGINAL | LUX SHOP')
 
 @section('styles')
+@include('admin.admin-styles')
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, "Noto Sans", sans-serif; 
-        background: #f8fafc; 
-        color: #0f172a; 
-        line-height: 1.6;
+    /* Дополнительные стили для страницы товаров */
+    .products-list {
+        margin-top: 32px;
     }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 16px;
-        }
-        
-        /* Main Content */
-        .main {
-            padding: 32px 0;
-        }
-        
-        .page-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .page-title {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: #0f172a;
-        }
-        
-        .page-subtitle {
-            font-size: 16px;
-            color: #64748b;
-        }
-        
-        /* Admin Panel */
-        .admin-panel {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 32px;
-            margin-bottom: 24px;
-        }
-        
-        .section-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 24px;
-            color: #0f172a;
-        }
-        
-        /* Form Styles */
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 12px;
-            }
-            
-            .main {
-                padding: 20px 0;
-            }
-            
-            .page-title {
-                font-size: 24px;
-            }
-            
-            .page-subtitle {
-                font-size: 14px;
-            }
-            
-            .admin-panel {
-                padding: 20px;
-            }
-            
-            .section-title {
-                font-size: 20px;
-                margin-bottom: 16px;
-            }
-            
-            .form-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-            
-            .form-input, .form-select, .form-textarea {
-                padding: 10px;
-                font-size: 16px; /* Предотвращает зум на iOS */
-            }
-            
-            .form-textarea {
-                min-height: 80px;
-            }
-            
-            .btn {
-                padding: 12px 20px;
-                font-size: 14px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 8px;
-            }
-            
-            .main {
-                padding: 16px 0;
-            }
-            
-            .page-title {
-                font-size: 20px;
-            }
-            
-            .admin-panel {
-                padding: 16px;
-            }
-            
-            .section-title {
-                font-size: 18px;
-            }
-            
-            .form-grid {
-                gap: 12px;
-            }
-            
-            .form-input, .form-select, .form-textarea {
-                padding: 8px;
-                font-size: 16px;
-            }
-            
-            .form-textarea {
-                min-height: 60px;
-            }
-            
-            .btn {
-                padding: 10px 16px;
-                font-size: 13px;
-            }
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-        
-        .form-label {
-            font-weight: 600;
-            color: #374151;
-            font-size: 14px;
-        }
-        
-        .form-input, .form-select, .form-textarea {
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.2s;
-        }
-        
-        .form-input:focus, .form-select:focus, .form-textarea:focus {
-            outline: none;
-            border-color: #527ea6;
-        }
-        
-        .form-textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        
-        .submit-btn {
-            padding: 12px 24px;
-            background: #527ea6;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        
-        .submit-btn:hover {
-            background: #3b5a7a;
-        }
-        
-        /* Products List */
-        .products-list {
-            margin-top: 32px;
-        }
-        
+    
+    .product-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        transition: all 0.2s;
+    }
+    
+    .product-item:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+    
+    .product-info {
+        flex: 1;
+        min-width: 0; /* Позволяет тексту обрезаться */
+    }
+    
+    .product-title {
+        font-weight: 600;
+        color: #0f172a;
+        margin-bottom: 4px;
+        font-size: 16px;
+        line-height: 1.4;
+    }
+    
+    .product-category {
+        display: inline-block;
+        padding: 4px 8px;
+        background: #e2e8f0;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 8px;
+    }
+    
+    .product-price {
+        color: #64748b;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .product-description {
+        color: #64748b;
+        font-size: 14px;
+        margin-top: 4px;
+        line-height: 1.4;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+    
+    .product-actions {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+    
+    .action-btn {
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        background: #fff;
+        color: #374151;
+        text-decoration: none;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+    
+    .action-btn:hover {
+        border-color: #527ea6;
+        color: #527ea6;
+        background: #f8fafc;
+    }
+    
+    .action-btn.delete {
+        color: #dc2626;
+        border-color: #dc2626;
+    }
+    
+    .action-btn.delete:hover {
+        background: #dc2626;
+        color: #fff;
+    }
+    
+    .empty-state {
+        text-align: center;
+        color: #64748b;
+        padding: 48px 16px;
+        background: #f8fafc;
+        border-radius: 12px;
+        border: 2px dashed #cbd5e1;
+    }
+    
+    .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+        opacity: 0.6;
+    }
+    
+    .empty-state-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #374151;
+    }
+    
+    .empty-state-description {
+        font-size: 14px;
+        opacity: 0.8;
+    }
+    
+    /* Стили для загрузки файлов */
+    .file-input-wrapper {
+        position: relative;
+        margin-bottom: 16px;
+    }
+    
+    .file-input {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+    
+    .file-input-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        border: 2px dashed #cbd5e1;
+        border-radius: 8px;
+        background: #f8fafc;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 16px;
+        color: #64748b;
+        min-height: 80px;
+    }
+    
+    .file-input-label:hover {
+        border-color: #527ea6;
+        background: #f1f5f9;
+        color: #527ea6;
+    }
+    
+    .image-preview {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 12px;
+        margin-top: 16px;
+    }
+    
+    .preview-image {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .preview-image img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+    }
+    
+    .preview-remove {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background: rgba(220, 38, 38, 0.8);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .form-help {
+        color: #64748b;
+        font-size: 13px;
+        margin-top: 4px;
+        display: block;
+    }
+
+    /* Мобильная адаптация */
+    @media (max-width: 768px) {
         .product-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            margin-bottom: 12px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px;
         }
         
         .product-info {
-            flex: 1;
+            width: 100%;
         }
         
         .product-title {
-            font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 4px;
-        }
-        
-        .product-category {
-            display: inline-block;
-            padding: 4px 8px;
-            background: #e2e8f0;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 500;
-            color: #374151;
+            font-size: 18px;
             margin-bottom: 8px;
         }
         
+        .product-category {
+            font-size: 13px;
+            padding: 6px 10px;
+            margin-bottom: 10px;
+        }
+        
         .product-price {
-            color: #64748b;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        .product-description {
+            font-size: 15px;
+            margin-top: 8px;
+            -webkit-line-clamp: 3;
         }
         
         .product-actions {
-            display: flex;
-            gap: 8px;
+            width: 100%;
+            justify-content: space-between;
+            gap: 12px;
         }
         
         .action-btn {
-            padding: 8px 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            background: #fff;
-            color: #374151;
-            text-decoration: none;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .action-btn:hover {
-            border-color: #527ea6;
-            color: #527ea6;
-        }
-        
-        .action-btn.delete {
-            color: #dc2626;
-            border-color: #dc2626;
-        }
-        
-        .action-btn.delete:hover {
-            background: #dc2626;
-            color: #fff;
-        }
-        
-        /* Alert Messages */
-        .alert {
+            flex: 1;
             padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 24px;
+            font-size: 15px;
+            text-align: center;
             font-weight: 500;
         }
         
-        .alert-success {
-            background: #d1fae5;
-            color: #065f46;
-            border: 1px solid #a7f3d0;
+        .empty-state {
+            padding: 32px 16px;
+            margin: 20px 0;
         }
         
-        .alert-error {
-            background: #fee2e2;
-            color: #991b1b;
-            border: 1px solid #fca5a5;
+        .empty-state-icon {
+            font-size: 40px;
         }
         
-        /* Responsive */
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .product-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-            }
-            
-            .product-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
+        .empty-state-title {
+            font-size: 16px;
         }
-    </style>
+    }
+    
+    @media (max-width: 480px) {
+        .product-item {
+            padding: 16px;
+            gap: 12px;
+        }
+        
+        .product-title {
+            font-size: 16px;
+        }
+        
+        .product-category {
+            font-size: 12px;
+            padding: 4px 8px;
+        }
+        
+        .product-price {
+            font-size: 15px;
+        }
+        
+        .product-description {
+            font-size: 14px;
+        }
+        
+        .action-btn {
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+        
+        .empty-state {
+            padding: 24px 12px;
+        }
+        
+        .empty-state-icon {
+            font-size: 36px;
+        }
+        
+        .empty-state-title {
+            font-size: 15px;
+        }
+        
+        .empty-state-description {
+            font-size: 13px;
+        }
+    }
+</style>
 @endsection
 
 @section('content')
@@ -322,122 +329,229 @@
             <p class="page-subtitle">Добавление и редактирование товаров в каталоге</p>
         </div>
 
-        <?php if(session('success')): ?>
+        @if(session('success'))
             <div class="alert alert-success">
-                <?php echo e(session('success')); ?>
+                {{ session('success') }}
             </div>
-        <?php endif; ?>
+        @endif
 
-            <?php if(session('error')): ?>
-                <div class="alert alert-error">
-                    <?php echo e(session('error')); ?>
-                </div>
-            <?php endif; ?>
+        @if(session('error'))
+            <div class="alert alert-error">
+                {{ session('error') }}
+            </div>
+        @endif
 
-            <div class="admin-panel">
-                <h2 class="section-title">Добавить новый товар</h2>
+        <div class="admin-panel">
+            <h2 class="section-title">Добавить новый товар</h2>
+            
+                <form method="post" action="/admin/products" enctype="multipart/form-data">
+                @csrf
                 
-                <form method="post" action="/admin/products">
-                    <?php echo csrf_field(); ?>
-                    
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">Название товара *</label>
-                            <input type="text" name="title" class="form-input" placeholder="Введите название товара" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Категория *</label>
-                            <select name="category" class="form-select" required>
-                                <option value="">Выберите категорию</option>
-                                <option value="Одежда">Одежда</option>
-                                <option value="Обувь">Обувь</option>
-                                <option value="Сумки">Сумки</option>
-                                <option value="Часы">Часы</option>
-                                <option value="Украшения">Украшения</option>
-                                <option value="Аксессуары">Аксессуары</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Бренд *</label>
-                            <input type="text" name="brand" class="form-input" placeholder="Введите бренд" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Подкатегория</label>
-                            <input type="text" name="subcat" class="form-input" placeholder="Например: Кроссовки, Платья">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Цена (€) *</label>
-                            <input type="number" name="price" class="form-input" placeholder="0.00" step="0.01" min="0" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">URL изображения</label>
-                            <input type="url" name="images" class="form-input" placeholder="https://example.com/image.jpg">
-                        </div>
-                        
-                        <div class="form-group full-width">
-                            <label class="form-label">Описание товара</label>
-                            <textarea name="description" class="form-textarea" placeholder="Подробное описание товара"></textarea>
-                        </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Название товара *</label>
+                        <input type="text" name="title" class="form-input" placeholder="Введите название товара" required>
                     </div>
                     
-                    <button type="submit" class="submit-btn">Добавить товар</button>
-                </form>
-            </div>
-
-            <div class="admin-panel">
-                <h2 class="section-title">Существующие товары</h2>
-                
-                <div class="products-list">
-                    <?php 
-                    $products = App\Models\Product::orderBy('created_at', 'desc')->get();
-                    if($products->count() > 0): 
-                    ?>
-                        <?php foreach($products as $product): ?>
-                            <div class="product-item">
-                                <div class="product-info">
-                                    <div class="product-title"><?php echo e($product->title); ?></div>
-                                    <div class="product-category"><?php echo e($product->category); ?></div>
-                                    <div class="product-price"><?php echo e($product->brand); ?> • <?php echo e($product->price); ?>€</div>
-                                    <?php if($product->description): ?>
-                                        <div style="color: #64748b; font-size: 14px; margin-top: 4px;">
-                                            <?php echo e(substr($product->description, 0, 100)); ?>...
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                                
-                                <div class="product-actions">
-                                    <button class="action-btn" onclick="editProduct(<?php echo e($product->id); ?>)">
-                                        ✏️ Редактировать
-                                    </button>
-                                    <form method="post" action="/admin/products/<?php echo e($product->id); ?>" style="display: inline;" onsubmit="return confirm('Удалить этот товар?')">
-                                        <?php echo csrf_field(); ?>
-                                        <?php echo method_field('DELETE'); ?>
-                                        <button type="submit" class="action-btn delete">🗑️ Удалить</button>
-                                    </form>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div style="text-align: center; color: #64748b; padding: 32px;">
-                            <div style="font-size: 48px; margin-bottom: 16px;">🛍️</div>
-                            <div>Товары еще не добавлены</div>
-                            <div style="font-size: 14px; margin-top: 8px;">Добавьте первый товар выше</div>
+                    <div class="form-group">
+                        <label class="form-label">Категория *</label>
+                        <select name="category" class="form-select" required onchange="updateSubcategories(this.value)">
+                            <option value="">Выберите категорию</option>
+                            <option value="Одежда">Одежда</option>
+                            <option value="Обувь">Обувь</option>
+                            <option value="Сумки">Сумки</option>
+                            <option value="Часы">Часы</option>
+                            <option value="Украшения">Украшения</option>
+                            <option value="Аксессуары">Аксессуары</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Бренд *</label>
+                        <input type="text" name="brand" class="form-input" placeholder="Введите бренд" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Подкатегория</label>
+                        <select name="subcat" class="form-select" id="subcategory-select">
+                            <option value="">Выберите подкатегорию</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Цена (€) *</label>
+                        <input type="number" name="price" class="form-input" placeholder="0.00" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Изображения товара</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" name="images[]" class="file-input" id="imageInput" multiple accept="image/*">
+                            <label for="imageInput" class="file-input-label">
+                                📁 Выберите изображения или перетащите их сюда
+                            </label>
                         </div>
-                    <?php endif; ?>
+                        <div class="image-preview" id="imagePreview"></div>
+                        <small class="form-help">Или введите URL изображения:</small>
+                        <input type="url" name="image_url" class="form-input" placeholder="https://example.com/image.jpg" style="margin-top: 8px;">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label class="form-label">Описание товара</label>
+                        <textarea name="description" class="form-textarea" placeholder="Подробное описание товара"></textarea>
+                    </div>
                 </div>
+                
+                <button type="submit" class="submit-btn">Добавить товар</button>
+            </form>
+        </div>
+
+        <div class="admin-panel">
+            <h2 class="section-title">Существующие товары</h2>
+            
+            <div class="products-list">
+                @php
+                    $products = App\Models\Product::orderBy('created_at', 'desc')->get();
+                @endphp
+                
+                @if($products->count() > 0)
+                    @foreach($products as $product)
+                        <div class="product-item">
+                            <div class="product-info">
+                                <div class="product-title">{{ $product->title }}</div>
+                                <div class="product-category">{{ $product->category }}</div>
+                                <div class="product-price">{{ $product->brand }} • {{ $product->price }}€</div>
+                                @if($product->description)
+                                    <div class="product-description">
+                                        {{ $product->description }}
+                                    </div>
+                                @endif
+                            </div>
+                            
+                            <div class="product-actions">
+                                <a href="/admin/products/{{ $product->id }}/edit" class="action-btn">
+                                    ✏️ Редактировать
+                                </a>
+                                <form method="post" action="/admin/products/{{ $product->id }}" style="display: inline;" onsubmit="return confirm('Удалить этот товар?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="action-btn delete">🗑️ Удалить</button>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🛍️</div>
+                        <div class="empty-state-title">Товары еще не добавлены</div>
+                        <div class="empty-state-description">Добавьте первый товар выше</div>
+                    </div>
+                @endif
             </div>
         </div>
-    </main>
+    </div>
+</div>
 
-    <script>
-        function editProduct(productId) {
-            // Здесь можно добавить логику редактирования товара
-            alert('Функция редактирования товара будет добавлена позже');
-        }
+<script>
+// Динамическое обновление подкатегорий
+const subcategories = {
+    'Одежда': ['Платья', 'Блузки', 'Футболки', 'Джинсы', 'Брюки', 'Юбки', 'Куртки', 'Пальто', 'Худи', 'Свитеры'],
+    'Обувь': ['Кроссовки', 'Туфли', 'Сапоги', 'Ботинки', 'Сандалии', 'Босоножки', 'Лоферы', 'Кеды'],
+    'Сумки': ['Рюкзаки', 'Сумки через плечо', 'Клатчи', 'Торбы', 'Портфели', 'Кошельки'],
+    'Часы': ['Наручные часы', 'Карманные часы', 'Настенные часы', 'Спортивные часы'],
+    'Украшения': ['Кольца', 'Серьги', 'Браслеты', 'Цепочки', 'Подвески', 'Броши'],
+    'Аксессуары': ['Очки', 'Шарфы', 'Перчатки', 'Ремни', 'Галстуки', 'Шляпы']
+};
+
+function updateSubcategories(category) {
+    const select = document.getElementById('subcategory-select');
+    select.innerHTML = '<option value="">Выберите подкатегорию</option>';
+    
+    if (subcategories[category]) {
+        subcategories[category].forEach(subcat => {
+            const option = document.createElement('option');
+            option.value = subcat;
+            option.textContent = subcat;
+            select.appendChild(option);
+        });
+    }
+}
+
+// Обработка загрузки изображений
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const fileInputLabel = document.querySelector('.file-input-label');
+    
+    if (imageInput) {
+        imageInput.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            imagePreview.innerHTML = '';
+            
+            files.forEach((file, index) => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const previewDiv = document.createElement('div');
+                        previewDiv.className = 'preview-image';
+                        previewDiv.innerHTML = `
+                            <img src="${e.target.result}" alt="Preview ${index + 1}">
+                            <button type="button" class="preview-remove" onclick="removePreview(this)">×</button>
+                        `;
+                        imagePreview.appendChild(previewDiv);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Обновляем текст лейбла
+            if (files.length > 0) {
+                fileInputLabel.textContent = `Выбрано файлов: ${files.length}`;
+            } else {
+                fileInputLabel.textContent = '📁 Выберите изображения или перетащите их сюда';
+            }
+        });
+        
+        // Drag and drop
+        fileInputLabel.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#527ea6';
+            this.style.background = '#f1f5f9';
+        });
+        
+        fileInputLabel.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#cbd5e1';
+            this.style.background = '#f8fafc';
+        });
+        
+        fileInputLabel.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#cbd5e1';
+            this.style.background = '#f8fafc';
+            
+            const files = Array.from(e.dataTransfer.files);
+            imageInput.files = e.dataTransfer.files;
+            
+            // Триггерим событие change
+            const event = new Event('change', { bubbles: true });
+            imageInput.dispatchEvent(event);
+        });
+    }
+});
+
+function removePreview(button) {
+    button.parentElement.remove();
+    
+    // Обновляем счетчик файлов
+    const fileInputLabel = document.querySelector('.file-input-label');
+    const remainingImages = document.querySelectorAll('.preview-image').length;
+    
+    if (remainingImages === 0) {
+        fileInputLabel.textContent = '📁 Выберите изображения или перетащите их сюда';
+    } else {
+        fileInputLabel.textContent = `Выбрано файлов: ${remainingImages}`;
+    }
+}
+</script>
 @endsection
-

@@ -75,3 +75,43 @@
 }
 </style>
 @endsection
+
+@section('scripts')
+<script>
+// Очищаем корзину после успешного заказа
+document.addEventListener('DOMContentLoaded', function() {
+    // Очищаем localStorage
+    localStorage.removeItem('cart');
+    
+    // Обновляем счетчики в хедере
+    const cartBadge = document.getElementById('cart-badge');
+    if (cartBadge) {
+        cartBadge.textContent = '0';
+        cartBadge.style.display = 'none';
+    }
+    
+    const mobileCartBadge = document.querySelector('.mobile-cart-badge');
+    if (mobileCartBadge) {
+        mobileCartBadge.textContent = '0';
+        mobileCartBadge.style.display = 'none';
+    }
+    
+    // Обновляем счетчики избранного
+    const favoritesBadge = document.getElementById('favorites-badge');
+    if (favoritesBadge) {
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        favoritesBadge.textContent = favorites.length;
+        favoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
+    }
+    
+    const mobileFavoritesBadge = document.querySelector('.mobile-favorites-badge');
+    if (mobileFavoritesBadge) {
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        mobileFavoritesBadge.textContent = favorites.length;
+        mobileFavoritesBadge.style.display = favorites.length > 0 ? 'block' : 'none';
+    }
+    
+    console.log('Cart cleared after successful order');
+});
+</script>
+@endsection

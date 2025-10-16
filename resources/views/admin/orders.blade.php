@@ -455,6 +455,11 @@
                                 <div class="customer-info">
                                     <div class="customer-name">{{ $order->customer_name }}</div>
                                     <div class="customer-email">{{ $order->customer_email }}</div>
+                                    @if($order->user)
+                                        <div class="customer-telegram" style="color: #527ea6; font-size: 12px; margin-top: 2px;">
+                                            👤 {{ $order->user->telegram_tag ?? $order->user->email }}
+                                        </div>
+                                    @endif
                                 </div>
                             </td>
                             <td>

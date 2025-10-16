@@ -3,21 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Services\OrderService;
-use App\Services\CartService;
-use App\Services\LocalStorageService;
 use App\Services\AdminNotificationService;
 use App\Models\Order;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 
 class SimpleOrderController extends Controller
 {
     public function __construct(
         protected OrderService $orderService,
-        protected CartService $cartService,
-        protected LocalStorageService $localStorageService,
         protected AdminNotificationService $adminNotificationService
     ) {}
 
@@ -27,19 +21,23 @@ class SimpleOrderController extends Controller
     public function showSimpleOrder(Request $request)
     {
         try {
-            // Синхронизируем корзину из localStorage если есть данные
+            $cart = [];
+            $total = 0;
+            
+            // Если есть данные корзины в запросе
             if ($request->has('cart_data')) {
-                $this->localStorageService->syncCartFromLocalStorage($request);
+                $cartData = json_decode($request->input('cart_data'), true);
+                if ($cartData && is_array($cartData)) {
+                    $cart = $cartData;
+                    $total = array_sum(array_map(function($item) {
+                        return ($item['price'] ?? 0) * ($item['quantity'] ?? 1);
+                    }, $cart));
+                }
             }
             
-            $cart = session('cart', []);
             if (empty($cart)) {
                 return redirect()->route('cart.index')->with('error', 'Корзина пуста');
             }
-
-            $total = array_sum(array_map(function($item) {
-                return $item['price'] * $item['quantity'];
-            }, $cart));
 
             return view('simple-order', compact('cart', 'total'));
         } catch (\Exception $e) {
@@ -48,8 +46,7 @@ class SimpleOrderController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
             
-            return redirect()->route('cart.index')
-                ->with('error', 'Произошла ошибка при загрузке страницы оформления заказа');
+            return redirect()->route('cart.index')->with('error', 'Произошла ошибка при загрузке страницы оформления заказа');
         }
     }
 
@@ -62,26 +59,33 @@ class SimpleOrderController extends Controller
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'required|string|max:20',
             'customer_address' => 'required|string|max:500',
-            'notes' => 'nullable|string|max:1000'
+            'notes' => 'nullable|string|max:1000',
+            'cart_data' => 'required|string'
         ]);
 
         try {
-            $cart = session('cart', []);
-            if (empty($cart)) {
-                Log::info('Simple order: cart is empty', ['session_cart' => $cart]);
-                return redirect()->route('cart.index')->with('error', 'Корзина пуста');
+            // Получаем данные корзины
+            $cartData = json_decode($request->input('cart_data'), true);
+            if (!$cartData || !is_array($cartData)) {
+                return redirect()->route('cart.index')->with('error', 'Данные корзины не найдены');
             }
 
-            Log::info('Simple order: processing cart', ['cart' => $cart]);
+            Log::info('Processing simple order', [
+                'customer_name' => $request->customer_name,
+                'cart_items' => count($cartData),
+                'cart_data' => $cartData
+            ]);
 
+            // Рассчитываем общую сумму
             $total = array_sum(array_map(function($item) {
-                return $item['price'] * $item['quantity'];
-            }, $cart));
+                return ($item['price'] ?? 0) * ($item['quantity'] ?? 1);
+            }, $cartData));
 
             // Создаем заказ в базе данных
             $orderData = [
+                'user_id' => auth()->check() ? auth()->id() : null,
                 'customer_name' => $request->customer_name,
-                'customer_email' => $request->customer_phone . '@temp.com', // Временный email
+                'customer_email' => $request->customer_phone . '@temp.com',
                 'customer_phone' => $request->customer_phone,
                 'shipping_address' => $request->customer_address,
                 'shipping_city' => 'Не указан',
@@ -91,13 +95,23 @@ class SimpleOrderController extends Controller
                 'payment_method' => 'simple_order'
             ];
 
-            $order = $this->orderService->createOrder($orderData, $cart);
+            $order = $this->orderService->createOrder($orderData, $cartData);
+
+            Log::info('Order created successfully', [
+                'order_id' => $order->id,
+                'order_number' => $order->order_number,
+                'total' => $total
+            ]);
 
             // Отправляем уведомление админу
-            $this->adminNotificationService->notifyNewOrder($order);
-
-            // Очищаем корзину
-            session()->forget('cart');
+            try {
+                $this->adminNotificationService->notifyNewOrder($order);
+            } catch (\Exception $e) {
+                Log::error('Failed to send admin notification', [
+                    'order_id' => $order->id,
+                    'error' => $e->getMessage()
+                ]);
+            }
 
             return redirect()->route('order.success', ['order_number' => $order->order_number])
                 ->with('success', 'Заказ успешно создан! Мы свяжемся с вами в ближайшее время.');
@@ -105,7 +119,8 @@ class SimpleOrderController extends Controller
         } catch (\Exception $e) {
             Log::error('Simple order processing error', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->except(['cart_data'])
             ]);
 
             return redirect()->back()->with('error', 
@@ -114,12 +129,11 @@ class SimpleOrderController extends Controller
     }
 
     /**
-     * Показать страницу успешного заказа
+     * Показать страницу успеха
      */
     public function showSuccess(Request $request)
     {
-        $orderNumber = $request->get('order_number');
-        
+        $orderNumber = $request->get('order_number', 'N/A');
         return view('order-success', compact('orderNumber'));
     }
 }

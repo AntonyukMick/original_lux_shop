@@ -10,6 +10,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'order_number',
         'customer_name',
         'customer_email',
@@ -37,6 +38,12 @@ class Order extends Model
         'shipping_cost' => 'decimal:2',
         'total' => 'decimal:2'
     ];
+
+    // Связь с пользователем
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     // Связь с элементами заказа
     public function items()

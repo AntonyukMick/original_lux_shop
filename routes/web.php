@@ -12,6 +12,7 @@ use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\TelegramBotController;
 use App\Http\Controllers\SimpleOrderController;
+use App\Http\Controllers\AdminProductController;
 use App\Models\VideoLink;
 
 // Главная страница
@@ -61,12 +62,14 @@ Route::get('/favorites/data', [FavoriteController::class, 'getFavoritesData'])->
 Route::post('/favorites/add', [FavoriteController::class, 'add'])->name('favorites.add');
 Route::post('/favorites/remove', [FavoriteController::class, 'remove'])->name('favorites.remove');
 
-// Заказы
-Route::get('/checkout', [OrderController::class, 'create'])->name('checkout');
-Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+// Заказы (требуют авторизации)
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [OrderController::class, 'create'])->name('checkout');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+});
 
-// Простые заказы
+// Простые заказы (без авторизации)
 Route::get('/simple-order', [SimpleOrderController::class, 'showSimpleOrder'])->name('simple-order.show');
 Route::post('/simple-order', [SimpleOrderController::class, 'processSimpleOrder'])->name('simple-order.process');
 Route::get('/order-success', [SimpleOrderController::class, 'showSuccess'])->name('order.success');
@@ -103,6 +106,11 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     
     // Управление товарами
     Route::resource('products', ProductController::class);
+    
+    // Простое управление товарами в админ-панели
+    Route::get('/products', [AdminProductController::class, 'index'])->name('products.index');
+    Route::post('/products', [AdminProductController::class, 'store'])->name('products.store');
+    Route::delete('/products/{id}', [AdminProductController::class, 'destroy'])->name('products.destroy');
     
     // Управление заказами
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');

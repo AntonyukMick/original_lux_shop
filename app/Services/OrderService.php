@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class OrderService
 {
@@ -24,6 +25,7 @@ class OrderService
 
         // Создание заказа
         $order = Order::create([
+            'user_id' => $data['user_id'] ?? (auth()->check() ? auth()->id() : null),
             'order_number' => $this->generateOrderNumber(),
             'customer_name' => $data['customer_name'],
             'customer_email' => $data['customer_email'],
@@ -40,6 +42,8 @@ class OrderService
             'status' => 'pending',
             'payment_status' => 'pending'
         ]);
+
+        Log::info('OrderService: order created', ['order_id' => $order->id, 'order_number' => $order->order_number]);
 
         // Создание элементов заказа
         $this->createOrderItems($order, $cart);
@@ -105,7 +109,7 @@ class OrderService
      */
     public function getAllOrders($perPage = 20)
     {
-        return Order::with('items')
+        return Order::with(['items', 'user'])
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
