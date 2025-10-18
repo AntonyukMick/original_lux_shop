@@ -36,6 +36,7 @@ class AdminProductController extends Controller
             'description' => 'nullable|string',
             'images.*' => 'nullable|image|max:4096',
             'image_url' => 'nullable|url',
+            'sizes' => 'nullable|string',
         ]);
 
         try {
@@ -65,6 +66,14 @@ class AdminProductController extends Controller
             }
             
             $data['images'] = $images;
+            
+            // Обработка размеров
+            if ($request->filled('sizes')) {
+                $sizes = json_decode($request->sizes, true);
+                if (is_array($sizes)) {
+                    $data['sizes'] = $sizes;
+                }
+            }
             
             $product = $this->productService->createProduct($data);
 

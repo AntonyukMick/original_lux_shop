@@ -3,11 +3,8 @@
 namespace App\Events;
 
 use App\Models\Product;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -15,15 +12,11 @@ class ProductAddedToCart
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $product;
-    public $user;
-
     /**
      * Create a new event instance.
      */
-    public function __construct(Product $product, $user = null)
+    public function __construct(public Product $product, public $user = null)
     {
-        $this->product = $product;
         $this->user = $user;
     }
 

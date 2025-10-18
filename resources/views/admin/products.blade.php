@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Управление товарами | ORIGINAL | LUX SHOP')
 
@@ -318,6 +318,100 @@
             font-size: 13px;
         }
     }
+    
+    /* Стили для размеров */
+    .sizes-container {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .size-options h4 {
+        margin: 0 0 20px 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #1f2937;
+        text-align: center;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f3f4f6;
+    }
+    
+    .size-block {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .size-block::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: left 0.5s;
+    }
+    
+    .size-block:hover::before {
+        left: 100%;
+    }
+    
+    .size-block.selected {
+        animation: sizeSelect 0.3s ease-out;
+    }
+    
+    @keyframes sizeSelect {
+        0% { transform: scale(1) translateY(0); }
+        50% { transform: scale(1.05) translateY(-3px); }
+        100% { transform: scale(1) translateY(-2px); }
+    }
+    
+    .size-help {
+        color: #6b7280;
+        font-style: italic;
+        margin: 0;
+        font-size: 14px;
+        text-align: center;
+        padding: 15px;
+        background: #f9fafb;
+        border-radius: 8px;
+        border: 1px dashed #d1d5db;
+    }
+    
+    #size-info {
+        font-size: 14px;
+        color: #6b7280;
+        margin-top: 15px;
+        padding: 15px;
+        background: #f8fafc;
+        border-radius: 8px;
+        border-left: 4px solid #d1d5db;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    #size-info:hover {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Адаптивность для мобильных устройств */
+    @media (max-width: 768px) {
+        .sizes-container {
+            padding: 15px;
+        }
+        
+        .size-block {
+            min-height: 40px;
+            font-size: 13px;
+        }
+        
+        .size-options h4 {
+            font-size: 14px;
+        }
+    }
 </style>
 @endsection
 
@@ -396,6 +490,16 @@
                         <input type="url" name="image_url" class="form-input" placeholder="https://example.com/image.jpg" style="margin-top: 8px;">
                     </div>
                     
+                    <div class="form-group">
+                        <label class="form-label">Размеры товара</label>
+                        <div class="sizes-container" id="sizes-container">
+                            <div class="size-options" id="size-options">
+                                <p class="size-help">Выберите категорию для отображения размеров</p>
+                            </div>
+                        </div>
+                        <input type="hidden" name="sizes" id="selected-sizes" value="">
+                    </div>
+                    
                     <div class="form-group full-width">
                         <label class="form-label">Описание товара</label>
                         <textarea name="description" class="form-textarea" placeholder="Подробное описание товара"></textarea>
@@ -463,6 +567,261 @@ const subcategories = {
     'Аксессуары': ['Очки', 'Шарфы', 'Перчатки', 'Ремни', 'Галстуки', 'Шляпы']
 };
 
+// Определения размеров для каждой категории
+const sizesByCategory = {
+    'Обувь': ['30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48'],
+    'Одежда': ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
+    'Сумки': ['One Size', 'S', 'M', 'L'],
+    'Часы': ['One Size'],
+    'Украшения': ['One Size', 'S', 'M', 'L'],
+    'Аксессуары': ['One Size', 'S', 'M', 'L']
+};
+
+function updateSizes(category) {
+    const sizeOptions = document.getElementById('size-options');
+    const selectedSizesInput = document.getElementById('selected-sizes');
+    
+    // Очищаем предыдущие размеры
+    sizeOptions.innerHTML = '';
+    selectedSizesInput.value = '';
+    
+    if (sizesByCategory[category]) {
+        const sizes = sizesByCategory[category];
+        
+        // Создаем заголовок
+        const title = document.createElement('h4');
+        title.textContent = `Выберите доступные размеры для "${category}":`;
+        title.style.marginBottom = '15px';
+        title.style.color = '#374151';
+        title.style.fontSize = '16px';
+        title.style.fontWeight = '600';
+        sizeOptions.appendChild(title);
+        
+        // Создаем контейнер для блоков размеров
+        const blocksContainer = document.createElement('div');
+        blocksContainer.style.display = 'grid';
+        blocksContainer.style.gridTemplateColumns = 'repeat(auto-fit, minmax(60px, 1fr))';
+        blocksContainer.style.gap = '10px';
+        blocksContainer.style.marginBottom = '15px';
+        blocksContainer.style.padding = '15px';
+        blocksContainer.style.backgroundColor = '#f8fafc';
+        blocksContainer.style.borderRadius = '8px';
+        blocksContainer.style.border = '1px solid #e2e8f0';
+        
+        sizes.forEach(size => {
+            const sizeBlock = document.createElement('div');
+            sizeBlock.className = 'size-block';
+            sizeBlock.dataset.size = size;
+            sizeBlock.textContent = size;
+            
+            // Стили для блока размера
+            sizeBlock.style.cssText = `
+                padding: 12px 8px;
+                text-align: center;
+                border: 2px solid #d1d5db;
+                border-radius: 8px;
+                background-color: #ffffff;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 14px;
+                color: #374151;
+                transition: all 0.2s ease;
+                user-select: none;
+                min-height: 45px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            `;
+            
+            // Обработчики событий
+            sizeBlock.addEventListener('click', function() {
+                toggleSizeBlock(this);
+            });
+            
+            sizeBlock.addEventListener('mouseenter', function() {
+                if (!this.classList.contains('selected')) {
+                    this.style.backgroundColor = '#f3f4f6';
+                    this.style.borderColor = '#9ca3af';
+                    this.style.transform = 'translateY(-1px)';
+                }
+            });
+            
+            sizeBlock.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('selected')) {
+                    this.style.backgroundColor = '#ffffff';
+                    this.style.borderColor = '#d1d5db';
+                    this.style.transform = 'translateY(0)';
+                }
+            });
+            
+            blocksContainer.appendChild(sizeBlock);
+        });
+        
+        sizeOptions.appendChild(blocksContainer);
+        
+        // Добавляем кнопки управления
+        const controlsContainer = document.createElement('div');
+        controlsContainer.style.display = 'flex';
+        controlsContainer.style.gap = '10px';
+        controlsContainer.style.marginBottom = '15px';
+        
+        const selectAllBtn = document.createElement('button');
+        selectAllBtn.textContent = 'Выбрать все';
+        selectAllBtn.type = 'button';
+        selectAllBtn.style.cssText = `
+            padding: 8px 16px;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        `;
+        selectAllBtn.addEventListener('click', function() {
+            selectAllSizes();
+        });
+        selectAllBtn.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = '#2563eb';
+        });
+        selectAllBtn.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = '#3b82f6';
+        });
+        
+        const clearAllBtn = document.createElement('button');
+        clearAllBtn.textContent = 'Очистить все';
+        clearAllBtn.type = 'button';
+        clearAllBtn.style.cssText = `
+            padding: 8px 16px;
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        `;
+        clearAllBtn.addEventListener('click', function() {
+            clearAllSizes();
+        });
+        clearAllBtn.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = '#dc2626';
+        });
+        clearAllBtn.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = '#ef4444';
+        });
+        
+        controlsContainer.appendChild(selectAllBtn);
+        controlsContainer.appendChild(clearAllBtn);
+        sizeOptions.appendChild(controlsContainer);
+        
+        // Добавляем информацию о выбранных размерах
+        const info = document.createElement('div');
+        info.id = 'size-info';
+        info.style.cssText = `
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 10px;
+            padding: 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border-left: 4px solid #d1d5db;
+            font-weight: 500;
+        `;
+        info.textContent = 'Выберите размеры товара';
+        sizeOptions.appendChild(info);
+        
+    } else {
+        const message = document.createElement('div');
+        message.style.cssText = `
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-style: italic;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px dashed #d1d5db;
+        `;
+        message.innerHTML = `
+            <div style="font-size: 18px; margin-bottom: 8px;">📦</div>
+            <div>Размеры не определены для категории "${category}"</div>
+        `;
+        sizeOptions.appendChild(message);
+    }
+}
+
+function toggleSizeBlock(block) {
+    block.classList.toggle('selected');
+    
+    if (block.classList.contains('selected')) {
+        block.style.backgroundColor = '#ecfdf5';
+        block.style.borderColor = '#10b981';
+        block.style.color = '#059669';
+        block.style.transform = 'translateY(-2px)';
+        block.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
+    } else {
+        block.style.backgroundColor = '#ffffff';
+        block.style.borderColor = '#d1d5db';
+        block.style.color = '#374151';
+        block.style.transform = 'translateY(0)';
+        block.style.boxShadow = 'none';
+    }
+    
+    updateSelectedSizes();
+}
+
+function selectAllSizes() {
+    const blocks = document.querySelectorAll('.size-block');
+    blocks.forEach(block => {
+        if (!block.classList.contains('selected')) {
+            toggleSizeBlock(block);
+        }
+    });
+}
+
+function clearAllSizes() {
+    const blocks = document.querySelectorAll('.size-block');
+    blocks.forEach(block => {
+        if (block.classList.contains('selected')) {
+            toggleSizeBlock(block);
+        }
+    });
+}
+
+function updateSelectedSizes() {
+    const selectedBlocks = document.querySelectorAll('.size-block.selected');
+    const selectedSizes = Array.from(selectedBlocks).map(block => block.dataset.size);
+    
+    const selectedSizesInput = document.getElementById('selected-sizes');
+    selectedSizesInput.value = JSON.stringify(selectedSizes);
+    
+    const info = document.getElementById('size-info');
+    if (info) {
+        if (selectedSizes.length > 0) {
+            info.innerHTML = `
+                <div style="color: #059669; font-weight: 600; margin-bottom: 4px;">
+                    ✅ Выбрано размеров: ${selectedSizes.length}
+                </div>
+                <div style="font-size: 13px; color: #6b7280;">
+                    ${selectedSizes.join(', ')}
+                </div>
+            `;
+            info.style.borderLeftColor = '#10b981';
+            info.style.backgroundColor = '#f0fdf4';
+        } else {
+            info.innerHTML = `
+                <div style="color: #6b7280;">
+                    📏 Выберите размеры товара
+                </div>
+            `;
+            info.style.borderLeftColor = '#d1d5db';
+            info.style.backgroundColor = '#f3f4f6';
+        }
+    }
+}
+
 function updateSubcategories(category) {
     const select = document.getElementById('subcategory-select');
     select.innerHTML = '<option value="">Выберите подкатегорию</option>';
@@ -475,6 +834,9 @@ function updateSubcategories(category) {
             select.appendChild(option);
         });
     }
+    
+    // Обновляем размеры в зависимости от категории
+    updateSizes(category);
 }
 
 // Обработка загрузки изображений

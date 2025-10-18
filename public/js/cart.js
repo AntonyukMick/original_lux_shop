@@ -1,9 +1,9 @@
 /**
- * Cart Manager - Clean JavaScript for cart functionality
+ * Cart Manager - Server-side cart functionality
  */
 class CartManager {
     static init() {
-        this.loadCart();
+        // НЕ загружаем корзину через API - данные уже загружены с сервера
         this.bindEvents();
         this.updateHeaderCounters();
     }
@@ -25,294 +25,307 @@ class CartManager {
         }
     }
 
-    static loadCart() {
-        const cart = this.getCart();
+    static async loadCart() {
+        try {
+            const response = await fetch('/cart/data');
+            const data = await response.json();
+            
+            if (data.success) {
+                this.displayCart(data.cart, data.total, data.count);
+            } else {
+                console.error('Error loading cart:', data.message);
+                this.displayEmptyCart();
+            }
+        } catch (error) {
+            console.error('Error loading cart:', error);
+            this.displayEmptyCart();
+        }
+    }
+
+    static displayCart(cartItems, total, count) {
         const cartContent = document.getElementById('cart-content');
         const cartSummary = document.getElementById('cart-summary');
         const cartItemsCount = document.getElementById('cart-items-count');
+        
+        if (!cartContent || !cartSummary || !cartItemsCount) return;
 
-        if (cart.length === 0) {
-            this.showEmptyState(cartContent);
-            cartSummary.style.display = 'none';
-            cartItemsCount.textContent = '0 товаров';
+        if (cartItems.length === 0) {
+            this.displayEmptyCart();
             return;
         }
 
-        this.renderCartItems(cart, cartContent);
-        this.updateSummary(cart);
+        // Обновляем счетчик товаров
+        cartItemsCount.textContent = `${count} товар${this.getPlural(count)}`;
+
+        // Отображаем товары
+        cartContent.innerHTML = cartItems.map(item => `
+            <div class="cart-item" data-product-id="${item.id}" data-size="${item.size || ''}">
+                <img src="${item.image || '/image/placeholder.jpg'}" alt="${item.title}" class="cart-item-image">
+                <div class="cart-item-info">
+                    <div class="cart-item-title">${item.title}</div>
+                    <div class="cart-item-price">${item.price}€</div>
+                    ${item.size ? `<div class="cart-item-size">Размер: ${item.size}</div>` : ''}
+                </div>
+                <div class="cart-item-quantity">
+                    <button class="quantity-btn" onclick="CartManager.decreaseQuantity(${item.id}, '${item.size || ''}')">-</button>
+                    <input type="number" class="quantity-input" value="${item.quantity}" min="1" max="10" 
+                           onchange="CartManager.updateQuantity(${item.id}, '${item.size || ''}', this.value)">
+                    <button class="quantity-btn" onclick="CartManager.increaseQuantity(${item.id}, '${item.size || ''}')">+</button>
+                </div>
+                <div class="cart-item-total">
+                    ${(item.price * item.quantity).toFixed(2)}€
+                </div>
+                <button class="cart-item-remove" onclick="CartManager.removeFromCart(${item.id}, '${item.size || ''}')">×</button>
+            </div>
+        `).join('');
+
+        // Обновляем итоговую сумму
+        document.getElementById('cart-total').textContent = `${total.toFixed(2)}€`;
+
+        // Показываем корзину
         cartSummary.style.display = 'block';
-        cartItemsCount.textContent = `${cart.length} товар${this.getPluralForm(cart.length)}`;
     }
 
-    static showEmptyState(container) {
-        container.innerHTML = `
+    static displayEmptyCart() {
+        const cartContent = document.getElementById('cart-content');
+        const cartSummary = document.getElementById('cart-summary');
+        const cartItemsCount = document.getElementById('cart-items-count');
+        
+        if (!cartContent || !cartSummary || !cartItemsCount) return;
+
+        cartItemsCount.textContent = '0 товаров';
+        cartContent.innerHTML = `
             <div class="cart-empty">
                 <div class="cart-empty-icon">🛒</div>
-                <h2 class="cart-empty-title">Корзина пуста</h2>
-                <p class="cart-empty-description">Добавьте товары в корзину, чтобы они отобразились здесь</p>
-                <a href="/catalog" class="cart-empty-button">
-                    <span>🛍️</span>
-                    Перейти к покупкам
-                </a>
+                <h3 class="cart-empty-title">Корзина пуста</h3>
+                <p class="cart-empty-description">Добавьте товары в корзину для оформления заказа</p>
+                <a href="/" class="cart-empty-button">Перейти к каталогу</a>
             </div>
         `;
+        cartSummary.style.display = 'none';
     }
 
-    static renderCartItems(cart, container) {
-        let html = '';
-        
-        cart.forEach((item, index) => {
-            const price = parseFloat(item.price) || 0;
-            const quantity = parseInt(item.quantity) || 1;
-            const total = price * quantity;
+    static async addToCart(productId, title, price, image, size = null) {
+        try {
+            const response = await fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    title: title,
+                    price: price,
+                    image: image,
+                    size: size,
+                    quantity: 1
+                })
+            });
 
-            html += `
-                <div class="cart-item">
-                    <img src="${item.image}" alt="${item.title}" class="cart-item-image">
-                    <div class="cart-item-info">
-                        <h3 class="cart-item-title">${item.title}</h3>
-                        <div class="cart-item-price">${price.toFixed(2)}€</div>
-                    </div>
-                    <div class="cart-item-quantity">
-                        <input type="number" 
-                               class="quantity-input" 
-                               value="${quantity}" 
-                               min="1" 
-                               max="99" 
-                               onchange="CartManager.updateQuantity(${index}, this.value)">
-                    </div>
-                    <div class="cart-item-total">${total.toFixed(2)}€</div>
-                    <button class="cart-item-remove" onclick="CartManager.removeItem(${index})">
-                        ✕
-                    </button>
-                </div>
-            `;
-        });
-
-        container.innerHTML = html;
-    }
-
-    static updateSummary(cart) {
-        const total = cart.reduce((sum, item) => {
-            const price = parseFloat(item.price) || 0;
-            const quantity = parseInt(item.quantity) || 1;
-            return sum + (price * quantity);
-        }, 0);
-
-        document.getElementById('cart-total').textContent = `${total.toFixed(2)}€`;
-    }
-
-    static updateQuantity(index, quantity) {
-        const cart = this.getCart();
-        if (cart[index] && quantity > 0) {
-            cart[index].quantity = parseInt(quantity);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            this.loadCart();
-            this.updateHeaderCounters();
-        }
-    }
-
-    static removeItem(index) {
-        if (confirm('Удалить товар из корзины?')) {
-            const cart = this.getCart();
-            cart.splice(index, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            this.loadCart();
-            this.updateHeaderCounters();
-        }
-    }
-
-    static clearCart() {
-        localStorage.removeItem('cart');
-        this.loadCart();
-        this.updateHeaderCounters();
-    }
-
-    static async checkout() {
-        const cart = this.getCart();
-        if (cart.length === 0) {
-            alert('Корзина пуста');
-            return;
-        }
-
-        // Создаем форму и отправляем заказ напрямую
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/simple-order';
-        
-        // CSRF Token
-        const csrfToken = document.createElement('input');
-        csrfToken.type = 'hidden';
-        csrfToken.name = '_token';
-        const metaToken = document.querySelector('meta[name="csrf-token"]');
-        csrfToken.value = metaToken ? metaToken.getAttribute('content') : '';
-        form.appendChild(csrfToken);
-        
-        // Данные корзины
-        const cartInput = document.createElement('input');
-        cartInput.type = 'hidden';
-        cartInput.name = 'cart_data';
-        cartInput.value = JSON.stringify(cart);
-        form.appendChild(cartInput);
-        
-        // Добавляем форму на страницу и отправляем
-        document.body.appendChild(form);
-        form.submit();
-    }
-
-    static async simpleCheckout() {
-        const cart = this.getCart();
-        if (cart.length === 0) {
-            alert('Корзина пуста');
-            return;
-        }
-
-        // Создаем форму и отправляем заказ напрямую
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/simple-order';
-        
-        // CSRF Token
-        const csrfToken = document.createElement('input');
-        csrfToken.type = 'hidden';
-        csrfToken.name = '_token';
-        const metaToken = document.querySelector('meta[name="csrf-token"]');
-        csrfToken.value = metaToken ? metaToken.getAttribute('content') : '';
-        form.appendChild(csrfToken);
-        
-        // Данные корзины
-        const cartInput = document.createElement('input');
-        cartInput.type = 'hidden';
-        cartInput.name = 'cart_data';
-        cartInput.value = JSON.stringify(cart);
-        form.appendChild(cartInput);
-        
-        // Добавляем форму на страницу и отправляем
-        document.body.appendChild(form);
-        form.submit();
-    }
-
-    static async syncCartWithServer(cart) {
-        // Получаем CSRF токен безопасным способом
-        const metaToken = document.querySelector('meta[name="csrf-token"]');
-        const csrfToken = metaToken ? metaToken.getAttribute('content') : this.getCsrfTokenFromCookie();
-        
-        const response = await fetch('/cart/sync', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken || ''
-            },
-            body: JSON.stringify({ cart })
-        });
-
-        if (!response.ok) {
-            throw new Error('Sync failed');
-        }
-    }
-
-    static createCheckoutForm(cart) {
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/generate-order-pdf';
-        
-        // CSRF Token
-        const csrfToken = document.createElement('input');
-        csrfToken.type = 'hidden';
-        csrfToken.name = '_token';
-        
-        // Попробуем получить CSRF токен из meta тега
-        const metaToken = document.querySelector('meta[name="csrf-token"]');
-        if (metaToken) {
-            csrfToken.value = metaToken.getAttribute('content');
-        } else {
-            // Альтернативный способ - получить из cookie
-            const token = this.getCsrfTokenFromCookie();
-            csrfToken.value = token || '';
-        }
-        
-        form.appendChild(csrfToken);
-        
-        // Cart Items
-        const cartItemsInput = document.createElement('input');
-        cartItemsInput.type = 'hidden';
-        cartItemsInput.name = 'cartItems';
-        cartItemsInput.value = JSON.stringify(cart);
-        form.appendChild(cartItemsInput);
-        
-        // Total Amount
-        const totalInput = document.createElement('input');
-        totalInput.type = 'hidden';
-        totalInput.name = 'totalAmount';
-        totalInput.value = this.calculateTotal(cart);
-        form.appendChild(totalInput);
-        
-        return form;
-    }
-
-    static calculateTotal(cart) {
-        return cart.reduce((total, item) => {
-            const price = parseFloat(item.price) || 0;
-            const quantity = parseInt(item.quantity) || 1;
-            return total + (price * quantity);
-        }, 0);
-    }
-
-    static updateHeaderCounters() {
-        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-        const cart = this.getCart();
-        
-        // Desktop counters
-        this.updateCounter('favorites-badge', favorites.length);
-        this.updateCounter('cart-badge', cart.reduce((sum, item) => sum + (item.quantity || 1), 0));
-        
-        // Mobile counters
-        this.updateCounter('.mobile-favorites-badge', favorites.length);
-        this.updateCounter('.mobile-cart-badge', cart.reduce((sum, item) => sum + (item.quantity || 1), 0));
-    }
-
-    static updateCounter(selector, count) {
-        const element = typeof selector === 'string' && selector.startsWith('.') 
-            ? document.querySelector(selector) 
-            : document.getElementById(selector);
+            const data = await response.json();
             
-        if (element) {
-            element.textContent = count;
-            element.style.display = count > 0 ? 'block' : 'none';
+            if (data.success) {
+                this.showNotification('Товар добавлен в корзину', 'success');
+                this.updateHeaderCounters();
+                this.loadCart(); // Перезагружаем корзину
+            } else {
+                this.showNotification(data.message || 'Ошибка при добавлении товара', 'error');
+            }
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            this.showNotification('Ошибка при добавлении товара', 'error');
         }
     }
 
-    static getCsrfTokenFromCookie() {
-        const cookies = document.cookie.split(';');
-        for (let cookie of cookies) {
-            const [name, value] = cookie.trim().split('=');
-            if (name === 'XSRF-TOKEN') {
-                return decodeURIComponent(value);
+    static async updateQuantity(productId, size, quantity) {
+        try {
+            const response = await fetch('/cart/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    size: size,
+                    quantity: parseInt(quantity)
+                })
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                this.updateHeaderCounters();
+                this.loadCart(); // Перезагружаем корзину
+            } else {
+                this.showNotification(data.message || 'Ошибка при обновлении количества', 'error');
+            }
+        } catch (error) {
+            console.error('Error updating quantity:', error);
+            this.showNotification('Ошибка при обновлении количества', 'error');
+        }
+    }
+
+    static async increaseQuantity(productId, size) {
+        const input = document.querySelector(`[data-product-id="${productId}"][data-size="${size}"] input[type="number"]`);
+        if (input) {
+            const newQuantity = parseInt(input.value) + 1;
+            if (newQuantity <= 10) {
+                await this.updateQuantity(productId, size, newQuantity);
             }
         }
-        return null;
     }
 
-    static getCart() {
-        return JSON.parse(localStorage.getItem('cart') || '[]');
+    static async decreaseQuantity(productId, size) {
+        const input = document.querySelector(`[data-product-id="${productId}"][data-size="${size}"] input[type="number"]`);
+        if (input) {
+            const newQuantity = parseInt(input.value) - 1;
+            if (newQuantity >= 1) {
+                await this.updateQuantity(productId, size, newQuantity);
+            } else {
+                await this.removeFromCart(productId, size);
+            }
+        }
     }
 
-    static getPluralForm(count) {
+    static async removeFromCart(productId, size) {
+        try {
+            const response = await fetch('/cart/remove', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    size: size
+                })
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                this.showNotification('Товар удален из корзины', 'success');
+                this.updateHeaderCounters();
+                this.loadCart(); // Перезагружаем корзину
+            } else {
+                this.showNotification(data.message || 'Ошибка при удалении товара', 'error');
+            }
+        } catch (error) {
+            console.error('Error removing from cart:', error);
+            this.showNotification('Ошибка при удалении товара', 'error');
+        }
+    }
+
+    static async clearCart() {
+        try {
+            const response = await fetch('/cart/clear', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                this.showNotification('Корзина очищена', 'success');
+                this.updateHeaderCounters();
+                this.loadCart(); // Перезагружаем корзину
+            } else {
+                this.showNotification(data.message || 'Ошибка при очистке корзины', 'error');
+            }
+        } catch (error) {
+            console.error('Error clearing cart:', error);
+            this.showNotification('Ошибка при очистке корзины', 'error');
+        }
+    }
+
+    static async updateHeaderCounters() {
+        try {
+            const [countResponse, totalResponse] = await Promise.all([
+                fetch('/cart/count'),
+                fetch('/cart/total')
+            ]);
+
+            const countData = await countResponse.json();
+            const totalData = await totalResponse.json();
+
+            // Обновляем счетчики в хедере
+            const cartBadge = document.getElementById('cart-badge');
+            if (cartBadge) {
+                cartBadge.textContent = countData.count;
+                cartBadge.style.display = countData.count > 0 ? 'block' : 'none';
+            }
+
+            const mobileCartBadge = document.querySelector('.mobile-cart-badge');
+            if (mobileCartBadge) {
+                mobileCartBadge.textContent = countData.count;
+                mobileCartBadge.style.display = countData.count > 0 ? 'block' : 'none';
+            }
+        } catch (error) {
+            console.error('Error updating header counters:', error);
+        }
+    }
+
+    static async enhancedCheckout() {
+        try {
+            const response = await fetch('/cart/data');
+            const data = await response.json();
+            
+            if (!data.success || data.cart.length === 0) {
+                alert('Корзина пуста');
+                return;
+            }
+
+            // Переходим к улучшенной форме заказа
+            window.location.href = '/enhanced-order';
+        } catch (error) {
+            console.error('Error during checkout:', error);
+            alert('Ошибка при переходе к оформлению заказа');
+        }
+    }
+
+    static showNotification(message, type = 'info') {
+        // Простое уведомление
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            transition: all 0.3s ease;
+            ${type === 'success' ? 'background: #10b981;' : 
+              type === 'error' ? 'background: #ef4444;' : 
+              'background: #3b82f6;'}
+        `;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 3000);
+    }
+
+    static getPlural(count) {
         if (count % 10 === 1 && count % 100 !== 11) return '';
         if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) return 'а';
         return 'ов';
     }
 
-    static showModal(type) {
-        const modal = document.getElementById(`modal-${type}`);
-        if (modal) {
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-    }
-
-    static closeModal(type) {
-        const modal = document.getElementById(`modal-${type}`);
+    static closeModal(modalId) {
+        const modal = document.getElementById(modalId + 'Modal');
         if (modal) {
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
@@ -321,34 +334,18 @@ class CartManager {
 }
 
 // Global functions for backward compatibility
+function addToCart(productId, title, price, image, size = null) {
+    CartManager.addToCart(productId, title, price, image, size);
+}
+
+function enhancedCheckout() {
+    CartManager.enhancedCheckout();
+}
+
 function checkout() {
-    CartManager.checkout();
+    CartManager.enhancedCheckout();
 }
 
 function simpleCheckout() {
-    CartManager.simpleCheckout();
-}
-
-function updateQuantity(index, quantity) {
-    CartManager.updateQuantity(index, quantity);
-}
-
-function removeFromCart(index) {
-    CartManager.removeItem(index);
-}
-
-function clearCart() {
-    CartManager.clearCart();
-}
-
-function showModal(type) {
-    CartManager.showModal(type);
-}
-
-function closeModal(type) {
-    CartManager.closeModal(type);
-}
-
-function updateHeaderCounters() {
-    CartManager.updateHeaderCounters();
+    CartManager.enhancedCheckout();
 }

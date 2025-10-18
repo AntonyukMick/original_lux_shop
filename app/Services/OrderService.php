@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Log;
 class OrderService
 {
     /**
-     * Создать новый заказ
+     * Создать новый заказ с расширенной информацией
      */
-    public function createOrder($data, $cart)
+    public function createEnhancedOrder($data, $cart)
     {
-        Log::info('OrderService: creating order', ['data' => $data, 'cart' => $cart]);
+        Log::info('OrderService: creating enhanced order', ['data' => $data, 'cart' => $cart]);
         
         // Расчет сумм
         $subtotal = $this->calculateSubtotal($cart);
@@ -45,16 +45,16 @@ class OrderService
 
         Log::info('OrderService: order created', ['order_id' => $order->id, 'order_number' => $order->order_number]);
 
-        // Создание элементов заказа
-        $this->createOrderItems($order, $cart);
+        // Создание элементов заказа с расширенной информацией
+        $this->createEnhancedOrderItems($order, $cart);
 
         return $order;
     }
 
     /**
-     * Создать элементы заказа
+     * Создать элементы заказа с расширенной информацией
      */
-    private function createOrderItems($order, $cart)
+    private function createEnhancedOrderItems($order, $cart)
     {
         foreach ($cart as $item) {
             OrderItem::create([
@@ -62,7 +62,12 @@ class OrderService
                 'product_title' => $item['title'],
                 'price' => $item['price'],
                 'quantity' => $item['quantity'] ?? $item['qty'] ?? 1,
-                'product_image' => $item['image'] ?? null
+                'size' => $item['size'] ?? null,
+                'product_image' => $item['image'] ?? null,
+                'images' => $item['images'] ?? [],
+                'category' => $item['category'] ?? null,
+                'subcategory' => $item['subcategory'] ?? null,
+                'brand' => $item['brand'] ?? null
             ]);
         }
     }

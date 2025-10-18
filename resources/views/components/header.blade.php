@@ -1,6 +1,12 @@
 @php
-$favoritesCount = is_countable(session('favorites')) ? count(session('favorites')) : 0;
-$cartCount = is_countable(session('cart')) ? count(session('cart')) : 0;
+use App\Services\CartService;
+use App\Services\FavoriteService;
+
+$cartService = app(CartService::class);
+$favoriteService = app(FavoriteService::class);
+
+$favoritesCount = $favoriteService->getFavoritesCount();
+$cartCount = $cartService->getCount();
 $auth = session('auth');
 @endphp
 
@@ -54,7 +60,6 @@ $auth = session('auth');
                     </a>
                 @else
                     <a class="btn" href="/profile" style="text-decoration:none;color:inherit" title="Профиль">👤 {{ $auth['role'] === 'admin' ? 'Админ' : 'Профиль' }}</a>
-                    <a class="btn" href="/logout" style="text-decoration:none;color:inherit" title="Выйти">🚪</a>
                 @endif
             </div>
         </div>

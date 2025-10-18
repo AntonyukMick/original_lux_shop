@@ -332,7 +332,31 @@
                     <img src="{{ $item->product_image }}" alt="{{ $item->product_title }}" class="item-image">
                     <div class="item-details">
                         <div class="item-title">{{ $item->product_title }}</div>
-                        <div class="item-meta">Количество: {{ $item->quantity }} × {{ $item->price }}€</div>
+                        <div class="item-meta">
+                            Количество: {{ $item->quantity }} × {{ $item->price }}€
+                            @if($item->size)
+                                <br>Размер: {{ $item->size }}
+                            @endif
+                            @if($item->category)
+                                <br>Категория: {{ $item->category }}
+                                @if($item->subcategory)
+                                    / {{ $item->subcategory }}
+                                @endif
+                            @endif
+                            @if($item->brand)
+                                <br>Бренд: {{ $item->brand }}
+                            @endif
+                        </div>
+                        @if($item->images && count($item->images) > 0)
+                        <div class="item-images" style="margin-top: 8px;">
+                            <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">Выбранные фотографии:</div>
+                            <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                                @foreach($item->images as $image)
+                                <img src="{{ $image }}" alt="Фото товара" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #e2e8f0;">
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
                     </div>
                     <div class="item-total">{{ $item->total }}€</div>
                 </div>

@@ -50,6 +50,18 @@ class ProductDataService
             $images = [];
         }
         
+        // Обрабатываем размеры
+        $sizes = $product->sizes;
+        if (is_string($sizes)) {
+            $sizes = json_decode($sizes, true) ?: [];
+        }
+        if (!is_array($sizes)) {
+            $sizes = [];
+        }
+        
+        // Берем первый доступный размер или "M" по умолчанию
+        $defaultSize = !empty($sizes) ? $sizes[0] : 'M';
+
         return [
             'id' => $product->id,
             'title' => $product->title,
@@ -61,7 +73,8 @@ class ProductDataService
             'brand' => $product->brand,
             'category' => $product->category,
             'subcategory' => $product->subcat,
-            'size' => 'M',
+            'size' => $defaultSize,
+            'sizes' => $sizes, // Добавляем все доступные размеры
             'colors' => $this->generateColorsFromImages($images)
         ];
     }

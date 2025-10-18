@@ -93,8 +93,12 @@ class ProductService
         if (isset($data['images']) && is_array($data['images'])) {
             foreach ($data['images'] as $image) {
                 if ($image instanceof UploadedFile && $image->isValid()) {
+                    // Обработка загруженного файла
                     $path = $image->store('products', 'public');
                     $images[] = '/storage/' . $path;
+                } elseif (is_string($image) && !empty($image)) {
+                    // Обработка уже готового пути или URL
+                    $images[] = $image;
                 }
             }
         }
@@ -113,6 +117,7 @@ class ProductService
             'original_price' => $data['original_price'] ?? null,
             'description' => $data['description'] ?? null,
             'images' => $images,
+            'sizes' => $data['sizes'] ?? null,
             'is_active' => $data['is_active'] ?? true,
             'featured' => $data['featured'] ?? false,
             'stock_quantity' => $data['stock_quantity'] ?? 0,
@@ -134,8 +139,12 @@ class ProductService
         if (isset($data['images']) && is_array($data['images'])) {
             foreach ($data['images'] as $image) {
                 if ($image instanceof UploadedFile && $image->isValid()) {
+                    // Обработка загруженного файла
                     $path = $image->store('products', 'public');
                     $newImages[] = '/storage/' . $path;
+                } elseif (is_string($image) && !empty($image)) {
+                    // Обработка уже готового пути или URL
+                    $newImages[] = $image;
                 }
             }
         }
@@ -155,6 +164,7 @@ class ProductService
             'original_price' => $data['original_price'] ?? null,
             'description' => $data['description'] ?? null,
             'images' => $images,
+            'sizes' => $data['sizes'] ?? $product->sizes,
             'is_active' => $data['is_active'] ?? true,
             'featured' => $data['featured'] ?? false,
             'stock_quantity' => $data['stock_quantity'] ?? 0,

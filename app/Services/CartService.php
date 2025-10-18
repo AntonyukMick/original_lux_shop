@@ -2,85 +2,184 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Session;
+use App\Models\CartItem;
+use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class CartService
 {
     /**
-     * Получить содержимое корзины
+     * Проверить, авторизован ли пользователь
      */
-    public function getCart()
+    public function isAuthenticated()
     {
-        return session('cart', []);
+        $auth = session('auth');
+        return $auth && isset($auth['id']);
+    }
+
+    /**
+     * Получить ID пользователя для корзины (только авторизованные пользователи)
+     */
+    private function getCartOwner()
+    {
+        $auth = session('auth');
+        
+        if ($auth && isset($auth['id'])) {
+            return ['user_id' => $auth['id'], 'session_id' => null];
+        }
+        
+        // Если пользователь не авторизован, возвращаем null
+        return ['user_id' => null, 'session_id' => null];
+    }
+
+    /**
+     * Получить все товары в корзине (только для авторизованных пользователей)
+     */
+    public function getCartItems()
+    {
+        $owner = $this->getCartOwner();
+        
+        // Если пользователь не авторизован, возвращаем пустую коллекцию
+        if (!$owner['user_id']) {
+            return collect();
+        }
+        
+        return CartItem::where('user_id', $owner['user_id'])->get();
     }
 
     /**
      * Добавить товар в корзину
      */
-    public function addToCart($data)
+    public function addItem($productId, $title, $price, $quantity = 1, $size = null, $image = null)
     {
-        $cart = $this->getCart();
-        $key = $this->generateCartKey($data);
+        $owner = $this->getCartOwner();
         
-        if (!isset($cart[$key])) {
-            $cart[$key] = [
-                'title' => $data['title'],
-                'price' => (float) $data['price'],
-                'qty' => $data['qty'] ?? 1,
-                'image' => $data['image'] ?? null
-            ];
+        // Если пользователь не авторизован, выбрасываем исключение
+        if (!$owner['user_id']) {
+            throw new \Exception('Пользователь должен быть авторизован для добавления товаров в корзину');
+        }
+        
+        // Проверяем, есть ли уже такой товар
+        $existingItem = CartItem::where('product_id', $productId)
+            ->where('size', $size)
+            ->where('user_id', $owner['user_id'])
+            ->first();
+        
+        if ($existingItem) {
+            // Увеличиваем количество
+            $existingItem->quantity += $quantity;
+            $existingItem->save();
         } else {
-            $cart[$key]['qty'] += $data['qty'] ?? 1;
+            // Создаем новый товар в корзине
+            $cartData = [
+                'product_id' => $productId,
+                'product_title' => $title,
+                'price' => $price,
+                'quantity' => $quantity,
+                'size' => $size,
+                'image' => $image,
+                'user_id' => $owner['user_id'],
+                'session_id' => null
+            ];
+            
+            CartItem::create($cartData);
         }
         
-        session(['cart' => $cart]);
-        return $cart;
+        return true;
     }
 
     /**
-     * Обновить количество товара в корзине
+     * Удалить товар из корзины (только для авторизованных пользователей)
      */
-    public function updateQuantity($key, $quantity)
+    public function removeItem($productId, $size = null)
     {
-        $cart = $this->getCart();
+        $owner = $this->getCartOwner();
         
-        if (isset($cart[$key])) {
-            $cart[$key]['qty'] = (int) $quantity;
-            session(['cart' => $cart]);
+        // Если пользователь не авторизован, выбрасываем исключение
+        if (!$owner['user_id']) {
+            throw new \Exception('Пользователь должен быть авторизован для удаления товаров из корзины');
         }
         
-        return $cart;
+        $query = CartItem::where('product_id', $productId)
+            ->where('user_id', $owner['user_id']);
+        
+        if ($size) {
+            $query->where('size', $size);
+        }
+        
+        $query->delete();
+        
+        return true;
     }
 
     /**
-     * Удалить товар из корзины
+     * Обновить количество товара (только для авторизованных пользователей)
      */
-    public function removeFromCart($key)
+    public function updateQuantity($productId, $quantity, $size = null)
     {
-        $cart = $this->getCart();
-        unset($cart[$key]);
-        session(['cart' => $cart]);
-        return $cart;
+        $owner = $this->getCartOwner();
+        
+        // Если пользователь не авторизован, выбрасываем исключение
+        if (!$owner['user_id']) {
+            throw new \Exception('Пользователь должен быть авторизован для обновления количества товаров');
+        }
+        
+        $query = CartItem::where('product_id', $productId)
+            ->where('user_id', $owner['user_id']);
+        
+        if ($size) {
+            $query->where('size', $size);
+        }
+        
+        $item = $query->first();
+        
+        if ($item) {
+            if ($quantity <= 0) {
+                $item->delete();
+            } else {
+                $item->quantity = $quantity;
+                $item->save();
+            }
+        }
+        
+        return true;
     }
 
     /**
-     * Очистить корзину
+     * Очистить корзину (только для авторизованных пользователей)
      */
     public function clearCart()
     {
-        session()->forget('cart');
+        $owner = $this->getCartOwner();
+        
+        // Если пользователь не авторизован, выбрасываем исключение
+        if (!$owner['user_id']) {
+            throw new \Exception('Пользователь должен быть авторизован для очистки корзины');
+        }
+        
+        CartItem::where('user_id', $owner['user_id'])->delete();
+        
+        return true;
+    }
+
+    /**
+     * Проверить, пуста ли корзина
+     */
+    public function isCartEmpty()
+    {
+        return $this->getCartItems()->isEmpty();
     }
 
     /**
      * Получить общую сумму корзины
      */
-    public function getCartTotal()
+    public function getTotal()
     {
-        $cart = $this->getCart();
+        $items = $this->getCartItems();
         $total = 0;
         
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['qty'];
+        foreach ($items as $item) {
+            $total += $item->price * $item->quantity;
         }
         
         return $total;
@@ -89,60 +188,16 @@ class CartService
     /**
      * Получить количество товаров в корзине
      */
-    public function getCartCount()
+    public function getCount()
     {
-        $cart = $this->getCart();
-        $count = 0;
-        
-        foreach ($cart as $item) {
-            $count += $item['qty'];
-        }
-        
-        return $count;
+        return $this->getCartItems()->sum('quantity');
     }
 
     /**
-     * Проверить, пуста ли корзина
+     * Получить количество уникальных товаров
      */
-    public function isCartEmpty()
+    public function getItemsCount()
     {
-        return empty($this->getCart());
-    }
-
-    /**
-     * Генерировать ключ для товара в корзине
-     */
-    private function generateCartKey($data)
-    {
-        return md5($data['title'] . $data['price'] . ($data['image'] ?? ''));
-    }
-
-    /**
-     * Получить данные для оформления заказа
-     */
-    public function getCheckoutData()
-    {
-        $cart = $this->getCart();
-        $subtotal = $this->getCartTotal();
-        $shippingCost = $this->calculateShippingCost($subtotal);
-        $total = $subtotal + $shippingCost;
-
-        return [
-            'cart' => $cart,
-            'subtotal' => $subtotal,
-            'shipping_cost' => $shippingCost,
-            'total' => $total,
-            'item_count' => $this->getCartCount()
-        ];
-    }
-
-    /**
-     * Рассчитать стоимость доставки
-     */
-    private function calculateShippingCost($subtotal)
-    {
-        $pickupService = app(\App\Services\PickupPointService::class);
-        return $pickupService->calculateShippingCost($subtotal);
+        return $this->getCartItems()->count();
     }
 }
-

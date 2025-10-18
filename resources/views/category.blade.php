@@ -445,7 +445,7 @@
                                         </div>
                                     @endif
                                     
-                                    <button class="add-to-cart-btn" onclick="addToCartSimple({{ $product->id }}, 1, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ is_array($product->images ?? null) ? ($product->images[0] ?? '') : ($product->image ?? '') }}', event)">
+                                    <button class="add-to-cart-btn" onclick="addToCartNew({{ $product->id }}, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ is_array($product->images ?? null) ? ($product->images[0] ?? '') : ($product->image ?? '') }}', event)">
                                         Добавить в корзину
                                     </button>
                                 </div>
@@ -464,6 +464,108 @@
 </main>
 
 <script>
+    // НОВАЯ СИСТЕМА ДОБАВЛЕНИЯ В КОРЗИНУ
+    async function addToCartNew(productId, title, price, image, event) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        
+        try {
+            console.log('=== ДОБАВЛЕНИЕ В КОРЗИНУ ===');
+            console.log('Product ID:', productId);
+            console.log('Title:', title);
+            console.log('Price:', price);
+            console.log('Image:', image);
+            
+            // Получаем CSRF токен
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfToken) {
+                throw new Error('CSRF token not found');
+            }
+            
+            console.log('CSRF Token:', csrfToken.getAttribute('content'));
+            
+            // Отправляем запрос на сервер
+            const response = await fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken.getAttribute('content'),
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    title: title,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                })
+            });
+
+            console.log('Response status:', response.status);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('Response data:', data);
+            
+            if (data.success) {
+                console.log('✅ Товар успешно добавлен в корзину');
+                showNotification('Товар добавлен в корзину!', 'success');
+                
+                // Обновляем счетчики
+                updateCartCounters(data.cart_count, data.cart_total);
+            } else if (data.requires_auth) {
+                console.log('🔒 Требуется авторизация');
+                showAuthModal();
+            } else {
+                console.error('❌ Ошибка:', data.message);
+                showNotification(data.message || 'Ошибка при добавлении товара', 'error');
+            }
+        } catch (error) {
+            console.error('❌ Критическая ошибка:', error);
+            showNotification('Ошибка: ' + error.message, 'error');
+        }
+    }
+
+    // Обновление счетчиков корзины
+    function updateCartCounters(count, total) {
+        console.log('Обновляем счетчики:', { count, total });
+        
+        // Обновляем счетчик в хедере
+        const cartBadge = document.getElementById('cart-badge');
+        if (cartBadge) {
+            cartBadge.textContent = count;
+            cartBadge.style.display = count > 0 ? 'block' : 'none';
+        }
+        
+        // Обновляем мобильный счетчик
+        const mobileCartBadge = document.querySelector('.mobile-cart-badge');
+        if (mobileCartBadge) {
+            mobileCartBadge.textContent = count;
+            mobileCartBadge.style.display = count > 0 ? 'block' : 'none';
+        }
+    }
+
+    // Функция для показа модального окна авторизации
+    function showAuthModal() {
+        const modal = document.getElementById('auth-modal');
+        if (modal) {
+            modal.style.display = 'block';
+        }
+    }
+
+    // Функция для закрытия модального окна авторизации
+    function closeAuthModal() {
+        const modal = document.getElementById('auth-modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
     // Функции для управления корзиной и избранным (аналогично странице акций)
     function addToCartSimple(productId, quantity, title, price, image, event) {
         if (event) {
@@ -651,5 +753,23 @@
         updateHeaderCounters();
     });
 </script>
+
+<!-- Модальное окно авторизации -->
+<div id="auth-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:12px;padding:24px;max-width:400px;width:90%;max-height:80vh;overflow-y:auto">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+            <h2 style="margin:0;color:#0f172a;font-size:24px;font-weight:700">Вход в систему</h2>
+            <button onclick="closeAuthModal()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#64748b">&times;</button>
+        </div>
+        <div style="color:#374151;line-height:1.6;margin-bottom:20px">
+            <p>Для добавления товаров в корзину необходимо войти в систему.</p>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:center">
+            <a href="/login" style="background:#527ea6;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;transition:background 0.2s">Войти</a>
+            <a href="/register" style="background:#f1f5f9;color:#475569;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;border:1px solid #cbd5e1;transition:background 0.2s">Регистрация</a>
+        </div>
+    </div>
+</div>
+
 @endsection
 

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Управление видео | ORIGINAL | LUX SHOP')
 

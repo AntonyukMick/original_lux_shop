@@ -10,8 +10,8 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\OrderPdfController;
 use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\PromotionsController;
-use App\Http\Controllers\TelegramBotController;
 use App\Http\Controllers\SimpleOrderController;
+use App\Http\Controllers\EnhancedOrderController;
 use App\Http\Controllers\AdminProductController;
 use App\Models\VideoLink;
 
@@ -46,14 +46,13 @@ Route::get('/product/{id}', [ProductController::class, 'show'])->name('products.
 
 // Корзина
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/sync', [CartController::class, 'sync'])->name('cart.sync');
-Route::get('/cart/data', [CartController::class, 'getCartData'])->name('cart.data');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/update-quantity', [CartController::class, 'updateQuantity'])->name('cart.update-quantity');
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
-Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
-Route::get('/cart/total', [CartController::class, 'total'])->name('cart.total');
+Route::get('/cart/count', [CartController::class, 'getCount'])->name('cart.count');
+Route::get('/cart/total', [CartController::class, 'getTotal'])->name('cart.total');
+Route::post('/cart/product-id', [CartController::class, 'getProductId'])->name('cart.product-id');
 
 // Избранное
 Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
@@ -69,10 +68,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
 });
 
+// Упрощенное создание заказа из корзины
+Route::post('/orders/create-from-cart', [OrderController::class, 'createFromCart'])->name('orders.create-from-cart');
+
 // Простые заказы (без авторизации)
 Route::get('/simple-order', [SimpleOrderController::class, 'showSimpleOrder'])->name('simple-order.show');
 Route::post('/simple-order', [SimpleOrderController::class, 'processSimpleOrder'])->name('simple-order.process');
 Route::get('/order-success', [SimpleOrderController::class, 'showSuccess'])->name('order.success');
+
+// Улучшенная система заказов
+Route::get('/enhanced-order', [EnhancedOrderController::class, 'showOrderForm'])->name('enhanced-order.show');
+Route::post('/enhanced-order-process', [EnhancedOrderController::class, 'processOrder'])->name('enhanced-order.process');
 
 // PDF маршруты
 Route::post('/generate-order-pdf', [OrderPdfController::class, 'generateOrderPdf'])->name('generate.order.pdf');
@@ -113,21 +119,14 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::delete('/products/{id}', [AdminProductController::class, 'destroy'])->name('products.destroy');
     
     // Управление заказами
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders', [AdminController::class, 'orders'])->name('orders.index');
     Route::get('/orders/statistics', [OrderController::class, 'statistics'])->name('orders.statistics');
     Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+    Route::post('/orders/{id}/status-api', [OrderController::class, 'updateStatusApi'])->name('orders.status-api');
     Route::post('/orders/{id}/payment', [OrderController::class, 'updatePayment'])->name('orders.payment');
     
     // Управление видео-ссылками
     Route::get('/videos', [AdminController::class, 'videos'])->name('videos.index');
     Route::post('/videos', [AdminController::class, 'storeVideo'])->name('videos.store');
     Route::delete('/videos/{id}', [AdminController::class, 'deleteVideo'])->name('videos.delete');
-});
-
-// Telegram Bot маршруты
-Route::prefix('telegram')->group(function () {
-    Route::post('/webhook', [TelegramBotController::class, 'webhook'])->name('telegram.webhook');
-    Route::post('/set-webhook', [TelegramBotController::class, 'setWebhook'])->name('telegram.set-webhook');
-    Route::post('/delete-webhook', [TelegramBotController::class, 'deleteWebhook'])->name('telegram.delete-webhook');
-    Route::get('/bot-info', [TelegramBotController::class, 'getBotInfo'])->name('telegram.bot-info');
 });

@@ -18,6 +18,7 @@ class Product extends Model
         'original_price',
         'description',
         'images',
+        'sizes',
         'is_active',
         'featured',
         'stock_quantity',
@@ -28,6 +29,7 @@ class Product extends Model
 
     protected $casts = [
         'images' => 'array',
+        'sizes' => 'array',
         'price' => 'decimal:2',
         'original_price' => 'decimal:2',
         'is_active' => 'boolean',

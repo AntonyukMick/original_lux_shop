@@ -253,10 +253,24 @@
             cursor: pointer;
             font-size: 14px;
             transition: all 0.2s;
+            margin: 4px;
         }
         
         .size-btn:hover {
             border-color: #527ea6;
+        }
+        
+        .size-btn.selected {
+            background: #527ea6;
+            color: #fff;
+            border-color: #527ea6;
+        }
+        
+        .size-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
         }
         
         .size-link {
@@ -309,6 +323,13 @@
             text-align: center;
             font-size: 16px;
             font-weight: 600;
+            -moz-appearance: textfield; /* Firefox */
+        }
+        
+        .quantity-input::-webkit-outer-spin-button,
+        .quantity-input::-webkit-inner-spin-button {
+            -webkit-appearance: none; /* Chrome, Safari */
+            margin: 0;
         }
         
         /* Action Buttons */
@@ -318,31 +339,34 @@
             margin-bottom: 24px;
         }
         
-        .add-to-cart {
-            flex: 1;
+        .add-to-cart-btn {
+            width: 100%;
             height: 48px;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            color: #475569;
-            border: 1px solid #e2e8f0;
-            border-radius: 24px;
+            background: #527ea6;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
             font-size: 15px;
-            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: background 0.2s;
+            font-weight: 600;
         }
         
-        .add-to-cart:hover {
-            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-            color: #1e293b;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            border-color: #cbd5e1;
+        .add-to-cart-btn:hover {
+            background: #3b5a7a;
         }
         
-        .add-to-cart:active {
-            transform: translateY(0);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        /* Стили для кнопки "В корзине" */
+        .add-to-cart-btn[style*="background:#48bb78"], 
+        .add-to-cart-btn[style*="background: #48bb78"] {
+            background: #48bb78 !important;
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+        
+        .add-to-cart-btn[style*="background:#48bb78"]:hover, 
+        .add-to-cart-btn[style*="background: #48bb78"]:hover {
+            background: #38a169 !important;
         }
         
         .favorite-btn {
@@ -745,7 +769,19 @@
                             <span class="option-title">РАЗМЕР</span>
                             <a href="#" class="size-link">УЗНАТЬ СВОЙ РАЗМЕР</a>
                         </div>
-                        <button class="size-btn">{{ $productData['size'] }}</button>
+                        @if(isset($productData['sizes']) && !empty($productData['sizes']))
+                            <div class="size-options">
+                                @foreach($productData['sizes'] as $size)
+                                    <button class="size-btn {{ $size === $productData['size'] ? 'selected' : '' }}" 
+                                            data-size="{{ $size }}" 
+                                            onclick="selectSize('{{ $size }}', this)">
+                                        {{ $size }}
+                                    </button>
+                                @endforeach
+                            </div>
+                        @else
+                            <button class="size-btn selected">{{ $productData['size'] }}</button>
+                        @endif
                     </div>
 
                     <!-- Quantity -->
@@ -760,7 +796,7 @@
 
                     <!-- Action Buttons -->
                     <div class="action-buttons">
-                        <button class="add-to-cart" data-action="add-to-cart" data-product-id="{{ $productData['id'] }}" data-quantity="1">ДОБАВИТЬ В КОРЗИНУ</button>
+                        <button class="add-to-cart-btn" data-action="add-to-cart" data-product-id="{{ $productData['id'] }}" data-quantity="1" data-size="{{ $productData['size'] }}">В корзину</button>
                         <button class="favorite-btn" data-action="toggle-favorite" data-product-id="{{ $productData['id'] }}" title="Добавить в избранное">♡</button>
                     </div>
 
@@ -906,11 +942,35 @@
             }
         }
 
+        // Select size
+        function selectSize(size, element) {
+            // Убираем активное состояние со всех кнопок размеров
+            document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
+            // Добавляем активное состояние к выбранной кнопке
+            element.classList.add('selected');
+            
+            // Обновляем атрибут data-size кнопки добавления в корзину
+            const addToCartBtn = document.querySelector('.add-to-cart-btn');
+            if (addToCartBtn) {
+                addToCartBtn.setAttribute('data-size', size);
+            }
+            
+            console.log('Выбран размер:', size);
+        }
+
         // Change quantity
         function changeQuantity(delta) {
             const input = document.getElementById('quantity');
             const newValue = Math.max(1, parseInt(input.value) + delta);
             input.value = newValue;
+            
+            // Обновляем атрибут data-quantity кнопки добавления в корзину
+            const addToCartBtn = document.querySelector('.add-to-cart-btn');
+            if (addToCartBtn) {
+                addToCartBtn.setAttribute('data-quantity', newValue);
+            }
+            
+            console.log('Количество изменено на:', newValue);
         }
 
         // Используем глобальную функцию addToCart из common-functions.js
@@ -1038,8 +1098,13 @@
         document.addEventListener('DOMContentLoaded', function() {
             updateProductStatuses();
             updateHeaderCounters();
+            
+            // Обработчик кнопки добавления в корзину теперь в common-functions.js
         });
     </script>
+    
+    <!-- Подключаем общие функции -->
+    <script src="{{ asset('js/common-functions.js') }}"></script>
     
     <!-- Модальные окна -->
     <div id="modal-faq" class="modal hidden">

@@ -6,18 +6,16 @@ use App\Http\Requests\AuthRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ProfileRequest;
 use App\Services\AuthService;
-use App\Services\UserActivityService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class AuthController extends Controller
 {
     protected $authService;
-    protected $activityService;
 
-    public function __construct(AuthService $authService, UserActivityService $activityService)
+    public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
-        $this->activityService = $activityService;
     }
 
     /**
@@ -34,27 +32,18 @@ class AuthController extends Controller
     public function login(AuthRequest $request)
     {
         $validated = $request->validated();
-        
+
         $authData = $this->authService->authenticate(
-            $validated['telegram_tag'], 
+            $validated['telegram_tag'],
             $validated['password']
         );
 
         if (!$authData) {
-            // Логируем неудачную попытку входа
-            $this->activityService->logActivity('login_failed', null, [
-                'telegram_tag' => $validated['telegram_tag'],
-                'reason' => 'invalid_credentials'
-            ], $request);
-            
-            return back()->withErrors(['telegram_tag' => 'Неверный Telegram тег или пароль'])
+            return back()->withErrors(['telegram_tag' => 'Неверные логин или пароль'])
                 ->withInput();
         }
 
         session(['auth' => $authData]);
-        
-        // Логируем успешный вход
-        $this->activityService->logLogin($authData['id'], $authData['telegram_tag'], $request);
         
         return redirect('/')->with('success', 'Вы успешно вошли в систему');
     }
@@ -64,13 +53,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        $authData = session('auth');
-        if ($authData) {
-            // Логируем выход
-            $this->activityService->logLogout($authData['id']);
-        }
-        
-        $this->authService->logout();
+        session()->forget('auth');
         return redirect('/')->with('success', 'Вы вышли из системы');
     }
 
@@ -88,12 +71,9 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $validated = $request->validated();
-        
+
         $authData = $this->authService->register($validated);
         session(['auth' => $authData]);
-
-        // Логируем регистрацию
-        $this->activityService->logRegistration($authData['id'], $authData['telegram_tag'], $request);
 
         return redirect('/')->with('success', 'Регистрация успешна!');
     }
@@ -101,14 +81,15 @@ class AuthController extends Controller
     /**
      * Показать профиль пользователя
      */
-    public function profile(): View
+    public function profile()
     {
         $auth = session('auth');
+        
         if (!$auth) {
-            return redirect()->route('auth.login');
+            return redirect('/login')->with('error', 'Необходимо войти в систему');
         }
 
-        return view('profile', compact('auth'));
+        return view('profile', ['auth' => $auth]);
     }
 
     /**
@@ -118,7 +99,7 @@ class AuthController extends Controller
     {
         $validated = $request->validated();
         $currentAuth = session('auth');
-        
+
         $authData = $this->authService->updateProfile($validated, $currentAuth);
         session(['auth' => $authData]);
 

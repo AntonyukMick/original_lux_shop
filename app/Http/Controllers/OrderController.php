@@ -6,7 +6,10 @@ use App\Services\OrderService;
 use App\Services\CartService;
 use App\Services\LocalStorageService;
 use App\Services\AdminNotificationService;
+use App\Services\ProductCategoryService;
 use App\Http\Requests\OrderRequest;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -14,11 +17,12 @@ class OrderController extends Controller
 {
 
     public function __construct(
-     protected OrderService $orderService,
-     protected CartService $cartService,
-     protected LocalStorageService $localStorageService,
-     protected AdminNotificationService $adminNotificationService)
-    {}
+        protected OrderService $orderService,
+        protected CartService $cartService,
+        protected LocalStorageService $localStorageService,
+        protected AdminNotificationService $adminNotificationService,
+        protected ProductCategoryService $productCategoryService
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -138,6 +142,45 @@ class OrderController extends Controller
     }
 
     /**
+     * Обновить статус заказа (упрощенный API метод)
+     */
+    public function updateStatusApi(Request $request, string $id)
+    {
+        try {
+            $order = Order::findOrFail($id);
+            $status = $request->input('status');
+            
+            if (!in_array($status, ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Недопустимый статус заказа'
+                ], 400);
+            }
+            
+            $order->status = $status;
+            $order->save();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Статус заказа обновлен',
+                'order_id' => $order->id,
+                'new_status' => $status
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Order status update error', [
+                'error' => $e->getMessage(),
+                'order_id' => $id
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибка при обновлении статуса заказа'
+            ], 500);
+        }
+    }
+
+    /**
      * Обновить статус заказа (для админа)
      */
     public function updateStatus(OrderRequest $request, string $id)
@@ -167,11 +210,88 @@ class OrderController extends Controller
     }
 
     /**
-     * Получить статистику заказов (для админа)
+     * Создать заказ из корзины (упрощенный метод)
      */
-    public function statistics()
+    public function createFromCart(Request $request)
     {
-        $statistics = $this->orderService->getOrderStatistics();
-        return view('admin.orders.statistics', compact('statistics'));
+        try {
+            // Проверяем авторизацию
+            $auth = session('auth');
+            if (!$auth || !isset($auth['id'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Необходимо войти в систему'
+                ], 401);
+            }
+            
+            // Получаем товары из корзины
+            $cartItems = $this->cartService->getCartItems();
+            if ($cartItems->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Корзина пуста'
+                ], 400);
+            }
+            
+            // Создаем заказ
+            $orderData = [
+                'user_id' => $auth['id'],
+                'order_number' => Order::generateOrderNumber(),
+                'customer_name' => $auth['name'] ?? 'Пользователь',
+                'customer_email' => $auth['email'] ?? 'user@example.com',
+                'customer_phone' => $auth['phone'] ?? '+7 (000) 000-00-00',
+                'shipping_address' => $request->input('shipping_address', 'Адрес не указан'),
+                'shipping_city' => $request->input('shipping_city', 'Город не указан'),
+                'shipping_postal_code' => $request->input('shipping_postal_code', '000000'),
+                'shipping_country' => $request->input('shipping_country', 'Россия'),
+                'notes' => $request->input('notes', 'Заказ оформлен через корзину'),
+                'subtotal' => $this->cartService->getTotal(),
+                'shipping_cost' => 0,
+                'total' => $this->cartService->getTotal(),
+                'status' => 'pending',
+                'payment_method' => 'cash',
+                'payment_status' => 'pending'
+            ];
+            
+            $order = Order::create($orderData);
+            
+            // Добавляем товары в заказ
+            foreach ($cartItems as $cartItem) {
+                // Получаем информацию о товаре для правильной категории и бренда
+                $productInfo = $this->productCategoryService->getProductInfo($cartItem->product_title);
+                
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_title' => $cartItem->product_title,
+                    'price' => $cartItem->price,
+                    'quantity' => $cartItem->quantity,
+                    'size' => $cartItem->size,
+                    'product_image' => $cartItem->image,
+                    'category' => $productInfo['category_name'],
+                    'brand' => $productInfo['brand']
+                ]);
+            }
+            
+            // Очищаем корзину
+            $this->cartService->clearCart();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Заказ успешно оформлен',
+                'order_number' => $order->order_number,
+                'order_id' => $order->id
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Order creation from cart error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибка при оформлении заказа'
+            ], 500);
+        }
     }
 }

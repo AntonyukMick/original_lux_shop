@@ -16,7 +16,7 @@
     @yield('styles')
 </head>
 <body>
-    @include('components.header-cart-favorites')
+    @include('components.header')
     
     <main class="main">
         @yield('content')

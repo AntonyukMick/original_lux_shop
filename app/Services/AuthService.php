@@ -12,23 +12,14 @@ class AuthService
     /**
      * Аутентификация пользователя
      */
-    public function authenticate(string $telegramTag, string $password): ?array
+    public function authenticate(string $username, string $password): ?array
     {
         try {
-            // Попытка найти пользователя по telegram_tag
-            $user = User::where('telegram_tag', $telegramTag)->first();
-        } catch (\Exception $e) {
-            // Если колонка telegram_tag не существует, используем fallback
-            Log::warning('telegram_tag column not found, using fallback authentication', [
-                'error' => $e->getMessage(),
-                'telegram_tag' => $telegramTag
-            ]);
-            
-            // Временный fallback - ищем по email или имени
-            $user = User::where('email', $telegramTag)
-                       ->orWhere('name', $telegramTag)
+            // Попытка найти пользователя по username
+            $user = User::where('email', $username)
+                       ->orWhere('name', $username)
+                       ->orWhere('telegram_tag', $username)
                        ->first();
-        }
 
         if (!$user || !Hash::check($password, $user->password)) {
             return null;
@@ -51,12 +42,20 @@ class AuthService
         return [
             'id' => $user->id,
             'username' => $user->name,
-            'telegram_tag' => $user->telegram_tag ?? $telegramTag,
+            'telegram_tag' => $user->telegram_tag ?? null,
             'email' => $user->email,
             'role' => $user->role,
             'phone' => $user->phone,
             'address' => $user->address
         ];
+        
+        } catch (\Exception $e) {
+            Log::error('Authentication error', [
+                'error' => $e->getMessage(),
+                'username' => $username
+            ]);
+            return null;
+        }
     }
 
     /**

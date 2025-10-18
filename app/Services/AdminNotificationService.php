@@ -14,8 +14,7 @@ class AdminNotificationService
 
     public function __construct()
     {
-        $this->botToken = config('telegram.bot_token');
-        $this->adminChatId = config('telegram.admin_chat_id');
+        // Уведомления отключены
     }
 
     /**
@@ -34,13 +33,8 @@ class AdminNotificationService
                 'created_at' => $order->created_at->toISOString()
             ]);
 
-            // Отправляем в Telegram если настроен
-            if ($this->botToken && $this->adminChatId && config('telegram.notifications.new_order', true)) {
-                return $this->sendTelegramNotification($order);
-            }
-
-            // Если Telegram не настроен, просто логируем
-            Log::info('Telegram notification skipped - bot token or admin chat ID not configured');
+            // Уведомления отключены
+            Log::info('Notifications disabled');
             return true;
 
         } catch (\Exception $e) {

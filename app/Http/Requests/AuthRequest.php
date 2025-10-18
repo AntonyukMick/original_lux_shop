@@ -20,7 +20,7 @@ class AuthRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'telegram_tag' => 'required|string|regex:/^@[a-zA-Z0-9_]{5,32}$/',
+            'telegram_tag' => 'required|string|max:255',
             'password' => 'required|string',
         ];
     }
@@ -32,7 +32,7 @@ class AuthRequest extends FormRequest
     {
         return [
             'telegram_tag.required' => 'Telegram тег обязателен',
-            'telegram_tag.regex' => 'Некорректный формат Telegram тега. Используйте @username (5-32 символа)',
+            'telegram_tag.max' => 'Telegram тег не должен превышать 255 символов',
             'password.required' => 'Пароль обязателен',
         ];
     }

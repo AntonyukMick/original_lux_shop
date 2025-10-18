@@ -14,12 +14,18 @@ class OrderItem extends Model
         'product_title',
         'price',
         'quantity',
-        'product_image'
+        'size',
+        'product_image',
+        'images',
+        'category',
+        'subcategory',
+        'brand'
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
-        'quantity' => 'integer'
+        'quantity' => 'integer',
+        'images' => 'array'
     ];
 
     // Связь с заказом
