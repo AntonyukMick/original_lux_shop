@@ -24,6 +24,7 @@ class User extends Authenticatable
         'role',
         'phone',
         'address',
+        'telegram_tag',
         'is_active',
         'last_login_at',
     ];

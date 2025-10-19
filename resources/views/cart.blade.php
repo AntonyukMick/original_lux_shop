@@ -372,18 +372,19 @@
         // Проверяем авторизацию
         const auth = @json(session('auth'));
         if (!auth || !auth.id) {
-            alert('Для оформления заказа необходимо войти в систему');
-            window.location.href = '/login';
-            return;
-        }
-        
-        if (!confirm('Оформить заказ? Корзина будет очищена после оформления.')) {
+            showNotification('Для оформления заказа необходимо войти в систему', 'error');
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 2000);
             return;
         }
         
         // Получаем данные корзины
         const cartItems = @json($cartItems);
         const total = {{ $total }};
+        
+        // Показываем уведомление о начале оформления
+        showNotification('Оформляем заказ...', 'info');
         
         // Отправляем заказ
         fetch('/orders/create-from-cart', {
@@ -413,16 +414,18 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Заказ успешно оформлен! Номер заказа: ' + data.order_number);
-                // Очищаем корзину
-                location.reload();
+                showNotification('✅ Заказ успешно оформлен! Номер заказа: ' + data.order_number, 'success');
+                // Очищаем корзину через 3 секунды
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
             } else {
-                alert('Ошибка при оформлении заказа: ' + (data.message || 'Неизвестная ошибка'));
+                showNotification('❌ Ошибка при оформлении заказа: ' + (data.message || 'Неизвестная ошибка'), 'error');
             }
         })
         .catch(error => {
             console.error('Ошибка:', error);
-            alert('Ошибка при оформлении заказа');
+            showNotification('❌ Ошибка при оформлении заказа', 'error');
         });
     }
     

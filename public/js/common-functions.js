@@ -556,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Click event:', e.target, e.target.dataset);
         
         if (e.target.matches('[data-action="add-to-cart"]')) {
-            console.log('Add to cart clicked');
+            console.log('🛒 Add to cart clicked');
             e.preventDefault();
             e.stopPropagation();
             
@@ -565,8 +565,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const quantity = quantityInput ? parseInt(quantityInput.value) : parseInt(e.target.dataset.quantity) || 1;
             const size = e.target.dataset.size || '';
             
+            console.log('🛒 Product data:', { productId, quantity, size });
+            
             // Проверяем, находимся ли мы на странице товара
             if (window.location.pathname.includes('/product/')) {
+                console.log('🛒 On product page, using addToCartNew');
                 // На странице товара используем addToCartNew с полными данными
                 const title = e.target.closest('.product-detail')?.querySelector('h1')?.textContent || 'Товар';
                 const priceElement = e.target.closest('.product-detail')?.querySelector('.price');
@@ -574,11 +577,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const imageElement = e.target.closest('.product-detail')?.querySelector('.product-image img');
                 const image = imageElement ? imageElement.src : '';
                 
-                console.log('Adding to cart from product page:', { productId, title, price, image, size, quantity });
+                console.log('🛒 Adding to cart from product page:', { productId, title, price, image, size, quantity });
                 await addToCartNew(productId, title, price, image, size, quantity);
             } else {
+                console.log('🛒 On other page, using addToCart');
                 // На других страницах используем обычный addToCart
-                console.log('Adding to cart from other page:', productId, quantity);
+                console.log('🛒 Adding to cart from other page:', productId, quantity);
                 await addToCart(productId, quantity);
             }
         }
@@ -623,7 +627,7 @@ window.updateProductStatus = updateProductStatus;
  */
 async function addToCartNew(productId, title, price, image, size = '', quantity = 1) {
     try {
-        console.log('🛒 Adding to cart:', { productId, title, price, image, size, quantity });
+        console.log('🛒 Adding to cart via PHP controller:', { productId, title, price, image, size, quantity });
         
         const response = await fetch('/cart/add', {
             method: 'POST',
@@ -641,10 +645,17 @@ async function addToCartNew(productId, title, price, image, size = '', quantity 
             })
         });
         
+        console.log('🛒 Response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
+        console.log('🛒 Response data:', data);
         
         if (data.success) {
-            console.log('✅ Товар добавлен в корзину:', data);
+            console.log('✅ Товар добавлен в корзину через PHP:', data);
             showNotification(data.message || 'Товар добавлен в корзину', 'success');
             
             // Обновляем счетчики
@@ -661,7 +672,11 @@ async function addToCartNew(productId, title, price, image, size = '', quantity 
             });
         } else {
             console.error('❌ Ошибка добавления в корзину:', data);
-            showNotification(data.message || 'Ошибка добавления в корзину', 'error');
+            if (data.requires_auth) {
+                showNotification('Для добавления товара в корзину необходимо войти в систему', 'error');
+            } else {
+                showNotification(data.message || 'Ошибка добавления в корзину', 'error');
+            }
         }
     } catch (error) {
         console.error('❌ Ошибка при добавлении в корзину:', error);

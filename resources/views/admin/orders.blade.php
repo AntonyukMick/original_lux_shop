@@ -173,6 +173,12 @@
                                                     <strong>{{ $order->customer_name }}</strong><br>
                                                     <small class="text-muted">{{ $order->customer_email }}</small><br>
                                                     <small class="text-muted">{{ $order->customer_phone }}</small>
+                                                    @if($order->user && $order->user->telegram_tag)
+                                                        <br>
+                                                        <small class="text-muted">
+                                                            <strong>Telegram:</strong> {{ $order->user->telegram_tag }}
+                                                        </small>
+                                                    @endif
                                                 </div>
                                             </td>
                                             <td>
@@ -256,21 +262,77 @@ function updateOrderStatus(orderId, status) {
     })
     .then(data => {
         if (data.success) {
-            alert('Статус заказа обновлен');
+            showNotification('Статус заказа обновлен', 'success');
             location.reload();
         } else {
-            alert('Ошибка при обновлении статуса: ' + (data.message || 'Неизвестная ошибка'));
+            showNotification('Ошибка при обновлении статуса: ' + (data.message || 'Неизвестная ошибка'), 'error');
         }
     })
     .catch(error => {
         console.error('Ошибка:', error);
         if (error.message.includes('401') || error.message.includes('403')) {
-            alert('Необходимо войти в систему как администратор');
-            window.location.href = '/login';
+            showNotification('Необходимо войти в систему как администратор', 'error');
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 2000);
         } else {
-            alert('Ошибка при обновлении статуса заказа');
+            showNotification('Ошибка при обновлении статуса заказа', 'error');
         }
     });
+}
+
+// Функция показа уведомлений
+function showNotification(message, type = 'info') {
+    console.log('showNotification called:', message, type);
+    
+    // Создаем элемент уведомления
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    
+    // Стили для уведомления
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        z-index: 10000;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.3s ease;
+        max-width: 300px;
+    `;
+    
+    // Цвета в зависимости от типа
+    const colors = {
+        success: '#48bb78',
+        error: '#ef4444',
+        info: '#527ea6',
+        warning: '#f59e0b'
+    };
+    
+    notification.style.backgroundColor = colors[type] || colors.info;
+    
+    // Добавляем в DOM
+    document.body.appendChild(notification);
+    
+    // Анимация появления
+    setTimeout(() => {
+        notification.style.opacity = '1';
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Автоматическое скрытие через 3 секунды
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
 }
 </script>
 @endsection

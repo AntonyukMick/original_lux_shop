@@ -1106,6 +1106,194 @@
     <!-- Подключаем общие функции -->
     <script src="{{ asset('js/common-functions.js') }}"></script>
     
+    <!-- Логика добавления в корзину (как на главной странице) -->
+    <script>
+        // Функция добавления в корзину (скопирована с главной страницы + размер)
+        async function addToCartNew(productId, title, price, image, size = '', quantity = 1) {
+            try {
+                console.log('=== ДОБАВЛЕНИЕ В КОРЗИНУ ===');
+                console.log('Product ID:', productId);
+                console.log('Title:', title);
+                console.log('Price:', price);
+                console.log('Image:', image);
+                console.log('Size:', size);
+                console.log('Quantity:', quantity);
+                
+                // Получаем CSRF токен
+                const csrfToken = document.querySelector('meta[name="csrf-token"]');
+                if (!csrfToken) {
+                    throw new Error('CSRF token not found');
+                }
+                
+                console.log('CSRF Token:', csrfToken.getAttribute('content'));
+                
+                // Отправляем запрос на сервер
+                const response = await fetch('/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken.getAttribute('content'),
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        title: title,
+                        price: price,
+                        image: image,
+                        size: size,
+                        quantity: quantity
+                    })
+                });
+
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (data.success) {
+                    console.log('✅ Товар успешно добавлен в корзину');
+                    showNotification('Товар добавлен в корзину!', 'success');
+                    
+                    // Обновляем кнопку на "В корзине"
+                    const addToCartBtn = document.querySelector('.add-to-cart-btn');
+                    if (addToCartBtn) {
+                        addToCartBtn.innerHTML = 'В корзине';
+                        addToCartBtn.style.background = '#48bb78';
+                        addToCartBtn.disabled = true;
+                    }
+                    
+                    // Обновляем счетчики
+                    updateHeaderCounters();
+                } else if (data.requires_auth) {
+                    console.log('🔒 Требуется авторизация');
+                    showNotification('Для добавления товара в корзину необходимо войти в систему', 'error');
+                } else {
+                    console.error('❌ Ошибка:', data.message);
+                    showNotification(data.message || 'Ошибка при добавлении товара', 'error');
+                }
+            } catch (error) {
+                console.error('❌ Критическая ошибка:', error);
+                showNotification('Ошибка: ' + error.message, 'error');
+            }
+        }
+        
+        // Функция показа уведомлений
+        function showNotification(message, type = 'info') {
+            console.log('showNotification called:', message, type);
+            
+            // Создаем элемент уведомления
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.textContent = message;
+            
+            // Стили для уведомления
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 10000;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            // Цвета в зависимости от типа
+            const colors = {
+                success: '#48bb78',
+                error: '#ef4444',
+                info: '#527ea6',
+                warning: '#f59e0b'
+            };
+            
+            notification.style.backgroundColor = colors[type] || colors.info;
+            
+            // Добавляем в DOM
+            document.body.appendChild(notification);
+            
+            // Анимация появления
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Автоматическое скрытие через 3 секунды
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Функция обновления счетчиков
+        async function updateHeaderCounters() {
+            try {
+                const cartResponse = await fetch('/cart/count');
+                const cartData = await cartResponse.json();
+                
+                const cartBadge = document.getElementById('cart-badge');
+                if (cartBadge) {
+                    if (cartData.count > 0) {
+                        cartBadge.textContent = cartData.count;
+                        cartBadge.classList.remove('hidden');
+                    } else {
+                        cartBadge.classList.add('hidden');
+                    }
+                }
+                
+                const mobileCartBadge = document.querySelector('.mobile-cart-badge');
+                if (mobileCartBadge) {
+                    if (cartData.count > 0) {
+                        mobileCartBadge.textContent = cartData.count;
+                        mobileCartBadge.classList.remove('hidden');
+                    } else {
+                        mobileCartBadge.classList.add('hidden');
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating header counters:', error);
+            }
+        }
+        
+        // Обработчик кнопки добавления в корзину
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Product page loaded');
+            
+            const addToCartBtn = document.querySelector('.add-to-cart-btn');
+            if (addToCartBtn) {
+                console.log('🔍 Add to cart button found:', addToCartBtn);
+                
+                addToCartBtn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    console.log('🖱️ Клик по кнопке "В корзину"');
+                    
+                    const productId = parseInt(this.dataset.productId);
+                    const quantity = parseInt(document.getElementById('quantity')?.value || 1);
+                    const size = this.dataset.size || '';
+                    
+                    console.log('📦 Данные товара:', { productId, quantity, size });
+                    
+                    // Добавляем товар в корзину
+                    await addToCartNew(productId, '{{ $productData["title"] }}', {{ $productData["price"] }}, '{{ $productData["image"] }}', size, quantity);
+                });
+            } else {
+                console.error('❌ Add to cart button not found');
+            }
+        });
+    </script>
+    
     <!-- Модальные окна -->
     <div id="modal-faq" class="modal hidden">
         <div class="modal-content">

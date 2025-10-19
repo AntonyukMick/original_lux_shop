@@ -130,3 +130,8 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::post('/videos', [AdminController::class, 'storeVideo'])->name('videos.store');
     Route::delete('/videos/{id}', [AdminController::class, 'deleteVideo'])->name('videos.delete');
 });
+
+// Тестовая страница для проверки корзины
+Route::get('/test-cart', function() {
+    return view('test-cart');
+})->name('test-cart');
