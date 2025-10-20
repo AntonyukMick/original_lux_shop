@@ -44,6 +44,9 @@ Route::get('/products/popular', [ProductController::class, 'popular'])->name('pr
 Route::get('/products/discounted', [ProductController::class, 'discounted'])->name('products.discounted');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('products.show');
 
+// API: поиск товаров для главной страницы
+Route::get('/api/search-products', [ProductController::class, 'searchApi'])->name('api.products.search');
+
 // Корзина
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');

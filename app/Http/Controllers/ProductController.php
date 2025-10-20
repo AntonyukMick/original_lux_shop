@@ -134,4 +134,20 @@ class ProductController extends Controller
         $products = $this->productService->getDiscountedProducts();
         return view('products.discounted', compact('products'));
     }
+
+    /**
+     * Поиск (JSON) для главной страницы
+     */
+    public function searchApi(Request $request)
+    {
+        $query = (string) $request->get('q', '');
+        $category = $request->get('category');
+
+        $products = $query
+            ? $this->productService->searchProducts($query, 50)
+            : ($category ? $this->productService->getProductsByCategory($category, 50) : $this->productService->getAllProducts(50));
+
+        $data = $this->productDataService->transformForCatalog($products);
+        return response()->json(['products' => $data]);
+    }
 }

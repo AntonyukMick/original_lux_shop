@@ -2410,7 +2410,7 @@ $auth = session('auth');
                     placeholder="Поиск товаров..." 
                     autocomplete="off"
                 />
-                <button class="search-icon-btn" onclick="performSearch()" title="Искать">
+                <button class="search-icon-btn" onclick="goToCatalog()" title="Искать">
                     🔍
                 </button>
             </div>
@@ -2807,39 +2807,53 @@ $auth = session('auth');
         });
 
         // Функция поиска
-        function performSearch(query = '') {
+        async function performSearch(query = '') {
             const searchInput = document.getElementById('searchInput');
-            const searchResults = document.getElementById('searchResults');
             const searchFilters = document.getElementById('searchFilters');
+            const searchResults = document.getElementById('searchResults');
             
             if (!query) {
-                query = searchInput.value.trim().toLowerCase();
+                query = (searchInput.value || '').trim();
             }
 
-            // Показываем фильтры при любом поиске
+            // Если меньше 2 символов — очищаем блок и выходим
+            if (query.length < 2) {
+                searchResults.innerHTML = '';
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            // Показываем фильтры и контейнер результатов
             searchFilters.style.display = 'flex';
+            searchResults.style.display = 'block';
+            searchResults.innerHTML = '<div class="no-results">Идёт поиск…</div>';
 
-            let filteredProducts = allProducts;
-
-            // Фильтрация по категории
-            if (currentFilter !== 'all') {
-                filteredProducts = filteredProducts.filter(product => 
-                    product.category === currentFilter
-                );
+            const params = new URLSearchParams();
+            params.set('q', query);
+            if (currentFilter && currentFilter !== 'all') {
+                params.set('category', currentFilter);
             }
 
-            // Поиск по тексту
-            if (query) {
-                filteredProducts = filteredProducts.filter(product => 
-                    product.title.toLowerCase().includes(query) ||
-                    product.brand.toLowerCase().includes(query) ||
-                    product.category.toLowerCase().includes(query) ||
-                    product.subcategory.toLowerCase().includes(query)
-                );
+            try {
+                const resp = await fetch('/api/search-products?' + params.toString(), { headers: { 'Accept': 'application/json' } });
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                const data = await resp.json();
+                const products = Array.isArray(data.products) ? data.products : [];
+                displaySearchResults(products);
+            } catch (e) {
+                searchResults.innerHTML = '<div class="no-results">Ошибка поиска</div>';
             }
+        }
 
-            // Отображение результатов
-            displaySearchResults(filteredProducts);
+        // Переход в каталог по текущему запросу/фильтрам
+        function goToCatalog() {
+            const searchInput = document.getElementById('searchInput');
+            const q = (searchInput.value || '').trim();
+            const params = new URLSearchParams();
+            if (q) params.set('search', q);
+            if (currentFilter && currentFilter !== 'all') params.set('category', currentFilter);
+            const url = '/catalog' + (params.toString() ? ('?' + params.toString()) : '');
+            window.location.href = url;
         }
 
         // Отображение результатов поиска
