@@ -141,30 +141,6 @@ function updateProductStatus(productId, type) {
 }
 
 /**
- * Синхронизирует корзину с сервером
- */
-async function syncCartWithServer() {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    
-    try {
-        const response = await fetch('/cart/sync', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
-            },
-            body: JSON.stringify({ cart: cart })
-        });
-        
-        if (response.ok) {
-            console.log('Корзина синхронизирована с сервером');
-        }
-    } catch (error) {
-        console.error('Ошибка синхронизации корзины:', error);
-    }
-}
-
-/**
  * Синхронизирует избранное с сервером
  */
 async function syncFavoritesWithServer() {
@@ -189,44 +165,49 @@ async function syncFavoritesWithServer() {
 }
 
 /**
- * Добавляет товар в корзину
- * @param {number|string} productId - ID товара или название
+ * Добавляет товар в корзину (только для авторизованных пользователей)
+ * @param {number|string} productId - ID товара
  * @param {number} quantity - Количество (по умолчанию 1)
- * @param {string} title - Название товара (если используется title вместо ID)
- * @param {number} price - Цена товара (если используется title)
- * @param {string} image - Изображение товара (если используется title)
  */
-async function addToCart(productId, quantity = 1, title = null, price = null, image = null) {
-    console.log('addToCart called with:', { productId, quantity, title, price, image });
+async function addToCart(productId, quantity = 1) {
+    console.log('addToCart called with:', { productId, quantity });
     
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    
-    // Если передан title, используем старый формат
-    if (title) {
-        const existingItem = cart.find(item => item.title === title);
-        if (existingItem) {
-            existingItem.quantity = (existingItem.quantity || 1) + quantity;
-        } else {
-            cart.push({ title, price, image, quantity: quantity });
-        }
-    } else {
-        // Используем новый формат с ID
-        const existingItem = cart.find(item => item.id === productId);
-        if (existingItem) {
-            existingItem.quantity += quantity;
-        } else {
-            cart.push({ id: productId, quantity: quantity });
-        }
+    // Проверяем авторизацию
+    const auth = @json(session('auth'));
+    if (!auth || !auth.id) {
+        showNotification('Для добавления товара в корзину необходимо войти в систему', 'error');
+        setTimeout(() => {
+            window.location.href = '/login';
+        }, 2000);
+        return;
     }
     
-    localStorage.setItem('cart', JSON.stringify(cart));
-    console.log('Cart updated:', cart);
-    
-    await updateHeaderCounters();
-    updateProductStatus(productId, 'cart');
-    
-    // Показываем уведомление
-    showNotification('Товар добавлен в корзину', 'success');
+    try {
+        const response = await fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                quantity: quantity
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('Товар добавлен в корзину', 'success');
+            await updateHeaderCounters();
+            updateProductStatus(productId, 'cart');
+        } else {
+            showNotification(data.message || 'Ошибка при добавлении товара', 'error');
+        }
+    } catch (error) {
+        console.error('Ошибка при добавлении в корзину:', error);
+        showNotification('Ошибка при добавлении товара в корзину', 'error');
+    }
 }
 
 /**
@@ -674,13 +655,16 @@ async function addToCartNew(productId, title, price, image, size = '', quantity 
             console.error('❌ Ошибка добавления в корзину:', data);
             if (data.requires_auth) {
                 showNotification('Для добавления товара в корзину необходимо войти в систему', 'error');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2000);
             } else {
                 showNotification(data.message || 'Ошибка добавления в корзину', 'error');
             }
         }
     } catch (error) {
         console.error('❌ Ошибка при добавлении в корзину:', error);
-        showNotification('Ошибка при добавлении в корзину', 'error');
+        showNotification('Ошибка при добавлении товара в корзину', 'error');
     }
 }
 
@@ -698,7 +682,6 @@ window.validateAddress = validateAddress;
 window.validatePrice = validatePrice;
 window.showFieldError = showFieldError;
 window.clearFieldError = clearFieldError;
-window.syncCartWithServer = syncCartWithServer;
 window.syncFavoritesWithServer = syncFavoritesWithServer;
 
 console.log('Functions exported to window:', {

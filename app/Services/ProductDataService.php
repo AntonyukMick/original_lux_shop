@@ -52,9 +52,6 @@ class ProductDataService
         
         // Обрабатываем размеры
         $sizes = $product->sizes;
-        if (is_string($sizes)) {
-            $sizes = json_decode($sizes, true) ?: [];
-        }
         if (!is_array($sizes)) {
             $sizes = [];
         }

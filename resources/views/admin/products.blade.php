@@ -319,6 +319,53 @@
         }
     }
     
+    /* Стили для уведомлений */
+    .alert {
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        animation: slideIn 0.3s ease-out;
+    }
+    
+    .alert-success {
+        background: #d1fae5;
+        border: 1px solid #a7f3d0;
+        color: #065f46;
+    }
+    
+    .alert-error {
+        background: #fee2e2;
+        border: 1px solid #fca5a5;
+        color: #991b1b;
+    }
+    
+    .alert::before {
+        font-size: 1.25rem;
+    }
+    
+    .alert-success::before {
+        content: '✅';
+    }
+    
+    .alert-error::before {
+        content: '❌';
+    }
+    
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
     /* Стили для размеров */
     .sizes-container {
         background: #ffffff;
@@ -424,13 +471,13 @@
         </div>
 
         @if(session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success" id="success-alert">
                 {{ session('success') }}
             </div>
         @endif
 
         @if(session('error'))
-            <div class="alert alert-error">
+            <div class="alert alert-error" id="error-alert">
                 {{ session('error') }}
             </div>
         @endif
@@ -567,7 +614,33 @@ const subcategories = {
     'Аксессуары': ['Очки', 'Шарфы', 'Перчатки', 'Ремни', 'Галстуки', 'Шляпы']
 };
 
-// Определения размеров для каждой категории
+    // Автоматическое скрытие уведомлений
+    document.addEventListener('DOMContentLoaded', function() {
+        const successAlert = document.getElementById('success-alert');
+        const errorAlert = document.getElementById('error-alert');
+        
+        if (successAlert) {
+            setTimeout(() => {
+                successAlert.style.opacity = '0';
+                successAlert.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    successAlert.remove();
+                }, 300);
+            }, 4000);
+        }
+        
+        if (errorAlert) {
+            setTimeout(() => {
+                errorAlert.style.opacity = '0';
+                errorAlert.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    errorAlert.remove();
+                }, 300);
+            }, 6000);
+        }
+    });
+
+    // Определения размеров для каждой категории
 const sizesByCategory = {
     'Обувь': ['30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48'],
     'Одежда': ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],

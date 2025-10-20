@@ -96,7 +96,7 @@
     
     .cart-item-quantity {
         display: flex;
-        gap: 6px;
+                gap: 6px;
         align-items: center;
     }
     
@@ -125,9 +125,9 @@
         text-align: center;
         border: 1px solid #cbd5e1;
         border-radius: 6px;
-        font-size: 14px;
-    }
-    
+                font-size: 14px;
+            }
+            
     .cart-item-total {
         font-weight: 700;
         font-size: 16px;
@@ -214,8 +214,8 @@
     
     .notification.error {
         background: #ef4444;
-    }
-</style>
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -272,7 +272,7 @@
             </div>
         @endif
     </div>
-</div>
+                    </div>
 
 <!-- FAQ Modal -->
 @include('components.modals.faq')
@@ -335,7 +335,7 @@
     // Удалить товар из корзины
     function removeItem(productId, size = '') {
         if (!confirm('Удалить товар из корзины?')) {
-            return;
+                return;
         }
         
         fetch('/cart/remove', {
@@ -431,7 +431,7 @@
     
     console.log('Корзина загружена');
     console.log('Товаров в корзине:', {{ $cartItems->count() }});
-</script>
+    </script>
 
 <div id="notification" class="notification"></div>
 @endsection

@@ -84,6 +84,36 @@ class ProductService
     }
 
     /**
+     * Обработать размеры товара
+     */
+    private function processSizes($sizes)
+    {
+        if (empty($sizes)) {
+            return null;
+        }
+
+        // Если это массив, фильтруем пустые значения
+        if (is_array($sizes)) {
+            $filteredSizes = array_filter($sizes, function($size) {
+                return !empty(trim($size));
+            });
+
+            // Возвращаем отфильтрованный массив (Laravel автоматически преобразует в JSON)
+            return array_values($filteredSizes);
+        }
+
+        // Если это строка, разделяем по запятым и возвращаем массив
+        if (is_string($sizes) && !empty($sizes)) {
+            $sizesArray = array_map('trim', explode(',', $sizes));
+            return array_filter($sizesArray, function($size) {
+                return !empty($size);
+            });
+        }
+
+        return $sizes;
+    }
+
+    /**
      * Создать новый товар
      */
     public function createProduct($data)
@@ -117,7 +147,7 @@ class ProductService
             'original_price' => $data['original_price'] ?? null,
             'description' => $data['description'] ?? null,
             'images' => $images,
-            'sizes' => $data['sizes'] ?? null,
+            'sizes' => $this->processSizes($data['sizes'] ?? null),
             'is_active' => $data['is_active'] ?? true,
             'featured' => $data['featured'] ?? false,
             'stock_quantity' => $data['stock_quantity'] ?? 0,
@@ -164,7 +194,7 @@ class ProductService
             'original_price' => $data['original_price'] ?? null,
             'description' => $data['description'] ?? null,
             'images' => $images,
-            'sizes' => $data['sizes'] ?? $product->sizes,
+            'sizes' => $this->processSizes($data['sizes'] ?? $product->sizes),
             'is_active' => $data['is_active'] ?? true,
             'featured' => $data['featured'] ?? false,
             'stock_quantity' => $data['stock_quantity'] ?? 0,

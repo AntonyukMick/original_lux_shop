@@ -10,6 +10,77 @@ use Illuminate\Support\Facades\Log;
 class OrderService
 {
     /**
+     * Создать новый заказ (основной метод)
+     */
+    public function createOrder($data, $cartItems)
+    {
+        Log::info('OrderService: creating order', ['data' => $data, 'cart_items_count' => $cartItems->count()]);
+        
+        // Расчет сумм
+        $subtotal = $this->calculateSubtotalFromCartItems($cartItems);
+        $shippingCost = $this->calculateShippingCost($subtotal);
+        $total = $subtotal + $shippingCost;
+
+        Log::info('OrderService: calculated amounts', ['subtotal' => $subtotal, 'shipping' => $shippingCost, 'total' => $total]);
+
+        // Создание заказа
+        $order = Order::create([
+            'user_id' => $data['user_id'] ?? null,
+            'order_number' => $this->generateOrderNumber(),
+            'customer_name' => $data['customer_name'],
+            'customer_email' => $data['customer_email'],
+            'customer_phone' => $data['customer_phone'],
+            'shipping_address' => $data['shipping_address'],
+            'shipping_city' => $data['shipping_city'],
+            'shipping_postal_code' => $data['shipping_postal_code'],
+            'shipping_country' => $data['shipping_country'],
+            'notes' => $data['notes'] ?? null,
+            'subtotal' => $subtotal,
+            'shipping_cost' => $shippingCost,
+            'total' => $total,
+            'payment_method' => $data['payment_method'] ?? 'cash',
+            'status' => 'pending',
+            'payment_status' => 'pending'
+        ]);
+
+        Log::info('OrderService: order created', ['order_id' => $order->id, 'order_number' => $order->order_number]);
+
+        // Создание элементов заказа
+        $this->createOrderItemsFromCart($order, $cartItems);
+
+        return $order;
+    }
+
+    /**
+     * Создать элементы заказа из корзины
+     */
+    private function createOrderItemsFromCart($order, $cartItems)
+    {
+        foreach ($cartItems as $cartItem) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_title' => $cartItem->product_title,
+                'price' => $cartItem->price,
+                'quantity' => $cartItem->quantity,
+                'size' => $cartItem->size,
+                'product_image' => $cartItem->image
+            ]);
+        }
+    }
+
+    /**
+     * Рассчитать подытог из элементов корзины
+     */
+    private function calculateSubtotalFromCartItems($cartItems)
+    {
+        $subtotal = 0;
+        foreach ($cartItems as $item) {
+            $subtotal += $item->price * $item->quantity;
+        }
+        return $subtotal;
+    }
+
+    /**
      * Создать новый заказ с расширенной информацией
      */
     public function createEnhancedOrder($data, $cart)

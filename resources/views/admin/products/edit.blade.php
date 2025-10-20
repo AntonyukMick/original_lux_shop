@@ -247,6 +247,61 @@
             background: #f7fafc;
         }
 
+        /* Стили для таблицы размеров */
+        .size-table-wrapper {
+            margin-top: 1rem;
+        }
+
+        .size-table {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .size-table.clothing {
+            grid-template-columns: repeat(6, 1fr);
+        }
+
+        .size-table.shoes {
+            grid-template-columns: repeat(8, 1fr);
+        }
+
+        .size-checkbox {
+            display: none;
+        }
+
+        .size-label {
+            display: block;
+            padding: 8px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            background: #fff;
+        }
+
+        .size-label:hover {
+            border-color: #527ea6;
+            background: #f7fafc;
+        }
+
+        .size-checkbox:checked + .size-label {
+            background: #527ea6;
+            color: #fff;
+            border-color: #527ea6;
+        }
+
+        .no-category-message {
+            padding: 1rem;
+            text-align: center;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px dashed #cbd5e1;
+        }
+
         @media (max-width: 768px) {
             .admin-container {
                 padding: 1rem;
@@ -360,6 +415,21 @@
                     <div class="image-preview" id="imagePreview"></div>
                 </div>
 
+                <div class="form-group">
+                    <label class="form-label">Размеры</label>
+                    <div class="sizes-container">
+                        <div class="size-table-wrapper" id="sizeTableWrapper" style="display: none;">
+                            <div class="size-table" id="sizeTable">
+                                <!-- Таблица размеров будет генерироваться динамически -->
+                            </div>
+                            <div class="form-help">Выберите доступные размеры для товара</div>
+                        </div>
+                        <div class="no-category-message" id="noCategoryMessage">
+                            <p style="color: #718096; font-style: italic;">Выберите категорию товара для отображения таблицы размеров</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">SKU</label>
@@ -442,13 +512,87 @@
             // Загружаем подкатегории для текущей категории
             if (currentCategory) {
                 updateSubcategories(currentCategory, currentSubcat);
+                // Инициализируем таблицу размеров
+                updateSizeTable(currentCategory);
+                // Восстанавливаем выбранные размеры
+                restoreSelectedSizes();
             }
         });
 
         // Обработчик изменения категории
         document.getElementById('categorySelect').addEventListener('change', function() {
             updateSubcategories(this.value);
+            // Обновляем таблицу размеров
+            updateSizeTable(this.value);
         });
+
+        // Функция для обновления таблицы размеров
+        function updateSizeTable(category) {
+            const sizeTableWrapper = document.getElementById('sizeTableWrapper');
+            const noCategoryMessage = document.getElementById('noCategoryMessage');
+            const sizeTable = document.getElementById('sizeTable');
+            
+            // Определяем размеры в зависимости от категории
+            let sizes = [];
+            let tableClass = '';
+            
+            if (category === 'Одежда') {
+                sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+                tableClass = 'clothing';
+            } else if (category === 'Обувь') {
+                sizes = ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47'];
+                tableClass = 'shoes';
+            }
+            
+            if (sizes.length > 0) {
+                // Показываем таблицу размеров
+                sizeTableWrapper.style.display = 'block';
+                noCategoryMessage.style.display = 'none';
+                
+                // Очищаем таблицу
+                sizeTable.innerHTML = '';
+                sizeTable.className = 'size-table ' + tableClass;
+                
+                // Добавляем размеры
+                sizes.forEach(function(size) {
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.name = 'sizes[]';
+                    checkbox.value = size;
+                    checkbox.id = 'size_' + size;
+                    checkbox.className = 'size-checkbox';
+                    
+                    const label = document.createElement('label');
+                    label.htmlFor = 'size_' + size;
+                    label.className = 'size-label';
+                    label.textContent = size;
+                    
+                    sizeTable.appendChild(checkbox);
+                    sizeTable.appendChild(label);
+                });
+                
+                // Восстанавливаем выбранные размеры
+                restoreSelectedSizes();
+            } else {
+                // Скрываем таблицу размеров
+                sizeTableWrapper.style.display = 'none';
+                noCategoryMessage.style.display = 'block';
+            }
+        }
+
+        // Функция для восстановления выбранных размеров
+        function restoreSelectedSizes() {
+            const productSizes = @json($product->sizes ?? []); // Получаем размеры из PHP как массив
+            
+            if (productSizes && Array.isArray(productSizes) && productSizes.length > 0) {
+                productSizes.forEach(function(size) {
+                    const checkbox = document.getElementById('size_' + size);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
+                });
+            }
+        }
 
         // Предварительный просмотр новых изображений
         document.getElementById('imageInput').addEventListener('change', function(e) {

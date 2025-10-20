@@ -200,4 +200,23 @@ class CartService
     {
         return $this->getCartItems()->count();
     }
+
+    /**
+     * Получить данные для оформления заказа
+     */
+    public function getCheckoutData()
+    {
+        $cartItems = $this->getCartItems();
+        $total = $this->getTotal();
+        $count = $this->getCount();
+        
+        return [
+            'cartItems' => $cartItems,
+            'total' => $total,
+            'count' => $count,
+            'subtotal' => $total,
+            'shipping_cost' => $total >= 200 ? 0 : 15, // Бесплатная доставка от 200€
+            'grand_total' => $total + ($total >= 200 ? 0 : 15)
+        ];
+    }
 }

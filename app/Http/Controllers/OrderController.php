@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\OrderService;
 use App\Services\CartService;
-use App\Services\LocalStorageService;
 use App\Services\AdminNotificationService;
 use App\Services\ProductCategoryService;
 use App\Http\Requests\OrderRequest;
@@ -19,7 +18,6 @@ class OrderController extends Controller
     public function __construct(
         protected OrderService $orderService,
         protected CartService $cartService,
-        protected LocalStorageService $localStorageService,
         protected AdminNotificationService $adminNotificationService,
         protected ProductCategoryService $productCategoryService
     ) {}
@@ -39,11 +37,6 @@ class OrderController extends Controller
     public function create(Request $request): View
     {
         try {
-            // Синхронизируем корзину из localStorage если есть данные
-            if ($request->has('cart_data')) {
-                $this->localStorageService->syncCartFromLocalStorage($request);
-            }
-            
             if ($this->cartService->isCartEmpty()) {
                 return redirect()->route('cart.index')->with('error', 'Корзина пуста');
             }
@@ -67,17 +60,12 @@ class OrderController extends Controller
     public function store(OrderRequest $request)
     {
         try {
-            // Синхронизируем корзину из localStorage если есть данные
-            if ($request->has('cart_data')) {
-                $this->localStorageService->syncCartFromLocalStorage($request);
-            }
-            
             if ($this->cartService->isCartEmpty()) {
                 return redirect()->route('cart.index')->with('error', 'Корзина пуста');
             }
 
             $validated = $request->validated();
-            $cart = $this->cartService->getCart();
+            $cart = $this->cartService->getCartItems();
             $order = $this->orderService->createOrder($validated, $cart);
 
             $this->cartService->clearCart();
