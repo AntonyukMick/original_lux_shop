@@ -574,10 +574,7 @@
                         <div class="action-text">Управление видео</div>
                     </a>
                     
-                    <a href="{{ route('admin.products.create') }}" class="action-btn">
-                        <div class="action-icon">➕</div>
-                        <div class="action-text">Добавить товар</div>
-                    </a>
+                    
                     
                     <a href="/" class="action-btn">
                         <div class="action-icon">🏠</div>

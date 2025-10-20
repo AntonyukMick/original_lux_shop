@@ -110,13 +110,17 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     Route::get('/statistics', [AdminController::class, 'salesStatistics'])->name('statistics');
     Route::get('/statistics/{period}', [AdminController::class, 'salesStatistics'])->name('statistics.period');
     
-    // Управление товарами
-    Route::resource('products', ProductController::class);
+    // Управление товарами (отключаем страницу создания через resource)
+    Route::resource('products', ProductController::class)->except(['create']);
     
     // Простое управление товарами в админ-панели
     Route::get('/products', [AdminProductController::class, 'index'])->name('products.index');
     Route::post('/products', [AdminProductController::class, 'store'])->name('products.store');
     Route::delete('/products/{id}', [AdminProductController::class, 'destroy'])->name('products.destroy');
+    // Жестко перекрываем server URL /admin/products/create -> редирект на список
+    Route::get('/products/create', function () {
+        return redirect()->route('admin.products.index');
+    })->name('products.create');
     
     // Управление заказами
     Route::get('/orders', [AdminController::class, 'orders'])->name('orders.index');
