@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\FavoriteService;
-use App\Services\LocalStorageService;
 use App\Http\Requests\FavoriteRequest;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -11,12 +10,9 @@ use Illuminate\View\View;
 class FavoriteController extends Controller
 {
     protected $favoriteService;
-    protected $localStorageService;
-
-    public function __construct(FavoriteService $favoriteService, LocalStorageService $localStorageService)
+    public function __construct(FavoriteService $favoriteService)
     {
         $this->favoriteService = $favoriteService;
-        $this->localStorageService = $localStorageService;
     }
 
     /**
@@ -33,11 +29,10 @@ class FavoriteController extends Controller
      */
     public function sync(Request $request)
     {
-        $this->localStorageService->syncFavoritesFromLocalStorage($request);
-        
+        // Сервер больше не управляет localStorage. Оставляем совместимый ответ
         return response()->json([
             'success' => true,
-            'message' => 'Избранное синхронизировано'
+            'message' => 'Синхронизация не требуется'
         ]);
     }
 
@@ -46,12 +41,9 @@ class FavoriteController extends Controller
      */
     public function getFavoritesData()
     {
-        $favorites = $this->localStorageService->getFavoritesForApi();
-        $count = $this->favoriteService->getFavoritesCount();
-        
         return response()->json([
-            'favorites' => $favorites,
-            'count' => $count
+            'favorites' => [],
+            'count' => $this->favoriteService->getFavoritesCount()
         ]);
     }
 

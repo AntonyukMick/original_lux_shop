@@ -40,7 +40,9 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            // Позволяем переопределять корень публичного диска через ENV,
+            // чтобы указывать постоянный диск на сервере (Render Persistent Disk)
+            'root' => env('PUBLIC_DISK_ROOT', storage_path('app/public')),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,
@@ -74,7 +76,8 @@ return [
     */
 
     'links' => [
-        public_path('storage') => storage_path('app/public'),
+        // Символическая ссылка public/storage -> корень публичного диска
+        public_path('storage') => env('PUBLIC_DISK_ROOT', storage_path('app/public')),
     ],
 
 ];
