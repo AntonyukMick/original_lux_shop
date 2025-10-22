@@ -72,7 +72,8 @@ $auth = session('auth');
             <div class="header-left">
                 <!-- Иконка главной страницы (домик) -->
                 <div class="icon-container" onclick="window.location.href='/'" title="Главная страница">
-                    <div class="home-icon">🏠</div>
+                    <img src="{{ asset('image/IMG_4637.PNG') }}" alt="Главная" class="icon-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">🏠</div>
                 </div>
                 
                 <!-- Иконка FAQ -->
@@ -114,11 +115,13 @@ $auth = session('auth');
                 <!-- Иконка пользователя -->
                 @if(!$auth)
                     <div class="icon-container" onclick="window.location.href='/login'" title="Войти">
-                        <div class="user-icon">👤</div>
+                        <img src="{{ asset('image/photo_2025-10-22_21-47-03.jpg') }}" alt="Войти" class="icon-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">👤</div>
                     </div>
                 @else
                     <div class="icon-container" onclick="window.location.href='/profile'" title="Профиль">
-                        <div class="user-icon">👤</div>
+                        <img src="{{ asset('image/photo_2025-10-22_21-47-03.jpg') }}" alt="Профиль" class="icon-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="icon-fallback" style="display:none; font-size: 20px; color: #FFD700; text-shadow: 1px 1px 0 #000;">👤</div>
                     </div>
                 @endif
             </div>

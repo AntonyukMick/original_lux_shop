@@ -49,20 +49,21 @@
     .tile h3{margin:0 0 6px 0;font-size:16px;font-weight:700;color:#1e293b}
     .tile p{margin:0;color:#475569;font-weight:500}
     
-    /* Одинаковый размер текста для верхних кнопок */
+    /* Стили для верхних кнопок как на эскизе */
     .grid-top .tile h3 {
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 1.4;
-        color: #1e293b;
+        font-size: 20px;
+        font-weight: 700;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0 0 8px 0;
     }
     
     .grid-top .tile p {
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 1.4;
-        color: #64748b;
-        opacity: 0.8;
+        font-size: 18px;
+        font-weight: 700;
+        color: #333;
+        margin: 0;
     }
         /* Улучшенные стили для поиска - на всю ширину с лупой */
         .search {
@@ -239,42 +240,116 @@
             font-size: 14px;
         }
         
-        .search-filters {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-        }
-        
-        .search-filter {
-            padding: 4px 10px;
-            border-radius: 16px;
-            border: 1px solid #e2e8f0;
-            background: #fff;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: #64748b;
-        }
-        
-        .search-filter.active {
-            background: #527ea6;
-            border-color: #527ea6;
-            color: #fff;
-            font-weight: 500;
-        }
-        
-        .search-filter:hover {
-            border-color: #527ea6;
-            color: #527ea6;
-        }
         .tabs{display:flex;gap:8px}
         .tab{flex:1;text-align:center;background:#c0cfdd;border:1px solid #99aec2;border-radius:8px;padding:8px 10px;font-weight:600;cursor:pointer}
         .tab.active{background:#527ea6;color:#fff}
         .catalog{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
         .card{background:var(--card);border:1px solid var(--muted);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px}
-        .card h4{margin:0;font-size:14px}
-        .img{width:100%;aspect-ratio:16/10;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#64748b}
+        .card h4{margin:0;font-size:16px;font-weight:600;color:#333;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+        .img img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+        
+        /* Стили для информационных блоков согласно эскизу */
+        .info-blocks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+        
+        .intro-block {
+            background: #e6e6fa;
+            border: 1px solid #d3d3d3;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .intro-block .intro-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 8px 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        .intro-block .intro-subtitle {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        .intro-block .play-icon {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+        }
+        
+        .intro-block .play-icon::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 12px solid #333;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            margin-left: 4px;
+        }
+        
+        .offer-block {
+            background: #e0e7ff;
+            border: 1px solid #d3d3d3;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .offer-block .offer-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin: 0 0 8px 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        .offer-block .offer-main {
+            font-size: 30px;
+            font-weight: 700;
+            color: #333;
+            margin: 0 0 8px 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        .offer-block .offer-subtitle {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        .offer-block .chat-icon {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            background: #e0e7ff;
+            border: 2px solid #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
         /* Нижняя часть страницы */
         .banner{margin:16px 0;background:#e6eaf2;border:1px solid #cbd5e1;border-radius:10px;padding:14px;text-align:center;font-weight:700;font-size:28px;letter-spacing:.5px}
         .small-tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
@@ -315,6 +390,73 @@
             justify-content: center;
         }
         
+        /* Стили для новых элементов товара */
+        .product-gender {
+            margin: 4px 0;
+        }
+        
+        .gender-badge {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #374151;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 4px;
+            font-weight: 500;
+        }
+        
+        .product-sizes {
+            margin: 4px 0;
+            font-size: 12px;
+        }
+        
+        .sizes-label {
+            color: #64748b;
+            margin-right: 4px;
+        }
+        
+        .size-badge {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #475569;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 10px;
+            margin-right: 2px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .size-more {
+            color: #64748b;
+            font-size: 10px;
+        }
+        
+        .product-colors {
+            margin: 4px 0;
+            font-size: 12px;
+        }
+        
+        .colors-label {
+            color: #64748b;
+            margin-right: 4px;
+        }
+        
+        .color-swatch {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid #e2e8f0;
+            margin-right: 3px;
+            vertical-align: middle;
+        }
+        
+        .color-more {
+            color: #64748b;
+            font-size: 10px;
+        }
+        
         /* Мобильная адаптация для товаров */
         @media (max-width:768px){
             .goods{grid-template-columns:repeat(2,1fr);gap:8px;align-items:stretch}
@@ -333,7 +475,50 @@
                 height: 28px !important;
             }
             
-            /* Сжатые стили для информационных блоков */
+            /* Адаптивные стили для информационных блоков */
+            .info-blocks {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin: 16px 0;
+            }
+            
+            .intro-block, .offer-block {
+                padding: 16px;
+            }
+            
+            .intro-block .intro-title {
+                font-size: 20px;
+            }
+            
+            .intro-block .intro-subtitle {
+                font-size: 16px;
+            }
+            
+            .offer-block .offer-title {
+                font-size: 20px;
+            }
+            
+            .offer-block .offer-main {
+                font-size: 26px;
+            }
+            
+            .offer-block .offer-subtitle {
+                font-size: 16px;
+            }
+            
+            .intro-block .play-icon, .offer-block .chat-icon {
+                width: 32px;
+                height: 32px;
+                bottom: 12px;
+                right: 12px;
+            }
+            
+            .intro-block .play-icon::before {
+                border-left: 10px solid #333;
+                border-top: 6px solid transparent;
+                border-bottom: 6px solid transparent;
+            }
+            
             .banner{margin:12px 0;padding:10px;font-size:20px;letter-spacing:0.3px}
             .small-tiles{margin:8px 0;gap:8px}
             .small-tiles .tile{padding:10px;min-height:80px}
@@ -381,6 +566,45 @@
             .good .btn[style*="background:#48bb78"], 
             .good .btn[style*="background: #48bb78"] {
                 height: 24px !important;
+            }
+            
+            /* Еще более сжатые стили для информационных блоков */
+            .intro-block, .offer-block {
+                padding: 12px;
+            }
+            
+            .intro-block .intro-title {
+                font-size: 18px;
+            }
+            
+            .intro-block .intro-subtitle {
+                font-size: 14px;
+            }
+            
+            .offer-block .offer-title {
+                font-size: 18px;
+            }
+            
+            .offer-block .offer-main {
+                font-size: 22px;
+            }
+            
+            .offer-block .offer-subtitle {
+                font-size: 14px;
+            }
+            
+            .intro-block .play-icon, .offer-block .chat-icon {
+                width: 28px;
+                height: 28px;
+                bottom: 8px;
+                right: 8px;
+                font-size: 16px;
+            }
+            
+            .intro-block .play-icon::before {
+                border-left: 8px solid #333;
+                border-top: 5px solid transparent;
+                border-bottom: 5px solid transparent;
             }
             
             /* Еще более сжатые стили для маленьких экранов */
@@ -895,6 +1119,51 @@
             
             .favorites-grid img {
                 height: 100px !important;
+            }
+        }
+        
+        /* Дополнительные стили для мобильных устройств */
+        @media (max-width: 768px) {
+            .tile-intro h3 {
+                font-size: 18px;
+            }
+            
+            .tile-intro p {
+                font-size: 14px;
+            }
+            
+            .tile-custom h3 {
+                font-size: 18px;
+            }
+            
+            .tile-custom p {
+                font-size: 14px;
+            }
+            
+            .tile-custom p:last-child {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tile-intro h3 {
+                font-size: 16px;
+            }
+            
+            .tile-intro p {
+                font-size: 12px;
+            }
+            
+            .tile-custom h3 {
+                font-size: 16px;
+            }
+            
+            .tile-custom p {
+                font-size: 12px;
+            }
+            
+            .tile-custom p:last-child {
+                font-size: 14px;
             }
         }
     </style>
@@ -1928,11 +2197,12 @@ $auth = session('auth');
     <div class="grid-top">
         <div class="tile tile-intro" style="background:rgb(226,223,244);cursor:pointer" onclick="showModal('order')">
             <h3>Знакомство. Оформление заказа</h3>
-                <p>Как мы работаем и как оформить покупку</p>
+    
             </div>
             <div class="tile tile-custom" style="background:rgb(204,215,227);cursor:pointer" onclick="showModal('custom')">
-                <h3>Любая модель под заказ</h3>
-                <p>В 10 раз дешевле</p>
+                <h3>ЛЮБАЯ МОДЕЛЬ</h3>
+                <h3>ПОД ЗАКАЗ</h3>
+                <h3>В 10 раз дешевле</h3>
             </div>
         </div>
 
@@ -2415,16 +2685,6 @@ $auth = session('auth');
                 </button>
             </div>
             
-            <!-- Фильтры поиска -->
-            <div class="search-filters" id="searchFilters" style="display: none;">
-                <div class="search-filter active" data-filter="all">Все</div>
-                <div class="search-filter" data-filter="Одежда">Одежда</div>
-                <div class="search-filter" data-filter="Обувь">Обувь</div>
-                <div class="search-filter" data-filter="Сумки">Сумки</div>
-                <div class="search-filter" data-filter="Часы">Часы</div>
-                <div class="search-filter" data-filter="Украшения">Украшения</div>
-                <div class="search-filter" data-filter="Аксессуары">Аксессуары</div>
-            </div>
             
             <!-- Результаты поиска -->
             <div class="search-results" id="searchResults">
@@ -2438,66 +2698,78 @@ $auth = session('auth');
         </div>
 
         <section class="catalog">
-            <div class="card" data-section="men" onclick="window.location.href='/category/clothing'" style="cursor:pointer">
+            <div class="card" data-section="men" onclick="window.location.href='/category/clothing?gender=men'" style="cursor:pointer">
                 <h4>Одежда</h4>
                 <div class="img">
-                    <img src="https://media.endclothing.com/media/f_auto,q_auto:eco,w_1600/prodmedia/media/catalog/product/0/5/05-08-2021_TH_751560519-V0029_1_1.jpg" alt="Stone Island худи" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
+                    <img src="{{ asset('image/IMG_4589.JPG') }}" alt="Stone Island худи" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
                 </div>
             </div>
-            <div class="card" data-section="men" onclick="window.location.href='/category/shoes'" style="cursor:pointer">
+            <div class="card" data-section="men" onclick="window.location.href='/category/shoes?gender=men'" style="cursor:pointer">
                 <h4>Обувь</h4>
                 <div class="img">
-                    <img src="https://i.ebayimg.com/images/g/K6YAAOSw-0pkpWG2/s-l1600.jpg" alt="Обувь" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
+                    <img src="{{ asset('image/IMG_4590.JPG') }}" alt="Обувь" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
                 </div>
             </div>
-            <div class="card" data-section="men" onclick="window.location.href='/category/bags'" style="cursor:pointer">
+            <div class="card" data-section="men" onclick="window.location.href='/category/bags?gender=men'" style="cursor:pointer">
                 <h4>Сумки</h4>
                 <div class="img">
-                    <img src="https://s3-eu-west-1.amazonaws.com/img.frmoda.com/borse/balenciaga/4823/4823892JMF71000nero-01.jpg" alt="Сумка Balenciaga" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
+                    <img src="{{ asset('image/IMG_4591.JPG') }}" alt="Сумка Balenciaga" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
                 </div>
             </div>
-            <div class="card" data-section="men" onclick="window.location.href='/category/jewelry'" style="cursor:pointer">
+            <div class="card" data-section="men" onclick="window.location.href='/category/jewelry?gender=men'" style="cursor:pointer">
                 <h4>Украшения</h4>
                 <div class="img">
-                    <img src="https://avatars.mds.yandex.net/i?id=998c7a6e6b4da23a6ace208d71d1df9c_l-6949821-images-thumbs&n=13" alt="Украшения" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
+                    <img src="{{ asset('image/IMG_4592.JPG') }}" alt="Украшения" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
                 </div>
             </div>
-            <div class="card" data-section="men" onclick="window.location.href='/category/accessories'" style="cursor:pointer">
+            <div class="card" data-section="men" onclick="window.location.href='/category/accessories?gender=men'" style="cursor:pointer">
                 <h4>Аксессуары</h4>
                 <div class="img">
-                    <img src="https://i.ebayimg.com/images/g/eEkAAOSwWCBnxyC~/s-l1600.jpg" alt="Ремень Gucci" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
+                    <img src="{{ asset('image/IMG_4593.JPG') }}" alt="Ремень Gucci" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
                 </div>
             </div>
-            <div class="card" data-section="men" onclick="window.location.href='/category/watches'" style="cursor:pointer">
+            <div class="card" data-section="men" onclick="window.location.href='/category/watches?gender=men'" style="cursor:pointer">
                 <h4>Часы</h4>
                 <div class="img">
-                    <img src="https://cdn.staticscc.com/uploads/103804/cart/resources/20241115/A14E3A2E-E65C-D30C-AF26-5919EEDB736F.png" alt="Rolex Daytona" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
+                    <img src="{{ asset('image/IMG_4594.JPG') }}" alt="Rolex Daytona" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
                 </div>
             </div>
 
-            <div class="card" data-section="women">
+            <div class="card" data-section="women" onclick="window.location.href='/category/clothing?gender=women'" style="cursor:pointer">
                 <h4>Одежда</h4>
-                <div class="img">изображение</div>
+                <div class="img">
+                    <img src="{{ asset('image/IMG_4595.JPG') }}" alt="Женская одежда" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
+                </div>
             </div>
-            <div class="card" data-section="women">
+            <div class="card" data-section="women" onclick="window.location.href='/category/shoes?gender=women'" style="cursor:pointer">
                 <h4>Обувь</h4>
-                <div class="img">изображение</div>
+                <div class="img">
+                    <img src="{{ asset('image/IMG_4596.JPG') }}" alt="Женская обувь" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
+                </div>
             </div>
-            <div class="card" data-section="women">
+            <div class="card" data-section="women" onclick="window.location.href='/category/bags?gender=women'" style="cursor:pointer">
                 <h4>Сумки</h4>
-                <div class="img">изображение</div>
+                <div class="img">
+                    <img src="{{ asset('image/IMG_4597.JPG') }}" alt="Женские сумки" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
+                </div>
             </div>
-            <div class="card" data-section="women">
+            <div class="card" data-section="women" onclick="window.location.href='/category/jewelry?gender=women'" style="cursor:pointer">
                 <h4>Украшения</h4>
-                <div class="img">изображение</div>
+                <div class="img">
+                    <img src="{{ asset('image/IMG_4598.JPG') }}" alt="Женские украшения" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
+                </div>
             </div>
-            <div class="card" data-section="women">
+            <div class="card" data-section="women" onclick="window.location.href='/category/accessories?gender=women'" style="cursor:pointer">
                 <h4>Аксессуары</h4>
-                <div class="img">изображение</div>
+                <div class="img">
+                    <img src="{{ asset('image/IMG_4599.JPG') }}" alt="Женские аксессуары" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
+                </div>
             </div>
-            <div class="card" data-section="women">
+            <div class="card" data-section="women" onclick="window.location.href='/category/watches?gender=women'" style="cursor:pointer">
                 <h4>Часы</h4>
-                <div class="img">изображение</div>
+                <div class="img">
+                    <img src="{{ asset('image/IMG_4600.JPG') }}" alt="Женские часы" style="width:100%;height:120px;object-fit:cover;border-radius:8px;max-width:100%;max-height:120px;">
+                </div>
             </div>
         </section>
     </main>
@@ -2588,6 +2860,41 @@ $auth = session('auth');
                             <div class="meta">
                                         <div>{{ $product->title }}</div>
                                         <div class="price">{{ $product->price }}€</div>
+                                        
+                                        <!-- Отображение пола -->
+                                        @if($product->gender && is_array($product->gender) && count($product->gender) > 0)
+                                            <div class="product-gender">
+                                                @foreach($product->gender as $g)
+                                                    <span class="gender-badge">{{ $g }}</span>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                        
+                                        <!-- Отображение размеров -->
+                                        @if($product->sizes && is_array($product->sizes) && count($product->sizes) > 0)
+                                            <div class="product-sizes">
+                                                <span class="sizes-label">Размеры:</span>
+                                                @foreach(array_slice($product->sizes, 0, 3) as $size)
+                                                    <span class="size-badge">{{ $size }}</span>
+                                                @endforeach
+                                                @if(count($product->sizes) > 3)
+                                                    <span class="size-more">+{{ count($product->sizes) - 3 }}</span>
+                                                @endif
+                                            </div>
+                                        @endif
+                                        
+                                        <!-- Отображение цветов -->
+                                        @if($product->colors && is_array($product->colors) && count($product->colors) > 0)
+                                            <div class="product-colors">
+                                                <span class="colors-label">Цвета:</span>
+                                                @foreach(array_slice($product->colors, 0, 4) as $color)
+                                                    <span class="color-swatch" style="background-color: {{ $color }}" title="{{ $color }}"></span>
+                                                @endforeach
+                                                @if(count($product->colors) > 4)
+                                                    <span class="color-more">+{{ count($product->colors) - 4 }}</span>
+                                                @endif
+                                            </div>
+                                        @endif
                             </div>
                         </a>
                                 <form method="post" action="/cart/add" style="margin-top:8px">
@@ -2760,13 +3067,11 @@ $auth = session('auth');
             }
         ];
 
-        let currentFilter = 'all';
         let searchTimeout;
 
         // Инициализация поиска
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
-            const searchFilters = document.getElementById('searchFilters');
             const searchResults = document.getElementById('searchResults');
 
             // Обработчик ввода в поиск
@@ -2776,40 +3081,26 @@ $auth = session('auth');
                     const query = this.value.trim().toLowerCase();
                     if (query.length >= 2) {
                         performSearch(query);
-                        searchFilters.style.display = 'flex';
                         searchResults.style.display = 'block';
                     } else if (query.length === 0) {
                         // Показываем все товары только если поле пустое
                         showAllProducts();
                         searchResults.style.display = 'none';
-                        // НЕ скрываем фильтры, если они уже были показаны
                     }
                 }, 300);
             });
 
             // Обработчик клика вне поиска
             document.addEventListener('click', function(e) {
-                if (!searchInput.contains(e.target) && !searchResults.contains(e.target) && !searchFilters.contains(e.target)) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
                     searchResults.style.display = 'none';
-                    // НЕ скрываем фильтры при клике вне поиска
                 }
-            });
-
-            // Обработчики фильтров
-            document.querySelectorAll('.search-filter').forEach(filter => {
-                filter.addEventListener('click', function() {
-                    document.querySelectorAll('.search-filter').forEach(f => f.classList.remove('active'));
-                    this.classList.add('active');
-                    currentFilter = this.dataset.filter;
-                    performSearch(searchInput.value.trim());
-                });
             });
         });
 
         // Функция поиска
         async function performSearch(query = '') {
             const searchInput = document.getElementById('searchInput');
-            const searchFilters = document.getElementById('searchFilters');
             const searchResults = document.getElementById('searchResults');
             
             if (!query) {
@@ -2823,16 +3114,12 @@ $auth = session('auth');
                 return;
             }
 
-            // Показываем фильтры и контейнер результатов
-            searchFilters.style.display = 'flex';
+            // Показываем контейнер результатов
             searchResults.style.display = 'block';
             searchResults.innerHTML = '<div class="no-results">Идёт поиск…</div>';
 
             const params = new URLSearchParams();
             params.set('q', query);
-            if (currentFilter && currentFilter !== 'all') {
-                params.set('category', currentFilter);
-            }
 
             try {
                 const resp = await fetch('/api/search-products?' + params.toString(), { headers: { 'Accept': 'application/json' } });
@@ -2851,7 +3138,6 @@ $auth = session('auth');
             const q = (searchInput.value || '').trim();
             const params = new URLSearchParams();
             if (q) params.set('search', q);
-            if (currentFilter && currentFilter !== 'all') params.set('category', currentFilter);
             const url = '/catalog' + (params.toString() ? ('?' + params.toString()) : '');
             window.location.href = url;
         }

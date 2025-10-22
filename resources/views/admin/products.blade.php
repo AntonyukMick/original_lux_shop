@@ -366,7 +366,7 @@
         }
     }
     
-    /* Стили для размеров */
+    /* Стили для размеров и пола */
     .sizes-container {
         background: #ffffff;
         border: 1px solid #e2e8f0;
@@ -374,6 +374,314 @@
         padding: 20px;
         margin-top: 12px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Стили для выбора пола */
+    .gender-blocks-container {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        justify-content: center;
+    }
+    
+    .gender-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 16px;
+        border: 2px solid #d1d5db;
+        border-radius: 8px;
+        background-color: #ffffff;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        user-select: none;
+        min-height: 60px;
+        min-width: 60px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .gender-block::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: left 0.5s;
+    }
+    
+    .gender-block:hover::before {
+        left: 100%;
+    }
+    
+    .gender-block:hover {
+        background-color: #f3f4f6;
+        border-color: #9ca3af;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .gender-block.selected {
+        background-color: #ecfdf5;
+        border-color: #10b981;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    }
+    
+    .gender-icon {
+        font-size: 20px;
+        margin-bottom: 4px;
+        transition: transform 0.2s ease;
+    }
+    
+    .gender-block:hover .gender-icon {
+        transform: scale(1.1);
+    }
+    
+    .gender-text {
+        font-weight: 600;
+        font-size: 12px;
+        color: #374151;
+        text-align: center;
+        transition: color 0.2s ease;
+    }
+    
+    .gender-block.selected .gender-text {
+        color: #059669;
+    }
+    
+    .gender-controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        justify-content: center;
+    }
+    
+    .control-btn {
+        padding: 8px 16px;
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
+    
+    .control-btn:hover {
+        background-color: #2563eb;
+    }
+    
+    .control-btn:nth-child(2) {
+        background-color: #ef4444;
+    }
+    
+    .control-btn:nth-child(2):hover {
+        background-color: #dc2626;
+    }
+    
+    .info-display {
+        font-size: 14px;
+        color: #6b7280;
+        margin-top: 10px;
+        padding: 12px;
+        background: #f3f4f6;
+        border-radius: 6px;
+        border-left: 4px solid #d1d5db;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .info-display:hover {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Стили для профессионального цветового пикера */
+    .color-picker-wrapper {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        color: #374151;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .color-picker-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .color-picker-hex {
+        font-family: 'Courier New', monospace;
+        font-size: 16px;
+        font-weight: 600;
+        color: #1f2937;
+        background: #f8fafc;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        min-width: 100px;
+        text-align: center;
+    }
+    
+    .color-picker-main {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .color-field {
+        width: 300px;
+        height: 200px;
+        border-radius: 8px;
+        position: relative;
+        cursor: crosshair;
+        background: linear-gradient(to right, 
+            rgba(255, 255, 255, 1) 0%, 
+            rgba(255, 255, 255, 0) 100%),
+            linear-gradient(to bottom, 
+            rgba(0, 0, 0, 0) 0%, 
+            rgba(0, 0, 0, 1) 100%);
+        background-color: #ffffff;
+        border: 1px solid #d1d5db;
+    }
+    
+    .color-selector {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+        top: 80%;
+        left: 85%;
+    }
+    
+    .color-sliders {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .slider-container {
+        width: 400px;
+        height: 20px;
+        position: relative;
+    }
+    
+    .hue-slider {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        cursor: pointer;
+    }
+    
+    .hue-track {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        background: linear-gradient(to right,
+            #ff0000 0%,
+            #ffff00 16.66%,
+            #00ff00 33.33%,
+            #00ffff 50%,
+            #0000ff 66.66%,
+            #ff00ff 83.33%,
+            #ff0000 100%);
+    }
+    
+    .hue-handle {
+        position: absolute;
+        width: 4px;
+        height: 100%;
+        background: #ffffff;
+        border-radius: 2px;
+        top: 0;
+        left: 70%;
+        transform: translateX(-50%);
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+    }
+    
+    
+    .selected-colors-display {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8fafc;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .selected-colors-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 12px;
+    }
+    
+    .selected-colors-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .selected-color-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        background: #ffffff;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+    }
+    
+    .selected-color-preview {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        border: 1px solid #9ca3af;
+    }
+    
+    .selected-color-hex {
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        color: #374151;
+    }
+    
+    .remove-color-btn {
+        background: none;
+        border: none;
+        color: #ef4444;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 2px;
+        border-radius: 3px;
+        transition: background-color 0.2s;
+    }
+    
+    .remove-color-btn:hover {
+        background: #ef4444;
+        color: white;
+    }
+    
+    .no-colors {
+        color: #64748b;
+        font-style: italic;
+        font-size: 14px;
     }
     
     .size-options h4 {
@@ -458,6 +766,120 @@
         .size-options h4 {
             font-size: 14px;
         }
+        
+        .gender-blocks-container {
+            gap: 10px;
+            padding: 12px;
+        }
+        
+        .gender-block {
+            padding: 10px 12px;
+            min-height: 50px;
+            min-width: 50px;
+        }
+        
+        .gender-icon {
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+        
+        .gender-text {
+            font-size: 11px;
+        }
+        
+        .gender-controls {
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .control-btn {
+            padding: 10px 16px;
+            font-size: 15px;
+        }
+        
+        /* Мобильная адаптация цветового пикера */
+        .color-picker-wrapper {
+            padding: 15px;
+        }
+        
+        .color-picker-main {
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .color-field {
+            width: 100%;
+            height: 150px;
+        }
+        
+        .color-sliders {
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .slider-container {
+            width: 300px;
+            height: 20px;
+        }
+        
+        .color-picker-hex {
+            font-size: 14px;
+            padding: 6px 10px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .gender-blocks-container {
+            gap: 8px;
+            padding: 10px;
+        }
+        
+        .gender-block {
+            padding: 8px 10px;
+            min-height: 45px;
+            min-width: 45px;
+        }
+        
+        .gender-icon {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+        
+        .gender-text {
+            font-size: 10px;
+        }
+        
+        /* Мобильная адаптация цветового пикера для маленьких экранов */
+        .color-picker-wrapper {
+            padding: 12px;
+        }
+        
+        .color-field {
+            height: 120px;
+        }
+        
+        .slider-container {
+            width: 250px;
+            height: 20px;
+        }
+        
+        .color-picker-hex {
+            font-size: 13px;
+            padding: 5px 8px;
+            min-width: 80px;
+        }
+        
+        .color-picker-header {
+            gap: 8px;
+        }
+        
+        .selected-colors-list {
+            flex-direction: column;
+        }
+        
+        .selected-color-item {
+            justify-content: space-between;
+        }
     }
 </style>
 @endsection
@@ -535,6 +957,83 @@
                         <div class="image-preview" id="imagePreview"></div>
                         <small class="form-help">Или введите URL изображения:</small>
                         <input type="url" name="image_url" class="form-input" placeholder="https://example.com/image.jpg" style="margin-top: 8px;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Пол</label>
+                        <div class="sizes-container" id="gender-container">
+                            <div class="size-options" id="gender-options">
+                                <h4>Выберите пол для товара:</h4>
+                                <div class="gender-blocks-container">
+                                    <div class="gender-block" data-gender="Мужской">
+                                        <div class="gender-icon">👨</div>
+                                        <div class="gender-text">М</div>
+                                    </div>
+                                    <div class="gender-block" data-gender="Женский">
+                                        <div class="gender-icon">👩</div>
+                                        <div class="gender-text">Ж</div>
+                                    </div>
+                                    <div class="gender-block" data-gender="Унисекс">
+                                        <div class="gender-icon">👥</div>
+                                        <div class="gender-text">УН</div>
+                                    </div>
+                                </div>
+                                <div class="gender-controls">
+                                    <button type="button" class="control-btn" onclick="selectAllGenders()">Выбрать все</button>
+                                    <button type="button" class="control-btn" onclick="clearAllGenders()">Очистить все</button>
+                                </div>
+                                <div id="gender-info" class="info-display">Выберите пол товара</div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="gender" id="selected-gender" value="">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Цвет товара</label>
+                        <div class="colors-container" id="colors-container">
+                            <div class="color-options" id="color-options">
+                                <h4>Выберите цвет товара:</h4>
+                                
+                                <!-- Профессиональный цветовой пикер -->
+                                <div class="color-picker-wrapper">
+                                    <div class="color-picker-header">
+                                        <div class="color-picker-hex" id="colorPickerHex">#0f172a</div>
+                                    </div>
+                                    
+                                    <div class="color-picker-main">
+                                        <!-- Основное цветовое поле -->
+                                        <div class="color-field" id="colorField">
+                                            <div class="color-selector" id="colorSelector"></div>
+                                        </div>
+                                        
+                                        <!-- Слайдер оттенка -->
+                                        <div class="color-sliders">
+                                            <div class="slider-container hue-slider-container">
+                                                <div class="hue-slider" id="hueSlider">
+                                                    <div class="hue-track"></div>
+                                                    <div class="hue-handle" id="hueHandle"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Кнопки управления -->
+                                    <div class="color-controls">
+                                        <button type="button" class="control-btn" onclick="addSelectedColor()">Добавить цвет</button>
+                                        <button type="button" class="control-btn" onclick="clearAllColors()">Очистить все</button>
+                                    </div>
+                                    
+                                    <!-- Выбранные цвета -->
+                                    <div class="selected-colors-display" id="selectedColorsDisplay">
+                                        <div class="selected-colors-title">Выбранные цвета:</div>
+                                        <div class="selected-colors-list" id="selectedColorsList">
+                                            <div class="no-colors">Цвета не выбраны</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" name="colors" id="selected-colors" value="">
                     </div>
                     
                     <div class="form-group">
@@ -642,7 +1141,7 @@ const subcategories = {
 
     // Определения размеров для каждой категории
 const sizesByCategory = {
-    'Обувь': ['30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48'],
+    'Обувь': ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48'],
     'Одежда': ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
     'Сумки': ['One Size', 'S', 'M', 'L'],
     'Часы': ['One Size'],
@@ -895,6 +1394,265 @@ function updateSelectedSizes() {
     }
 }
 
+// Функции для работы с выбором пола
+function toggleGenderBlock(block) {
+    block.classList.toggle('selected');
+    updateSelectedGender();
+}
+
+function selectAllGenders() {
+    const blocks = document.querySelectorAll('.gender-block');
+    blocks.forEach(block => {
+        if (!block.classList.contains('selected')) {
+            toggleGenderBlock(block);
+        }
+    });
+}
+
+function clearAllGenders() {
+    const blocks = document.querySelectorAll('.gender-block');
+    blocks.forEach(block => {
+        if (block.classList.contains('selected')) {
+            toggleGenderBlock(block);
+        }
+    });
+}
+
+function updateSelectedGender() {
+    const selectedBlocks = document.querySelectorAll('.gender-block.selected');
+    const selectedGenders = Array.from(selectedBlocks).map(block => block.dataset.gender);
+    
+    const selectedGenderInput = document.getElementById('selected-gender');
+    selectedGenderInput.value = JSON.stringify(selectedGenders);
+    
+    const info = document.getElementById('gender-info');
+    if (info) {
+        if (selectedGenders.length > 0) {
+            info.innerHTML = `
+                <div style="color: #059669; font-weight: 600; margin-bottom: 4px;">
+                    ✅ Выбран пол: ${selectedGenders.length}
+                </div>
+                <div style="font-size: 13px; color: #6b7280;">
+                    ${selectedGenders.join(', ')}
+                </div>
+            `;
+            info.style.borderLeftColor = '#10b981';
+            info.style.backgroundColor = '#f0fdf4';
+        } else {
+            info.innerHTML = `
+                <div style="color: #6b7280;">
+                    👤 Выберите пол товара
+                </div>
+            `;
+            info.style.borderLeftColor = '#d1d5db';
+            info.style.backgroundColor = '#f3f4f6';
+        }
+    }
+}
+
+// Функции для работы с цветовым пикером
+let currentHue = 0.7; // Начальный оттенок (синий)
+let currentSaturation = 0.85; // Начальная насыщенность
+let currentLightness = 0.15; // Начальная яркость
+let currentAlpha = 1.0; // Начальная прозрачность
+let selectedColors = []; // Массив выбранных цветов
+
+function updateColorField() {
+    const colorField = document.getElementById('colorField');
+    const hueColor = hslToRgb(currentHue, 1, 0.5);
+    const hueHex = rgbToHex(hueColor.r, hueColor.g, hueColor.b);
+    
+    // Обновляем фон цветового поля
+    colorField.style.background = `
+        linear-gradient(to right, 
+            rgba(255, 255, 255, 1) 0%, 
+            rgba(255, 255, 255, 0) 100%),
+        linear-gradient(to bottom, 
+            rgba(0, 0, 0, 0) 0%, 
+            rgba(0, 0, 0, 1) 100%),
+        ${hueHex}
+    `;
+    
+    // Обновляем позицию селектора
+    const selector = document.getElementById('colorSelector');
+    selector.style.left = (currentSaturation * 100) + '%';
+    selector.style.top = ((1 - currentLightness) * 100) + '%';
+    
+    // Обновляем HEX код
+    const finalColor = hslToRgb(currentHue, currentSaturation, currentLightness);
+    const finalHex = rgbToHex(finalColor.r, finalColor.g, finalColor.b);
+    document.getElementById('colorPickerHex').textContent = finalHex;
+}
+
+function updateHueSlider() {
+    const hueHandle = document.getElementById('hueHandle');
+    hueHandle.style.left = (currentHue * 100) + '%';
+}
+
+
+function hslToRgb(h, s, l) {
+    let r, g, b;
+    
+    if (s === 0) {
+        r = g = b = l; // achromatic
+    } else {
+        const hue2rgb = (p, q, t) => {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        };
+        
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+    }
+    
+    return {
+        r: Math.round(r * 255),
+        g: Math.round(g * 255),
+        b: Math.round(b * 255)
+    };
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toLowerCase();
+}
+
+function addSelectedColor() {
+    const finalColor = hslToRgb(currentHue, currentSaturation, currentLightness);
+    const finalHex = rgbToHex(finalColor.r, finalColor.g, finalColor.b);
+    
+    // Проверяем, не добавлен ли уже этот цвет
+    if (!selectedColors.includes(finalHex)) {
+        selectedColors.push(finalHex);
+        updateSelectedColorsDisplay();
+        updateSelectedColorsInput();
+    }
+}
+
+function removeSelectedColor(hex) {
+    selectedColors = selectedColors.filter(color => color !== hex);
+    updateSelectedColorsDisplay();
+    updateSelectedColorsInput();
+}
+
+function clearAllColors() {
+    selectedColors = [];
+    updateSelectedColorsDisplay();
+    updateSelectedColorsInput();
+}
+
+function updateSelectedColorsDisplay() {
+    const container = document.getElementById('selectedColorsList');
+    
+    if (selectedColors.length === 0) {
+        container.innerHTML = '<div class="no-colors">Цвета не выбраны</div>';
+        return;
+    }
+    
+    container.innerHTML = selectedColors.map(hex => `
+        <div class="selected-color-item">
+            <div class="selected-color-preview" style="background-color: ${hex}"></div>
+            <div class="selected-color-hex">${hex}</div>
+            <button type="button" class="remove-color-btn" onclick="removeSelectedColor('${hex}')">×</button>
+        </div>
+    `).join('');
+}
+
+function updateSelectedColorsInput() {
+    const input = document.getElementById('selected-colors');
+    input.value = JSON.stringify(selectedColors);
+}
+
+function initializeColorPicker() {
+    // Инициализируем начальное состояние
+    updateColorField();
+    updateHueSlider();
+    
+    // Обработчики для цветового поля
+    const colorField = document.getElementById('colorField');
+    let isDragging = false;
+    
+    colorField.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        updateColorFromField(e);
+    });
+    
+    colorField.addEventListener('mousemove', function(e) {
+        if (isDragging) {
+            updateColorFromField(e);
+        }
+    });
+    
+    document.addEventListener('mouseup', function() {
+        isDragging = false;
+    });
+    
+    // Обработчики для слайдера оттенка
+    const hueSlider = document.getElementById('hueSlider');
+    let isHueDragging = false;
+    
+    hueSlider.addEventListener('mousedown', function(e) {
+        isHueDragging = true;
+        updateHueFromSlider(e);
+    });
+    
+    hueSlider.addEventListener('mousemove', function(e) {
+        if (isHueDragging) {
+            updateHueFromSlider(e);
+        }
+    });
+    
+    
+    // Обработчики для мобильных устройств
+    colorField.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        isDragging = true;
+        const touch = e.touches[0];
+        updateColorFromField({ clientX: touch.clientX, clientY: touch.clientY, target: colorField });
+    });
+    
+    colorField.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        if (isDragging) {
+            const touch = e.touches[0];
+            updateColorFromField({ clientX: touch.clientX, clientY: touch.clientY, target: colorField });
+        }
+    });
+    
+    document.addEventListener('touchend', function() {
+        isDragging = false;
+        isHueDragging = false;
+    });
+}
+
+function updateColorFromField(e) {
+    const rect = e.target.getBoundingClientRect();
+    const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    const y = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+    
+    currentSaturation = x;
+    currentLightness = 1 - y;
+    
+    updateColorField();
+}
+
+function updateHueFromSlider(e) {
+    const rect = e.target.getBoundingClientRect();
+    const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    
+    currentHue = x;
+    
+    updateColorField();
+    updateHueSlider();
+}
+
+
 function updateSubcategories(category) {
     const select = document.getElementById('subcategory-select');
     select.innerHTML = '<option value="">Выберите подкатегорию</option>';
@@ -912,8 +1670,35 @@ function updateSubcategories(category) {
     updateSizes(category);
 }
 
-// Обработка загрузки изображений
+// Обработка загрузки изображений и инициализация блоков пола и цветового пикера
 document.addEventListener('DOMContentLoaded', function() {
+    // Инициализация блоков выбора пола
+    const genderBlocks = document.querySelectorAll('.gender-block');
+    genderBlocks.forEach(block => {
+        block.addEventListener('click', function() {
+            toggleGenderBlock(this);
+        });
+        
+        block.addEventListener('mouseenter', function() {
+            if (!this.classList.contains('selected')) {
+                this.style.backgroundColor = '#f3f4f6';
+                this.style.borderColor = '#9ca3af';
+                this.style.transform = 'translateY(-2px)';
+            }
+        });
+        
+        block.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('selected')) {
+                this.style.backgroundColor = '#ffffff';
+                this.style.borderColor = '#d1d5db';
+                this.style.transform = 'translateY(0)';
+            }
+        });
+    });
+    
+    // Инициализация цветового пикера
+    initializeColorPicker();
+    
     const imageInput = document.getElementById('imageInput');
     const imagePreview = document.getElementById('imagePreview');
     const fileInputLabel = document.querySelector('.file-input-label');

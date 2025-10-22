@@ -12,90 +12,48 @@
         line-height: 1.6;
     }
         
-        /* Новые стили для иконок избранного и корзины */
-        .icon-container {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            background: white;
-            border: 2px solid #000;
+        /* Стили для иконок избранного и корзины удалены - используются стили из хедера */
+        
+        /* Стили для иконки сердца удалены - используются стили из хедера */
+        
+        /* Стили для иконки самолетика удалены - используются стили из хедера */
+        
+        /* Стили для иконки вопросика удалены - используются стили из хедера */
+        
+        /* Стили для иконок доставки и о нас удалены - используются стили из хедера */
+        
+        /* Кнопка "Назад" */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: #fff;
+            border: 2px solid #e2e8f0;
             border-radius: 8px;
-            cursor: pointer;
+            color: #475569;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
             transition: all 0.2s ease;
-            margin: 0 4px;
+            margin-bottom: 24px;
+            cursor: pointer;
         }
         
-        .icon-container:hover {
-            transform: translateY(-2px);
+        .back-button:hover {
+            background: #f8fafc;
+            border-color: #527ea6;
+            color: #527ea6;
+            transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         
-        .icon-container .icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 22px;
-            color: #FFD700;
+        .back-button:active {
+            transform: translateY(0);
         }
         
-        .icon-container .badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: #FFD700;
-            border: 2px solid #000;
-            border-radius: 50%;
-            width: 16px;
-            height: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 9px;
-            font-weight: bold;
-            color: #000;
-        }
-        
-        .icon-container .badge.hidden {
-            display: none;
-        }
-        
-        /* Стили для иконки сердца */
-        .heart-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки самолетика */
-        .plane-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки вопросика */
-        .question-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Стили для иконки доставки */
-        .delivery-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-            font-size: 20px;
-            transform: translate(-50%, -50%) scale(1.2);
-        }
-        
-        /* Стили для иконки о нас */
-        .about-icon {
-            color: #FFD700;
-            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
-        }
-        
-        /* Скрываем старые кнопки */
-        .old-icon-btn {
-            display: none;
+        .back-icon {
+            font-size: 16px;
         }
         
         .container {
@@ -732,6 +690,12 @@
 @section('content')
 <main class="main">
         <div class="container">
+            <!-- Кнопка "Назад" -->
+            <button class="back-button" onclick="goBack()">
+                <span class="back-icon">←</span>
+                Назад
+            </button>
+            
             <div class="product-grid">
                 <!-- Image Gallery -->
                 <div class="gallery">
@@ -880,6 +844,36 @@
     </main>
 
     <script>
+        // Функция "Назад" с сохранением позиции скролла
+        function goBack() {
+            // Сохраняем текущую позицию скролла
+            const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Проверяем, есть ли история браузера
+            if (window.history.length > 1) {
+                // Сохраняем позицию скролла в sessionStorage
+                sessionStorage.setItem('scrollPosition', currentScrollPosition);
+                
+                // Возвращаемся назад
+                window.history.back();
+            } else {
+                // Если нет истории, переходим на главную страницу
+                window.location.href = '/';
+            }
+        }
+        
+        // Восстанавливаем позицию скролла при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+            if (savedScrollPosition) {
+                // Небольшая задержка для корректного восстановления позиции
+                setTimeout(() => {
+                    window.scrollTo(0, parseInt(savedScrollPosition));
+                    sessionStorage.removeItem('scrollPosition');
+                }, 100);
+            }
+        });
+        
         // Показ уведомлений
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');

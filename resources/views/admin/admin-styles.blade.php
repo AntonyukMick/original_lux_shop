@@ -92,42 +92,7 @@
         min-height: 100px;
     }
     
-    .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 12px 24px;
-        background: #527ea6;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 600;
-        text-decoration: none;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    
-    .btn:hover {
-        background: #3d5a7a;
-        transform: translateY(-1px);
-    }
-    
-    .btn-secondary {
-        background: #64748b;
-    }
-    
-    .btn-secondary:hover {
-        background: #475569;
-    }
-    
-    .btn-danger {
-        background: #dc2626;
-    }
-    
-    .btn-danger:hover {
-        background: #b91c1c;
-    }
+    /* Стили для кнопок удалены - используются стили из common.css */
     
     /* Адаптивные стили */
     @media (max-width: 768px) {
@@ -170,10 +135,7 @@
             min-height: 80px;
         }
         
-        .btn {
-            padding: 12px 20px;
-            font-size: 14px;
-        }
+        /* Адаптивные стили для кнопок удалены - используются стили из common.css */
     }
     
     @media (max-width: 480px) {
@@ -210,9 +172,6 @@
             min-height: 60px;
         }
         
-        .btn {
-            padding: 10px 16px;
-            font-size: 13px;
-        }
+        /* Адаптивные стили для кнопок удалены - используются стили из common.css */
     }
 </style>

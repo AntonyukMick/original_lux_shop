@@ -37,6 +37,8 @@ class AdminProductController extends Controller
             'images.*' => 'nullable|image|max:4096',
             'image_url' => 'nullable|url',
             'sizes' => 'nullable|string',
+            'gender' => 'nullable|string',
+            'colors' => 'nullable|string',
         ]);
 
         try {
@@ -72,6 +74,22 @@ class AdminProductController extends Controller
                 $sizes = json_decode($request->sizes, true);
                 if (is_array($sizes)) {
                     $data['sizes'] = $sizes;
+                }
+            }
+            
+            // Обработка пола
+            if ($request->filled('gender')) {
+                $gender = json_decode($request->gender, true);
+                if (is_array($gender)) {
+                    $data['gender'] = $gender;
+                }
+            }
+            
+            // Обработка цветов
+            if ($request->filled('colors')) {
+                $colors = json_decode($request->colors, true);
+                if (is_array($colors)) {
+                    $data['colors'] = $colors;
                 }
             }
             
