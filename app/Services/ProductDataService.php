@@ -96,10 +96,18 @@ class ProductDataService
                 $decodedColors = json_decode($colors, true);
                 $colors = is_array($decodedColors) ? $decodedColors : [];
             } else {
-                $colors = array_map('trim', explode(',', $colors));
-                $colors = array_filter($colors, function($c) {
+                $colorStrings = array_map('trim', explode(',', $colors));
+                $colorStrings = array_filter($colorStrings, function($c) {
                     return !empty($c);
                 });
+                // Преобразуем строки в массив с ключами name и image
+                $colors = [];
+                foreach ($colorStrings as $colorName) {
+                    $colors[] = [
+                        'name' => $colorName,
+                        'image' => $images[0] ?? 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop'
+                    ];
+                }
             }
         }
         if (!is_array($colors)) {

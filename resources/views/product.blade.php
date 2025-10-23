@@ -773,8 +773,8 @@
                         <div class="colors-grid">
                             @foreach($productData['colors'] as $index => $color)
                             <div class="color-option {{ $index === 0 ? 'active' : '' }}" 
-                                 onclick="selectColor('{{ $color['image'] }}', '{{ $color['name'] }}', this)">
-                                <img src="{{ $color['image'] }}" alt="{{ $color['name'] }}">
+                                 onclick="selectColor('{{ is_array($color) ? $color['image'] : $color }}', '{{ is_array($color) ? $color['name'] : $color }}', this)">
+                                <img src="{{ is_array($color) ? $color['image'] : $color }}" alt="{{ is_array($color) ? $color['name'] : $color }}">
                             </div>
                             @endforeach
                         </div>
