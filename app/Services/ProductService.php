@@ -64,24 +64,24 @@ class ProductService
         $query = Product::where('is_active', true)
             ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'gender', 'created_at']);
 
-        // Фильтрация по полу (совместимо с SQLite)
+        // Фильтрация по полу (совместимо с PostgreSQL)
         if ($gender === 'men') {
             $query->where(function($q) {
-                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Мужской'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Мужской'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Мужской'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+                $q->whereRaw("gender->0 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->1 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->2 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
             });
         } elseif ($gender === 'women') {
             $query->where(function($q) {
-                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Женский'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Женский'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Женский'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+                $q->whereRaw("gender->0 = ?", ['Женский'])
+                  ->orWhereRaw("gender->1 = ?", ['Женский'])
+                  ->orWhereRaw("gender->2 = ?", ['Женский'])
+                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
             });
         }
 
@@ -97,24 +97,24 @@ class ProductService
             ->where('is_active', true)
             ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'gender', 'created_at']);
 
-        // Фильтрация по полу (совместимо с SQLite)
+        // Фильтрация по полу (совместимо с PostgreSQL)
         if ($gender === 'men') {
             $query->where(function($q) {
-                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Мужской'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Мужской'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Мужской'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+                $q->whereRaw("gender->0 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->1 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->2 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
             });
         } elseif ($gender === 'women') {
             $query->where(function($q) {
-                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Женский'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Женский'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Женский'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+                $q->whereRaw("gender->0 = ?", ['Женский'])
+                  ->orWhereRaw("gender->1 = ?", ['Женский'])
+                  ->orWhereRaw("gender->2 = ?", ['Женский'])
+                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
             });
         }
 
@@ -131,24 +131,24 @@ class ProductService
             ->where('subcat', $subcategory)
             ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'subcat', 'brand', 'gender']);
 
-        // Фильтрация по полу (совместимо с SQLite)
+        // Фильтрация по полу (совместимо с PostgreSQL)
         if ($gender === 'men') {
             $query->where(function($q) {
-                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Мужской'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Мужской'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Мужской'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+                $q->whereRaw("gender->0 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->1 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->2 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
             });
         } elseif ($gender === 'women') {
             $query->where(function($q) {
-                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Женский'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Женский'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Женский'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+                $q->whereRaw("gender->0 = ?", ['Женский'])
+                  ->orWhereRaw("gender->1 = ?", ['Женский'])
+                  ->orWhereRaw("gender->2 = ?", ['Женский'])
+                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
             });
         }
 
@@ -179,24 +179,24 @@ class ProductService
             ->where('featured', true)
             ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'gender', 'created_at']);
 
-        // Фильтрация по полу (совместимо с SQLite)
+        // Фильтрация по полу (совместимо с PostgreSQL)
         if ($gender === 'men') {
             $query->where(function($q) {
-                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Мужской'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Мужской'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Мужской'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+                $q->whereRaw("gender->0 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->1 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->2 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
             });
         } elseif ($gender === 'women') {
             $query->where(function($q) {
-                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Женский'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Женский'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Женский'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
-                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+                $q->whereRaw("gender->0 = ?", ['Женский'])
+                  ->orWhereRaw("gender->1 = ?", ['Женский'])
+                  ->orWhereRaw("gender->2 = ?", ['Женский'])
+                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
             });
         }
 
