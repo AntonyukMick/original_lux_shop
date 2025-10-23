@@ -759,12 +759,17 @@
         }
         
         .size-block {
-            min-height: 40px;
-            font-size: 13px;
+            min-height: 32px;
+            font-size: 12px;
         }
         
         .size-options h4 {
             font-size: 14px;
+        }
+        
+        /* На мобильных устройствах показываем 4 размера в строке */
+        .size-blocks-container {
+            grid-template-columns: repeat(4, 1fr) !important;
         }
         
         .gender-blocks-container {
@@ -847,6 +852,22 @@
         
         .gender-text {
             font-size: 10px;
+        }
+        
+        /* Адаптация размеров для маленьких экранов */
+        .size-blocks-container {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 6px;
+            padding: 12px;
+        }
+        
+        .size-block {
+            min-height: 30px;
+            font-size: 11px;
+        }
+        
+        .size-options h4 {
+            font-size: 13px;
         }
         
         /* Мобильная адаптация цветового пикера для маленьких экранов */
@@ -944,6 +965,12 @@
                     <div class="form-group">
                         <label class="form-label">Цена (€) *</label>
                         <input type="number" name="price" class="form-input" placeholder="0.00" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Оригинальная цена (€)</label>
+                        <input type="number" name="original_price" class="form-input" placeholder="0.00" step="0.01" min="0">
+                        <small class="form-help">Оставьте пустым, если товар не продается со скидкой</small>
                     </div>
                     
                     <div class="form-group">
@@ -1171,9 +1198,10 @@ function updateSizes(category) {
         
         // Создаем контейнер для блоков размеров
         const blocksContainer = document.createElement('div');
+        blocksContainer.className = 'size-blocks-container';
         blocksContainer.style.display = 'grid';
-        blocksContainer.style.gridTemplateColumns = 'repeat(auto-fit, minmax(60px, 1fr))';
-        blocksContainer.style.gap = '10px';
+        blocksContainer.style.gridTemplateColumns = 'repeat(5, 1fr)';
+        blocksContainer.style.gap = '8px';
         blocksContainer.style.marginBottom = '15px';
         blocksContainer.style.padding = '15px';
         blocksContainer.style.backgroundColor = '#f8fafc';
@@ -1188,18 +1216,18 @@ function updateSizes(category) {
             
             // Стили для блока размера
             sizeBlock.style.cssText = `
-                padding: 12px 8px;
+                padding: 8px 6px;
                 text-align: center;
                 border: 2px solid #d1d5db;
-                border-radius: 8px;
+                border-radius: 6px;
                 background-color: #ffffff;
                 cursor: pointer;
                 font-weight: 600;
-                font-size: 14px;
+                font-size: 13px;
                 color: #374151;
                 transition: all 0.2s ease;
                 user-select: none;
-                min-height: 45px;
+                min-height: 35px;
                 display: flex;
                 align-items: center;
                 justify-content: center;

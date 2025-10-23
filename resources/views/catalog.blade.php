@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Каталог товаров')
+@section('title', isset($gender) && $gender === 'men' ? 'Мужской каталог' : (isset($gender) && $gender === 'women' ? 'Женский каталог' : 'Каталог товаров'))
 
 @section('styles')
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -798,8 +798,24 @@
 <main class="main">
     <div class="container">
             <div class="catalog-header">
-                <h1 class="catalog-title">Каталог товаров</h1>
-                <p class="catalog-subtitle">Более 30 товаров в разных категориях</p>
+                <h1 class="catalog-title">
+                    @if(isset($gender) && $gender === 'men')
+                        Мужской каталог
+                    @elseif(isset($gender) && $gender === 'women')
+                        Женский каталог
+                    @else
+                        Каталог товаров
+                    @endif
+                </h1>
+                <p class="catalog-subtitle">
+                    @if(isset($gender) && $gender === 'men')
+                        Товары для мужчин
+                    @elseif(isset($gender) && $gender === 'women')
+                        Товары для женщин
+                    @else
+                        Более 30 товаров в разных категориях
+                    @endif
+                </p>
             </div>
 
             <!-- Category Tabs -->

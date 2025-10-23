@@ -33,6 +33,7 @@ class AdminProductController extends Controller
             'brand' => 'required|string|max:255',
             'subcat' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
+            'original_price' => 'nullable|numeric|min:0',
             'description' => 'nullable|string',
             'images.*' => 'nullable|image|max:4096',
             'image_url' => 'nullable|url',

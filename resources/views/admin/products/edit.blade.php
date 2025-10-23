@@ -294,12 +294,450 @@
             border-color: #527ea6;
         }
 
-        .no-category-message {
-            padding: 1rem;
-            text-align: center;
+        /* Стили для размеров и пола */
+        .sizes-container {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Стили для выбора пола */
+        .gender-blocks-container {
+            display: flex;
+            gap: 12px;
+            padding: 15px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .gender-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #ffffff;
+            min-height: 60px;
+            min-width: 60px;
+            justify-content: center;
+        }
+        
+        .gender-block:hover {
+            border-color: #527ea6;
             background: #f8fafc;
+            transform: translateY(-2px);
+        }
+        
+        .gender-block.selected {
+            background: #527ea6;
+            border-color: #527ea6;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(82, 126, 166, 0.3);
+        }
+        
+        .gender-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .gender-text {
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .gender-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .control-btn {
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
             border-radius: 6px;
-            border: 1px dashed #cbd5e1;
+            background: #ffffff;
+            color: #374151;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .control-btn:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .info-display {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        .size-help {
+            color: #6b7280;
+            font-style: italic;
+            margin: 0;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .size-options h4 {
+            margin: 0 0 20px 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+        
+        .size-block {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .size-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .size-block:hover::before {
+            left: 100%;
+        }
+        
+        .size-block.selected {
+            animation: sizeSelect 0.3s ease-out;
+        }
+        
+        @keyframes sizeSelect {
+            0% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.05) translateY(-3px); }
+            100% { transform: scale(1) translateY(-2px); }
+        }
+        
+        /* Стили для цветового пикера */
+        .colors-container {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .color-picker-wrapper {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .color-picker-header {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .color-picker-hex {
+            background: #f8fafc;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            min-width: 100px;
+        }
+        
+        .color-picker-main {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .color-field {
+            width: 100%;
+            height: 200px;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            position: relative;
+            cursor: crosshair;
+            overflow: hidden;
+        }
+        
+        .color-selector {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+            transform: translate(-50%, -50%);
+        }
+        
+        .color-sliders {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .slider-container {
+            flex: 1;
+            height: 20px;
+            position: relative;
+        }
+        
+        .hue-slider {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .hue-track {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(to right, 
+                #ff0000 0%, 
+                #ffff00 16.66%, 
+                #00ff00 33.33%, 
+                #00ffff 50%, 
+                #0000ff 66.66%, 
+                #ff00ff 83.33%, 
+                #ff0000 100%);
+        }
+        
+        .hue-handle {
+            position: absolute;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 2px;
+            transform: translateX(-50%);
+            pointer-events: none;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+        }
+        
+        .color-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .selected-colors-display {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .selected-colors-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+        
+        .selected-colors-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .color-swatch {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            border: 2px solid #d1d5db;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        .color-swatch:hover {
+            transform: scale(1.1);
+            border-color: #374151;
+        }
+        
+        .color-swatch::after {
+            content: '×';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .color-swatch:hover::after {
+            opacity: 1;
+        }
+        
+        .no-colors {
+            color: #9ca3af;
+            font-style: italic;
+            font-size: 14px;
+        }
+        
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            .sizes-container {
+                padding: 15px;
+            }
+            
+            .size-block {
+                min-height: 32px;
+                font-size: 12px;
+            }
+            
+            .size-options h4 {
+                font-size: 14px;
+            }
+            
+            /* На мобильных устройствах показываем 4 размера в строке */
+            .size-blocks-container {
+                grid-template-columns: repeat(4, 1fr) !important;
+            }
+            
+            .gender-blocks-container {
+                gap: 10px;
+                padding: 12px;
+            }
+            
+            .gender-block {
+                padding: 10px 12px;
+                min-height: 50px;
+                min-width: 50px;
+            }
+            
+            .gender-icon {
+                font-size: 18px;
+                margin-bottom: 2px;
+            }
+            
+            .gender-text {
+                font-size: 11px;
+            }
+            
+            .color-picker-wrapper {
+                padding: 15px;
+            }
+            
+            .color-field {
+                height: 150px;
+            }
+            
+            .color-sliders {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .slider-container {
+                width: 300px;
+                height: 20px;
+            }
+            
+            .color-picker-hex {
+                font-size: 14px;
+                padding: 6px 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gender-blocks-container {
+                gap: 8px;
+                padding: 10px;
+            }
+            
+            .gender-block {
+                padding: 8px 10px;
+                min-height: 45px;
+                min-width: 45px;
+            }
+            
+            .gender-icon {
+                font-size: 16px;
+                margin-bottom: 2px;
+            }
+            
+            .gender-text {
+                font-size: 10px;
+            }
+            
+            /* Адаптация размеров для маленьких экранов */
+            .size-blocks-container {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 6px;
+                padding: 12px;
+            }
+            
+            .size-block {
+                min-height: 30px;
+                font-size: 11px;
+            }
+            
+            .size-options h4 {
+                font-size: 13px;
+            }
+            
+            /* Мобильная адаптация цветового пикера для маленьких экранов */
+            .color-picker-wrapper {
+                padding: 12px;
+            }
+            
+            .color-field {
+                height: 120px;
+            }
+            
+            .slider-container {
+                width: 250px;
+                height: 20px;
+            }
+            
+            .color-picker-hex {
+                font-size: 14px;
+                padding: 6px 10px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -416,18 +854,80 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Размеры</label>
-                    <div class="sizes-container">
-                        <div class="size-table-wrapper" id="sizeTableWrapper" style="display: none;">
-                            <div class="size-table" id="sizeTable">
-                                <!-- Таблица размеров будет генерироваться динамически -->
+                    <label class="form-label">Пол</label>
+                    <div class="sizes-container" id="gender-container">
+                        <div class="size-options" id="gender-options">
+                            <h4>Выберите пол для товара:</h4>
+                            <div class="gender-blocks-container">
+                                <div class="gender-block" data-gender="Мужской">
+                                    <div class="gender-icon">👨</div>
+                                    <div class="gender-text">М</div>
                             </div>
-                            <div class="form-help">Выберите доступные размеры для товара</div>
+                                <div class="gender-block" data-gender="Женский">
+                                    <div class="gender-icon">👩</div>
+                                    <div class="gender-text">Ж</div>
                         </div>
-                        <div class="no-category-message" id="noCategoryMessage">
-                            <p style="color: #718096; font-style: italic;">Выберите категорию товара для отображения таблицы размеров</p>
+                                <div class="gender-block" data-gender="Унисекс">
+                                    <div class="gender-icon">👥</div>
+                                    <div class="gender-text">УН</div>
                         </div>
                     </div>
+                            <div class="gender-controls">
+                                <button type="button" class="control-btn" onclick="selectAllGenders()">Выбрать все</button>
+                                <button type="button" class="control-btn" onclick="clearAllGenders()">Очистить все</button>
+                            </div>
+                            <div id="gender-info" class="info-display">Выберите пол товара</div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="gender" id="selected-gender" value="">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Цвет товара</label>
+                    <div class="colors-container" id="colors-container">
+                        <div class="color-options" id="color-options">
+                            <h4>Выберите цвет товара:</h4>
+                            <div class="color-picker-wrapper">
+                                <div class="color-picker-header">
+                                    <div class="color-picker-hex" id="colorPickerHex">#0f172a</div>
+                                </div>
+                                <div class="color-picker-main">
+                                    <div class="color-field" id="colorField">
+                                        <div class="color-selector" id="colorSelector"></div>
+                                    </div>
+                                    <div class="color-sliders">
+                                        <div class="slider-container hue-slider-container">
+                                            <div class="hue-slider" id="hueSlider">
+                                                <div class="hue-track"></div>
+                                                <div class="hue-handle" id="hueHandle"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="color-controls">
+                                    <button type="button" class="control-btn" onclick="addSelectedColor()">Добавить цвет</button>
+                                    <button type="button" class="control-btn" onclick="clearAllColors()">Очистить все</button>
+                                </div>
+                                <div class="selected-colors-display" id="selectedColorsDisplay">
+                                    <div class="selected-colors-title">Выбранные цвета:</div>
+                                    <div class="selected-colors-list" id="selectedColorsList">
+                                        <div class="no-colors">Цвета не выбраны</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="colors" id="selected-colors" value="">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Размеры товара</label>
+                    <div class="sizes-container" id="sizes-container">
+                        <div class="size-options" id="size-options">
+                            <p class="size-help">Выберите категорию для отображения размеров</p>
+                        </div>
+                    </div>
+                    <input type="hidden" name="sizes" id="selected-sizes" value="">
                 </div>
 
                 <div class="form-row">
@@ -469,30 +969,70 @@
     </div>
 
     <script>
-        // Данные категорий и подкатегорий
-        const categoryData = {
-            'Одежда': ['Худи', 'Футболки', 'Куртки', 'Джинсы', 'Свитшоты'],
-            'Обувь': ['Кроссовки', 'Кеды', 'Лоферы', 'Ботинки', 'Сандалии'],
-            'Сумки': ['Рюкзаки', 'Сумки через плечо', 'Поясные сумки', 'Клатчи', 'Портфели'],
-            'Украшения': ['Браслеты', 'Кольца', 'Цепи', 'Серьги', 'Колье'],
-            'Аксессуары': ['Ремни', 'Кошельки', 'Очки', 'Шарфы', 'Перчатки'],
-            'Часы': ['Наручные часы', 'Умные часы', 'Карманные часы', 'Спортивные часы']
+        // Данные размеров по категориям
+        const sizesByCategory = {
+            'Обувь': ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48'],
+            'Одежда': ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
+        };
+
+        // Данные подкатегорий
+        const subcategories = {
+            'Одежда': ['Платья', 'Блузки', 'Футболки', 'Джинсы', 'Брюки', 'Юбки', 'Куртки', 'Пальто', 'Худи', 'Свитеры'],
+            'Обувь': ['Кроссовки', 'Туфли', 'Сапоги', 'Ботинки', 'Сандалии', 'Босоножки', 'Лоферы', 'Кеды'],
+            'Сумки': ['Рюкзаки', 'Сумки через плечо', 'Клатчи', 'Торбы', 'Портфели', 'Кошельки'],
+            'Часы': ['Наручные часы', 'Карманные часы', 'Настенные часы', 'Спортивные часы'],
+            'Украшения': ['Кольца', 'Серьги', 'Браслеты', 'Цепочки', 'Подвески', 'Броши'],
+            'Аксессуары': ['Очки', 'Шарфы', 'Перчатки', 'Ремни', 'Галстуки', 'Шляпы']
         };
 
         // Текущие значения из продукта
         const currentCategory = "{{ $product->category }}";
         const currentSubcat = "{{ $product->subcat }}";
+        const currentSizes = @json($product->sizes ?? []);
+        const currentGender = @json($product->gender ?? []);
+        const currentColors = @json($product->colors ?? []);
+
+        // Переменные для цветового пикера
+        let currentHue = 0;
+        let currentSaturation = 100;
+        let currentLightness = 50;
+        let selectedColors = [];
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем подкатегории для текущей категории
+            if (currentCategory) {
+                updateSubcategories(currentCategory, currentSubcat);
+                updateSizes(currentCategory);
+                restoreSelectedSizes();
+            }
+
+            // Восстанавливаем выбранный пол
+            restoreSelectedGender();
+
+            // Восстанавливаем выбранные цвета
+            restoreSelectedColors();
+
+            // Инициализируем цветовой пикер
+            initializeColorPicker();
+        });
+
+        // Обработчик изменения категории
+        document.getElementById('categorySelect').addEventListener('change', function() {
+            updateSubcategories(this.value);
+            updateSizes(this.value);
+        });
 
         // Функция обновления подкатегорий
-        function updateSubcategories(selectedCategory, selectSubcat = null) {
+        function updateSubcategories(category, selectSubcat = null) {
             const subcatSelect = document.getElementById('subcatSelect');
             
             // Очищаем текущие опции
             subcatSelect.innerHTML = '<option value="">Выберите подкатегорию</option>';
             
             // Если категория выбрана, добавляем подкатегории
-            if (selectedCategory && categoryData[selectedCategory]) {
-                categoryData[selectedCategory].forEach(function(subcat) {
+            if (category && subcategories[category]) {
+                subcategories[category].forEach(function(subcat) {
                     const option = document.createElement('option');
                     option.value = subcat;
                     option.textContent = subcat;
@@ -507,90 +1047,391 @@
             }
         }
 
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            // Загружаем подкатегории для текущей категории
-            if (currentCategory) {
-                updateSubcategories(currentCategory, currentSubcat);
-                // Инициализируем таблицу размеров
-                updateSizeTable(currentCategory);
-                // Восстанавливаем выбранные размеры
-                restoreSelectedSizes();
-            }
-        });
+        // Функция обновления размеров
+        function updateSizes(category) {
+            const sizeOptions = document.getElementById('size-options');
+            sizeOptions.innerHTML = '';
 
-        // Обработчик изменения категории
-        document.getElementById('categorySelect').addEventListener('change', function() {
-            updateSubcategories(this.value);
-            // Обновляем таблицу размеров
-            updateSizeTable(this.value);
-        });
-
-        // Функция для обновления таблицы размеров
-        function updateSizeTable(category) {
-            const sizeTableWrapper = document.getElementById('sizeTableWrapper');
-            const noCategoryMessage = document.getElementById('noCategoryMessage');
-            const sizeTable = document.getElementById('sizeTable');
-            
-            // Определяем размеры в зависимости от категории
-            let sizes = [];
-            let tableClass = '';
-            
-            if (category === 'Одежда') {
-                sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-                tableClass = 'clothing';
-            } else if (category === 'Обувь') {
-                sizes = ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47'];
-                tableClass = 'shoes';
+            if (!category || !sizesByCategory[category]) {
+                const message = document.createElement('p');
+                message.className = 'size-help';
+                message.textContent = 'Выберите категорию для отображения размеров';
+                sizeOptions.appendChild(message);
+                return;
             }
+
+            const sizes = sizesByCategory[category];
             
-            if (sizes.length > 0) {
-                // Показываем таблицу размеров
-                sizeTableWrapper.style.display = 'block';
-                noCategoryMessage.style.display = 'none';
+            // Создаем заголовок
+            const title = document.createElement('h4');
+            title.textContent = `Размеры для категории "${category}"`;
+            title.style.color = '#374151';
+            title.style.fontSize = '16px';
+            title.style.fontWeight = '600';
+            sizeOptions.appendChild(title);
+            
+            // Создаем контейнер для блоков размеров
+            const blocksContainer = document.createElement('div');
+            blocksContainer.className = 'size-blocks-container';
+            blocksContainer.style.display = 'grid';
+            blocksContainer.style.gridTemplateColumns = 'repeat(5, 1fr)';
+            blocksContainer.style.gap = '8px';
+            blocksContainer.style.marginBottom = '15px';
+            blocksContainer.style.padding = '15px';
+            blocksContainer.style.backgroundColor = '#f8fafc';
+            blocksContainer.style.borderRadius = '8px';
+            blocksContainer.style.border = '1px solid #e2e8f0';
+            
+            sizes.forEach(size => {
+                const sizeBlock = document.createElement('div');
+                sizeBlock.className = 'size-block';
+                sizeBlock.dataset.size = size;
+                sizeBlock.textContent = size;
                 
-                // Очищаем таблицу
-                sizeTable.innerHTML = '';
-                sizeTable.className = 'size-table ' + tableClass;
+                // Стили для блока размера
+                sizeBlock.style.cssText = `
+                    padding: 8px 6px;
+                    text-align: center;
+                    border: 2px solid #d1d5db;
+                    border-radius: 6px;
+                    background-color: #ffffff;
+                    cursor: pointer;
+                    font-weight: 600;
+                    font-size: 13px;
+                    color: #374151;
+                    transition: all 0.2s ease;
+                    user-select: none;
+                    min-height: 35px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                `;
                 
-                // Добавляем размеры
-                sizes.forEach(function(size) {
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.name = 'sizes[]';
-                    checkbox.value = size;
-                    checkbox.id = 'size_' + size;
-                    checkbox.className = 'size-checkbox';
-                    
-                    const label = document.createElement('label');
-                    label.htmlFor = 'size_' + size;
-                    label.className = 'size-label';
-                    label.textContent = size;
-                    
-                    sizeTable.appendChild(checkbox);
-                    sizeTable.appendChild(label);
+                // Обработчики событий
+                sizeBlock.addEventListener('click', function() {
+                    toggleSizeBlock(this);
                 });
                 
-                // Восстанавливаем выбранные размеры
-                restoreSelectedSizes();
+                blocksContainer.appendChild(sizeBlock);
+            });
+            
+            sizeOptions.appendChild(blocksContainer);
+            
+            // Создаем кнопки управления
+            const controlsContainer = document.createElement('div');
+            controlsContainer.style.display = 'flex';
+            controlsContainer.style.gap = '10px';
+            controlsContainer.style.justifyContent = 'center';
+            controlsContainer.style.marginBottom = '15px';
+            
+            const selectAllBtn = document.createElement('button');
+            selectAllBtn.type = 'button';
+            selectAllBtn.className = 'control-btn';
+            selectAllBtn.textContent = 'Выбрать все';
+            selectAllBtn.onclick = selectAllSizes;
+            
+            const clearAllBtn = document.createElement('button');
+            clearAllBtn.type = 'button';
+            clearAllBtn.className = 'control-btn';
+            clearAllBtn.textContent = 'Очистить все';
+            clearAllBtn.onclick = clearAllSizes;
+            
+            controlsContainer.appendChild(selectAllBtn);
+            controlsContainer.appendChild(clearAllBtn);
+            sizeOptions.appendChild(controlsContainer);
+            
+            // Создаем информационное поле
+            const info = document.createElement('div');
+            info.id = 'size-info';
+            info.style.cssText = `
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 6px;
+                padding: 12px;
+                text-align: center;
+                font-size: 14px;
+                color: #64748b;
+                border-left: 4px solid #d1d5db;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                transition: all 0.3s ease;
+            `;
+            info.innerHTML = '<div style="color: #6b7280; font-style: italic;">Размеры не выбраны</div>';
+            sizeOptions.appendChild(info);
+            
+            // Восстанавливаем выбранные размеры
+            restoreSelectedSizes();
+        }
+
+        // Функция переключения блока размера
+        function toggleSizeBlock(block) {
+            block.classList.toggle('selected');
+            
+            if (block.classList.contains('selected')) {
+                block.style.backgroundColor = '#ecfdf5';
+                block.style.borderColor = '#10b981';
+                block.style.color = '#059669';
+                block.style.transform = 'translateY(-2px)';
+                block.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
             } else {
-                // Скрываем таблицу размеров
-                sizeTableWrapper.style.display = 'none';
-                noCategoryMessage.style.display = 'block';
+                block.style.backgroundColor = '#ffffff';
+                block.style.borderColor = '#d1d5db';
+                block.style.color = '#374151';
+                block.style.transform = 'translateY(0)';
+                block.style.boxShadow = 'none';
+            }
+            
+            updateSelectedSizes();
+        }
+
+        // Функция выбора всех размеров
+        function selectAllSizes() {
+            const blocks = document.querySelectorAll('.size-block');
+            blocks.forEach(block => {
+                if (!block.classList.contains('selected')) {
+                    toggleSizeBlock(block);
+                }
+            });
+        }
+
+        // Функция очистки всех размеров
+        function clearAllSizes() {
+            const blocks = document.querySelectorAll('.size-block');
+            blocks.forEach(block => {
+                if (block.classList.contains('selected')) {
+                    toggleSizeBlock(block);
+                }
+            });
+        }
+
+        // Функция обновления выбранных размеров
+        function updateSelectedSizes() {
+            const selectedBlocks = document.querySelectorAll('.size-block.selected');
+            const selectedSizes = Array.from(selectedBlocks).map(block => block.dataset.size);
+            
+            const selectedSizesInput = document.getElementById('selected-sizes');
+            selectedSizesInput.value = JSON.stringify(selectedSizes);
+            
+            const info = document.getElementById('size-info');
+            if (info) {
+                if (selectedSizes.length > 0) {
+                    info.innerHTML = `
+                        <div style="color: #059669; font-weight: 600; margin-bottom: 4px;">
+                            ✅ Выбрано размеров: ${selectedSizes.length}
+                        </div>
+                        <div style="font-size: 13px; color: #6b7280;">
+                            ${selectedSizes.join(', ')}
+                        </div>
+                    `;
+            } else {
+                    info.innerHTML = '<div style="color: #6b7280; font-style: italic;">Размеры не выбраны</div>';
+                }
             }
         }
 
-        // Функция для восстановления выбранных размеров
+        // Функция восстановления выбранных размеров
         function restoreSelectedSizes() {
-            const productSizes = @json($product->sizes ?? []); // Получаем размеры из PHP как массив
-            
-            if (productSizes && Array.isArray(productSizes) && productSizes.length > 0) {
-                productSizes.forEach(function(size) {
-                    const checkbox = document.getElementById('size_' + size);
-                    if (checkbox) {
-                        checkbox.checked = true;
+            if (currentSizes && Array.isArray(currentSizes) && currentSizes.length > 0) {
+                currentSizes.forEach(size => {
+                    const block = document.querySelector(`[data-size="${size}"]`);
+                    if (block && !block.classList.contains('selected')) {
+                        toggleSizeBlock(block);
                     }
                 });
+            }
+        }
+
+        // Функции для работы с полом
+        function toggleGenderBlock(block) {
+            block.classList.toggle('selected');
+            updateSelectedGender();
+        }
+
+        function selectAllGenders() {
+            const blocks = document.querySelectorAll('.gender-block');
+            blocks.forEach(block => {
+                if (!block.classList.contains('selected')) {
+                    toggleGenderBlock(block);
+                }
+            });
+        }
+
+        function clearAllGenders() {
+            const blocks = document.querySelectorAll('.gender-block');
+            blocks.forEach(block => {
+                if (block.classList.contains('selected')) {
+                    toggleGenderBlock(block);
+                }
+            });
+        }
+
+        function updateSelectedGender() {
+            const selectedBlocks = document.querySelectorAll('.gender-block.selected');
+            const selectedGender = Array.from(selectedBlocks).map(block => block.dataset.gender);
+            
+            const selectedGenderInput = document.getElementById('selected-gender');
+            selectedGenderInput.value = JSON.stringify(selectedGender);
+            
+            const info = document.getElementById('gender-info');
+            if (info) {
+                if (selectedGender.length > 0) {
+                    info.innerHTML = `Выбрано: ${selectedGender.join(', ')}`;
+                } else {
+                    info.innerHTML = 'Выберите пол товара';
+                }
+            }
+        }
+
+        function restoreSelectedGender() {
+            if (currentGender && Array.isArray(currentGender) && currentGender.length > 0) {
+                currentGender.forEach(gender => {
+                    const block = document.querySelector(`[data-gender="${gender}"]`);
+                    if (block && !block.classList.contains('selected')) {
+                        toggleGenderBlock(block);
+                    }
+                });
+            }
+        }
+
+        // Функции для работы с цветовым пикером
+        function initializeColorPicker() {
+            const colorField = document.getElementById('colorField');
+            const hueSlider = document.getElementById('hueSlider');
+            const colorSelector = document.getElementById('colorSelector');
+            const hueHandle = document.getElementById('hueHandle');
+
+            // Восстанавливаем выбранные цвета
+            restoreSelectedColors();
+
+            // Обработчики для цветового поля
+            colorField.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const saturation = (x / rect.width) * 100;
+                const lightness = 100 - (y / rect.height) * 100;
+                
+                currentSaturation = Math.max(0, Math.min(100, saturation));
+                currentLightness = Math.max(0, Math.min(100, lightness));
+                
+                updateColorField();
+                updateColorDisplay();
+            });
+
+            // Обработчики для слайдера оттенка
+            hueSlider.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                currentHue = (x / rect.width) * 360;
+                updateHueSlider();
+                updateColorField();
+                updateColorDisplay();
+            });
+
+            // Инициализация
+            updateColorField();
+            updateHueSlider();
+            updateColorDisplay();
+        }
+
+        function updateColorField() {
+            const colorField = document.getElementById('colorField');
+            const colorSelector = document.getElementById('colorSelector');
+            
+            const hueColor = `hsl(${currentHue}, 100%, 50%)`;
+            colorField.style.background = `linear-gradient(to right, white, ${hueColor})`;
+            
+            const saturationGradient = `linear-gradient(to bottom, transparent, black)`;
+            colorField.style.background = `linear-gradient(to bottom, ${saturationGradient}), linear-gradient(to right, white, ${hueColor})`;
+            
+            colorSelector.style.left = `${currentSaturation}%`;
+            colorSelector.style.top = `${100 - currentLightness}%`;
+        }
+
+        function updateHueSlider() {
+            const hueHandle = document.getElementById('hueHandle');
+            hueHandle.style.left = `${(currentHue / 360) * 100}%`;
+        }
+
+        function updateColorDisplay() {
+            const hexDisplay = document.getElementById('colorPickerHex');
+            const rgb = hslToRgb(currentHue / 360, currentSaturation / 100, currentLightness / 100);
+            const hex = rgbToHex(rgb[0], rgb[1], rgb[2]);
+            hexDisplay.textContent = hex;
+        }
+
+        function hslToRgb(h, s, l) {
+            let r, g, b;
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1/6) return p + (q - p) * 6 * t;
+                    if (t < 1/2) return q;
+                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+
+        function addSelectedColor() {
+            const hexDisplay = document.getElementById('colorPickerHex');
+            const color = hexDisplay.textContent;
+            
+            if (!selectedColors.includes(color)) {
+                selectedColors.push(color);
+                updateSelectedColorsDisplay();
+                updateSelectedColorsInput();
+            }
+        }
+
+        function removeSelectedColor(color) {
+            selectedColors = selectedColors.filter(c => c !== color);
+            updateSelectedColorsDisplay();
+            updateSelectedColorsInput();
+        }
+
+        function clearAllColors() {
+            selectedColors = [];
+            updateSelectedColorsDisplay();
+            updateSelectedColorsInput();
+        }
+
+        function updateSelectedColorsDisplay() {
+            const colorsList = document.getElementById('selectedColorsList');
+            
+            if (selectedColors.length === 0) {
+                colorsList.innerHTML = '<div class="no-colors">Цвета не выбраны</div>';
+                return;
+            }
+            
+            colorsList.innerHTML = selectedColors.map(color => 
+                `<div class="color-swatch" style="background-color: ${color}" onclick="removeSelectedColor('${color}')" title="${color}"></div>`
+            ).join('');
+        }
+
+        function updateSelectedColorsInput() {
+            const selectedColorsInput = document.getElementById('selected-colors');
+            selectedColorsInput.value = JSON.stringify(selectedColors);
+        }
+
+        function restoreSelectedColors() {
+            if (currentColors && Array.isArray(currentColors) && currentColors.length > 0) {
+                selectedColors = [...currentColors];
+                updateSelectedColorsDisplay();
+                updateSelectedColorsInput();
             }
         }
 

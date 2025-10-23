@@ -52,12 +52,59 @@ class ProductDataService
         
         // Обрабатываем размеры
         $sizes = $product->sizes;
+        if (is_string($sizes)) {
+            // Если размеры в JSON формате, декодируем
+            if (str_starts_with($sizes, '[') && str_ends_with($sizes, ']')) {
+                $decodedSizes = json_decode($sizes, true);
+                $sizes = is_array($decodedSizes) ? $decodedSizes : [];
+            } else {
+                // Если это строка с разделителями, разделяем
+                $sizes = array_map('trim', explode(',', $sizes));
+                $sizes = array_filter($sizes, function($size) {
+                    return !empty($size);
+                });
+            }
+        }
         if (!is_array($sizes)) {
             $sizes = [];
         }
         
         // Берем первый доступный размер или "M" по умолчанию
         $defaultSize = !empty($sizes) ? $sizes[0] : 'M';
+
+        // Обрабатываем пол
+        $gender = $product->gender;
+        if (is_string($gender)) {
+            if (str_starts_with($gender, '[') && str_ends_with($gender, ']')) {
+                $decodedGender = json_decode($gender, true);
+                $gender = is_array($decodedGender) ? $decodedGender : [];
+            } else {
+                $gender = array_map('trim', explode(',', $gender));
+                $gender = array_filter($gender, function($g) {
+                    return !empty($g);
+                });
+            }
+        }
+        if (!is_array($gender)) {
+            $gender = [];
+        }
+
+        // Обрабатываем цвета
+        $colors = $product->colors;
+        if (is_string($colors)) {
+            if (str_starts_with($colors, '[') && str_ends_with($colors, ']')) {
+                $decodedColors = json_decode($colors, true);
+                $colors = is_array($decodedColors) ? $decodedColors : [];
+            } else {
+                $colors = array_map('trim', explode(',', $colors));
+                $colors = array_filter($colors, function($c) {
+                    return !empty($c);
+                });
+            }
+        }
+        if (!is_array($colors)) {
+            $colors = [];
+        }
 
         return [
             'id' => $product->id,
@@ -72,7 +119,8 @@ class ProductDataService
             'subcategory' => $product->subcat,
             'size' => $defaultSize,
             'sizes' => $sizes, // Добавляем все доступные размеры
-            'colors' => $this->generateColorsFromImages($images)
+            'gender' => $gender, // Добавляем пол
+            'colors' => !empty($colors) ? $colors : $this->generateColorsFromImages($images)
         ];
     }
 

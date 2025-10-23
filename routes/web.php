@@ -28,6 +28,19 @@ Route::get('/promotions', [PromotionsController::class, 'index'])->name('promoti
 // Категории
 Route::get('/category/{category}', [App\Http\Controllers\CategoryController::class, 'show'])->name('category.show');
 
+// Каталоги по полу
+Route::get('/men', function () {
+    $productService = app(\App\Services\ProductService::class);
+    $products = $productService->getProductsByGender('men', 12);
+    return view('catalog', compact('products'))->with('gender', 'men');
+})->name('catalog.men');
+
+Route::get('/women', function () {
+    $productService = app(\App\Services\ProductService::class);
+    $products = $productService->getProductsByGender('women', 12);
+    return view('catalog', compact('products'))->with('gender', 'women');
+})->name('catalog.women');
+
 // Аутентификация
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth.login');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login.post');

@@ -2693,8 +2693,8 @@ $auth = session('auth');
         </div>
 
         <div class="tabs">
-            <div id="tab-men" class="tab active">Мужской каталог</div>
-            <div id="tab-women" class="tab">Женский каталог</div>
+            <div id="tab-men" class="tab active" onclick="switchCatalog('men')">Мужской каталог</div>
+            <div id="tab-women" class="tab" onclick="switchCatalog('women')">Женский каталог</div>
         </div>
 
         <section class="catalog">
@@ -3200,6 +3200,29 @@ $auth = session('auth');
                 this.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
+        });
+
+        // Функция переключения каталогов
+        function switchCatalog(gender) {
+            // Обновляем активную кнопку
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById('tab-' + gender).classList.add('active');
+            
+            // Показываем/скрываем соответствующие карточки
+            document.querySelectorAll('.card').forEach(card => {
+                if (card.dataset.section === gender) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Инициализация: показываем только мужские карточки по умолчанию
+        document.addEventListener('DOMContentLoaded', function() {
+            switchCatalog('men');
         });
     </script>
 

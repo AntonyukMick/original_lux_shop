@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Services\ProductService;
 
 class CategoryController extends Controller
 {
+    public function __construct(
+        protected ProductService $productService
+    ) {}
+
     /**
      * Показать страницу категории с подкатегориями
      */
-    public function show($category)
+    public function show($category, Request $request)
     {
         // Определяем подкатегории для каждой категории
         $categoryData = $this->getCategoryData($category);
@@ -19,19 +24,22 @@ class CategoryController extends Controller
             abort(404);
         }
         
+        // Получаем параметр пола из запроса
+        $gender = $request->get('gender');
+        
         $perPage = 8;
         
         // Группируем товары по подкатегориям
         $subcategories = [];
         
         foreach ($categoryData['subcategories'] as $subcategory) {
-            $products = Product::where('is_active', true)
-                ->where('category', $categoryData['name'])
-                ->where('subcat', $subcategory)
-                ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'subcat', 'brand'])
-                ->orderByRaw('CASE WHEN original_price IS NOT NULL AND original_price > price THEN (original_price - price) / original_price ELSE 0 END DESC')
-                ->take($perPage)
-                ->get();
+            // Используем новый метод для получения товаров с фильтрацией по полу
+            $products = $this->productService->getProductsBySubcategoryAndGender(
+                $categoryData['name'], 
+                $subcategory, 
+                $gender, 
+                $perPage
+            );
             
             // Если нет реальных товаров, пропускаем подкатегорию
             if ($products->isEmpty()) {
@@ -49,7 +57,8 @@ class CategoryController extends Controller
             'categoryName' => $categoryData['name'],
             'categoryEmoji' => $categoryData['emoji'],
             'categoryDescription' => $categoryData['description'],
-            'subcategories' => $subcategories
+            'subcategories' => $subcategories,
+            'gender' => $gender // Передаем пол в представление
         ]);
     }
     

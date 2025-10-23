@@ -57,6 +57,107 @@ class ProductService
     }
 
     /**
+     * Получить товары по полу
+     */
+    public function getProductsByGender($gender, $perPage = 12)
+    {
+        $query = Product::where('is_active', true)
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'gender', 'created_at']);
+
+        // Фильтрация по полу (совместимо с SQLite)
+        if ($gender === 'men') {
+            $query->where(function($q) {
+                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Мужской'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Мужской'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Мужской'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+            });
+        } elseif ($gender === 'women') {
+            $query->where(function($q) {
+                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Женский'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Женский'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Женский'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+            });
+        }
+
+        return $query->orderBy('created_at', 'desc')->paginate($perPage);
+    }
+
+    /**
+     * Получить товары по категории и полу
+     */
+    public function getProductsByCategoryAndGender($category, $gender = null, $perPage = 12)
+    {
+        $query = Product::where('category', $category)
+            ->where('is_active', true)
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'gender', 'created_at']);
+
+        // Фильтрация по полу (совместимо с SQLite)
+        if ($gender === 'men') {
+            $query->where(function($q) {
+                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Мужской'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Мужской'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Мужской'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+            });
+        } elseif ($gender === 'women') {
+            $query->where(function($q) {
+                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Женский'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Женский'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Женский'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+            });
+        }
+
+        return $query->orderBy('created_at', 'desc')->paginate($perPage);
+    }
+
+    /**
+     * Получить товары по подкатегории и полу
+     */
+    public function getProductsBySubcategoryAndGender($category, $subcategory, $gender = null, $perPage = 8)
+    {
+        $query = Product::where('is_active', true)
+            ->where('category', $category)
+            ->where('subcat', $subcategory)
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'subcat', 'brand', 'gender']);
+
+        // Фильтрация по полу (совместимо с SQLite)
+        if ($gender === 'men') {
+            $query->where(function($q) {
+                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Мужской'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Мужской'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Мужской'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+            });
+        } elseif ($gender === 'women') {
+            $query->where(function($q) {
+                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Женский'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Женский'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Женский'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+            });
+        }
+
+        return $query->orderByRaw('CASE WHEN original_price IS NOT NULL AND original_price > price THEN (original_price - price) / original_price ELSE 0 END DESC')
+                    ->take($perPage)
+                    ->get();
+    }
+
+    /**
      * Получить популярные товары
      */
     public function getFeaturedProducts($limit = 8)
@@ -67,6 +168,39 @@ class ProductService
             ->orderBy('created_at', 'desc')
             ->limit($limit)
             ->get();
+    }
+
+    /**
+     * Получить популярные товары по полу
+     */
+    public function getFeaturedProductsByGender($gender, $limit = 8)
+    {
+        $query = Product::where('is_active', true)
+            ->where('featured', true)
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'gender', 'created_at']);
+
+        // Фильтрация по полу (совместимо с SQLite)
+        if ($gender === 'men') {
+            $query->where(function($q) {
+                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Мужской'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Мужской'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Мужской'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+            });
+        } elseif ($gender === 'women') {
+            $query->where(function($q) {
+                $q->whereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Женский'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Женский'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Женский'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[0]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[1]') = ?", ['Унисекс'])
+                  ->orWhereRaw("JSON_EXTRACT(gender, '$[2]') = ?", ['Унисекс']);
+            });
+        }
+
+        return $query->orderBy('created_at', 'desc')->limit($limit)->get();
     }
 
     /**
@@ -92,6 +226,17 @@ class ProductService
             return null;
         }
 
+        // Если это JSON строка, декодируем
+        if (is_string($sizes) && str_starts_with($sizes, '[') && str_ends_with($sizes, ']')) {
+            $decodedSizes = json_decode($sizes, true);
+            if (is_array($decodedSizes)) {
+                $filteredSizes = array_filter($decodedSizes, function($size) {
+                    return !empty(trim($size));
+                });
+                return array_values($filteredSizes);
+            }
+        }
+
         // Если это массив, фильтруем пустые значения
         if (is_array($sizes)) {
             $filteredSizes = array_filter($sizes, function($size) {
@@ -111,6 +256,68 @@ class ProductService
         }
 
         return $sizes;
+    }
+
+    /**
+     * Обработать пол товара
+     */
+    private function processGender($gender)
+    {
+        if (empty($gender)) {
+            return null;
+        }
+
+        // Если это JSON строка, декодируем
+        if (is_string($gender) && str_starts_with($gender, '[') && str_ends_with($gender, ']')) {
+            $decodedGender = json_decode($gender, true);
+            if (is_array($decodedGender)) {
+                $filteredGender = array_filter($decodedGender, function($g) {
+                    return !empty(trim($g));
+                });
+                return array_values($filteredGender);
+            }
+        }
+
+        // Если это массив, фильтруем пустые значения
+        if (is_array($gender)) {
+            $filteredGender = array_filter($gender, function($g) {
+                return !empty(trim($g));
+            });
+            return array_values($filteredGender);
+        }
+
+        return $gender;
+    }
+
+    /**
+     * Обработать цвета товара
+     */
+    private function processColors($colors)
+    {
+        if (empty($colors)) {
+            return null;
+        }
+
+        // Если это JSON строка, декодируем
+        if (is_string($colors) && str_starts_with($colors, '[') && str_ends_with($colors, ']')) {
+            $decodedColors = json_decode($colors, true);
+            if (is_array($decodedColors)) {
+                $filteredColors = array_filter($decodedColors, function($color) {
+                    return !empty(trim($color));
+                });
+                return array_values($filteredColors);
+            }
+        }
+
+        // Если это массив, фильтруем пустые значения
+        if (is_array($colors)) {
+            $filteredColors = array_filter($colors, function($color) {
+                return !empty(trim($color));
+            });
+            return array_values($filteredColors);
+        }
+
+        return $colors;
     }
 
     /**
@@ -148,6 +355,8 @@ class ProductService
             'description' => $data['description'] ?? null,
             'images' => $images,
             'sizes' => $this->processSizes($data['sizes'] ?? null),
+            'gender' => $this->processGender($data['gender'] ?? null),
+            'colors' => $this->processColors($data['colors'] ?? null),
             'is_active' => $data['is_active'] ?? true,
             'featured' => $data['featured'] ?? false,
             'stock_quantity' => $data['stock_quantity'] ?? 0,
@@ -195,6 +404,8 @@ class ProductService
             'description' => $data['description'] ?? null,
             'images' => $images,
             'sizes' => $this->processSizes($data['sizes'] ?? $product->sizes),
+            'gender' => $this->processGender($data['gender'] ?? $product->gender),
+            'colors' => $this->processColors($data['colors'] ?? $product->colors),
             'is_active' => $data['is_active'] ?? true,
             'featured' => $data['featured'] ?? false,
             'stock_quantity' => $data['stock_quantity'] ?? 0,
