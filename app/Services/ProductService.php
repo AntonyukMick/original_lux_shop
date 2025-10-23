@@ -67,21 +67,21 @@ class ProductService
         // Фильтрация по полу (совместимо с PostgreSQL)
         if ($gender === 'men') {
             $query->where(function($q) {
-                $q->whereRaw("gender->0 = ?", ['Мужской'])
-                  ->orWhereRaw("gender->1 = ?", ['Мужской'])
-                  ->orWhereRaw("gender->2 = ?", ['Мужской'])
-                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
+                $q->whereRaw("gender->>0 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->>1 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->>2 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->>0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>2 = ?", ['Унисекс']);
             });
         } elseif ($gender === 'women') {
             $query->where(function($q) {
-                $q->whereRaw("gender->0 = ?", ['Женский'])
-                  ->orWhereRaw("gender->1 = ?", ['Женский'])
-                  ->orWhereRaw("gender->2 = ?", ['Женский'])
-                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
+                $q->whereRaw("gender->>0 = ?", ['Женский'])
+                  ->orWhereRaw("gender->>1 = ?", ['Женский'])
+                  ->orWhereRaw("gender->>2 = ?", ['Женский'])
+                  ->orWhereRaw("gender->>0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>2 = ?", ['Унисекс']);
             });
         }
 
@@ -100,21 +100,21 @@ class ProductService
         // Фильтрация по полу (совместимо с PostgreSQL)
         if ($gender === 'men') {
             $query->where(function($q) {
-                $q->whereRaw("gender->0 = ?", ['Мужской'])
-                  ->orWhereRaw("gender->1 = ?", ['Мужской'])
-                  ->orWhereRaw("gender->2 = ?", ['Мужской'])
-                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
+                $q->whereRaw("gender->>0 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->>1 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->>2 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->>0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>2 = ?", ['Унисекс']);
             });
         } elseif ($gender === 'women') {
             $query->where(function($q) {
-                $q->whereRaw("gender->0 = ?", ['Женский'])
-                  ->orWhereRaw("gender->1 = ?", ['Женский'])
-                  ->orWhereRaw("gender->2 = ?", ['Женский'])
-                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
+                $q->whereRaw("gender->>0 = ?", ['Женский'])
+                  ->orWhereRaw("gender->>1 = ?", ['Женский'])
+                  ->orWhereRaw("gender->>2 = ?", ['Женский'])
+                  ->orWhereRaw("gender->>0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>2 = ?", ['Унисекс']);
             });
         }
 
@@ -134,21 +134,21 @@ class ProductService
         // Фильтрация по полу (совместимо с PostgreSQL)
         if ($gender === 'men') {
             $query->where(function($q) {
-                $q->whereRaw("gender->0 = ?", ['Мужской'])
-                  ->orWhereRaw("gender->1 = ?", ['Мужской'])
-                  ->orWhereRaw("gender->2 = ?", ['Мужской'])
-                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
+                $q->whereRaw("gender->>0 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->>1 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->>2 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->>0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>2 = ?", ['Унисекс']);
             });
         } elseif ($gender === 'women') {
             $query->where(function($q) {
-                $q->whereRaw("gender->0 = ?", ['Женский'])
-                  ->orWhereRaw("gender->1 = ?", ['Женский'])
-                  ->orWhereRaw("gender->2 = ?", ['Женский'])
-                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
+                $q->whereRaw("gender->>0 = ?", ['Женский'])
+                  ->orWhereRaw("gender->>1 = ?", ['Женский'])
+                  ->orWhereRaw("gender->>2 = ?", ['Женский'])
+                  ->orWhereRaw("gender->>0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>2 = ?", ['Унисекс']);
             });
         }
 
@@ -182,21 +182,21 @@ class ProductService
         // Фильтрация по полу (совместимо с PostgreSQL)
         if ($gender === 'men') {
             $query->where(function($q) {
-                $q->whereRaw("gender->0 = ?", ['Мужской'])
-                  ->orWhereRaw("gender->1 = ?", ['Мужской'])
-                  ->orWhereRaw("gender->2 = ?", ['Мужской'])
-                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
+                $q->whereRaw("gender->>0 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->>1 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->>2 = ?", ['Мужской'])
+                  ->orWhereRaw("gender->>0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>2 = ?", ['Унисекс']);
             });
         } elseif ($gender === 'women') {
             $query->where(function($q) {
-                $q->whereRaw("gender->0 = ?", ['Женский'])
-                  ->orWhereRaw("gender->1 = ?", ['Женский'])
-                  ->orWhereRaw("gender->2 = ?", ['Женский'])
-                  ->orWhereRaw("gender->0 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->1 = ?", ['Унисекс'])
-                  ->orWhereRaw("gender->2 = ?", ['Унисекс']);
+                $q->whereRaw("gender->>0 = ?", ['Женский'])
+                  ->orWhereRaw("gender->>1 = ?", ['Женский'])
+                  ->orWhereRaw("gender->>2 = ?", ['Женский'])
+                  ->orWhereRaw("gender->>0 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>1 = ?", ['Унисекс'])
+                  ->orWhereRaw("gender->>2 = ?", ['Унисекс']);
             });
         }
 
