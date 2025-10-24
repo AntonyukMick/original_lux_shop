@@ -798,7 +798,9 @@
 
                     <div class="form-group">
                         <label class="form-label">Бренд *</label>
-                        <input type="text" name="brand" value="{{ old('brand', $product->brand) }}" class="form-input" required>
+                        <select name="brand" id="brandSelect" class="form-select" required>
+                            <option value="">Выберите бренд</option>
+                        </select>
                     </div>
                 </div>
 
@@ -977,12 +979,22 @@
 
         // Данные подкатегорий
         const subcategories = {
-            'Одежда': ['Шорты', 'Штаны', 'Джинсы', 'Брюки', 'Футболки', 'Майки', 'Поло', 'Лонгсливы', 'Джемпер', 'Свитер', 'Свитшот', 'Кардиган', 'Худи', 'Зип-худи', 'Рубашки', 'Кофты', 'Платья', 'Блузки', 'Костюмы', 'Бомберы', 'Куртки', 'Ветровки', 'Пиджаки', 'Пуховики', 'Жилетки', 'Пальто'],
+            'Одежда': ['Шорты', 'Штаны', 'Джинсы', 'Брюки', 'Футболки', 'Майки', 'Поло', 'Лонгсливы', 'Джемпер', 'Свитер', 'Свитшот', 'Кардиган', 'Худи', 'Зип-худи', 'Рубашки', 'Кофты', 'Платья', 'Блузки', 'Костюмы', 'Бомберы', 'Куртки', 'Ветровки', 'Пиджаки', 'Пуховики', 'Жилетки', 'Пальто', 'Водолазки'],
             'Обувь': ['Кроссовки', 'Лоферы', 'Сандалии', 'Ботинки', 'Босоножки', 'Кеды'],
             'Сумки': ['Картхолдеры', 'Кошельки', 'Тоут', 'Через плечо', 'Рюкзаки', 'Косметички', 'Клатчи', 'Сумки', 'Дорожные сумки'],
             'Часы': ['Наручные часы', 'Карманные часы', 'Настенные часы', 'Спортивные часы'],
             'Украшения': ['Серьги', 'Браслеты', 'Кулоны', 'Колье', 'Подвески'],
             'Аксессуары': ['Ремни', 'Шарфы', 'Шапки', 'Панамы', 'Очки', 'Перчатки'],
+        };
+
+        // Данные брендов
+        const brands = {
+            'Одежда': ['Louis Vuitton', 'Balenciaga', 'Prada', 'Dior', 'Givenchy', 'Miu Miu', 'Loro Piana', 'Brunello Cucinelli', 'Zegna', 'Burberry', 'Moncler', 'Canada Goose', 'Gucci', 'Hermes', 'Chrome Hearts', 'Ralph Lauren', 'Maison Margiela', 'Essential (Fear of God)', 'Supreme', 'Stone Island', 'CP Company', 'The North Face', 'Arc\'teryx', 'Vetements', 'Nike', 'AMI', 'Loewe', 'YSL', 'Fendi', 'Amiri', 'Represent', 'Off White', 'Kiton', 'Palace', 'Mertra', 'Dolce & Gabbana', 'Celine', 'Chanel'],
+            'Обувь': ['Nike', 'Asics', 'New Balance', 'Puma', 'Balenciaga', 'Louis Vuitton', 'Dior', 'Prada', 'MM6', 'Alex McQueen', 'Valentino', 'Loro Piana', 'Brunello', 'Hermes', 'Miu Miu', 'Rick Owens', 'Off White', 'Golden Goose', 'Gucci', 'Yeezy'],
+            'Сумки': ['Balenciaga', 'Bottega Veneta', 'Celine', 'Chanel', 'Dior', 'Prada', 'Hermes', 'Loewe', 'Louis Vuitton', 'Burberry', 'Miu Miu', 'YSL', 'Goyard', 'Coach', 'Gucci', 'Loro Piana'],
+            'Часы': ['Cartier', 'Omega', 'Rolex', 'Tissot', 'Patek Philippe', 'Audemars Piguet'],
+            'Украшения': ['Cartier', 'Van Cleef', 'Chrome Hearts', 'Louis Vuitton', 'Bulgari', 'Tiffany'],
+            'Аксессуары': ['Louis Vuitton', 'Burberry', 'Hermes', 'Dior', 'Prada', 'Gucci', 'Coach', 'Maison Margiela', 'Bottega Veneta', 'Supreme', 'Givenchy', 'Miu Miu', 'Balenciaga', 'Valentino', 'YSL', 'Loro Piana', 'Brunello Cucinelli', 'Chrome Hearts', 'Dolce & Gabbana', 'Fendi'],
         };
 
         // Текущие значения из продукта
@@ -1003,6 +1015,7 @@
             // Загружаем подкатегории для текущей категории
             if (currentCategory) {
                 updateSubcategories(currentCategory, currentSubcat);
+                updateBrands(currentCategory, "{{ $product->brand }}");
                 updateSizes(currentCategory);
                 restoreSelectedSizes();
             }
@@ -1020,6 +1033,7 @@
         // Обработчик изменения категории
         document.getElementById('categorySelect').addEventListener('change', function() {
             updateSubcategories(this.value);
+            updateBrands(this.value);
             updateSizes(this.value);
         });
 
@@ -1043,6 +1057,30 @@
                     }
                     
                     subcatSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Функция обновления брендов
+        function updateBrands(category, selectBrand = null) {
+            const brandSelect = document.getElementById('brandSelect');
+            
+            // Очищаем текущие опции
+            brandSelect.innerHTML = '<option value="">Выберите бренд</option>';
+            
+            // Если категория выбрана, добавляем бренды
+            if (category && brands[category]) {
+                brands[category].forEach(function(brand) {
+                    const option = document.createElement('option');
+                    option.value = brand;
+                    option.textContent = brand;
+                    
+                    // Выбираем текущий бренд
+                    if (selectBrand && brand === selectBrand) {
+                        option.selected = true;
+                    }
+                    
+                    brandSelect.appendChild(option);
                 });
             }
         }

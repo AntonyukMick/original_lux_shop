@@ -952,7 +952,9 @@
                     
                     <div class="form-group">
                         <label class="form-label">Бренд *</label>
-                        <input type="text" name="brand" class="form-input" placeholder="Введите бренд" required>
+                        <select name="brand" class="form-select" id="brand-select" required>
+                            <option value="">Выберите бренд</option>
+                        </select>
                     </div>
                     
                     <div class="form-group">
@@ -1132,12 +1134,22 @@
 <script>
 // Динамическое обновление подкатегорий
 const subcategories = {
-    'Одежда': ['Шорты', 'Штаны', 'Джинсы', 'Брюки', 'Футболки', 'Майки', 'Поло', 'Лонгсливы', 'Джемпер', 'Свитер', 'Свитшот', 'Кардиган', 'Худи', 'Зип-худи', 'Рубашки', 'Кофты', 'Платья', 'Блузки', 'Костюмы', 'Бомберы', 'Куртки', 'Ветровки', 'Пиджаки', 'Пуховики', 'Жилетки', 'Пальто'],
+    'Одежда': ['Шорты', 'Штаны', 'Джинсы', 'Брюки', 'Футболки', 'Майки', 'Поло', 'Лонгсливы', 'Джемпер', 'Свитер', 'Свитшот', 'Кардиган', 'Худи', 'Зип-худи', 'Рубашки', 'Кофты', 'Платья', 'Блузки', 'Костюмы', 'Бомберы', 'Куртки', 'Ветровки', 'Пиджаки', 'Пуховики', 'Жилетки', 'Пальто', 'Водолазки'],
     'Обувь': ['Кроссовки', 'Лоферы', 'Сандалии', 'Ботинки', 'Босоножки', 'Кеды'],
     'Сумки': ['Картхолдеры', 'Кошельки', 'Тоут', 'Через плечо', 'Рюкзаки', 'Косметички', 'Клатчи', 'Сумки', 'Дорожные сумки'],
     'Часы': ['Наручные часы', 'Карманные часы', 'Настенные часы', 'Спортивные часы'],
     'Украшения': ['Серьги', 'Браслеты', 'Кулоны', 'Колье', 'Подвески'],
     'Аксессуары': ['Ремни', 'Шарфы', 'Шапки', 'Панамы', 'Очки', 'Перчатки'],
+};
+
+// Динамическое обновление брендов
+const brands = {
+    'Одежда': ['Louis Vuitton', 'Balenciaga', 'Prada', 'Dior', 'Givenchy', 'Miu Miu', 'Loro Piana', 'Brunello Cucinelli', 'Zegna', 'Burberry', 'Moncler', 'Canada Goose', 'Gucci', 'Hermes', 'Chrome Hearts', 'Ralph Lauren', 'Maison Margiela', 'Essential (Fear of God)', 'Supreme', 'Stone Island', 'CP Company', 'The North Face', 'Arc\'teryx', 'Vetements', 'Nike', 'AMI', 'Loewe', 'YSL', 'Fendi', 'Amiri', 'Represent', 'Off White', 'Kiton', 'Palace', 'Mertra', 'Dolce & Gabbana', 'Celine', 'Chanel'],
+    'Обувь': ['Nike', 'Asics', 'New Balance', 'Puma', 'Balenciaga', 'Louis Vuitton', 'Dior', 'Prada', 'MM6', 'Alex McQueen', 'Valentino', 'Loro Piana', 'Brunello', 'Hermes', 'Miu Miu', 'Rick Owens', 'Off White', 'Golden Goose', 'Gucci', 'Yeezy'],
+    'Сумки': ['Balenciaga', 'Bottega Veneta', 'Celine', 'Chanel', 'Dior', 'Prada', 'Hermes', 'Loewe', 'Louis Vuitton', 'Burberry', 'Miu Miu', 'YSL', 'Goyard', 'Coach', 'Gucci', 'Loro Piana'],
+    'Часы': ['Cartier', 'Omega', 'Rolex', 'Tissot', 'Patek Philippe', 'Audemars Piguet'],
+    'Украшения': ['Cartier', 'Van Cleef', 'Chrome Hearts', 'Louis Vuitton', 'Bulgari', 'Tiffany'],
+    'Аксессуары': ['Louis Vuitton', 'Burberry', 'Hermes', 'Dior', 'Prada', 'Gucci', 'Coach', 'Maison Margiela', 'Bottega Veneta', 'Supreme', 'Givenchy', 'Miu Miu', 'Balenciaga', 'Valentino', 'YSL', 'Loro Piana', 'Brunello Cucinelli', 'Chrome Hearts', 'Dolce & Gabbana', 'Fendi'],
 };
 
     // Автоматическое скрытие уведомлений
@@ -1694,8 +1706,25 @@ function updateSubcategories(category) {
         });
     }
     
+    // Обновляем бренды в зависимости от категории
+    updateBrands(category);
+    
     // Обновляем размеры в зависимости от категории
     updateSizes(category);
+}
+
+function updateBrands(category) {
+    const select = document.getElementById('brand-select');
+    select.innerHTML = '<option value="">Выберите бренд</option>';
+    
+    if (brands[category]) {
+        brands[category].forEach(brand => {
+            const option = document.createElement('option');
+            option.value = brand;
+            option.textContent = brand;
+            select.appendChild(option);
+        });
+    }
 }
 
 // Обработка загрузки изображений и инициализация блоков пола и цветового пикера
