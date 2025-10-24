@@ -2897,13 +2897,6 @@ $auth = session('auth');
                                         @endif
                             </div>
                         </a>
-                                <form method="post" action="/cart/add" style="margin-top:8px">
-                            <?php echo csrf_field(); ?>
-                                    <input type="hidden" name="title" value="{{ $product->title }}">
-                                    <input type="hidden" name="price" value="{{ $product->price }}">
-                                    <input type="hidden" name="image" value="{{ is_array($product->images) ? $product->images[0] : $product->image }}">
-                            <button class="btn" type="submit">Добавить в корзину</button>
-                        </form>
                     </article>
                         @endforeach
                     @else

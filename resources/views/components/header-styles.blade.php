@@ -20,19 +20,19 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 
 /* Обновленные стили для всех элементов хедера */
 .btn {
-    height: 36px;
-    padding: 0 8px;
-    border-radius: 6px;
+    height: 22px; /* было 19px, увеличено на 15% */
+    padding: 0 5px; /* было 0 4px, увеличено на 15% */
+    border-radius: 3px; /* было 3px, увеличено на 15% */
     border: 1px solid #000;
     background: #fff;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    font-size: 12px;
+    gap: 2px; /* было 2px, увеличено на 15% */
+    font-size: 8px; /* было 7px, увеличено на 15% */
     white-space: nowrap;
     flex-shrink: 0;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 8px; /* было 7px, увеличено на 15% */
     font-weight: 600;
     color: #000;
     transition: all 0.2s ease;
@@ -47,15 +47,15 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 }
 
 .brand {
-    margin-left: 4px;
+    margin-left: 3px; /* было 4px, уменьшено на 20% */
     background: rgb(151, 173, 200);
     border: 1px solid #000;
-    border-radius: 6px;
-    padding: 6px 8px;
+    border-radius: 5px; /* было 6px, уменьшено на 20% */
+    padding: 5px 6px; /* было 6px 8px, уменьшено на 20% */
     font-weight: 700;
     height: auto;
-    min-height: 36px;
-    font-size: 12px;
+    min-height: 29px; /* было 36px, уменьшено на 20% */
+    font-size: 10px; /* было 12px, уменьшено на 20% */
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -71,13 +71,13 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 }
 
 .brand-name {
-    font-size: 14px;
+    font-size: 11px; /* было 14px, уменьшено на 20% */
     font-weight: 700;
     white-space: nowrap;
 }
 
 .brand-subtitle {
-    font-size: 10px;
+    font-size: 8px; /* было 10px, уменьшено на 20% */
     font-weight: 400;
     opacity: 0.9;
     white-space: nowrap;
