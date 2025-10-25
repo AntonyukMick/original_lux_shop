@@ -53,11 +53,12 @@
     
     .cart-item {
         display: grid;
-        grid-template-columns: 80px 1fr 120px 120px 40px;
+        grid-template-columns: 80px 1fr auto auto 40px;
         gap: 15px;
         align-items: center;
         border-bottom: 1px solid #e2e8f0;
         padding: 15px 0;
+        min-height: 80px;
     }
     
     .cart-item:last-child {
@@ -82,6 +83,10 @@
         font-weight: 600;
         font-size: 16px;
         color: #1e293b;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
     }
     
     .cart-item-price {
@@ -96,7 +101,7 @@
     
     .cart-item-quantity {
         display: flex;
-                gap: 6px;
+        gap: 6px;
         align-items: center;
     }
     
@@ -193,6 +198,60 @@
     
     .checkout-button:hover {
         background: #059669;
+    }
+    
+    /* Мобильные стили */
+    @media (max-width: 768px) {
+        .cart-item {
+            grid-template-columns: 60px 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 10px;
+            padding: 12px 0;
+        }
+        
+        .cart-item-image {
+            grid-row: 1 / 4;
+            width: 60px;
+            height: 60px;
+        }
+        
+        .cart-item-info {
+            grid-column: 2;
+            grid-row: 1;
+        }
+        
+        .cart-item-quantity {
+            grid-column: 2;
+            grid-row: 2;
+            justify-self: start;
+        }
+        
+        .cart-item-total {
+            grid-column: 2;
+            grid-row: 3;
+            justify-self: start;
+            font-weight: 600;
+        }
+        
+        .cart-item-remove {
+            grid-column: 1 / 3;
+            grid-row: 1;
+            justify-self: end;
+            align-self: start;
+        }
+        
+        .cart-item-title {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .cart-item-price {
+            font-size: 13px;
+        }
+        
+        .cart-item-size {
+            font-size: 11px;
+        }
     }
     
     .notification {
