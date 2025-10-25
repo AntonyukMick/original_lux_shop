@@ -3109,43 +3109,25 @@ $auth = session('auth');
             searchResults.innerHTML = '<div class="no-results">Идёт поиск…</div>';
 
             try {
-                // Ищем по всем товарам через API каталога
+                // Ищем через API
                 const params = new URLSearchParams();
-                params.set('search', query);
+                params.set('q', query);
                 
-                const resp = await fetch('/catalog?' + params.toString());
-                if (!resp.ok) throw new Error('HTTP ' + resp.status);
-                
-                const html = await resp.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                
-                // Извлекаем товары из HTML каталога
-                const productCards = doc.querySelectorAll('.product-card');
-                const products = [];
-                
-                productCards.forEach(card => {
-                    const title = card.querySelector('.product-title')?.textContent || '';
-                    const brand = card.querySelector('.product-brand')?.textContent || '';
-                    const price = card.querySelector('.product-price')?.textContent || '';
-                    const image = card.querySelector('.product-image')?.src || '';
-                    const link = card.querySelector('a')?.href || '';
-                    
-                    if (title.toLowerCase().includes(query) || 
-                        brand.toLowerCase().includes(query) ||
-                        price.toLowerCase().includes(query)) {
-                        products.push({
-                            title: title,
-                            brand: brand,
-                            price: price,
-                            image: image,
-                            link: link
-                        });
+                const resp = await fetch('/api/search-products?' + params.toString(), {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     }
                 });
+                
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                
+                const data = await resp.json();
+                const products = data.products || [];
 
                 displayHomeSearchResults(products);
             } catch (e) {
+                console.error('Search error:', e);
                 searchResults.innerHTML = '<div class="no-results">Ошибка поиска</div>';
             }
         }
@@ -3163,13 +3145,13 @@ $auth = session('auth');
             const limitedProducts = products.slice(0, 5);
             
             const resultsHTML = limitedProducts.map(product => `
-                <div class="search-result-item" onclick="window.location.href='${product.link}'">
+                <div class="search-result-item" onclick="window.location.href='/product/${product.id}'">
                     <img src="${product.image}" alt="${product.title}" class="search-result-img">
                     <div class="search-result-info">
                         <div class="search-result-title">${product.title}</div>
                         <div class="search-result-category">${product.brand}</div>
                     </div>
-                    <div class="search-result-price">${product.price}</div>
+                    <div class="search-result-price">${product.price}€</div>
                 </div>
             `).join('');
 
