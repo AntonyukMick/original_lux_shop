@@ -2680,7 +2680,7 @@ $auth = session('auth');
                     placeholder="Поиск товаров..." 
                     autocomplete="off"
                 />
-                <button class="search-icon-btn" onclick="performHomeSearch()" title="Искать">
+                <button class="search-icon-btn" onclick="performLiveHomeSearch(document.getElementById('homeSearchInput').value.trim())" title="Искать">
                     🔍
                 </button>
             </div>
@@ -3060,26 +3060,42 @@ $auth = session('auth');
             }
         ];
 
-        // Функциональный поиск на главной странице
+        // Live поиск на главной странице
         let homeSearchTimeout;
+        let homeSearchController = null;
 
-        // Инициализация поиска на главной странице
+        // Инициализация live поиска на главной странице
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('homeSearchInput');
             const searchResults = document.getElementById('homeSearchResults');
 
-            // Обработчик ввода в поиск
+            // Обработчик ввода для live поиска
             searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                // Отменяем предыдущий запрос если он еще выполняется
+                if (homeSearchController) {
+                    homeSearchController.abort();
+                }
+
+                // Очищаем предыдущий таймаут
                 clearTimeout(homeSearchTimeout);
+
+                if (query.length === 0) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+
+                if (query.length < 2) {
+                    searchResults.style.display = 'block';
+                    searchResults.innerHTML = '<div class="no-results">Введите минимум 2 символа</div>';
+                    return;
+                }
+
+                // Запускаем поиск с задержкой для оптимизации
                 homeSearchTimeout = setTimeout(() => {
-                    const query = this.value.trim().toLowerCase();
-                    if (query.length >= 2) {
-                        performHomeSearch(query);
-                        searchResults.style.display = 'block';
-                    } else if (query.length === 0) {
-                        searchResults.style.display = 'none';
-                    }
-                }, 300);
+                    performLiveHomeSearch(query);
+                }, 200);
             });
 
             // Обработчик клика вне поиска
@@ -3088,28 +3104,29 @@ $auth = session('auth');
                     searchResults.style.display = 'none';
                 }
             });
+
+            // Обработчик фокуса на поле поиска
+            searchInput.addEventListener('focus', function() {
+                const query = this.value.trim();
+                if (query.length >= 2) {
+                    searchResults.style.display = 'block';
+                }
+            });
         });
 
-        // Функция поиска на главной странице
-        async function performHomeSearch(query = '') {
-            const searchInput = document.getElementById('homeSearchInput');
+        // Live поиск на главной странице
+        async function performLiveHomeSearch(query) {
             const searchResults = document.getElementById('homeSearchResults');
             
-            if (!query) {
-                query = searchInput.value.trim().toLowerCase();
-            }
-
-            if (query.length < 2) {
-                searchResults.style.display = 'none';
-                return;
-            }
-
             // Показываем контейнер результатов
             searchResults.style.display = 'block';
-            searchResults.innerHTML = '<div class="no-results">Идёт поиск…</div>';
+            searchResults.innerHTML = '<div class="no-results">🔍 Ищем товары...</div>';
 
             try {
-                // Ищем через API
+                // Создаем новый AbortController для отмены запроса
+                homeSearchController = new AbortController();
+                
+                // Ищем через API с возможностью отмены
                 const params = new URLSearchParams();
                 params.set('q', query);
                 
@@ -3117,7 +3134,8 @@ $auth = session('auth');
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    signal: homeSearchController.signal
                 });
                 
                 if (!resp.ok) throw new Error('HTTP ' + resp.status);
@@ -3126,9 +3144,16 @@ $auth = session('auth');
                 const products = data.products || [];
 
                 displayHomeSearchResults(products);
+                
             } catch (e) {
-                console.error('Search error:', e);
-                searchResults.innerHTML = '<div class="no-results">Ошибка поиска</div>';
+                if (e.name === 'AbortError') {
+                    // Запрос был отменен, ничего не делаем
+                    return;
+                }
+                console.error('Live search error:', e);
+                searchResults.innerHTML = '<div class="no-results">❌ Ошибка поиска</div>';
+            } finally {
+                homeSearchController = null;
             }
         }
 

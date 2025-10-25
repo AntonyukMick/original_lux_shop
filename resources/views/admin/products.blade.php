@@ -1096,7 +1096,7 @@
                     autocomplete="off"
                     style="flex: 1; height: 36px; border-radius: 6px; border: 1px solid #cbd5e1; padding: 0 10px; font-size: 13px; background: #fff; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"
                 />
-                <button class="search-btn" onclick="performAdminSearch()" style="height: 36px; padding: 0 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #527ea6; color: #fff; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 4px; font-size: 13px; white-space: nowrap; min-width: auto;">
+                <button class="search-btn" onclick="performLiveAdminSearch(document.getElementById('adminSearchInput').value.trim())" style="height: 36px; padding: 0 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #527ea6; color: #fff; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 4px; font-size: 13px; white-space: nowrap; min-width: auto;">
                     🔍 Найти
                 </button>
                 <button class="clear-btn" onclick="clearAdminSearch()" style="height: 36px; padding: 0 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc; color: #64748b; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 4px; font-size: 13px; white-space: nowrap; min-width: auto;">
@@ -1851,11 +1851,12 @@ function removePreview(button) {
     }
 }
 
-// Функциональный поиск в админ-панели
+// Live поиск в админ-панели
 let adminSearchTimeout;
+let adminSearchController = null;
 let originalProductsHTML = '';
 
-// Инициализация поиска в админ-панели
+// Инициализация live поиска в админ-панели
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('adminSearchInput');
     const productsList = document.getElementById('adminProductsList');
@@ -1863,39 +1864,47 @@ document.addEventListener('DOMContentLoaded', function() {
     // Сохраняем оригинальное содержимое
     originalProductsHTML = productsList.innerHTML;
 
-    // Обработчик ввода в поиск
+    // Обработчик ввода для live поиска
     searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        
+        // Отменяем предыдущий запрос если он еще выполняется
+        if (adminSearchController) {
+            adminSearchController.abort();
+        }
+
+        // Очищаем предыдущий таймаут
         clearTimeout(adminSearchTimeout);
+
+        if (query.length === 0) {
+            clearAdminSearch();
+            return;
+        }
+
+        if (query.length < 2) {
+            productsList.innerHTML = '<div style="padding: 40px; text-align: center; color: #64748b;">Введите минимум 2 символа</div>';
+            return;
+        }
+
+        // Запускаем поиск с задержкой для оптимизации
         adminSearchTimeout = setTimeout(() => {
-            const query = this.value.trim().toLowerCase();
-            if (query.length >= 2) {
-                performAdminSearch(query);
-            } else if (query.length === 0) {
-                clearAdminSearch();
-            }
-        }, 300);
+            performLiveAdminSearch(query);
+        }, 200);
     });
 });
 
-// Функция поиска в админ-панели
-async function performAdminSearch(query = '') {
-    const searchInput = document.getElementById('adminSearchInput');
+// Live поиск в админ-панели
+async function performLiveAdminSearch(query) {
     const productsList = document.getElementById('adminProductsList');
     
-    if (!query) {
-        query = searchInput.value.trim().toLowerCase();
-    }
-
-    if (query.length < 2) {
-        clearAdminSearch();
-        return;
-    }
-
     // Показываем индикатор загрузки
-    productsList.innerHTML = '<div style="padding: 40px; text-align: center; color: #64748b;">Идёт поиск…</div>';
+    productsList.innerHTML = '<div style="padding: 40px; text-align: center; color: #64748b;">🔍 Ищем товары...</div>';
 
     try {
-        // Ищем через API
+        // Создаем новый AbortController для отмены запроса
+        adminSearchController = new AbortController();
+        
+        // Ищем через API с возможностью отмены
         const params = new URLSearchParams();
         params.set('q', query);
         
@@ -1903,7 +1912,8 @@ async function performAdminSearch(query = '') {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            }
+            },
+            signal: adminSearchController.signal
         });
         
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
@@ -1912,9 +1922,16 @@ async function performAdminSearch(query = '') {
         const products = data.products || [];
 
         displayAdminSearchResults(products);
+        
     } catch (e) {
-        console.error('Admin search error:', e);
-        productsList.innerHTML = '<div style="padding: 40px; text-align: center; color: #dc2626;">Ошибка поиска</div>';
+        if (e.name === 'AbortError') {
+            // Запрос был отменен, ничего не делаем
+            return;
+        }
+        console.error('Live admin search error:', e);
+        productsList.innerHTML = '<div style="padding: 40px; text-align: center; color: #dc2626;">❌ Ошибка поиска</div>';
+    } finally {
+        adminSearchController = null;
     }
 }
 
