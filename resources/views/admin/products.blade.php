@@ -1085,10 +1085,30 @@
             </form>
         </div>
 
+        <!-- Поиск товаров в админ-панели -->
+        <div class="search-section" style="margin: 20px 0; padding: 16px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
+            <h3 style="margin: 0 0 12px 0; color: #1e293b; font-size: 16px; font-weight: 600;">🔍 Поиск товаров</h3>
+            <div class="search" style="display: flex; align-items: center; gap: 6px; width: 100%;">
+                <input 
+                    type="text" 
+                    id="adminSearchInput" 
+                    placeholder="Введите название товара, бренд или категорию..." 
+                    autocomplete="off"
+                    style="flex: 1; height: 36px; border-radius: 6px; border: 1px solid #cbd5e1; padding: 0 10px; font-size: 13px; background: #fff; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"
+                />
+                <button class="search-btn" onclick="performAdminSearch()" style="height: 36px; padding: 0 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #527ea6; color: #fff; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 4px; font-size: 13px; white-space: nowrap; min-width: auto;">
+                    🔍 Найти
+                </button>
+                <button class="clear-btn" onclick="clearAdminSearch()" style="height: 36px; padding: 0 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc; color: #64748b; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 4px; font-size: 13px; white-space: nowrap; min-width: auto;">
+                    ✕ Очистить
+                </button>
+            </div>
+        </div>
+
         <div class="admin-panel">
             <h2 class="section-title">Существующие товары</h2>
             
-            <div class="products-list">
+            <div class="products-list" id="adminProductsList">
                 @php
                     $products = App\Models\Product::orderBy('created_at', 'desc')->get();
                 @endphp
@@ -1829,6 +1849,124 @@ function removePreview(button) {
     } else {
         fileInputLabel.textContent = `Выбрано файлов: ${remainingImages}`;
     }
+}
+
+// Функциональный поиск в админ-панели
+let adminSearchTimeout;
+let originalProductsHTML = '';
+
+// Инициализация поиска в админ-панели
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('adminSearchInput');
+    const productsList = document.getElementById('adminProductsList');
+    
+    // Сохраняем оригинальное содержимое
+    originalProductsHTML = productsList.innerHTML;
+
+    // Обработчик ввода в поиск
+    searchInput.addEventListener('input', function() {
+        clearTimeout(adminSearchTimeout);
+        adminSearchTimeout = setTimeout(() => {
+            const query = this.value.trim().toLowerCase();
+            if (query.length >= 2) {
+                performAdminSearch(query);
+            } else if (query.length === 0) {
+                clearAdminSearch();
+            }
+        }, 300);
+    });
+});
+
+// Функция поиска в админ-панели
+async function performAdminSearch(query = '') {
+    const searchInput = document.getElementById('adminSearchInput');
+    const productsList = document.getElementById('adminProductsList');
+    
+    if (!query) {
+        query = searchInput.value.trim().toLowerCase();
+    }
+
+    if (query.length < 2) {
+        clearAdminSearch();
+        return;
+    }
+
+    // Показываем индикатор загрузки
+    productsList.innerHTML = '<div style="padding: 40px; text-align: center; color: #64748b;">Идёт поиск…</div>';
+
+    try {
+        // Ищем через API
+        const params = new URLSearchParams();
+        params.set('q', query);
+        
+        const resp = await fetch('/api/search-products?' + params.toString(), {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        
+        const data = await resp.json();
+        const products = data.products || [];
+
+        displayAdminSearchResults(products);
+    } catch (e) {
+        console.error('Admin search error:', e);
+        productsList.innerHTML = '<div style="padding: 40px; text-align: center; color: #dc2626;">Ошибка поиска</div>';
+    }
+}
+
+// Отображение результатов поиска в админ-панели
+function displayAdminSearchResults(products) {
+    const productsList = document.getElementById('adminProductsList');
+    
+    if (!products || products.length === 0) {
+        productsList.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">🔍</div>
+                <div class="empty-state-title">Товары не найдены</div>
+                <div class="empty-state-description">Попробуйте изменить поисковый запрос</div>
+            </div>
+        `;
+        return;
+    }
+
+    const resultsHTML = products.map(product => `
+        <div class="product-item">
+            <div class="product-info">
+                <div class="product-title">${product.title}</div>
+                <div class="product-category">${product.category}</div>
+                <div class="product-price">${product.brand} • ${product.price}€</div>
+                <div class="product-description">
+                    ID: ${product.id}
+                </div>
+            </div>
+            
+            <div class="product-actions">
+                <a href="/admin/products/${product.id}/edit" class="action-btn">
+                    ✏️ Редактировать
+                </a>
+                <form method="post" action="/admin/products/${product.id}" style="display: inline;" onsubmit="return confirm('Удалить этот товар?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="action-btn delete">🗑️ Удалить</button>
+                </form>
+            </div>
+        </div>
+    `).join('');
+
+    productsList.innerHTML = resultsHTML;
+}
+
+// Очистка поиска и возврат к оригинальному списку
+function clearAdminSearch() {
+    const searchInput = document.getElementById('adminSearchInput');
+    const productsList = document.getElementById('adminProductsList');
+    
+    searchInput.value = '';
+    productsList.innerHTML = originalProductsHTML;
 }
 </script>
 @endsection
