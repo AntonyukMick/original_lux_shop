@@ -128,7 +128,8 @@ class ProductDataService
             'size' => $defaultSize,
             'sizes' => $sizes, // Добавляем все доступные размеры
             'gender' => $gender, // Добавляем пол
-            'colors' => !empty($colors) ? $colors : $this->generateColorsFromImages($images)
+            'colors' => !empty($colors) ? $colors : $this->generateColorsFromImages($images),
+            'size_modal_text' => $product->size_modal_text
         ];
     }
 

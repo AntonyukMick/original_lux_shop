@@ -37,6 +37,8 @@ class AdminProductController extends Controller
             'description' => 'nullable|string',
             'images.*' => 'nullable|image|max:4096',
             'image_url' => 'nullable|url',
+            'size_chart' => 'nullable|image|max:5120', // 5MB
+            'color_photos.*' => 'nullable|image|max:5120', // 5MB для каждой фотографии цвета
             'sizes' => 'nullable|string',
             'gender' => 'nullable|string',
             'colors' => 'nullable|string',
@@ -69,6 +71,29 @@ class AdminProductController extends Controller
             }
             
             $data['images'] = $images;
+            
+            // Обработка изображения с таблицей размеров
+            if ($request->hasFile('size_chart')) {
+                $sizeChartFile = $request->file('size_chart');
+                if ($sizeChartFile->isValid()) {
+                    $path = $sizeChartFile->store('size-charts', 'public');
+                    $data['size_chart'] = '/storage/' . $path;
+                }
+            }
+            
+            // Обработка фотографий цветов
+            if ($request->hasFile('color_photos')) {
+                $colorPhotos = [];
+                foreach ($request->file('color_photos') as $colorPhoto) {
+                    if ($colorPhoto->isValid()) {
+                        $path = $colorPhoto->store('color-photos', 'public');
+                        $colorPhotos[] = '/storage/' . $path;
+                    }
+                }
+                if (!empty($colorPhotos)) {
+                    $data['color_photos'] = $colorPhotos;
+                }
+            }
             
             // Обработка размеров
             if ($request->filled('sizes')) {

@@ -731,7 +731,7 @@
                     <div class="option-group">
                         <div class="option-label">
                             <span class="option-title">РАЗМЕР</span>
-                            <a href="#" class="size-link">УЗНАТЬ СВОЙ РАЗМЕР</a>
+                            <a href="#" class="size-link" onclick="showModal('size'); return false;">УЗНАТЬ СВОЙ РАЗМЕР</a>
                         </div>
                         @if(isset($productData['sizes']) && !empty($productData['sizes']))
                             <div class="size-options">
@@ -1334,6 +1334,34 @@
                     <p>г. Москва, ул. Тверская, д. 1</p>
                     <p>Метро: Тверская</p>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно размеров -->
+    <div id="modal-size" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Узнать свой размер</h3>
+                <button class="modal-close" onclick="closeModal('size')">&times;</button>
+            </div>
+            <div class="modal-body">
+                @if(isset($productData['size_modal_text']) && !empty($productData['size_modal_text']))
+                    <div class="size-modal-content">
+                        {!! nl2br(e($productData['size_modal_text'])) !!}
+                    </div>
+                @else
+                    <div class="size-modal-content">
+                        <p>Для определения размера измерьте длину стопы в сантиметрах и сверьтесь с таблицей размеров.</p>
+                        <p><strong>Как измерить:</strong></p>
+                        <ul>
+                            <li>Поставьте ногу на лист бумаги</li>
+                            <li>Отметьте самую длинную точку стопы</li>
+                            <li>Измерьте расстояние в сантиметрах</li>
+                            <li>Сверьтесь с таблицей размеров</li>
+                        </ul>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

@@ -26,7 +26,8 @@ class Product extends Model
         'stock_quantity',
         'sku',
         'weight',
-        'dimensions'
+        'dimensions',
+        'size_modal_text'
     ];
 
     protected $casts = [
