@@ -2676,19 +2676,24 @@ $auth = session('auth');
             <div class="search-input-wrapper">
                 <input 
                     type="text" 
-                    id="searchInput" 
+                    id="homeSearchInput" 
                     placeholder="Поиск товаров..." 
                     autocomplete="off"
                 />
-                <button class="search-icon-btn" onclick="goToCatalog()" title="Искать">
+                <button class="search-icon-btn" onclick="performHomeSearch()" title="Искать">
                     🔍
                 </button>
             </div>
             
-            
-            <!-- Результаты поиска -->
-            <div class="search-results" id="searchResults">
-                <!-- Результаты будут добавляться динамически -->
+            <!-- Фильтры поиска -->
+            <div class="search-filters" id="homeSearchFilters" style="display: none; gap: 6px; margin-top: 12px; flex-wrap: wrap;">
+                <div class="search-filter active" data-filter="all" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">Все товары</div>
+                <div class="search-filter" data-filter="Одежда" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👕 Одежда</div>
+                <div class="search-filter" data-filter="Обувь" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👟 Обувь</div>
+                <div class="search-filter" data-filter="Сумки" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">👜 Сумки</div>
+                <div class="search-filter" data-filter="Часы" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">⌚ Часы</div>
+                <div class="search-filter" data-filter="Украшения" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">💍 Украшения</div>
+                <div class="search-filter" data-filter="Аксессуары" style="padding: 6px 12px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s ease; color: #64748b; font-weight: 500;">🕶️ Аксессуары</div>
             </div>
         </div>
 
@@ -2847,7 +2852,7 @@ $auth = session('auth');
                 <div class="goods" id="goods">
                     @if(isset($featuredProducts) && $featuredProducts->count() > 0)
                         @foreach($featuredProducts as $product)
-                            <article class="good" data-category="{{ $product->category }}" data-brand="{{ $product->brand }}" data-subcat="{{ $product->subcat }}" data-price="{{ $product->price }}">
+                            <article class="good product-card" data-category="{{ $product->category }}" data-brand="{{ $product->brand }}" data-subcat="{{ $product->subcat }}" data-price="{{ $product->price }}">
                         <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
                             <?php echo csrf_field(); ?>
                                     <input type="hidden" name="title" value="{{ $product->title }}">
@@ -2858,7 +2863,8 @@ $auth = session('auth');
                                 <a href="/product/{{ $product->id }}" style="text-decoration:none;color:inherit;display:block">
                                     <img src="{{ is_array($product->images) ? $product->images[0] : $product->image }}" alt="{{ $product->title }}">
                             <div class="meta">
-                                        <div>{{ $product->title }}</div>
+                                        <div class="product-title">{{ $product->title }}</div>
+                                        <div class="product-brand">{{ $product->brand }}</div>
                                         <div class="price">{{ $product->price }}€</div>
                                         
                                         <!-- Отображение пола -->
@@ -3060,132 +3066,167 @@ $auth = session('auth');
             }
         ];
 
-        let searchTimeout;
+        // Функциональный поиск на главной странице
+        let homeSearchTimeout;
+        let currentHomeFilter = 'all';
 
-        // Инициализация поиска
+        // Инициализация поиска на главной странице
         document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
-            const searchResults = document.getElementById('searchResults');
+            const searchInput = document.getElementById('homeSearchInput');
+            const searchFilters = document.getElementById('homeSearchFilters');
+
+            // Инициализируем счетчик товаров
+            const products = document.querySelectorAll('.product-card');
+            const countElement = document.querySelector('.section-count');
+            if (countElement) {
+                countElement.textContent = products.length;
+            }
 
             // Обработчик ввода в поиск
             searchInput.addEventListener('input', function() {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
+                clearTimeout(homeSearchTimeout);
+                homeSearchTimeout = setTimeout(() => {
                     const query = this.value.trim().toLowerCase();
                     if (query.length >= 2) {
-                        performSearch(query);
-                        searchResults.style.display = 'block';
+                        performHomeSearch(query);
+                        searchFilters.style.display = 'flex';
                     } else if (query.length === 0) {
                         // Показываем все товары только если поле пустое
-                        showAllProducts();
-                        searchResults.style.display = 'none';
+                        showAllHomeProducts();
+                        searchFilters.style.display = 'none';
                     }
                 }, 300);
             });
 
+            // Обработчики фильтров поиска
+            document.querySelectorAll('#homeSearchFilters .search-filter').forEach(filter => {
+                filter.addEventListener('click', function() {
+                    document.querySelectorAll('#homeSearchFilters .search-filter').forEach(f => f.classList.remove('active'));
+                    this.classList.add('active');
+                    currentHomeFilter = this.dataset.filter;
+                    performHomeSearch(searchInput.value.trim());
+                });
+            });
+
             // Обработчик клика вне поиска
             document.addEventListener('click', function(e) {
-                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-                    searchResults.style.display = 'none';
+                if (!searchInput.contains(e.target) && !searchFilters.contains(e.target)) {
+                    // Не скрываем фильтры при клике вне поиска
                 }
             });
         });
 
-        // Функция поиска
-        async function performSearch(query = '') {
-            const searchInput = document.getElementById('searchInput');
-            const searchResults = document.getElementById('searchResults');
+        // Функция поиска на главной странице
+        function performHomeSearch(query = '') {
+            const searchInput = document.getElementById('homeSearchInput');
+            const searchFilters = document.getElementById('homeSearchFilters');
             
             if (!query) {
-                query = (searchInput.value || '').trim();
+                query = searchInput.value.trim().toLowerCase();
             }
 
-            // Если меньше 2 символов — очищаем блок и выходим
-            if (query.length < 2) {
-                searchResults.innerHTML = '';
-                searchResults.style.display = 'none';
-                return;
+            searchFilters.style.display = 'flex';
+
+            const products = document.querySelectorAll('.product-card');
+            let visibleCount = 0;
+
+            products.forEach(product => {
+                // Получаем данные из data-атрибутов и элементов
+                const title = product.querySelector('.product-title')?.textContent.toLowerCase() || '';
+                const brand = product.querySelector('.product-brand')?.textContent.toLowerCase() || '';
+                const category = product.dataset.category || '';
+                const subcategory = product.dataset.subcat || '';
+                const price = product.dataset.price || '';
+
+                let show = true;
+
+                // Фильтрация по категории
+                if (currentHomeFilter !== 'all' && category !== currentHomeFilter) {
+                    show = false;
+                }
+
+                // Поиск по тексту
+                if (query) {
+                    const matchesSearch = title.includes(query) ||
+                                        brand.includes(query) ||
+                                        category.toLowerCase().includes(query) ||
+                                        subcategory.toLowerCase().includes(query) ||
+                                        price.includes(query);
+                    if (!matchesSearch) {
+                        show = false;
+                    }
+                }
+
+                product.style.display = show ? 'block' : 'none';
+                if (show) visibleCount++;
+            });
+
+            // Обновляем счетчик
+            const countElement = document.querySelector('.section-count');
+            if (countElement) {
+                countElement.textContent = visibleCount;
             }
 
-            // Показываем контейнер результатов
-            searchResults.style.display = 'block';
-            searchResults.innerHTML = '<div class="no-results">Идёт поиск…</div>';
-
-            const params = new URLSearchParams();
-            params.set('q', query);
-
-            try {
-                const resp = await fetch('/api/search-products?' + params.toString(), { headers: { 'Accept': 'application/json' } });
-                if (!resp.ok) throw new Error('HTTP ' + resp.status);
-                const data = await resp.json();
-                const products = Array.isArray(data.products) ? data.products : [];
-                displaySearchResults(products);
-            } catch (e) {
-                searchResults.innerHTML = '<div class="no-results">Ошибка поиска</div>';
+            // Показываем сообщение если ничего не найдено
+            if (visibleCount === 0) {
+                showNoHomeResultsMessage();
+            } else {
+                hideNoHomeResultsMessage();
             }
-        }
-
-        // Переход в каталог по текущему запросу/фильтрам
-        function goToCatalog() {
-            const searchInput = document.getElementById('searchInput');
-            const q = (searchInput.value || '').trim();
-            const params = new URLSearchParams();
-            if (q) params.set('search', q);
-            const url = '/catalog' + (params.toString() ? ('?' + params.toString()) : '');
-            window.location.href = url;
-        }
-
-        // Отображение результатов поиска
-        function displaySearchResults(products) {
-            const searchResults = document.getElementById('searchResults');
-            
-            if (products.length === 0) {
-                searchResults.innerHTML = `
-                    <div class="no-results">
-                        <div style="font-size: 24px; margin-bottom: 8px;">🔍</div>
-                        <div>Товары не найдены</div>
-                        <div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">
-                            Попробуйте изменить запрос или категорию
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            const resultsHTML = products.map(product => `
-                <div class="search-result-item" onclick="goToProduct('${product.id}')">
-                    <img src="${product.image}" alt="${product.title}" class="search-result-img">
-                    <div class="search-result-info">
-                        <div class="search-result-title">${product.title}</div>
-                        <div class="search-result-category">${product.brand} • ${product.category}</div>
-                    </div>
-                    <div class="search-result-price">${product.price}€</div>
-                </div>
-            `).join('');
-
-            searchResults.innerHTML = resultsHTML;
-        }
-
-        // Переход к товару
-        function goToProduct(productId) {
-            window.location.href = `/product/${productId}`;
         }
 
         // Показать все товары на главной странице
-        function showAllProducts() {
-            // На главной странице просто скрываем результаты поиска
-            const searchResults = document.getElementById('searchResults');
-            if (searchResults) {
-                searchResults.style.display = 'none';
+        function showAllHomeProducts() {
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(product => {
+                product.style.display = 'block';
+            });
+            
+            // Обновляем счетчик
+            const countElement = document.querySelector('.section-count');
+            if (countElement) {
+                countElement.textContent = products.length;
+            }
+            
+            hideNoHomeResultsMessage();
+        }
+
+        // Показать сообщение "не найдено" на главной странице
+        function showNoHomeResultsMessage() {
+            let noResultsDiv = document.getElementById('noHomeResults');
+            if (!noResultsDiv) {
+                noResultsDiv = document.createElement('div');
+                noResultsDiv.id = 'noHomeResults';
+                noResultsDiv.style.cssText = 'text-align: center; padding: 40px; color: #64748b; background: #f8fafc; border-radius: 8px; margin: 20px 0;';
+                noResultsDiv.innerHTML = `
+                    <div style="font-size: 48px; margin-bottom: 16px;">🔍</div>
+                    <h3 style="margin: 0 0 8px 0; color: #1e293b;">Товары не найдены</h3>
+                    <p style="margin: 0 0 16px 0;">Попробуйте изменить поисковый запрос или выберите другую категорию</p>
+                    <button onclick="resetHomeSearch()" style="padding: 8px 16px; background: #527ea6; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s ease;">Очистить поиск</button>
+                `;
+                document.getElementById('goods').appendChild(noResultsDiv);
+            }
+            noResultsDiv.style.display = 'block';
+        }
+
+        // Скрыть сообщение "не найдено" на главной странице
+        function hideNoHomeResultsMessage() {
+            const noResultsDiv = document.getElementById('noHomeResults');
+            if (noResultsDiv) {
+                noResultsDiv.style.display = 'none';
             }
         }
 
-        // Поиск по Enter
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                performSearch();
-            }
-        });
+        // Очистить поиск на главной странице
+        function resetHomeSearch() {
+            const searchInput = document.getElementById('homeSearchInput');
+            searchInput.value = '';
+            showAllHomeProducts();
+            document.getElementById('homeSearchFilters').style.display = 'none';
+            document.querySelectorAll('#homeSearchFilters .search-filter').forEach(f => f.classList.remove('active'));
+            document.querySelector('#homeSearchFilters .search-filter[data-filter="all"]').classList.add('active');
+            currentHomeFilter = 'all';
+        }
 
         // Обработчик клика вне модального окна FAQ
         document.getElementById('faqModal').addEventListener('click', function(e) {
