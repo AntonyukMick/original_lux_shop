@@ -89,7 +89,16 @@ class ProductDataService
             $gender = [];
         }
 
-        // Обрабатываем цвета
+        // Обрабатываем изображения цветов
+        $colorImages = $product->color_images;
+        if (is_string($colorImages)) {
+            $colorImages = json_decode($colorImages, true) ?: [];
+        }
+        if (!is_array($colorImages)) {
+            $colorImages = [];
+        }
+        
+        // Обрабатываем цвета (старое поле для совместимости)
         $colors = $product->colors;
         if (is_string($colors)) {
             if (str_starts_with($colors, '[') && str_ends_with($colors, ']')) {
@@ -128,6 +137,7 @@ class ProductDataService
             'size' => $defaultSize,
             'sizes' => $sizes, // Добавляем все доступные размеры
             'gender' => $gender, // Добавляем пол
+            'color_images' => !empty($colorImages) ? $colorImages : ($this->generateColorsFromImages($images)),
             'colors' => !empty($colors) ? $colors : $this->generateColorsFromImages($images),
             'size_modal_text' => $product->size_modal_text
         ];

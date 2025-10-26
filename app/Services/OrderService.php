@@ -57,12 +57,19 @@ class OrderService
     private function createOrderItemsFromCart($order, $cartItems)
     {
         foreach ($cartItems as $cartItem) {
+            \Illuminate\Support\Facades\Log::info('Creating order item from cart', [
+                'product_title' => $cartItem->product_title,
+                'color' => $cartItem->color ?? 'NULL',
+                'size' => $cartItem->size ?? 'NULL'
+            ]);
+            
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_title' => $cartItem->product_title,
                 'price' => $cartItem->price,
                 'quantity' => $cartItem->quantity,
-                'size' => $cartItem->size,
+                'size' => $cartItem->size ?? null,
+                'color' => $cartItem->color ?? null,
                 'product_image' => $cartItem->image
             ]);
         }
@@ -134,6 +141,7 @@ class OrderService
                 'price' => $item['price'],
                 'quantity' => $item['quantity'] ?? $item['qty'] ?? 1,
                 'size' => $item['size'] ?? null,
+                'color' => $item['color'] ?? null,
                 'product_image' => $item['image'] ?? null,
                 'images' => $item['images'] ?? [],
                 'category' => $item['category'] ?? null,

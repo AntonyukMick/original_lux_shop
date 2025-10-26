@@ -254,6 +254,7 @@ class OrderController extends Controller
                     'price' => $cartItem->price,
                     'quantity' => $cartItem->quantity,
                     'size' => $cartItem->size,
+                    'color' => $cartItem->color,
                     'product_image' => $cartItem->image,
                     'category' => $productInfo['category_name'],
                     'brand' => $productInfo['brand']

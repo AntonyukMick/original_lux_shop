@@ -2122,12 +2122,21 @@
 
                 console.log('Response status:', response.status);
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
                 const data = await response.json();
                 console.log('Response data:', data);
+                
+                if (!response.ok) {
+                    // Проверяем, требуется ли авторизация
+                    if (response.status === 401 && data.requires_auth) {
+                        console.log('🔒 Требуется авторизация');
+                        showNotificationSimple('Для добавления товара в корзину необходимо войти в систему', 'error');
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 2000);
+                        return;
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 
                 if (data.success) {
                     console.log('✅ Товар успешно добавлен в корзину');
@@ -2140,9 +2149,6 @@
                     if (typeof CartManager !== 'undefined' && CartManager.loadCart) {
                         CartManager.loadCart();
                     }
-                } else if (data.requires_auth) {
-                    console.log('🔒 Требуется авторизация');
-                    showAuthModal();
                 } else {
                     console.error('❌ Ошибка:', data.message);
                     showNotificationSimple(data.message || 'Ошибка при добавлении товара', 'error');

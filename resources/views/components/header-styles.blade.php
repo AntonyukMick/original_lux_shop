@@ -10,13 +10,13 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 .desktop-header .bar{display:flex;align-items:center;gap:3px;padding:4px 6px;width:100%;flex-wrap:nowrap;overflow:hidden}
 
 /* Мобильный хедер - показываем только на мобильных */
-.mobile-header .bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;width:100%;flex-wrap:nowrap;position:relative}
+.mobile-header .bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;width:100%;flex-wrap:nowrap}
 
 /* Новая структура для мобильного хедера */
-.mobile-header .header-left{display:flex;align-items:center;gap:6px;flex-shrink:0;z-index:2}
-.mobile-header .header-center{display:flex;align-items:center;justify-content:center;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:1}
-.mobile-header .header-center .brand{pointer-events:auto}
-.mobile-header .header-right{display:flex;align-items:center;gap:6px;flex-shrink:0;z-index:2}
+.mobile-header .header-left{display:flex;align-items:center;gap:4px;flex-shrink:0;z-index:2;min-width:fit-content}
+.mobile-header .header-center{display:flex;align-items:center;justify-content:center;flex:1;flex-shrink:1;min-width:0;pointer-events:none;z-index:1;position:absolute;left:50%;transform:translateX(-50%)}
+.mobile-header .header-center .brand{pointer-events:auto;flex-shrink:0}
+.mobile-header .header-right{display:flex;align-items:center;gap:4px;flex-shrink:0;z-index:2;min-width:fit-content;margin-left:auto}
 
 /* Обновленные стили для всех элементов хедера */
 .btn {
@@ -47,27 +47,26 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 }
 
 .brand {
-    margin-left: 3px; /* было 4px, уменьшено на 20% */
+    margin: 0;
     background: rgb(151, 173, 200);
     border: 1px solid #000;
-    border-radius: 5px; /* было 6px, уменьшено на 20% */
-    padding: 5px 6px; /* было 6px 8px, уменьшено на 20% */
+    border-radius: 5px;
+    padding: 5px 8px;
     font-weight: 700;
     height: auto;
-    min-height: 29px; /* было 36px, уменьшено на 20% */
-    font-size: 10px; /* было 12px, уменьшено на 20% */
-    flex-shrink: 0;
+    min-height: 30px;
+    font-size: 9px;
+    flex-shrink: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
     line-height: 1;
-    flex-shrink: 0;
     color: rgb(21, 36, 35);
     text-align: center;
-    gap: 2px;
+    white-space: nowrap;
 }
 
 .brand-name {
@@ -87,13 +86,16 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 .mobile-brand {
     flex-direction: row !important;
     height: auto !important;
-    min-height: 36px !important;
-    padding: 6px 12px !important;
-    font-size: 13px !important;
+    min-height: 30px !important;
+    padding: 4px 6px !important;
+    font-size: 7px !important;
     font-weight: 700 !important;
     white-space: nowrap !important;
     line-height: 1 !important;
     gap: 0 !important;
+    flex-shrink: 1 !important;
+    max-width: none !important;
+    width: auto !important;
 }
 
 .brand:hover {
@@ -295,14 +297,15 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     
     /* Компактный бренд */
     .brand {
-        padding: 4px 6px;
+        padding: 3px 5px;
         height: auto;
-        min-height: 32px;
-        margin-left: 2px;
+        min-height: 26px;
+        margin: 0;
         flex-shrink: 0;
         justify-content: center;
         text-align: center;
         gap: 1px;
+        font-size: 8px;
     }
     
     .brand-name {
@@ -315,9 +318,9 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     
     /* Мобильный бренд - компактный */
     .mobile-brand {
-        font-size: 11px !important;
-        padding: 4px 8px !important;
-        min-height: 32px !important;
+        font-size: 8px !important;
+        padding: 3px 6px !important;
+        min-height: 26px !important;
     }
     
     /* Компактные кнопки */

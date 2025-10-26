@@ -22,6 +22,15 @@
         transition: all 0.2s;
     }
     
+    .product-item img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex-shrink: 0;
+        border: 2px solid #e2e8f0;
+    }
+    
     .product-item:hover {
         background: #f1f5f9;
         border-color: #cbd5e1;
@@ -1018,51 +1027,41 @@
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label">Цвет товара</label>
-                        <div class="colors-container" id="colors-container">
-                            <div class="color-options" id="color-options">
-                                <h4>Выберите цвет товара:</h4>
-                                
-                                <!-- Профессиональный цветовой пикер -->
-                                <div class="color-picker-wrapper">
-                                    <div class="color-picker-header">
-                                        <div class="color-picker-hex" id="colorPickerHex">#0f172a</div>
+                        <label class="form-label">Изображения товара по цветам</label>
+                        <div id="color-images-container" style="margin-top: 10px;">
+                            <div class="color-image-item" style="margin-bottom: 16px; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc;">
+                                <div style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 16px; align-items: end;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #1e293b;">Название цвета</label>
+                                        <input type="text" name="color_names[]" class="form-input" placeholder="Красный" style="width: 100%; padding: 10px 12px;">
                                     </div>
-                                    
-                                    <div class="color-picker-main">
-                                        <!-- Основное цветовое поле -->
-                                        <div class="color-field" id="colorField">
-                                            <div class="color-selector" id="colorSelector"></div>
+                                    <div>
+                                        <label style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #1e293b;">Изображение</label>
+                                        <label style="
+                                            display: block;
+                                            padding: 10px 16px;
+                                            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                                            border: 2px dashed #cbd5e1;
+                                            border-radius: 8px;
+                                            cursor: pointer;
+                                            text-align: center;
+                                            font-size: 14px;
+                                            font-weight: 600;
+                                            color: #527ea6;
+                                            transition: all 0.2s;
+                                        " onmouseover="this.style.borderColor='#527ea6'; this.style.background='linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%)';" onmouseout="this.style.borderColor='#cbd5e1'; this.style.background='linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)';">
+                                            <span class="file-name">📎 Выбрать файл</span>
+                                            <input type="file" name="color_images[]" accept="image/*" style="display: none;" onchange="handleColorImageSelect(this)">
+                                        </label>
                                         </div>
-                                        
-                                        <!-- Слайдер оттенка -->
-                                        <div class="color-sliders">
-                                            <div class="slider-container hue-slider-container">
-                                                <div class="hue-slider" id="hueSlider">
-                                                    <div class="hue-track"></div>
-                                                    <div class="hue-handle" id="hueHandle"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Кнопки управления -->
-                                    <div class="color-controls">
-                                        <button type="button" class="control-btn" onclick="addSelectedColor()">Добавить цвет</button>
-                                        <button type="button" class="control-btn" onclick="clearAllColors()">Очистить все</button>
-                                    </div>
-                                    
-                                    <!-- Выбранные цвета -->
-                                    <div class="selected-colors-display" id="selectedColorsDisplay">
-                                        <div class="selected-colors-title">Выбранные цвета:</div>
-                                        <div class="selected-colors-list" id="selectedColorsList">
-                                            <div class="no-colors">Цвета не выбраны</div>
-                                        </div>
+                                    <div>
+                                        <button type="button" onclick="addColorImageField()" style="padding: 10px 16px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; height: 42px;">+ Добавить</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <input type="hidden" name="colors" id="selected-colors" value="">
+                        <small class="form-help">Загрузите изображения товара в разных цветах. На странице товара пользователи смогут выбирать цвет, кликая на миниатюры.</small>
                     </div>
                     
                     <div class="form-group">
@@ -1087,7 +1086,25 @@
                     </div>
                 </div>
                 
-                <button type="submit" class="submit-btn">Добавить товар</button>
+                <button type="submit" class="submit-btn" style="
+                    width: 100%;
+                    padding: 16px 32px;
+                    background: linear-gradient(135deg, #527ea6 0%, #3b5a7a 100%);
+                    color: #fff;
+                    border: none;
+                    border-radius: 12px;
+                    font-size: 16px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 12px rgba(82, 126, 166, 0.3);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(82, 126, 166, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(82, 126, 166, 0.3)';">
+                    ✨ Добавить товар
+                </button>
             </form>
         </div>
 
@@ -1122,7 +1139,11 @@
                 @if($products->count() > 0)
                     @foreach($products as $product)
                         <div class="product-item">
-                            <div class="product-info">
+                            @if($product->images && is_array($product->images) && count($product->images) > 0)
+                                <img src="{{ $product->images[0] }}" alt="{{ $product->title }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-right: 16px; flex-shrink: 0;">
+                            @endif
+                            
+                            <div class="product-info" style="flex: 1;">
                                 <div class="product-title">{{ $product->title }}</div>
                                 <div class="product-category">{{ $product->category }}</div>
                                 <div class="product-price">{{ $product->brand }} • {{ $product->price }}€</div>
@@ -1516,208 +1537,99 @@ function updateSelectedGender() {
     }
 }
 
-// Функции для работы с цветовым пикером
-let currentHue = 0.7; // Начальный оттенок (синий)
-let currentSaturation = 0.85; // Начальная насыщенность
-let currentLightness = 0.15; // Начальная яркость
-let currentAlpha = 1.0; // Начальная прозрачность
-let selectedColors = []; // Массив выбранных цветов
-
-function updateColorField() {
-    const colorField = document.getElementById('colorField');
-    const hueColor = hslToRgb(currentHue, 1, 0.5);
-    const hueHex = rgbToHex(hueColor.r, hueColor.g, hueColor.b);
+// Функция для добавления полей загрузки изображений цветов
+function addColorImageField() {
+    const container = document.getElementById('color-images-container');
     
-    // Обновляем фон цветового поля
-    colorField.style.background = `
-        linear-gradient(to right, 
-            rgba(255, 255, 255, 1) 0%, 
-            rgba(255, 255, 255, 0) 100%),
-        linear-gradient(to bottom, 
-            rgba(0, 0, 0, 0) 0%, 
-            rgba(0, 0, 0, 1) 100%),
-        ${hueHex}
+    const newItem = document.createElement('div');
+    newItem.className = 'color-image-item';
+    newItem.style.cssText = 'margin-bottom: 16px; padding: 16px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc;';
+    newItem.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 16px; align-items: end;">
+            <div>
+                <label style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #1e293b;">Название цвета</label>
+                <input type="text" name="color_names[]" class="form-input" placeholder="Красный" style="width: 100%; padding: 10px 12px;">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #1e293b;">Изображение</label>
+                <label style="
+                    display: block;
+                    padding: 10px 16px;
+                    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                    border: 2px dashed #cbd5e1;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    text-align: center;
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #527ea6;
+                    transition: all 0.2s;
+                " onmouseover="this.style.borderColor='#527ea6'; this.style.background='linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%)';" onmouseout="this.style.borderColor='#cbd5e1'; this.style.background='linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)';">
+                    <span class="file-name">📎 Выбрать файл</span>
+                    <input type="file" name="color_images[]" accept="image/*" style="display: none;" onchange="handleColorImageSelect(this)">
+                </label>
+            </div>
+            <div>
+                <button type="button" onclick="removeColorImageField(this)" style="padding: 10px 16px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; height: 42px;">− Удалить</button>
+            </div>
+        </div>
     `;
     
-    // Обновляем позицию селектора
-    const selector = document.getElementById('colorSelector');
-    selector.style.left = (currentSaturation * 100) + '%';
-    selector.style.top = ((1 - currentLightness) * 100) + '%';
-    
-    // Обновляем HEX код
-    const finalColor = hslToRgb(currentHue, currentSaturation, currentLightness);
-    const finalHex = rgbToHex(finalColor.r, finalColor.g, finalColor.b);
-    document.getElementById('colorPickerHex').textContent = finalHex;
+    container.appendChild(newItem);
 }
 
-function updateHueSlider() {
-    const hueHandle = document.getElementById('hueHandle');
-    hueHandle.style.left = (currentHue * 100) + '%';
-}
-
-
-function hslToRgb(h, s, l) {
-    let r, g, b;
-    
-    if (s === 0) {
-        r = g = b = l; // achromatic
+function removeColorImageField(button) {
+    const item = button.closest('.color-image-item');
+    if (document.querySelectorAll('.color-image-item').length > 1) {
+        item.remove();
     } else {
-        const hue2rgb = (p, q, t) => {
-            if (t < 0) t += 1;
-            if (t > 1) t -= 1;
-            if (t < 1/6) return p + (q - p) * 6 * t;
-            if (t < 1/2) return q;
-            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-            return p;
-        };
+        alert('Необходимо оставить хотя бы одно поле');
+    }
+}
+
+function handleColorImageSelect(input) {
+    const file = input.files[0];
+    
+    // Находим label
+    const label = input.closest('label');
+    if (!label) return;
+    
+    // Находим span для отображения имени файла
+    const fileNameSpan = label.querySelector('.file-name');
+    
+    if (file && file.type.startsWith('image/')) {
+        // Обновляем текст кнопки
+        if (fileNameSpan) {
+            fileNameSpan.textContent = '📎 ' + file.name;
+        }
         
-        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        const p = 2 * l - q;
-        r = hue2rgb(p, q, h + 1/3);
-        g = hue2rgb(p, q, h);
-        b = hue2rgb(p, q, h - 1/3);
-    }
-    
-    return {
-        r: Math.round(r * 255),
-        g: Math.round(g * 255),
-        b: Math.round(b * 255)
-    };
-}
-
-function rgbToHex(r, g, b) {
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toLowerCase();
-}
-
-function addSelectedColor() {
-    const finalColor = hslToRgb(currentHue, currentSaturation, currentLightness);
-    const finalHex = rgbToHex(finalColor.r, finalColor.g, finalColor.b);
-    
-    // Проверяем, не добавлен ли уже этот цвет
-    if (!selectedColors.includes(finalHex)) {
-        selectedColors.push(finalHex);
-        updateSelectedColorsDisplay();
-        updateSelectedColorsInput();
+        // Показываем превью изображения
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Находим контейнер (div с классом color-image-item)
+            const container = label.closest('.color-image-item');
+            if (!container) return;
+            
+            // Удаляем предыдущее превью если есть
+            const oldPreview = container.querySelector('.color-image-preview');
+            if (oldPreview) oldPreview.remove();
+            
+            // Создаем новое превью
+            const preview = document.createElement('div');
+            preview.className = 'color-image-preview';
+            preview.style.cssText = 'margin-top: 8px; border-radius: 8px; overflow: hidden; border: 2px solid #e2e8f0; max-width: 200px;';
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="width: 100%; height: 100px; object-fit: cover;">`;
+            
+            // Добавляем превью после label
+            label.parentElement.appendChild(preview);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        if (fileNameSpan) {
+            fileNameSpan.textContent = '📎 Выбрать файл';
+        }
     }
 }
-
-function removeSelectedColor(hex) {
-    selectedColors = selectedColors.filter(color => color !== hex);
-    updateSelectedColorsDisplay();
-    updateSelectedColorsInput();
-}
-
-function clearAllColors() {
-    selectedColors = [];
-    updateSelectedColorsDisplay();
-    updateSelectedColorsInput();
-}
-
-function updateSelectedColorsDisplay() {
-    const container = document.getElementById('selectedColorsList');
-    
-    if (selectedColors.length === 0) {
-        container.innerHTML = '<div class="no-colors">Цвета не выбраны</div>';
-        return;
-    }
-    
-    container.innerHTML = selectedColors.map(hex => `
-        <div class="selected-color-item">
-            <div class="selected-color-preview" style="background-color: ${hex}"></div>
-            <div class="selected-color-hex">${hex}</div>
-            <button type="button" class="remove-color-btn" onclick="removeSelectedColor('${hex}')">×</button>
-        </div>
-    `).join('');
-}
-
-function updateSelectedColorsInput() {
-    const input = document.getElementById('selected-colors');
-    input.value = JSON.stringify(selectedColors);
-}
-
-function initializeColorPicker() {
-    // Инициализируем начальное состояние
-    updateColorField();
-    updateHueSlider();
-    
-    // Обработчики для цветового поля
-    const colorField = document.getElementById('colorField');
-    let isDragging = false;
-    
-    colorField.addEventListener('mousedown', function(e) {
-        isDragging = true;
-        updateColorFromField(e);
-    });
-    
-    colorField.addEventListener('mousemove', function(e) {
-        if (isDragging) {
-            updateColorFromField(e);
-        }
-    });
-    
-    document.addEventListener('mouseup', function() {
-        isDragging = false;
-    });
-    
-    // Обработчики для слайдера оттенка
-    const hueSlider = document.getElementById('hueSlider');
-    let isHueDragging = false;
-    
-    hueSlider.addEventListener('mousedown', function(e) {
-        isHueDragging = true;
-        updateHueFromSlider(e);
-    });
-    
-    hueSlider.addEventListener('mousemove', function(e) {
-        if (isHueDragging) {
-            updateHueFromSlider(e);
-        }
-    });
-    
-    
-    // Обработчики для мобильных устройств
-    colorField.addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        isDragging = true;
-        const touch = e.touches[0];
-        updateColorFromField({ clientX: touch.clientX, clientY: touch.clientY, target: colorField });
-    });
-    
-    colorField.addEventListener('touchmove', function(e) {
-        e.preventDefault();
-        if (isDragging) {
-            const touch = e.touches[0];
-            updateColorFromField({ clientX: touch.clientX, clientY: touch.clientY, target: colorField });
-        }
-    });
-    
-    document.addEventListener('touchend', function() {
-        isDragging = false;
-        isHueDragging = false;
-    });
-}
-
-function updateColorFromField(e) {
-    const rect = e.target.getBoundingClientRect();
-    const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    const y = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
-    
-    currentSaturation = x;
-    currentLightness = 1 - y;
-    
-    updateColorField();
-}
-
-function updateHueFromSlider(e) {
-    const rect = e.target.getBoundingClientRect();
-    const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    
-    currentHue = x;
-    
-    updateColorField();
-    updateHueSlider();
-}
-
 
 function updateSubcategories(category) {
     const select = document.getElementById('subcategory-select');
@@ -1779,14 +1691,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Инициализация цветового пикера
-    initializeColorPicker();
-    
+    // Инициализация загрузки изображений
     const imageInput = document.getElementById('imageInput');
     const imagePreview = document.getElementById('imagePreview');
     const fileInputLabel = document.querySelector('.file-input-label');
     
-    if (imageInput) {
+    if (imageInput && imagePreview) {
         imageInput.addEventListener('change', function(e) {
             const files = Array.from(e.target.files);
             imagePreview.innerHTML = '';

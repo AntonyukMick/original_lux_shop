@@ -347,8 +347,26 @@ class ProductSeeder extends Seeder
             ]
         ];
 
-        foreach ($products as $product) {
-            Product::create($product);
+        foreach ($products as $productData) {
+            // Проверяем, существует ли уже товар
+            $existingProduct = null;
+            
+            // Проверяем по SKU если есть
+            if (!empty($productData['sku'])) {
+                $existingProduct = Product::where('sku', $productData['sku'])->first();
+            }
+            
+            // Если нет SKU или товар не найден по SKU, проверяем по заголовку и бренду
+            if (!$existingProduct) {
+                $existingProduct = Product::where('title', $productData['title'])
+                    ->where('brand', $productData['brand'])
+                    ->first();
+            }
+            
+            // Создаем только если товар не существует
+            if (!$existingProduct) {
+                Product::create($productData);
+            }
         }
     }
 }

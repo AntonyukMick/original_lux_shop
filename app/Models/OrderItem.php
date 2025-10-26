@@ -15,6 +15,7 @@ class OrderItem extends Model
         'price',
         'quantity',
         'size',
+        'color',
         'product_image',
         'images',
         'category',

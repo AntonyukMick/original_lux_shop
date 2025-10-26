@@ -372,6 +372,7 @@
             border: 2px solid transparent;
             overflow: hidden;
             transition: all 0.2s;
+            position: relative;
         }
         
         .color-option.active {
@@ -386,6 +387,29 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+        
+        .color-option .color-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 4px 8px;
+            font-size: 12px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .color-option:hover .color-name {
+            opacity: 1;
+        }
+        
+        .color-option.active .color-name {
+            opacity: 1;
+            background: rgba(82, 126, 166, 0.8);
         }
         
         /* Similar Products */
@@ -760,21 +784,24 @@
 
                     <!-- Action Buttons -->
                     <div class="action-buttons">
-                        <button class="add-to-cart-btn" data-action="add-to-cart" data-product-id="{{ $productData['id'] }}" data-quantity="1" data-size="{{ $productData['size'] }}">В корзину</button>
+                        <button class="add-to-cart-btn" data-action="add-to-cart" data-product-id="{{ $productData['id'] }}" data-quantity="1" data-size="" data-color="">В корзину</button>
                         <button class="favorite-btn" data-action="toggle-favorite" data-product-id="{{ $productData['id'] }}" title="Добавить в избранное">♡</button>
                     </div>
 
                     <!-- Colors -->
-                    @if(isset($productData['colors']))
-                    <div class="option-group">
+                    @if(isset($productData['color_images']) && count($productData['color_images']) > 0)
+                    <div class="option-group" id="colors-group">
                         <div class="option-label">
-                            <span class="option-title">ДРУГИЕ ЦВЕТА</span>
+                            <span class="option-title">ВЫБЕРИТЕ ЦВЕТ</span>
                         </div>
-                        <div class="colors-grid">
-                            @foreach($productData['colors'] as $index => $color)
+                        <div class="colors-grid" id="colors-grid">
+                            @foreach($productData['color_images'] as $index => $colorData)
                             <div class="color-option {{ $index === 0 ? 'active' : '' }}" 
-                                 onclick="selectColor('{{ is_array($color) ? $color['image'] : $color }}', '{{ is_array($color) ? $color['name'] : $color }}', this)">
-                                <img src="{{ is_array($color) ? $color['image'] : $color }}" alt="{{ is_array($color) ? $color['name'] : $color }}">
+                                 data-color="{{ $colorData['name'] }}"
+                                 data-image="{{ $colorData['image'] }}"
+                                 onclick="selectColorImage(this)">
+                                <img src="{{ $colorData['image'] }}" alt="{{ $colorData['name'] }}">
+                                <span class="color-name">{{ $colorData['name'] }}</span>
                             </div>
                             @endforeach
                         </div>
@@ -980,7 +1007,62 @@
             updateProductStatus(productId, 'favorites');
         }
 
-        // Select color
+        // Переменная для хранения выбранного цвета
+        let selectedColor = null;
+        
+        // Инициализация: выбираем первый цвет по умолчанию
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstColorOption = document.querySelector('.color-option.active');
+            if (firstColorOption) {
+                selectedColor = {
+                    name: firstColorOption.getAttribute('data-color'),
+                    image: firstColorOption.getAttribute('data-image')
+                };
+                
+                // Устанавливаем атрибуты кнопки добавления в корзину
+                const addToCartBtn = document.querySelector('.add-to-cart-btn');
+                if (addToCartBtn && selectedColor) {
+                    addToCartBtn.setAttribute('data-color', selectedColor.name);
+                    addToCartBtn.setAttribute('data-color-image', selectedColor.image);
+                }
+            }
+        });
+        
+        // Select color image - новая функция для работы с изображениями цветов
+        function selectColorImage(element) {
+            console.log('selectColorImage вызван:', element);
+            
+            // Убираем активное состояние со всех цветов
+            document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            
+            // Получаем данные о выбранном цвете
+            const colorName = element.getAttribute('data-color');
+            const colorImage = element.getAttribute('data-image');
+            
+            // Сохраняем выбранный цвет
+            selectedColor = {
+                name: colorName,
+                image: colorImage
+            };
+            
+            console.log('Выбранный цвет:', selectedColor);
+            
+            // Меняем главное изображение на выбранный цвет
+            const mainImage = document.getElementById('mainImage');
+            if (mainImage) {
+                mainImage.src = colorImage;
+            }
+            
+            // Обновляем атрибуты кнопки добавления в корзину
+            const addToCartBtn = document.querySelector('.add-to-cart-btn');
+            if (addToCartBtn) {
+                addToCartBtn.setAttribute('data-color', colorName);
+                addToCartBtn.setAttribute('data-color-image', colorImage);
+            }
+        }
+        
+        // Select color (старая функция для совместимости)
         function selectColor(imageSrc, colorName, element) {
             console.log('selectColor вызван:', { imageSrc, colorName, element });
             
@@ -1102,8 +1184,8 @@
     
     <!-- Логика добавления в корзину (как на главной странице) -->
     <script>
-        // Функция добавления в корзину (скопирована с главной страницы + размер)
-        async function addToCartNew(productId, title, price, image, size = '', quantity = 1) {
+        // Функция добавления в корзину (скопирована с главной страницы + размер + цвет)
+        async function addToCartNew(productId, title, price, image, size = '', color = '', quantity = 1) {
             try {
                 console.log('=== ДОБАВЛЕНИЕ В КОРЗИНУ ===');
                 console.log('Product ID:', productId);
@@ -1111,6 +1193,7 @@
                 console.log('Price:', price);
                 console.log('Image:', image);
                 console.log('Size:', size);
+                console.log('Color:', color);
                 console.log('Quantity:', quantity);
                 
                 // Получаем CSRF токен
@@ -1121,7 +1204,7 @@
                 
                 console.log('CSRF Token:', csrfToken.getAttribute('content'));
                 
-                // Отправляем запрос на сервер
+                // Отправляем запрос на сервер (user_id берется из сессии на сервере)
                 const response = await fetch('/cart/add', {
                     method: 'POST',
                     headers: {
@@ -1135,18 +1218,28 @@
                         price: price,
                         image: image,
                         size: size,
+                        color: color,
                         quantity: quantity
                     })
                 });
 
                 console.log('Response status:', response.status);
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
                 const data = await response.json();
                 console.log('Response data:', data);
+                
+                if (!response.ok) {
+                    // Проверяем, требуется ли авторизация
+                    if (response.status === 401 && data.requires_auth) {
+                        console.log('🔒 Требуется авторизация');
+                        showNotification('Для добавления товара в корзину необходимо войти в систему', 'error');
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 2000);
+                        return;
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 
                 if (data.success) {
                     console.log('✅ Товар успешно добавлен в корзину');
@@ -1165,6 +1258,10 @@
                 } else if (data.requires_auth) {
                     console.log('🔒 Требуется авторизация');
                     showNotification('Для добавления товара в корзину необходимо войти в систему', 'error');
+                    // Перенаправляем на страницу входа
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
                 } else {
                     console.error('❌ Ошибка:', data.message);
                     showNotification(data.message || 'Ошибка при добавлении товара', 'error');
@@ -1276,11 +1373,12 @@
                     const productId = parseInt(this.dataset.productId);
                     const quantity = parseInt(document.getElementById('quantity')?.value || 1);
                     const size = this.dataset.size || '';
+                    const color = this.dataset.color || '';
                     
-                    console.log('📦 Данные товара:', { productId, quantity, size });
+                    console.log('📦 Данные товара:', { productId, quantity, size, color });
                     
                     // Добавляем товар в корзину
-                    await addToCartNew(productId, '{{ $productData["title"] }}', {{ $productData["price"] }}, '{{ $productData["image"] }}', size, quantity);
+                    await addToCartNew(productId, '{{ $productData["title"] }}', {{ $productData["price"] }}, '{{ $productData["image"] }}', size, color, quantity);
                 });
             } else {
                 console.error('❌ Add to cart button not found');

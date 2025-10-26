@@ -58,6 +58,8 @@
     .table td {
         vertical-align: middle;
         border-bottom: 1px solid #e5e7eb;
+        word-wrap: break-word;
+        word-break: break-word;
     }
     
     .badge {
@@ -124,6 +126,74 @@
         font-size: 14px;
     }
     
+    /* Мобильные стили для таблицы */
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 8px;
+        }
+        
+        .card-body {
+            padding: 12px;
+        }
+        
+        .table-responsive {
+            overflow-x: visible;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table thead {
+            display: none;
+        }
+        
+        .table tbody tr {
+            display: block;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            padding: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .table tbody td {
+            display: block;
+            padding: 8px 0;
+            border: none;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: left;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+        
+        .table tbody td:before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #64748b;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 11px;
+        }
+        
+        .table tbody td:last-child {
+            border-bottom: none;
+        }
+        
+        .order-btn-group {
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .order-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 13px;
+        }
+    }
+    
     .text-muted {
         color: #6b7280 !important;
     }
@@ -165,10 +235,10 @@
                                 <tbody>
                                     @foreach($orders as $order)
                                         <tr>
-                                            <td>
+                                            <td data-label="№ Заказа">
                                                 <strong>{{ $order->order_number }}</strong>
                                             </td>
-                                            <td>
+                                            <td data-label="Клиент">
                                                 <div>
                                                     <strong>{{ $order->customer_name }}</strong><br>
                                                     <small class="text-muted">{{ $order->customer_email }}</small><br>
@@ -181,30 +251,33 @@
                                                     @endif
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td data-label="Товары">
                                                 @foreach($order->items as $item)
                                                     <div class="mb-1">
                                                         <strong>{{ $item->product_title }}</strong>
                                                         @if($item->size)
-                                                            <small class="text-muted">({{ $item->size }})</small>
+                                                            <small class="text-muted">(Размер: {{ $item->size }})</small>
+                                                        @endif
+                                                        @if($item->color)
+                                                            <br><small class="text-muted" style="color: #527ea6;">Цвет: {{ $item->color }}</small>
                                                         @endif
                                                         <br>
                                                         <small class="text-muted">{{ $item->quantity }} шт. × {{ number_format($item->price, 2) }}€</small>
                                                     </div>
                                                 @endforeach
                                             </td>
-                                            <td>
+                                            <td data-label="Сумма">
                                                 <strong>{{ number_format($order->total, 2) }}€</strong>
                                             </td>
-                                            <td>
+                                            <td data-label="Статус">
                                                 <span class="badge badge-{{ $order->status === 'pending' ? 'warning' : ($order->status === 'confirmed' ? 'info' : ($order->status === 'shipped' ? 'primary' : 'success')) }}">
                                                     {{ $order->status_text }}
                                                 </span>
                                             </td>
-                                            <td>
+                                            <td data-label="Дата">
                                                 {{ $order->created_at->format('d.m.Y H:i') }}
                                             </td>
-                                            <td>
+                                            <td data-label="Действия">
                                                 <div class="order-btn-group">
                                                     <button type="button" class="order-btn order-btn-confirm" onclick="updateOrderStatus({{ $order->id }}, 'confirmed')">
                                                         ✓ Подтвердить

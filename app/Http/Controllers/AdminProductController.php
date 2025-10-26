@@ -39,6 +39,8 @@ class AdminProductController extends Controller
             'image_url' => 'nullable|url',
             'size_chart' => 'nullable|image|max:5120', // 5MB
             'color_photos.*' => 'nullable|image|max:5120', // 5MB для каждой фотографии цвета
+            'color_images.*' => 'nullable|image|max:5120',
+            'color_names.*' => 'nullable|string|max:100',
             'sizes' => 'nullable|string',
             'gender' => 'nullable|string',
             'colors' => 'nullable|string',
@@ -93,6 +95,27 @@ class AdminProductController extends Controller
                 if (!empty($colorPhotos)) {
                     $data['color_photos'] = $colorPhotos;
                 }
+            }
+            
+            // Обработка изображений цветов (новая функциональность)
+            $colorImages = [];
+            if ($request->hasFile('color_images') && $request->has('color_names')) {
+                $colorNames = $request->input('color_names', []);
+                $colorImagesFiles = $request->file('color_images', []);
+                
+                foreach ($colorNames as $index => $colorName) {
+                    if (isset($colorImagesFiles[$index]) && $colorImagesFiles[$index]->isValid()) {
+                        $path = $colorImagesFiles[$index]->store('color-images', 'public');
+                        $colorImages[] = [
+                            'name' => $colorName ?: 'Цвет ' . ($index + 1),
+                            'image' => '/storage/' . $path
+                        ];
+                    }
+                }
+            }
+            
+            if (!empty($colorImages)) {
+                $data['color_images'] = $colorImages;
             }
             
             // Обработка размеров

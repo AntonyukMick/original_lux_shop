@@ -136,6 +136,16 @@
         }
         
         /* Адаптивные стили для кнопок удалены - используются стили из common.css */
+    
+    /* Мобильные стили для таблиц */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .table {
+        min-width: 600px;
+    }
     }
     
     @media (max-width: 480px) {
@@ -173,5 +183,70 @@
         }
         
         /* Адаптивные стили для кнопок удалены - используются стили из common.css */
+    }
+    
+    /* Мобильные стили - превращаем таблицу в карточки */
+    @media (max-width: 768px) {
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .table {
+            width: 100%;
+            display: block;
+            font-size: 12px;
+        }
+        
+        .table thead {
+            display: none;
+        }
+        
+        .table tbody {
+            display: block;
+        }
+        
+        .table tbody tr {
+            display: block;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .table tbody td {
+            display: block;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+            text-align: left;
+        }
+        
+        .table tbody td:before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #64748b;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 11px;
+        }
+        
+        .table tbody td:last-child {
+            border-bottom: none;
+        }
+        
+        /* Специальные стили для кнопок действий */
+        .order-btn-group {
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .order-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 13px;
+        }
     }
 </style>

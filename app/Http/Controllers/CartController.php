@@ -38,20 +38,25 @@ class CartController extends Controller
     public function add(Request $request): JsonResponse
     {
         try {
-            // Проверяем авторизацию
-            if (!$this->cartService->isAuthenticated()) {
+            // Получаем user_id из сессии Laravel
+            $auth = session('auth');
+            $userId = $auth['id'] ?? null;
+            
+            // Если user_id не найден в сессии, требуем авторизацию
+            if (!$userId) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Для добавления товара в корзину необходимо войти в систему',
                     'requires_auth' => true
                 ], 401);
             }
-
+            
             $productId = $request->input('product_id');
             $title = $request->input('title');
             $price = $request->input('price');
             $quantity = $request->input('quantity', 1);
             $size = $request->input('size');
+            $color = $request->input('color');
             $image = $request->input('image');
 
             if (!$productId || !$title || !$price) {
@@ -61,7 +66,8 @@ class CartController extends Controller
                 ], 400);
             }
 
-            $this->cartService->addItem($productId, $title, $price, $quantity, $size, $image);
+            // Используем метод с user_id
+            $this->cartService->addItemWithUserId($productId, $title, $price, $quantity, $size, $color, $image, $userId);
 
             return response()->json([
                 'success' => true,
@@ -76,9 +82,18 @@ class CartController extends Controller
                 'data' => $request->all()
             ]);
 
+            // Если ошибка связана с авторизацией, возвращаем 401
+            if (str_contains($e->getMessage(), 'Пользователь не найден') || str_contains($e->getMessage(), 'авторизован')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                    'requires_auth' => true
+                ], 401);
+            }
+
             return response()->json([
                 'success' => false,
-                'message' => 'Ошибка при добавлении товара в корзину'
+                'message' => 'Ошибка при добавлении товара в корзину: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -91,6 +106,7 @@ class CartController extends Controller
         try {
             $productId = $request->input('product_id');
             $size = $request->input('size');
+            $color = $request->input('color');
 
             if (!$productId) {
                 return response()->json([
@@ -99,7 +115,7 @@ class CartController extends Controller
                 ], 400);
             }
 
-            $this->cartService->removeItem($productId, $size);
+            $this->cartService->removeItem($productId, $size, $color);
 
             return response()->json([
                 'success' => true,
@@ -130,6 +146,7 @@ class CartController extends Controller
             $productId = $request->input('product_id');
             $quantity = $request->input('quantity');
             $size = $request->input('size');
+            $color = $request->input('color');
 
             if (!$productId || !isset($quantity)) {
                 return response()->json([
@@ -138,7 +155,7 @@ class CartController extends Controller
                 ], 400);
             }
 
-            $this->cartService->updateQuantity($productId, $quantity, $size);
+            $this->cartService->updateQuantity($productId, $quantity, $size, $color);
 
             return response()->json([
                 'success' => true,

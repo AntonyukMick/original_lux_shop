@@ -99,6 +99,11 @@
         color: #94a3b8;
     }
     
+    .cart-item-color {
+        font-size: 12px;
+        color: #94a3b8;
+    }
+    
     .cart-item-quantity {
         display: flex;
         gap: 6px;
@@ -288,7 +293,7 @@
         <div id="cart-content">
             @if($cartItems->count() > 0)
                 @foreach($cartItems as $item)
-                    <div class="cart-item" data-product-id="{{ $item->product_id }}" data-size="{{ $item->size ?? '' }}">
+                    <div class="cart-item" data-product-id="{{ $item->product_id }}" data-size="{{ $item->size ?? '' }}" data-color="{{ $item->color ?? '' }}">
                         <img src="{{ $item->image ?? '/image/placeholder.jpg' }}" alt="{{ $item->product_title }}" class="cart-item-image">
                         <div class="cart-item-info">
                             <div class="cart-item-title">{{ $item->product_title }}</div>
@@ -296,17 +301,20 @@
                             @if($item->size)
                                 <div class="cart-item-size">Размер: {{ $item->size }}</div>
                             @endif
+                            @if($item->color)
+                                <div class="cart-item-color">Цвет: {{ $item->color }}</div>
+                            @endif
                         </div>
                         <div class="cart-item-quantity">
-                            <button class="quantity-btn" onclick="updateQuantity({{ $item->product_id }}, {{ $item->quantity - 1 }}, '{{ $item->size ?? '' }}')">-</button>
+                            <button class="quantity-btn" onclick="updateQuantity({{ $item->product_id }}, {{ $item->quantity - 1 }}, '{{ $item->size ?? '' }}', '{{ $item->color ?? '' }}')">-</button>
                             <input type="number" class="quantity-input" value="{{ $item->quantity }}" min="1" max="10" 
-                                   onchange="updateQuantity({{ $item->product_id }}, this.value, '{{ $item->size ?? '' }}')">
-                            <button class="quantity-btn" onclick="updateQuantity({{ $item->product_id }}, {{ $item->quantity + 1 }}, '{{ $item->size ?? '' }}')">+</button>
+                                   onchange="updateQuantity({{ $item->product_id }}, this.value, '{{ $item->size ?? '' }}', '{{ $item->color ?? '' }}')">
+                            <button class="quantity-btn" onclick="updateQuantity({{ $item->product_id }}, {{ $item->quantity + 1 }}, '{{ $item->size ?? '' }}', '{{ $item->color ?? '' }}')">+</button>
                         </div>
                         <div class="cart-item-total">
                             {{ number_format($item->price * $item->quantity, 2) }}€
                         </div>
-                        <button class="cart-item-remove" onclick="removeItem({{ $item->product_id }}, '{{ $item->size ?? '' }}')">×</button>
+                        <button class="cart-item-remove" onclick="removeItem({{ $item->product_id }}, '{{ $item->size ?? '' }}', '{{ $item->color ?? '' }}')">×</button>
                     </div>
                 @endforeach
             @else
@@ -355,9 +363,9 @@
     }
     
     // Обновить количество товара
-    function updateQuantity(productId, quantity, size = '') {
+    function updateQuantity(productId, quantity, size = '', color = '') {
         if (quantity < 1) {
-            removeItem(productId, size);
+            removeItem(productId, size, color);
             return;
         }
         
@@ -370,7 +378,8 @@
             body: JSON.stringify({
                 product_id: productId,
                 quantity: quantity,
-                size: size
+                size: size,
+                color: color
             })
         })
         .then(response => response.json())
@@ -392,7 +401,7 @@
     }
     
     // Удалить товар из корзины
-    function removeItem(productId, size = '') {
+    function removeItem(productId, size = '', color = '') {
         if (!confirm('Удалить товар из корзины?')) {
                 return;
         }
@@ -405,7 +414,8 @@
             },
             body: JSON.stringify({
                 product_id: productId,
-                size: size
+                size: size,
+                color: color
             })
         })
         .then(response => response.json())

@@ -97,12 +97,38 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, string $id)
     {
-        $validated = $request->validated();
-        $product = $this->productService->getProductById($id);
-        $this->productService->updateProduct($product, $validated);
+        try {
+            $validated = $request->validated();
+            
+            // Добавляем данные формы, которые не прошли валидацию
+            $data = array_merge($validated, $request->all());
+            
+            \Log::info('Product update request', [
+                'product_id' => $id,
+                'request_data_keys' => array_keys($data),
+                'sizes' => $data['sizes'] ?? null,
+                'gender' => $data['gender'] ?? null,
+                'color_names' => $data['color_names'] ?? null,
+                'existing_color_images' => $data['existing_color_images'] ?? null,
+            ]);
+            
+            $product = $this->productService->getProductById($id);
+            $this->productService->updateProduct($product, $data);
 
-        return redirect()->route('admin.products.index')
-            ->with('success', 'Товар успешно обновлен!');
+            return redirect()->route('admin.products.index')
+                ->with('success', 'Товар успешно обновлен!');
+                
+        } catch (\Exception $e) {
+            \Log::error('Product update failed', [
+                'product_id' => $id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Ошибка при обновлении товара: ' . $e->getMessage());
+        }
     }
 
     /**

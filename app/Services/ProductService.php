@@ -357,6 +357,7 @@ class ProductService
             'sizes' => $this->processSizes($data['sizes'] ?? null),
             'gender' => $this->processGender($data['gender'] ?? null),
             'colors' => $this->processColors($data['colors'] ?? null),
+            'color_images' => $data['color_images'] ?? null,
             'is_active' => $data['is_active'] ?? true,
             'featured' => $data['featured'] ?? false,
             'stock_quantity' => $data['stock_quantity'] ?? 0,
@@ -394,7 +395,72 @@ class ProductService
             $images = ['https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop'];
         }
 
-        return $product->update([
+        // Обработка color_images - объединяем все поля (и существующие, и новые)
+        $colorImages = [];
+        
+        // Получаем все данные из формы
+        $allColorNames = $data['color_names'] ?? [];
+        $existingImages = $data['existing_color_images'] ?? [];
+        $uploadedFiles = [];
+        
+        if (!empty($data['color_images']) && is_array($data['color_images'])) {
+            $uploadedFiles = $data['color_images'];
+        }
+        
+        // Логирование для отладки
+        \Log::info('Color images processing', [
+            'all_color_names_count' => count($allColorNames),
+            'existing_images_count' => count($existingImages),
+            'uploaded_files_count' => count($uploadedFiles),
+            'all_color_names' => $allColorNames,
+            'existing_images' => $existingImages,
+        ]);
+        
+        // Проходим по всем именам цветов и собираем соответствующие изображения
+        foreach ($allColorNames as $index => $name) {
+            $image = null;
+            
+            // Сначала проверяем существующие изображения
+            if (isset($existingImages[$index]) && !empty($existingImages[$index])) {
+                $image = $existingImages[$index];
+            }
+            // Если нет существующего, проверяем загруженные
+            elseif (isset($uploadedFiles[$index]) && $uploadedFiles[$index] instanceof \Illuminate\Http\UploadedFile && $uploadedFiles[$index]->isValid()) {
+                $path = $uploadedFiles[$index]->store('color-images', 'public');
+                $image = '/storage/' . $path;
+            }
+            
+            // Добавляем только если есть изображение
+            if ($image) {
+                $colorImages[] = [
+                    'name' => $name ?: 'Цвет ' . ($index + 1),
+                    'image' => $image
+                ];
+            }
+        }
+
+        // Обработка размеров
+        $sizes = $this->processSizes($data['sizes'] ?? $product->sizes);
+        
+        // Обработка пола
+        $gender = $this->processGender($data['gender'] ?? $product->gender);
+        
+        // Обработка цветов
+        $colors = $this->processColors($data['colors'] ?? $product->colors);
+        
+        // Логирование для отладки
+        \Log::info('Product update data', [
+            'sizes' => $sizes,
+            'gender' => $gender,
+            'colors' => $colors,
+            'color_images_count' => count($colorImages),
+            'color_images' => $colorImages,
+            'raw_sizes' => $data['sizes'] ?? null,
+            'raw_gender' => $data['gender'] ?? null,
+            'all_request_keys' => array_keys($data),
+        ]);
+        
+        $updateData = [
             'title' => $data['title'],
             'category' => $data['category'],
             'brand' => $data['brand'],
@@ -403,16 +469,24 @@ class ProductService
             'original_price' => $data['original_price'] ?? null,
             'description' => $data['description'] ?? null,
             'images' => $images,
-            'sizes' => $this->processSizes($data['sizes'] ?? $product->sizes),
-            'gender' => $this->processGender($data['gender'] ?? $product->gender),
-            'colors' => $this->processColors($data['colors'] ?? $product->colors),
+            'sizes' => $sizes,
+            'gender' => $gender,
+            'colors' => $colors,
+            'color_images' => !empty($colorImages) ? $colorImages : $product->color_images,
             'is_active' => $data['is_active'] ?? true,
             'featured' => $data['featured'] ?? false,
             'stock_quantity' => $data['stock_quantity'] ?? 0,
             'sku' => $data['sku'] ?? null,
             'weight' => $data['weight'] ?? null,
             'dimensions' => $data['dimensions'] ?? null,
-        ]);
+        ];
+        
+        // Добавляем size_modal_text если он есть
+        if (isset($data['size_modal_text'])) {
+            $updateData['size_modal_text'] = $data['size_modal_text'];
+        }
+        
+        return $product->update($updateData);
     }
 
     /**
