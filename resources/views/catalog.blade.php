@@ -918,15 +918,6 @@
                             </div>
                         </a>
                         
-                        <div class="product-actions">
-                            <form method="post" action="/cart/add" style="margin:0;width:100%">
-                                @csrf
-                                <input type="hidden" name="title" value="{{ $product['title'] }}">
-                                <input type="hidden" name="price" value="{{ $product['price'] }}">
-                                <input type="hidden" name="image" value="{{ $product['image'] }}">
-                                <button type="submit" class="add-to-cart-btn">В корзину</button>
-                            </form>
-                        </div>
                     </div>
                     @endforeach
                 </div>
@@ -1088,7 +1079,7 @@
             },
             'Сумки': {
                 brands: ['Goyard', 'Gucci', 'Chanel', 'Louis Vuitton', 'Rimowa'],
-                subcategories: ['Кошелек', 'Рюкзак', 'Клатч', 'Торба', 'Дорожная сумка'],
+                subcategories: ['Кошелек', 'Рюкзак', 'Клатч', 'Торба', 'Дорожная сумка', 'Мессенджеры'],
                 priceRange: { min: 60, max: 350 }
             },
             'Часы': {
@@ -1729,7 +1720,8 @@
                     {name: 'Косметички'},
                     {name: 'Клатчи'},
                     {name: 'Сумки'},
-                    {name: 'Дорожные сумки'}
+                    {name: 'Дорожные сумки'},
+                    {name: 'Мессенджеры'}
                 ]
             },
             'Часы': {

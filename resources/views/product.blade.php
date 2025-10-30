@@ -810,63 +810,7 @@
                 </div>
             </div>
 
-            <!-- Similar Products -->
-            <div class="similar-section">
-                <h2 class="section-title">ПОХОЖИЕ ТОВАРЫ</h2>
-                <div class="similar-grid">
-                    @php
-                        // Получаем похожие товары из той же категории
-                        $similarProducts = [];
-                        $currentCategory = $productData['category'];
-                        
-                        // Статические данные похожих товаров по категориям
-                        $similarData = [
-                            'Обувь' => [
-                                ['id' => '3', 'title' => 'Кеды Adidas Stan Smith (белые)', 'price' => 120, 'image' => 'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop'],
-                                ['id' => '4', 'title' => 'Кроссовки Puma RS-X (красные)', 'price' => 95, 'image' => 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1200&auto=format&fit=crop'],
-                                ['id' => '5', 'title' => 'Лоферы Gucci Horsebit (коричневые)', 'price' => 280, 'image' => 'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop']
-                            ],
-                            'Сумки' => [
-                                ['id' => '17', 'title' => 'Рюкзак Gucci Marmont (чёрный)', 'price' => 180, 'image' => 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=1200&auto=format&fit=crop'],
-                                ['id' => '18', 'title' => 'Клатч Chanel Classic (чёрный)', 'price' => 220, 'image' => 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1200&auto=format&fit=crop'],
-                                ['id' => '19', 'title' => 'Торба Louis Vuitton Neverfull (коричневая)', 'price' => 190, 'image' => 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop']
-                            ],
-                            'Одежда' => [
-                                ['id' => '10', 'title' => 'Шорты Stone Island (чёрные)', 'price' => 55, 'image' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop'],
-                                ['id' => '11', 'title' => 'Футболка Nike Dri-FIT (синяя)', 'price' => 45, 'image' => 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop'],
-                                ['id' => '12', 'title' => 'Джинсы Levi\'s 501 (синие)', 'price' => 85, 'image' => 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop']
-                            ],
-                            'Часы' => [
-                                ['id' => '22', 'title' => 'Часы Omega Speedmaster (чёрные)', 'price' => 4200, 'image' => 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop'],
-                                ['id' => '23', 'title' => 'Часы Cartier Tank (золотые)', 'price' => 6800, 'image' => 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop'],
-                                ['id' => '24', 'title' => 'Часы Patek Philippe Calatrava (белые)', 'price' => 12500, 'image' => 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?q=80&w=1200&auto=format&fit=crop']
-                            ],
-                            'Украшения' => [
-                                ['id' => '27', 'title' => 'Браслет Tiffany T (серебряный)', 'price' => 1800, 'image' => 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop'],
-                                ['id' => '28', 'title' => 'Цепочка Hermès Chaine d\'Ancre (золотая)', 'price' => 950, 'image' => 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop'],
-                                ['id' => '29', 'title' => 'Серьги Van Cleef & Arpels Alhambra (золотые)', 'price' => 2800, 'image' => 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1200&auto=format&fit=crop']
-                            ],
-                            'Аксессуары' => [
-                                ['id' => '33', 'title' => 'Ремень Hermès H (коричневый)', 'price' => 420, 'image' => 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=1200&auto=format&fit=crop'],
-                                ['id' => '34', 'title' => 'Галстук Tom Ford (синий)', 'price' => 180, 'image' => 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=1200&auto=format&fit=crop'],
-                                ['id' => '35', 'title' => 'Шарф Burberry Heritage (бежевый)', 'price' => 280, 'image' => 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=1200&auto=format&fit=crop']
-                            ]
-                        ];
-                        
-                        $similarProducts = $similarData[$currentCategory] ?? array_slice($similarData['Обувь'], 0, 3);
-                    @endphp
-                    
-                    @foreach($similarProducts as $similar)
-                    <a href="/product/{{ $similar['id'] }}" class="similar-card" style="text-decoration:none;color:inherit;display:block">
-                        <img src="{{ $similar['image'] }}" alt="{{ $similar['title'] }}">
-                        <div class="similar-card-content">
-                            <div class="similar-card-title">{{ $similar['title'] }}</div>
-                            <div class="similar-card-price">{{ $similar['price'] }}€</div>
-                        </div>
-                    </a>
-                    @endforeach
-                </div>
-            </div>
+            {{-- Временно скрыто: блок "Похожие товары" --}}
         </div>
     </main>
 

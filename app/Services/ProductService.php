@@ -9,26 +9,30 @@ use Illuminate\Http\UploadedFile;
 class ProductService
 {
     /**
-     * Получить все товары с пагинацией
+     * Получить все активные товары
+     * Если $perPage указан, ограничиваем результирующий набор, иначе возвращаем все
      */
-    public function getAllProducts($perPage = 12)
+    public function getAllProducts($perPage = null)
     {
-        return Product::where('is_active', true)
+        $query = Product::where('is_active', true)
             ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'created_at'])
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
+            ->orderBy('created_at', 'desc');
+
+        return $perPage ? $query->limit($perPage)->get() : $query->get();
     }
 
     /**
      * Получить товары по категории
+     * Если $perPage указан, ограничиваем результирующий набор, иначе возвращаем все
      */
-    public function getProductsByCategory($category, $perPage = 12)
+    public function getProductsByCategory($category, $perPage = null)
     {
-        return Product::where('category', $category)
+        $query = Product::where('category', $category)
             ->where('is_active', true)
             ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'created_at'])
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
+            ->orderBy('created_at', 'desc');
+
+        return $perPage ? $query->limit($perPage)->get() : $query->get();
     }
 
     /**
@@ -42,18 +46,20 @@ class ProductService
 
     /**
      * Поиск товаров
+     * Если $perPage указан, ограничиваем результирующий набор, иначе возвращаем все
      */
-    public function searchProducts($query, $perPage = 12)
+    public function searchProducts($query, $perPage = null)
     {
-        return Product::where('is_active', true)
+        $builder = Product::where('is_active', true)
             ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'created_at'])
             ->where(function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
                   ->orWhere('description', 'like', "%{$query}%")
                   ->orWhere('brand', 'like', "%{$query}%");
             })
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
+            ->orderBy('created_at', 'desc');
+
+        return $perPage ? $builder->limit($perPage)->get() : $builder->get();
     }
 
     /**

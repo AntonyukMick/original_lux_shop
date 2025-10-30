@@ -558,9 +558,7 @@
                                 </div>
                             </div>
                             
-                            <button class="add-to-cart-btn" onclick="addToCartNew(null, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ $product->image ?? '' }}', event)">
-                                Добавить в корзину
-                            </button>
+                            
                         </div>
                         </div>
                     </a>
