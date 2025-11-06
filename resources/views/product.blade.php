@@ -169,10 +169,14 @@
             font-weight: 600;
         }
         
-        .product-description {
-            color: #475569;
+        .product-description-wrapper {
             margin-bottom: 24px;
+        }
+        
+        .product-description-text {
+            color: #475569;
             line-height: 1.7;
+            margin-bottom: 12px;
         }
         
         .expand-link {
@@ -180,6 +184,7 @@
             text-decoration: none;
             font-size: 14px;
             cursor: pointer;
+            display: inline-block;
         }
         
         .expand-link:hover {
@@ -529,10 +534,14 @@
                 padding: 3px 6px;
             }
             
-            .product-description {
+            .product-description-text {
                 font-size: 14px;
-                margin-bottom: 16px;
+                margin-bottom: 12px;
                 line-height: 1.5;
+            }
+            
+            .expand-link {
+                font-size: 13px;
             }
             
             .option-group {
@@ -683,8 +692,12 @@
                 font-size: 20px;
             }
             
-            .product-description {
+            .product-description-text {
                 font-size: 13px;
+            }
+            
+            .expand-link {
+                font-size: 12px;
             }
             
             .similar-grid {
@@ -745,10 +758,11 @@
                         @endif
                     </div>
 
-                    <div class="product-description">
-                        {{ $productData['description'] }}
-                        <br><br>
-                        <a href="#" class="expand-link">Развернуть</a>
+                    <div class="product-description-wrapper">
+                        <div class="product-description-text" id="productDescription" style="display: none;">
+                            {{ $productData['description'] }}
+                        </div>
+                        <a href="#" class="expand-link" id="expandLink" onclick="toggleDescription(); return false;">Развернуть описание</a>
                     </div>
 
                     <!-- Size -->
@@ -830,6 +844,20 @@
             } else {
                 // Если нет истории, переходим на главную страницу
                 window.location.href = '/';
+            }
+        }
+        
+        // Функция переключения описания товара
+        function toggleDescription() {
+            const description = document.getElementById('productDescription');
+            const expandLink = document.getElementById('expandLink');
+            
+            if (description.style.display === 'none') {
+                description.style.display = 'block';
+                expandLink.textContent = 'Свернуть описание';
+            } else {
+                description.style.display = 'none';
+                expandLink.textContent = 'Развернуть описание';
             }
         }
         

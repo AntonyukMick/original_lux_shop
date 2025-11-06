@@ -776,6 +776,147 @@
             color:#475569;
         }
         
+        /* Стили для модального окна с акциями */
+        .promotions-main-offer {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .promotions-title {
+            font-size: 24px;
+            color: #527ea6;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        
+        .promotions-title:last-of-type {
+            margin-bottom: 30px;
+        }
+        
+        .promotions-item {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #527ea6;
+        }
+        
+        .promotions-item-title {
+            margin: 0 0 10px 0;
+            color: #1e40af;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .promotions-item-text {
+            margin: 0;
+            font-size: 16px;
+            color: #374151;
+        }
+        
+        /* Адаптивные стили для модального окна с акциями */
+        @media (max-width: 768px) {
+            .modal-dialog {
+                max-width: 95%;
+                padding: 0;
+            }
+            
+            .modal-header {
+                padding: 15px 50px 15px 15px;
+            }
+            
+            .modal-header h2 {
+                font-size: 18px;
+            }
+            
+            .modal-body {
+                padding: 15px;
+            }
+            
+            .promotions-title {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            
+            .promotions-title:last-of-type {
+                margin-bottom: 25px;
+            }
+            
+            .promotions-item {
+                margin-bottom: 20px;
+                padding: 15px;
+            }
+            
+            .promotions-item-title {
+                font-size: 18px;
+                margin-bottom: 8px;
+            }
+            
+            .promotions-item-text {
+                font-size: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .modal-overlay {
+                padding: 10px;
+            }
+            
+            .modal-dialog {
+                max-width: 100%;
+                max-height: 95vh;
+                border-radius: 8px;
+            }
+            
+            .modal-header {
+                padding: 12px 40px 12px 12px;
+            }
+            
+            .modal-header h2 {
+                font-size: 16px;
+            }
+            
+            .modal-close {
+                width: 32px;
+                height: 32px;
+                font-size: 24px;
+                top: 10px;
+                right: 10px;
+            }
+            
+            .modal-body {
+                padding: 12px;
+            }
+            
+            .promotions-main-offer {
+                margin-bottom: 20px;
+            }
+            
+            .promotions-title {
+                font-size: 18px;
+                margin-bottom: 12px;
+            }
+            
+            .promotions-title:last-of-type {
+                margin-bottom: 20px;
+            }
+            
+            .promotions-item {
+                margin-bottom: 15px;
+                padding: 12px;
+                border-left-width: 3px;
+            }
+            
+            .promotions-item-title {
+                font-size: 16px;
+                margin-bottom: 6px;
+            }
+            
+            .promotions-item-text {
+                font-size: 14px;
+            }
+        }
+        
         /* Старые классы для обратной совместимости */
         .modal{position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box}
         .modal.hidden{display:none !important}
@@ -900,6 +1041,146 @@
             
             .telegram-btn span:first-child {
                 font-size: 16px;
+            }
+        }
+        
+        /* Стили для FAQ аккордеона */
+        .faq-accordion {
+            color: #374151;
+            line-height: 1.6;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        
+        .faq-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s ease;
+        }
+        
+        .faq-header:hover {
+            background-color: #f8fafc;
+            margin-left: -24px;
+            margin-right: -24px;
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+        
+        .faq-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0f172a;
+            flex: 1;
+        }
+        
+        .faq-arrow {
+            font-size: 12px;
+            color: #64748b;
+            transition: transform 0.3s ease;
+            margin-left: 12px;
+        }
+        
+        .faq-item.active .faq-arrow {
+            transform: rotate(180deg);
+        }
+        
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0;
+        }
+        
+        .faq-item.active .faq-content {
+            max-height: 800px;
+            padding: 0 0 16px 0;
+        }
+        
+        .faq-content p {
+            margin: 0;
+            color: #475569;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .faq-content p + p {
+            margin-top: 12px;
+        }
+        
+        .faq-content ul {
+            margin: 12px 0 0 0;
+            padding-left: 20px;
+            color: #475569;
+        }
+        
+        .faq-content li {
+            margin: 8px 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .faq-content ul ul {
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .faq-content ul ul li {
+            font-size: 13px;
+            margin: 6px 0;
+        }
+        
+        /* Адаптивные стили для FAQ аккордеона */
+        @media (max-width: 768px) {
+            .faq-title {
+                font-size: 15px;
+            }
+            
+            .faq-content p {
+                font-size: 13px;
+            }
+            
+            .faq-content li {
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .faq-header {
+                padding: 12px 0;
+            }
+            
+            .faq-title {
+                font-size: 14px;
+            }
+            
+            .faq-content p {
+                font-size: 12px;
+            }
+            
+            .faq-content ul {
+                padding-left: 18px;
+            }
+            
+            .faq-content li {
+                font-size: 12px;
+                margin: 6px 0;
+            }
+            
+            .faq-header:hover {
+                margin-left: -12px;
+                margin-right: -12px;
+                padding-left: 12px;
+                padding-right: 12px;
             }
         }
         
@@ -2205,7 +2486,7 @@ $auth = session('auth');
             <h3>Знакомство. Оформление заказа</h3>
     
             </div>
-            <div class="tile tile-custom" style="background:rgb(204,215,227);cursor:pointer" onclick="showModal('custom')">
+            <div class="tile tile-custom" style="background:rgb(204,215,227);cursor:pointer" onclick="window.open('https://t.me/OLS_Managerr', '_blank')">
                 <h3>ЛЮБАЯ МОДЕЛЬ</h3>
                 <h3>ПОД ЗАКАЗ</h3>
                 <h3>В 10 раз дешевле</h3>
@@ -2282,6 +2563,31 @@ $auth = session('auth');
                             <span>📱</span>
                             <span>Связаться с менеджером в Telegram</span>
                         </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-promotions" class="modal-overlay">
+            <div class="modal-dialog">
+                <div class="modal-header">
+                    <h2>Акции от OLS</h2>
+                    <button class="modal-close" data-modal="modal-promotions" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="promotions-main-offer">
+                        <h3 class="promotions-title">5% СКИДКА НА ПЕРВЫЙ</h3>
+                        <h3 class="promotions-title">ЗАКАЗ ДО КОНЦА ГОДА</h3>
+                    </div>
+                    
+                    <div class="promotions-item">
+                        <h3 class="promotions-item-title">ПРИГЛАСИ ДРУГА</h3>
+                        <p class="promotions-item-text">ПОЛУЧИ СКИДКУ</p>
+                    </div>
+                    
+                    <div class="promotions-item">
+                        <h3 class="promotions-item-title">ОСТАВЬ ОТЗЫВ</h3>
+                        <p class="promotions-item-text">ПОЛУЧИ СКИДКУ</p>
                     </div>
                 </div>
             </div>
@@ -2783,12 +3089,12 @@ $auth = session('auth');
         <div class="banner" style="background:rgb(220,215,242)">СКИДКИ ДО -20%</div>
 
         <div class="small-tiles">
-            <div class="tile" style="background:rgb(211,220,231)">
+            <div class="tile" style="background:rgb(211,220,231);cursor:pointer" onclick="window.open('https://t.me/ols_katalog/11', '_blank')">
                 <h3>Отзывы</h3>
                 <p>Перед заказом можно ознакомиться с реальными отзывами наших покупателей</p>
                 <div style="margin-top:8px;color:#f59e0b">★★★★★</div>
             </div>
-            <div class="tile" onclick="window.location.href='/promotions'" style="cursor:pointer;background:rgb(211,220,231)">
+            <div class="tile" onclick="showModal('promotions')" style="cursor:pointer;background:rgb(211,220,231)">
                 <h3>Акции от OLS</h3>
                 <p>Будьте в курсе новых акций нашего магазина и делайте покупки ещё выгоднее</p>
             </div>
@@ -3212,6 +3518,22 @@ $auth = session('auth');
                 document.body.style.overflow = 'auto';
             }
         });
+        
+        // Функция переключения элементов FAQ аккордеона
+        function toggleFaqItem(header) {
+            const item = header.closest('.faq-item');
+            const isActive = item.classList.contains('active');
+            
+            // Закрываем все элементы
+            document.querySelectorAll('.faq-item').forEach(faqItem => {
+                faqItem.classList.remove('active');
+            });
+            
+            // Открываем текущий элемент, если он был закрыт
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
 
         // Функция переключения каталогов
         function switchCatalog(gender) {
@@ -3242,31 +3564,130 @@ $auth = session('auth');
 
     <!-- FAQ Modal -->
     <div id="faqModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000">
-        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:12px;padding:24px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto">
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:12px;padding:24px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
                 <h2 style="margin:0;color:#0f172a;font-size:24px;font-weight:700">Часто задаваемые вопросы</h2>
                 <button onclick="document.getElementById('faqModal').style.display='none'; document.body.style.overflow='auto';" style="background:none;border:none;font-size:24px;cursor:pointer;color:#64748b">&times;</button>
             </div>
-            <div style="color:#374151;line-height:1.6">
-                <div style="margin-bottom:16px">
-                    <h3 style="color:#0f172a;font-size:18px;margin-bottom:8px">Как оформить заказ?</h3>
-                    <p>Выберите товар, добавьте в корзину и перейдите к оформлению заказа. Заполните контактные данные и выберите способ доставки.</p>
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <div class="faq-header" onclick="toggleFaqItem(this)">
+                        <span class="faq-title">ОФОРМЛЕНИЕ ЗАКАЗА</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>Оформление заказа происходит следующим образом:</p>
+                        <ul>
+                            <li>Выбор модели в магазине либо под заказ с менеджером</li>
+                            <li>Предоставление всех необходимых данных</li>
+                            <li>Оплата заказа</li>
+                            <li>Прибытие модели на склад</li>
+                            <li>Проверка и одобрения качества</li>
+                            <li>Отправка заказа</li>
+                            <li>Оплата доставки</li>
+                            <li>Получение заказа</li>
+                        </ul>
+                    </div>
                 </div>
-                <div style="margin-bottom:16px">
-                    <h3 style="color:#0f172a;font-size:18px;margin-bottom:8px">Какие способы оплаты доступны?</h3>
-                    <p>Мы принимаем оплату наличными при получении, банковскими картами и электронными платежами.</p>
+                
+                <div class="faq-item">
+                    <div class="faq-header" onclick="toggleFaqItem(this)">
+                        <span class="faq-title">КАЧЕСТВО ПРОДУКЦИИ</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>Наш магазин сотрудничает с лучшими фабриками и производствами, которые воспроизводят популярные модели мировых и известных брендов до максимальной схожести. В создании моделей используются качественное производство, те же материалы, контроль качества и очень часто ручной труд, говоря об эксклюзивных и дорогостоящих моделей и аксессуаров.</p>
+                    </div>
                 </div>
-                <div style="margin-bottom:16px">
-                    <h3 style="color:#0f172a;font-size:18px;margin-bottom:8px">Сколько стоит доставка?</h3>
-                    <p>Стоимость доставки зависит от региона и способа доставки. Подробную информацию вы найдете в разделе "Доставка".</p>
+                
+                <div class="faq-item">
+                    <div class="faq-header" onclick="toggleFaqItem(this)">
+                        <span class="faq-title">РАБОТА ПОД ЗАКАЗ</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>Если вы не нашли любимую модель в нашем магазине, тогда обращайтесь к нашему менеджеру с конкретным запросом: фото, название модели, размер и доп. примечания. Наш менеджер обязательно поможет и постарается найти вашу любимую модель в разы дешевле в кратчайшие сроки.</p>
+                        <p>Настоятельно рекомендуем сначала поискать модель в нашем магазине. Например, если вы ищете шорты от бренда Balenciaga, то просмотрите сначала данную подкатегорию от бренда на сайте и если все-таки вам не удалось ее найти, тогда обращайтесь к менеджеру. Обработка запроса занимает примерно 1-2 дня.</p>
+                    </div>
                 </div>
-                <div style="margin-bottom:16px">
-                    <h3 style="color:#0f172a;font-size:18px;margin-bottom:8px">Можно ли вернуть товар?</h3>
-                    <p>Да, вы можете вернуть товар в течение 14 дней с момента покупки при сохранении товарного вида и упаковки.</p>
+                
+                <div class="faq-item">
+                    <div class="faq-header" onclick="toggleFaqItem(this)">
+                        <span class="faq-title">КУПИТЬ ЕЩЕ ДЕШЕВЛЕ</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>Наши модели качества 1:1 максимально приближены к тому, что вы можете увидеть и купить в официальных магазинах разных брендов. Однако, несмотря на низкие цены с средней скидкой примерно в 80% мы можем найти модели еще дешевле под ваш запрос. Сразу предупреждаем, данные модели не будут такого качества. Для дальнейшей информации и поиска обращайтесь к нашему менеджеру.</p>
+                    </div>
                 </div>
-                <div style="margin-bottom:16px">
-                    <h3 style="color:#0f172a;font-size:18px;margin-bottom:8px">Как связаться с поддержкой?</h3>
-                    <p>Вы можете связаться с нами через Telegram канал или написать нам на почту. Мы отвечаем в течение 24 часов.</p>
+                
+                <div class="faq-item">
+                    <div class="faq-header" onclick="toggleFaqItem(this)">
+                        <span class="faq-title">ДОСТАВКА / ТАРИФЫ</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>Все заказы наших клиентов едут по всему миру включая СНГ, Европу и США. На определенный регион или страну есть свои тарифы и сроки доставки. Доставка оплачивается отдельно, когда модель уже находится на пути к клиенту. После отправки мы получаем счет и номер отслеживания от логистической компании. После оплаты доставки клиенту сразу выдаются трек-номер. Цена доставки зависит от страны получателя, веса и объема посылки. Более подробно с тарифами и сроками доставки вы можете ознакомиться по ссылке.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-header" onclick="toggleFaqItem(this)">
+                        <span class="faq-title">ЗАМЕНА / ВОЗВРАТ</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>После каждого оформленного заказа, модель прибывает на наш склад, где мы делаем фото проверки и высылаем их нашим клиентам, чтобы они могли увидеть и одобрить качество лично перед отправкой.</p>
+                        <ul>
+                            <li>Если клиента что-то смутило, он может задать вопрос нам или запросить дополнительные фото с конкретных ракурсов (запрос выполняется в течении 2 дней).</li>
+                            <li>Если качество модели не одобрено, то клиент может запросить замену или отмену заказа.
+                                <ul>
+                                    <li>В случае замены, через некоторое время на склад приезжает новая замененная модель.</li>
+                                    <li>В случае отмены заказа, модель едет обратно, а клиенту выполняется возврат средств в течении 5-7 рабочих дней.</li>
+                                </ul>
+                            </li>
+                            <li>Если клиент одобрил качество и уже получил посылку, то возврат или замену заказа уже сделать нельзя.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-header" onclick="toggleFaqItem(this)">
+                        <span class="faq-title">ОТСЛЕЖИВАНИЕ ЗАКАЗА</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>После отправки заказа со склада на логистическую компанию, мы получаем счет за доставку и номер отслеживание в течении следующих 7 дней. После этого мы сразу связываемся с клиентом и после оплаты выдаем трек-номер, с которым он может отслеживать свой заказ.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-header" onclick="toggleFaqItem(this)">
+                        <span class="faq-title">СТРАХОВАНИЕ ЗАКАЗА</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>Заказы наших клиентов всегда доходят до своих адресатов, но для дополнительного спокойствия и безопасности мы предоставляем услуги страхования заказов. Данная страховка обойдется в 3% от всей стоимости заказа для всех стран кроме России и Беларуси. В случае, если посылка была утеряна, клиент получает полное возмещение средств.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-header" onclick="toggleFaqItem(this)">
+                        <span class="faq-title">ПОСЫЛКА НЕ ПОЛУЧЕНА</span>
+                        <span class="faq-arrow">▼</span>
+                    </div>
+                    <div class="faq-content">
+                        <p>Если посылка и доставка были оплачены, но не получена, нужно знать следующие моменты:</p>
+                        <ul>
+                            <li>Если по трек-номеру пишется, что посылка доставлена, но клиент ее не получил, тогда следует написать менеджеру и он будет помогать решить данную проблему вместе с клиентом, предлагаем разные возможные пути решения.</li>
+                            <li>Если по трек-номеру пишется, что посылка утеряна и не может быть доставлена, то:
+                                <ul>
+                                    <li>если клиент не имеет страховки на заказ, он получает возмещения средств доставки.</li>
+                                    <li>если клиент имеет страховку на заказ, он получает полный возврат средств за доставку и заказ.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

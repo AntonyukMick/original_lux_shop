@@ -59,40 +59,136 @@
     .panel h1{margin:0 0 24px 0;font-size:28px;font-weight:700;color:#0f172a}
     .row{display:grid;grid-template-columns:1fr 120px 120px 40px;gap:10px;align-items:center;border-bottom:1px solid #e2e8f0;padding:12px 0;text-align:left}
     .row:last-child{border-bottom:none}
-    .thumb{width:70px;height:70px;border-radius:8px;background:#e5e7eb;object-fit:cover;margin-right:10px}
-    .title{font-weight:600;font-size:16px}
+    .thumb{width:70px;height:70px;border-radius:8px;background:#e5e7eb;object-fit:cover;margin-right:10px;flex-shrink:0}
+    .title{font-weight:600;font-size:16px;word-wrap:break-word;overflow-wrap:break-word}
     .price{font-weight:700;font-size:16px;text-align:center}
-    .panel .btn{height:34px;padding:0 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;color:#000;font-weight:600;font-size:14px}
+    .panel .btn{height:34px;padding:0 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;color:#000;font-weight:600;font-size:14px;white-space:nowrap;flex-shrink:0}
     
     /* Мобильная адаптация для избранного */
     @media (max-width: 768px) {
         .container{padding:8px}
         .panel{padding:16px}
         .panel h1{font-size:24px;margin-bottom:16px}
-        .row{grid-template-columns:1fr 80px 80px 30px;gap:6px;padding:8px 0}
-        .thumb{width:50px;height:50px;margin-right:8px}
-        .title{font-size:14px;line-height:1.3}
-        .price{font-size:14px}
-        .panel .btn{height:28px;padding:0 8px;font-size:12px;border-radius:6px}
+        .row{
+            grid-template-columns: auto 1fr;
+            grid-template-rows: auto auto;
+            gap: 10px;
+            padding: 12px 0;
+            align-items: start;
+        }
+        .row > div:first-child {
+            grid-column: 1 / 3;
+            grid-row: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .row > div:nth-child(2) {
+            grid-column: 1;
+            grid-row: 2;
+            text-align: left;
+            align-self: center;
+            min-width: 0;
+        }
+        .row > div:nth-child(3) {
+            grid-column: 2;
+            grid-row: 2;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            min-width: 0;
+        }
+        .thumb{width:50px;height:50px;margin-right:0;flex-shrink:0}
+        .title{font-size:14px;line-height:1.3;word-wrap:break-word;overflow-wrap:break-word}
+        .price{font-size:14px;font-weight:700;text-align:left}
+        .panel .btn{
+            height:32px;
+            padding:0 12px;
+            font-size:12px;
+            border-radius:6px;
+            white-space:nowrap;
+            min-width:auto;
+            flex-shrink:0;
+        }
         
         /* Компактные кнопки для мобильных */
-        .panel .btn.primary{height:22px;padding:0 4px;font-size:10px;border-radius:4px}
-        .panel .btn[style*="background:#ef4444"]{height:20px;width:20px;padding:0;font-size:9px;border-radius:3px;display:flex;align-items:center;justify-content:center}
+        .panel .btn.primary{
+            height:32px;
+            padding:0 12px;
+            font-size:12px;
+            border-radius:6px;
+        }
+        .panel .btn[style*="background:#ef4444"]{
+            height:32px;
+            width:32px;
+            padding:0;
+            font-size:14px;
+            border-radius:6px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            flex-shrink:0;
+        }
     }
     
     @media (max-width: 480px) {
         .container{padding:6px}
         .panel{padding:12px}
         .panel h1{font-size:20px;margin-bottom:12px}
-        .row{grid-template-columns:1fr 60px 60px 25px;gap:4px;padding:6px 0}
-        .thumb{width:40px;height:40px;margin-right:6px}
-        .title{font-size:12px;line-height:1.2}
-        .price{font-size:12px}
-        .panel .btn{height:24px;padding:0 6px;font-size:10px;border-radius:4px}
+        .row{
+            grid-template-columns: auto 1fr;
+            grid-template-rows: auto auto;
+            gap: 8px;
+            padding: 10px 0;
+        }
+        .row > div:first-child {
+            grid-column: 1 / 3;
+            grid-row: 1;
+            gap: 8px;
+            min-width: 0;
+            overflow: hidden;
+        }
+        .row > div:nth-child(2) {
+            grid-column: 1;
+            grid-row: 2;
+            min-width: 0;
+        }
+        .row > div:nth-child(3) {
+            grid-column: 2;
+            grid-row: 2;
+            gap: 6px;
+            flex-wrap: wrap;
+            min-width: 0;
+        }
+        .thumb{width:45px;height:45px;margin-right:0}
+        .title{font-size:13px;line-height:1.2}
+        .price{font-size:13px}
+        .panel .btn{
+            height:28px;
+            padding:0 10px;
+            font-size:11px;
+            border-radius:5px;
+        }
         
         /* Еще более компактные кнопки для маленьких экранов */
-        .panel .btn.primary{height:18px;padding:0 3px;font-size:9px;border-radius:3px}
-        .panel .btn[style*="background:#ef4444"]{height:16px;width:16px;padding:0;font-size:7px;border-radius:2px;display:flex;align-items:center;justify-content:center}
+        .panel .btn.primary{
+            height:28px;
+            padding:0 10px;
+            font-size:11px;
+            border-radius:5px;
+        }
+        .panel .btn[style*="background:#ef4444"]{
+            height:28px;
+            width:28px;
+            padding:0;
+            font-size:12px;
+            border-radius:5px;
+        }
     }
     .panel .btn.primary{background:#527ea6;color:#ffffff;border-color:#527ea6;font-weight:600}
     .panel .btn.primary:hover{background:#3b5a7a}
@@ -185,17 +281,15 @@
                 
                 favoritesHTML += `
                     <div class="row">
-                        <div style="display:flex;align-items:center">
+                        <div style="display:flex;align-items:center;flex:1;min-width:0">
                             <img src="${image}" alt="${item.title}" class="thumb" onerror="this.src='https://via.placeholder.com/100x100?text=No+Image'">
-                            <div>
+                            <div style="flex:1;min-width:0">
                                 <div class="title">${item.title}</div>
                             </div>
                         </div>
                         <div class="price">${displayPrice}</div>
-                        <div>
+                        <div style="display:flex;gap:8px;align-items:center">
                             <button class="btn primary" onclick="addToCart('${item.title}', '${item.price || 0}', '${item.image || ''}')">В корзину</button>
-                        </div>
-                        <div>
                             <button class="btn" onclick="removeFromFavorites(${index})" style="background:#ef4444;color:#fff;border-color:#ef4444">✕</button>
                         </div>
                     </div>

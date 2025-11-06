@@ -259,11 +259,12 @@
     
     .favorite-actions {
         display: flex;
-        gap: 12px;
+        flex-direction: column;
+        gap: 8px;
     }
     
     .favorite-btn {
-        flex: 1;
+        width: 100%;
         padding: 12px 16px;
         border-radius: 8px;
         border: 1px solid #e2e8f0;
@@ -273,6 +274,7 @@
         cursor: pointer;
         transition: all 0.2s ease;
         font-size: 14px;
+        text-align: center;
     }
     
     .favorite-btn.primary {
@@ -348,11 +350,6 @@
         
         .favorite-price {
             font-size: 16px;
-        }
-        
-        .favorite-actions {
-            flex-direction: column;
-            gap: 8px;
         }
         
         .favorite-btn {
