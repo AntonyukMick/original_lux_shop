@@ -44,7 +44,7 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     
-    .grid-top{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+    .grid-top{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0 12px 0}
     .tile{background:var(--card);border:1px solid #cbd5e1;border-radius:10px;padding:16px;position:relative;min-height:100px;transition:all 0.2s ease}
     .tile h3{margin:0 0 6px 0;font-size:16px;font-weight:700;color:#1e293b}
     .tile p{margin:0;color:#475569;font-weight:500}
@@ -529,7 +529,7 @@
             .promo p{font-size:11px;line-height:1.3}
             
             /* Сжатые стили для верхних блоков */
-            .grid-top{margin:8px 0;gap:8px}
+            .grid-top{margin:16px 0 8px 0;gap:8px}
             .grid-top .tile{padding:10px;min-height:80px}
             .grid-top .tile h3{font-size:13px;margin:0 0 4px 0;line-height:1.3;font-weight:600;color:#1e293b}
             .grid-top .tile p{font-size:13px;margin:0 0 4px 0;line-height:1.3;font-weight:600;color:#64748b;opacity:0.8}
@@ -618,7 +618,7 @@
             .promo p{font-size:10px;line-height:1.2}
             
             /* Еще более сжатые стили для верхних блоков */
-            .grid-top{margin:6px 0;gap:6px}
+            .grid-top{margin:14px 0 6px 0;gap:6px}
             .grid-top .tile{padding:8px;min-height:70px}
             .grid-top .tile h3{font-size:12px;margin:0 0 3px 0;line-height:1.2;font-weight:600;color:#1e293b}
             .grid-top .tile p{font-size:12px;margin:0 0 3px 0;line-height:1.2;font-weight:600;color:#64748b;opacity:0.8}
@@ -3033,7 +3033,7 @@ $auth = session('auth');
                 <p>Перед заказом можно ознакомиться с реальными отзывами наших покупателей</p>
                 <div style="margin-top:8px;color:#f59e0b">★★★★★</div>
             </div>
-            <div class="tile" onclick="showModal('promotions')" style="cursor:pointer;background:rgb(211,220,231)">
+            <div class="tile" onclick="window.location.href='/promotions'" style="cursor:pointer;background:rgb(211,220,231)">
                 <h3>Акции от OLS</h3>
                 <p>Будьте в курсе новых акций нашего магазина и делайте покупки ещё выгоднее</p>
             </div>

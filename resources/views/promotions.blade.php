@@ -23,12 +23,13 @@
     }
     
     .main {
-        padding: 32px 0;
+        padding: 50px 0 32px 0;
     }
     
     .page-header {
         text-align: center;
         margin-bottom: 24px;
+        margin-top: 20px;
     }
     
     .page-title {
@@ -42,33 +43,182 @@
         background-clip: text;
     }
     
-    .page-subtitle {
-        font-size: 16px;
-        color: #475569;
+    .promotions-images {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+        margin-bottom: 32px;
+    }
+    
+    .promotion-image {
+        width: 95%;
+        max-width: 95%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: block;
+    }
+    
+    .promotion-image.clickable {
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .promotion-image.clickable:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Модальное окно */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    
+    .modal-overlay.active {
+        display: flex;
+    }
+    
+    .modal-dialog {
+        background: #fff;
+        border-radius: 12px;
         max-width: 600px;
-        margin: 0 auto;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
     
-    .promotion-banner {
-        background: #eef2ff;
-        border: 1px solid #cbd5e1;
-        border-radius: 10px;
-        padding: 16px;
-        margin-bottom: 24px;
-        text-align: center;
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid #e2e8f0;
     }
     
-    .promotion-banner h2 {
-        font-size: 20px;
+    .modal-header h2 {
+        margin: 0;
+        font-size: 24px;
         font-weight: 700;
-        margin-bottom: 6px;
         color: #1e293b;
     }
     
-    .promotion-banner p {
-        font-size: 14px;
-        color: #475569;
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 32px;
+        color: #64748b;
+        cursor: pointer;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s ease;
+    }
+    
+    .modal-close:hover {
+        color: #1e293b;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .modal-body p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #374151;
         margin: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .modal-dialog {
+            max-width: 95%;
+        }
+        
+        .modal-header {
+            padding: 15px;
+        }
+        
+        .modal-header h2 {
+            font-size: 20px;
+        }
+        
+        .modal-body {
+            padding: 15px;
+        }
+        
+        .modal-body p {
+            font-size: 15px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .modal-dialog {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        
+        .modal-header {
+            padding: 12px;
+        }
+        
+        .modal-header h2 {
+            font-size: 18px;
+        }
+        
+        .modal-close {
+            font-size: 28px;
+            width: 28px;
+            height: 28px;
+        }
+        
+        .modal-body {
+            padding: 12px;
+        }
+        
+        .modal-body p {
+            font-size: 14px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .promotions-images {
+            gap: 15px;
+        }
+        
+        .promotion-image {
+            border-radius: 6px;
+            width: 60%;
+            max-width: 60%;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .promotions-images {
+            gap: 12px;
+        }
+        
+        .promotion-image {
+            border-radius: 6px;
+            width: 60%;
+            max-width: 60%;
+        }
     }
     
     .promotions-grid {
@@ -297,7 +447,8 @@
         }
         
         .main {
-            padding: 20px 0;
+            padding-top: 50px;
+            padding-bottom: 20px;
         }
         
         .page-header {
@@ -445,7 +596,8 @@
         }
         
         .main {
-            padding: 16px 0;
+            padding-top: 50px;
+            padding-bottom: 16px;
         }
         
         .page-title {
@@ -508,70 +660,52 @@
     <div class="container">
         <div class="page-header">
             <h1 class="page-title">🔥 Акции от OLS</h1>
-            <p class="page-subtitle">Специальные предложения и скидки на популярные товары. Не упустите возможность сэкономить!</p>
         </div>
 
-        <div class="promotion-banner">
-            <h2>⚡ Ограниченное время!</h2>
-            <p>Скидки действуют до конца месяца. Торопитесь, количество товаров ограничено!</p>
+        <div class="promotions-images">
+            <img src="{{ asset('image/5215533247901667474.jpg') }}" alt="Акция 1" class="promotion-image clickable" onclick="showPromotionModal(1)">
+            <img src="{{ asset('image/5262616543416225323.jpg') }}" alt="Акция 2" class="promotion-image clickable" onclick="showPromotionModal(2)">
+            <img src="{{ asset('image/5215533247901667486.jpg') }}" alt="Акция 3" class="promotion-image clickable" onclick="showPromotionModal(3)">
         </div>
-
-        @if($products->count() > 0)
-            <div class="promotions-grid">
-                @foreach($products as $product)
-                    <a href="/product/{{ $product->id }}" class="promotion-card-link">
-                        <div class="promotion-card">
-                        @php
-                            $discount = 0;
-                            $originalPrice = $product->original_price ?? 0;
-                            $currentPrice = $product->price ?? 0;
-                            if ($originalPrice > 0 && $currentPrice > 0 && $originalPrice > $currentPrice) {
-                                $discount = round((($originalPrice - $currentPrice) / $originalPrice) * 100);
-                            }
-                        @endphp
-                        <div class="discount-badge">-{{ $discount }}%</div>
-                        
-                        <button class="add-to-favorite-btn" onclick="toggleFavoriteSimple(null, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ $product->image ?? '' }}', event)" title="Добавить в избранное">
-                            ❤️
-                        </button>
-                        
-                        <div class="product-image">
-                            @if(isset($product->image) && $product->image && file_exists(public_path($product->image)))
-                                <img src="{{ asset($product->image) }}" alt="{{ $product->title }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            @else
-                                🛍️
-                            @endif
-                        </div>
-                        
-                        <div class="product-info">
-                            <div class="product-category">{{ $product->category ?? 'Категория не указана' }}</div>
-                            <h3 class="product-title">{{ $product->title ?? 'Название не указано' }}</h3>
-                            <p class="product-description">{{ $product->description ?? 'Описание не указано' }}</p>
-                            
-                            <div class="price-section">
-                                <div>
-                                    <div class="original-price">{{ $product->original_price ?? 0 }}€</div>
-                                    <div class="discounted-price">{{ $product->price ?? 0 }}€</div>
-                                </div>
-                                <div class="savings">
-                                    Экономия {{ round(($product->original_price ?? 0) - ($product->price ?? 0), 2) }}€
-                                </div>
-                            </div>
-                            
-                            
-                        </div>
-                        </div>
-                    </a>
-                @endforeach
+        
+        <!-- Модальное окно для первой акции -->
+        <div id="promotionModal1" class="modal-overlay" onclick="closePromotionModal(event)">
+            <div class="modal-dialog" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h2>🎉 Специальное предложение</h2>
+                    <button class="modal-close" onclick="closePromotionModal()" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>В честь появления нашего сайта и грядущего Нового Года мы дарим скидку 5% на любой первый заказ для наших клиентов.</p>
+                </div>
             </div>
-        @else
-            <div class="empty-state">
-                <div class="empty-state-icon">🔥</div>
-                <h2 class="empty-state-title">Акций пока нет</h2>
-                <p class="empty-state-description">Следите за обновлениями! Скоро появятся новые скидки и специальные предложения.</p>
-                <a href="/catalog" class="empty-state-button">Перейти в каталог</a>
+        </div>
+        
+        <!-- Модальное окно для второй акции -->
+        <div id="promotionModal2" class="modal-overlay" onclick="closePromotionModal(event)">
+            <div class="modal-dialog" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h2>👥 Реферальная программа</h2>
+                    <button class="modal-close" onclick="closePromotionModal()" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>В нашем магазине действует «реферальная скидка». Вы можете пригласить любого друга и он перед заказам обязать сообщить, что он пришел именно от вас, отметив телеграмм-тегом @. В таком случае вы получаете скидку 2% при заказе. Количество приглашенных неограниченно. Срок действия скидки - 3 месяца.</p>
+                </div>
             </div>
-        @endif
+        </div>
+        
+        <!-- Модальное окно для третьей акции -->
+        <div id="promotionModal3" class="modal-overlay" onclick="closePromotionModal(event)">
+            <div class="modal-dialog" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h2>⭐ Отзывы с выгодой</h2>
+                    <button class="modal-close" onclick="closePromotionModal()" type="button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>После полученного Вами заказа, мы всегда рады обратной связи наших клиентов. А теперь это будет еще и выгодно. После оставленного отзыва клиент получает скидку 3%. Срок действия скидки - 3 месяца.</p>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 
@@ -905,6 +1039,40 @@
         // Обновляем статусы кнопок
         updateProductStatuses();
     }
+    
+    // Функции для модального окна акции
+    function showPromotionModal(number) {
+        // Закрываем все модальные окна перед открытием нового
+        closeAllPromotionModals();
+        
+        const modal = document.getElementById('promotionModal' + number);
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    
+    function closePromotionModal(event) {
+        if (event && event.target !== event.currentTarget) {
+            return;
+        }
+        closeAllPromotionModals();
+    }
+    
+    function closeAllPromotionModals() {
+        const modals = document.querySelectorAll('.modal-overlay');
+        modals.forEach(modal => {
+            modal.classList.remove('active');
+        });
+        document.body.style.overflow = '';
+    }
+    
+    // Закрытие модального окна по нажатию Escape
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeAllPromotionModals();
+        }
+    });
 </script>
 
 <!-- Модальное окно авторизации -->

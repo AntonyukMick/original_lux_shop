@@ -61,7 +61,14 @@
     }
     
     .main {
-        padding: 16px 0;
+        padding-top: 50px;
+        padding-bottom: 16px;
+    }
+    
+    @media (min-width: 769px) {
+        .main {
+            padding-top: 40px;
+        }
     }
     
     .catalog-header {
@@ -461,7 +468,8 @@
         /* Responsive */
         @media (max-width: 768px) {
             .main {
-                padding: 12px 0;
+                padding-top: 50px;
+                padding-bottom: 12px;
             }
             
             .search-section {
@@ -509,7 +517,8 @@
         
         @media (max-width: 480px) {
             .main {
-                padding: 8px 0;
+                padding-top: 50px;
+                padding-bottom: 8px;
             }
             
             .search-section {

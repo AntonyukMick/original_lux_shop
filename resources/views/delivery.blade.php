@@ -29,7 +29,14 @@
         
         /* Main Content */
         .main {
-            padding: 32px 0;
+            padding-top: 50px;
+            padding-bottom: 32px;
+        }
+        
+        @media (min-width: 769px) {
+            .main {
+                padding-top: 40px;
+            }
         }
         
         .page-header {

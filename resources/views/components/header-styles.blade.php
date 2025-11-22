@@ -31,14 +31,14 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%;position:fi
     
     .mobile-header .header-left {
         flex: 0 0 auto;
-        gap: 6px !important;
-        margin-right: 6px !important;
+        gap: 14px !important;
+        margin-right: 14px !important;
         margin-left: 0 !important;
     }
     
     .mobile-header .header-right {
         flex: 0 0 auto;
-        gap: 6px !important;
+        gap: 14px !important;
         margin-left: 0 !important;
     }
     
@@ -331,13 +331,13 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%;position:fi
     
     /* Устанавливаем одинаковый gap для всех кнопок */
     .mobile-header .header-left {
-        gap: 6px !important;
-        margin-right: 6px !important;
+        gap: 14px !important;
+        margin-right: 14px !important;
         margin-left: 0 !important;
     }
     
     .mobile-header .header-right {
-        gap: 6px !important;
+        gap: 14px !important;
         margin-left: 0 !important;
     }
     
@@ -454,13 +454,13 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%;position:fi
     
     /* Устанавливаем одинаковый gap для всех кнопок */
     .mobile-header .header-left {
-        gap: 8px !important;
-        margin-right: 8px !important;
+        gap: 12px !important;
+        margin-right: 12px !important;
         margin-left: 0 !important;
     }
     
     .mobile-header .header-right {
-        gap: 8px !important;
+        gap: 12px !important;
         margin-left: 0 !important;
     }
     
