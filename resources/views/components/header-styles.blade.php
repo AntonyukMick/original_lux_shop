@@ -1,6 +1,6 @@
 <style>
 /* Общие стили для хедера */
-header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
+header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%;position:fixed;top:0;left:0;z-index:1000}
 
 /* Десктопный хедер - показываем только на десктопе */
 .desktop-header{display:block}
@@ -16,7 +16,36 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
 .mobile-header .header-left{display:flex;align-items:center;gap:4px;flex-shrink:0;z-index:2;min-width:fit-content}
 .mobile-header .header-center{display:flex;align-items:center;justify-content:center;flex:1;flex-shrink:1;min-width:0;pointer-events:none;z-index:1;position:absolute;left:50%;transform:translateX(-50%)}
 .mobile-header .header-center .brand{pointer-events:auto;flex-shrink:0}
-.mobile-header .header-right{display:flex;align-items:center;gap:4px;flex-shrink:0;z-index:2;min-width:fit-content;margin-left:auto}
+.mobile-header .header-right{display:flex;align-items:center;gap:4px;flex-shrink:0;z-index:2;min-width:fit-content}
+
+/* Скрываем название на мобильном хедере и делаем равномерное расположение всех кнопок */
+@media (max-width: 768px) {
+    .mobile-header .header-center {
+        display: none !important;
+    }
+    
+    .mobile-header .bar {
+        gap: 0 !important;
+        justify-content: center !important;
+    }
+    
+    .mobile-header .header-left {
+        flex: 0 0 auto;
+        gap: 6px !important;
+        margin-right: 6px !important;
+        margin-left: 0 !important;
+    }
+    
+    .mobile-header .header-right {
+        flex: 0 0 auto;
+        gap: 6px !important;
+        margin-left: 0 !important;
+    }
+    
+    .mobile-header .icon-container {
+        margin: 0 !important;
+    }
+}
 
 /* Обновленные стили для всех элементов хедера */
 .btn {
@@ -288,10 +317,32 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     
     .mobile-header .bar {
         padding: 6px 8px;
-        gap: 2px;
+        gap: 0 !important;
         flex-wrap: nowrap;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        justify-content: center !important;
+    }
+    
+    /* Скрываем название на мобильном */
+    .mobile-header .header-center {
+        display: none !important;
+    }
+    
+    /* Устанавливаем одинаковый gap для всех кнопок */
+    .mobile-header .header-left {
+        gap: 6px !important;
+        margin-right: 6px !important;
+        margin-left: 0 !important;
+    }
+    
+    .mobile-header .header-right {
+        gap: 6px !important;
+        margin-left: 0 !important;
+    }
+    
+    .mobile-header .icon-container {
+        margin: 0 !important;
     }
     
     
@@ -389,10 +440,32 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     
     .mobile-header .bar {
         padding: 8px 12px;
-        gap: 4px;
+        gap: 0 !important;
         flex-wrap: nowrap;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        justify-content: center !important;
+    }
+    
+    /* Скрываем название на мобильном */
+    .mobile-header .header-center {
+        display: none !important;
+    }
+    
+    /* Устанавливаем одинаковый gap для всех кнопок */
+    .mobile-header .header-left {
+        gap: 8px !important;
+        margin-right: 8px !important;
+        margin-left: 0 !important;
+    }
+    
+    .mobile-header .header-right {
+        gap: 8px !important;
+        margin-left: 0 !important;
+    }
+    
+    .mobile-header .icon-container {
+        margin: 0 !important;
     }
     
     
@@ -476,6 +549,23 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%}
     }
     
     
+}
+
+/* Отступ для основного контента, чтобы он не перекрывался фиксированным хедером */
+.main {
+    padding-top: 50px;
+}
+
+@media (max-width: 768px) {
+    .main {
+        padding-top: 50px;
+    }
+}
+
+@media (min-width: 769px) {
+    .main {
+        padding-top: 40px;
+    }
 }
 
 </style>

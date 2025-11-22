@@ -777,41 +777,20 @@
         }
         
         /* Стили для модального окна с акциями */
-        .promotions-main-offer {
-            text-align: center;
-            margin-bottom: 30px;
+        .promotions-images {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
         }
         
-        .promotions-title {
-            font-size: 24px;
-            color: #527ea6;
-            margin-bottom: 20px;
-            line-height: 1.3;
-        }
-        
-        .promotions-title:last-of-type {
-            margin-bottom: 30px;
-        }
-        
-        .promotions-item {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8fafc;
+        .promotion-image {
+            width: 75%;
+            max-width: 75%;
+            height: auto;
             border-radius: 8px;
-            border-left: 4px solid #527ea6;
-        }
-        
-        .promotions-item-title {
-            margin: 0 0 10px 0;
-            color: #1e40af;
-            font-size: 20px;
-            font-weight: 600;
-        }
-        
-        .promotions-item-text {
-            margin: 0;
-            font-size: 16px;
-            color: #374151;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: block;
         }
         
         /* Адаптивные стили для модального окна с акциями */
@@ -833,27 +812,14 @@
                 padding: 15px;
             }
             
-            .promotions-title {
-                font-size: 20px;
-                margin-bottom: 15px;
+            .promotions-images {
+                gap: 15px;
             }
             
-            .promotions-title:last-of-type {
-                margin-bottom: 25px;
-            }
-            
-            .promotions-item {
-                margin-bottom: 20px;
-                padding: 15px;
-            }
-            
-            .promotions-item-title {
-                font-size: 18px;
-                margin-bottom: 8px;
-            }
-            
-            .promotions-item-text {
-                font-size: 15px;
+            .promotion-image {
+                border-radius: 6px;
+                width: 37.5%;
+                max-width: 37.5%;
             }
         }
         
@@ -888,32 +854,14 @@
                 padding: 12px;
             }
             
-            .promotions-main-offer {
-                margin-bottom: 20px;
+            .promotions-images {
+                gap: 12px;
             }
             
-            .promotions-title {
-                font-size: 18px;
-                margin-bottom: 12px;
-            }
-            
-            .promotions-title:last-of-type {
-                margin-bottom: 20px;
-            }
-            
-            .promotions-item {
-                margin-bottom: 15px;
-                padding: 12px;
-                border-left-width: 3px;
-            }
-            
-            .promotions-item-title {
-                font-size: 16px;
-                margin-bottom: 6px;
-            }
-            
-            .promotions-item-text {
-                font-size: 14px;
+            .promotion-image {
+                border-radius: 6px;
+                width: 37.5%;
+                max-width: 37.5%;
             }
         }
         
@@ -2575,19 +2523,10 @@ $auth = session('auth');
                     <button class="modal-close" data-modal="modal-promotions" type="button">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="promotions-main-offer">
-                        <h3 class="promotions-title">5% СКИДКА НА ПЕРВЫЙ</h3>
-                        <h3 class="promotions-title">ЗАКАЗ ДО КОНЦА ГОДА</h3>
-                    </div>
-                    
-                    <div class="promotions-item">
-                        <h3 class="promotions-item-title">ПРИГЛАСИ ДРУГА</h3>
-                        <p class="promotions-item-text">ПОЛУЧИ СКИДКУ</p>
-                    </div>
-                    
-                    <div class="promotions-item">
-                        <h3 class="promotions-item-title">ОСТАВЬ ОТЗЫВ</h3>
-                        <p class="promotions-item-text">ПОЛУЧИ СКИДКУ</p>
+                    <div class="promotions-images">
+                        <img src="{{ asset('image/5215533247901667474.jpg') }}" alt="Акция 1" class="promotion-image">
+                        <img src="{{ asset('image/5215533247901667483.jpg') }}" alt="Акция 2" class="promotion-image">
+                        <img src="{{ asset('image/5215533247901667486.jpg') }}" alt="Акция 3" class="promotion-image">
                     </div>
                 </div>
             </div>
