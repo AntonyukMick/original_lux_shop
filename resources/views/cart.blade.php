@@ -645,7 +645,6 @@
 <div id="orderSuccessModal" class="order-success-modal">
     <div class="modal-content">
         <span class="modal-close" onclick="closeOrderSuccessModal()">&times;</span>
-        <div class="modal-success-icon">✅</div>
         <h2 class="modal-title">Заказ успешно оформлен!</h2>
         <img src="{{ asset('image/Untitled.jpeg') }}" alt="Заказ оформлен" class="modal-image">
         <div class="modal-order-number" id="modalOrderNumber"></div>
