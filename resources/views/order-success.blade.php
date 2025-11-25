@@ -8,6 +8,12 @@
         <div style="font-size: 64px; margin-bottom: 24px;">✅</div>
         <h2 style="color: #10b981; margin-bottom: 16px;">Заказ успешно отправлен!</h2>
         
+        <div style="margin: 24px 0; display: flex; justify-content: center;">
+            <img src="{{ asset('image/Untitled.jpeg') }}" 
+                 alt="Заказ оформлен" 
+                 style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        </div>
+        
         @if(isset($orderNumber))
         <div style="background: #f0f9ff; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
             <p style="margin: 0; color: #0369a1; font-weight: bold;">
@@ -71,6 +77,11 @@
         display: block;
         margin: 8px 0 !important;
         text-align: center;
+    }
+    
+    img {
+        max-width: 100% !important;
+        height: auto !important;
     }
 }
 </style>

@@ -424,7 +424,155 @@
     
     .notification.error {
         background: #ef4444;
+    }
+    
+    .notification.info {
+        background: #3b82f6;
+    }
+    
+    /* Модальное окно */
+    .order-success-modal {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .order-success-modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .modal-content {
+        background-color: #fff;
+        margin: auto;
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        animation: slideIn 0.3s ease;
+        position: relative;
+    }
+    
+    .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #64748b;
+        cursor: pointer;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s;
+    }
+    
+    .modal-close:hover {
+        background-color: #f1f5f9;
+        color: #1e293b;
+    }
+    
+    .modal-success-icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+    }
+    
+    .modal-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #10b981;
+        margin-bottom: 20px;
+    }
+    
+    .modal-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        margin: 20px 0;
+    }
+    
+    .modal-order-number {
+        background: #f0f9ff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        color: #0369a1;
+        font-weight: 600;
+    }
+    
+    .modal-message {
+        font-size: 16px;
+        color: #475569;
+        margin: 20px 0;
+        line-height: 1.6;
+    }
+    
+    .modal-button {
+        background: #10b981;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: background-color 0.2s;
+    }
+    
+    .modal-button:hover {
+        background: #059669;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
         }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .modal-content {
+            padding: 20px;
+            width: 95%;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+        }
+        
+        .modal-success-icon {
+            font-size: 48px;
+        }
+    }
     </style>
 @endsection
 
@@ -492,6 +640,21 @@
 
 <!-- Contact Modal -->
 @include('components.modals.contact')
+
+<!-- Order Success Modal -->
+<div id="orderSuccessModal" class="order-success-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeOrderSuccessModal()">&times;</span>
+        <div class="modal-success-icon">✅</div>
+        <h2 class="modal-title">Заказ успешно оформлен!</h2>
+        <img src="{{ asset('image/Untitled.jpeg') }}" alt="Заказ оформлен" class="modal-image">
+        <div class="modal-order-number" id="modalOrderNumber"></div>
+        <p class="modal-message">
+            Спасибо за ваш заказ! Мы получили вашу заявку и свяжемся с вами в ближайшее время.
+        </p>
+        <button class="modal-button" onclick="closeOrderSuccessModal()">Понятно</button>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -629,11 +792,8 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showNotification('✅ Заказ успешно оформлен! Номер заказа: ' + data.order_number, 'success');
-                // Очищаем корзину через 3 секунды
-                setTimeout(() => {
-                    location.reload();
-                }, 3000);
+                // Показываем модальное окно с картинкой
+                showOrderSuccessModal(data.order_number);
             } else {
                 showNotification('❌ Ошибка при оформлении заказа: ' + (data.message || 'Неизвестная ошибка'), 'error');
             }
@@ -643,6 +803,54 @@
             showNotification('❌ Ошибка при оформлении заказа', 'error');
         });
     }
+    
+    // Показать модальное окно успешного заказа
+    function showOrderSuccessModal(orderNumber) {
+        const modal = document.getElementById('orderSuccessModal');
+        const orderNumberElement = document.getElementById('modalOrderNumber');
+        
+        if (orderNumber) {
+            orderNumberElement.textContent = 'Номер заказа: ' + orderNumber;
+            orderNumberElement.style.display = 'block';
+        } else {
+            orderNumberElement.style.display = 'none';
+        }
+        
+        modal.classList.add('active');
+    }
+    
+    // Обработчик клика вне модального окна (добавляется один раз)
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('orderSuccessModal');
+        if (modal) {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeOrderSuccessModal();
+                }
+            });
+        }
+    });
+    
+    // Закрыть модальное окно успешного заказа
+    function closeOrderSuccessModal() {
+        const modal = document.getElementById('orderSuccessModal');
+        modal.classList.remove('active');
+        
+        // Перезагружаем страницу для обновления корзины
+        setTimeout(() => {
+            location.reload();
+        }, 300);
+    }
+    
+    // Закрытие модального окна по клавише Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('orderSuccessModal');
+            if (modal.classList.contains('active')) {
+                closeOrderSuccessModal();
+            }
+        }
+    });
     
     console.log('Корзина загружена');
     console.log('Товаров в корзине:', {{ $cartItems->count() }});
