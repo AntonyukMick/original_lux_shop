@@ -486,57 +486,12 @@
         color: #1e293b;
     }
     
-    .modal-success-icon {
-        font-size: 64px;
-        margin-bottom: 20px;
-    }
-    
-    .modal-title {
-        font-size: 24px;
-        font-weight: 700;
-        color: #10b981;
-        margin-bottom: 20px;
-    }
-    
     .modal-image {
         max-width: 100%;
         height: auto;
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         margin: 20px 0;
-    }
-    
-    .modal-order-number {
-        background: #f0f9ff;
-        padding: 12px 20px;
-        border-radius: 8px;
-        margin: 20px 0;
-        color: #0369a1;
-        font-weight: 600;
-    }
-    
-    .modal-message {
-        font-size: 16px;
-        color: #475569;
-        margin: 20px 0;
-        line-height: 1.6;
-    }
-    
-    .modal-button {
-        background: #10b981;
-        color: white;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-top: 20px;
-        transition: background-color 0.2s;
-    }
-    
-    .modal-button:hover {
-        background: #059669;
     }
     
     @keyframes fadeIn {
@@ -563,14 +518,6 @@
         .modal-content {
             padding: 20px;
             width: 95%;
-        }
-        
-        .modal-title {
-            font-size: 20px;
-        }
-        
-        .modal-success-icon {
-            font-size: 48px;
         }
     }
     </style>
@@ -645,13 +592,7 @@
 <div id="orderSuccessModal" class="order-success-modal">
     <div class="modal-content">
         <span class="modal-close" onclick="closeOrderSuccessModal()">&times;</span>
-        <h2 class="modal-title">Заказ успешно оформлен!</h2>
         <img src="{{ asset('image/Untitled.jpeg') }}" alt="Заказ оформлен" class="modal-image">
-        <div class="modal-order-number" id="modalOrderNumber"></div>
-        <p class="modal-message">
-            Спасибо за ваш заказ! Мы получили вашу заявку и свяжемся с вами в ближайшее время.
-        </p>
-        <button class="modal-button" onclick="closeOrderSuccessModal()">Понятно</button>
     </div>
 </div>
 @endsection
@@ -792,7 +733,7 @@
         .then(data => {
             if (data.success) {
                 // Показываем модальное окно с картинкой
-                showOrderSuccessModal(data.order_number);
+                showOrderSuccessModal();
             } else {
                 showNotification('❌ Ошибка при оформлении заказа: ' + (data.message || 'Неизвестная ошибка'), 'error');
             }
@@ -804,17 +745,8 @@
     }
     
     // Показать модальное окно успешного заказа
-    function showOrderSuccessModal(orderNumber) {
+    function showOrderSuccessModal() {
         const modal = document.getElementById('orderSuccessModal');
-        const orderNumberElement = document.getElementById('modalOrderNumber');
-        
-        if (orderNumber) {
-            orderNumberElement.textContent = 'Номер заказа: ' + orderNumber;
-            orderNumberElement.style.display = 'block';
-        } else {
-            orderNumberElement.style.display = 'none';
-        }
-        
         modal.classList.add('active');
     }
     
