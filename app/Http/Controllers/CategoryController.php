@@ -27,18 +27,18 @@ class CategoryController extends Controller
         // Получаем параметр пола из запроса
         $gender = $request->get('gender');
         
-        $perPage = 8;
+        // Получаем все товары без лимита (лимит будет применен в представлении)
         
         // Группируем товары по подкатегориям
         $subcategories = [];
         
         foreach ($categoryData['subcategories'] as $subcategory) {
-            // Используем новый метод для получения товаров с фильтрацией по полу
+            // Получаем все товары без лимита
             $products = $this->productService->getProductsBySubcategoryAndGender(
                 $categoryData['name'], 
                 $subcategory, 
                 $gender, 
-                $perPage
+                null // null означает получить все товары
             );
             
             // Если нет реальных товаров, пропускаем подкатегорию

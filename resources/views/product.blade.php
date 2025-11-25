@@ -476,6 +476,66 @@
             color: #0f172a;
         }
         
+        .similar-original-price {
+            font-size: 14px;
+            color: #64748b;
+            text-decoration: line-through;
+            margin-left: 8px;
+        }
+        
+        .similar-discount-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #3b82f6;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 10;
+        }
+        
+        .similar-card {
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .similar-product-hidden {
+            display: none !important;
+        }
+        
+        .show-more-container {
+            text-align: center;
+            margin-top: 32px;
+            padding: 20px 0;
+            width: 100%;
+        }
+        
+        .show-more-btn {
+            background: #527ea6;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(82, 126, 166, 0.3);
+        }
+        
+        .show-more-btn:hover {
+            background: #3b5a7a;
+            box-shadow: 0 4px 12px rgba(82, 126, 166, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .show-more-btn:active {
+            transform: translateY(0);
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .main {
@@ -727,6 +787,16 @@
             .similar-price {
                 font-size: 14px;
             }
+            
+            .show-more-container {
+                margin-top: 20px;
+                padding: 16px 0;
+            }
+            
+            .show-more-btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
         }
     </style>
 @endsection
@@ -831,7 +901,45 @@
                 </div>
             </div>
 
-            {{-- Временно скрыто: блок "Похожие товары" --}}
+            {{-- Похожие товары --}}
+            @if($similarProducts->count() > 0)
+            <div class="similar-section">
+                <h2 class="section-title">Похожие товары</h2>
+                <div class="similar-grid" id="similarProductsGrid">
+                    @foreach($similarProducts as $index => $similarProduct)
+                        @php
+                            $productImage = is_array($similarProduct->images) ? ($similarProduct->images[0] ?? '') : '';
+                            $discount = 0;
+                            if ($similarProduct->original_price && $similarProduct->price && $similarProduct->original_price > $similarProduct->price) {
+                                $discount = round((($similarProduct->original_price - $similarProduct->price) / $similarProduct->original_price) * 100);
+                            }
+                        @endphp
+                        <a href="/product/{{ $similarProduct->id }}" class="similar-card {{ $index >= 8 ? 'similar-product-hidden' : '' }}">
+                            @if($discount > 0)
+                                <div class="similar-discount-badge">-{{ $discount }}%</div>
+                            @endif
+                            <img src="{{ $productImage }}" alt="{{ $similarProduct->title }}">
+                            <div class="similar-card-content">
+                                <div class="similar-card-title">{{ $similarProduct->title }}</div>
+                                <div class="similar-card-price">
+                                    {{ number_format($similarProduct->price, 2) }}€
+                                    @if($similarProduct->original_price && $similarProduct->original_price > $similarProduct->price)
+                                        <span class="similar-original-price">{{ number_format($similarProduct->original_price, 2) }}€</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+                @if($similarProducts->count() > 8)
+                    <div class="show-more-container">
+                        <button class="show-more-btn" id="showMoreBtn" onclick="showMoreProducts()">
+                            Смотреть остальное ({{ $similarProducts->count() - 8 }})
+                        </button>
+                    </div>
+                @endif
+            </div>
+            @endif
         </div>
     </main>
 
@@ -1149,6 +1257,20 @@
 
         // Используем глобальную функцию updateHeaderCounters из хедера
 
+        // Функция показа остальных товаров
+        function showMoreProducts() {
+            const hiddenProducts = document.querySelectorAll('.similar-product-hidden');
+            const showMoreBtn = document.getElementById('showMoreBtn');
+            
+            hiddenProducts.forEach(product => {
+                product.classList.remove('similar-product-hidden');
+            });
+            
+            if (showMoreBtn) {
+                showMoreBtn.style.display = 'none';
+            }
+        }
+        
         // Обновляем статусы при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
             updateProductStatuses();

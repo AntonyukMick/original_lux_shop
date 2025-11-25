@@ -207,14 +207,48 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     
-    .add-to-cart-btn:active {
-        transform: translateY(0);
-    }
-    
-    .add-to-cart-btn.added {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: #fff;
-    }
+        .add-to-cart-btn:active {
+            transform: translateY(0);
+        }
+        
+        .add-to-cart-btn.added {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
+        }
+        
+        .product-hidden {
+            display: none !important;
+        }
+        
+        .show-more-container {
+            text-align: center;
+            margin-top: 32px;
+            padding: 20px 0;
+            width: 100%;
+        }
+        
+        .show-more-btn {
+            background: #527ea6;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(82, 126, 166, 0.3);
+        }
+        
+        .show-more-btn:hover {
+            background: #3b5a7a;
+            box-shadow: 0 4px 12px rgba(82, 126, 166, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .show-more-btn:active {
+            transform: translateY(0);
+        }
     
     .add-to-favorite-btn {
         position: absolute;
@@ -343,6 +377,16 @@
             height: 32px;
             font-size: 12px;
         }
+        
+        .show-more-container {
+            margin-top: 20px;
+            padding: 16px 0;
+        }
+        
+        .show-more-btn {
+            padding: 12px 24px;
+            font-size: 14px;
+        }
     }
     
     @media (max-width: 480px) {
@@ -402,9 +446,9 @@
                 </div>
                 
                 @if(count($subcategory['products']) > 0)
-                    <div class="products-grid">
-                        @foreach($subcategory['products'] as $product)
-                            <a href="/product/{{ $product->id }}" class="product-card-link">
+                    <div class="products-grid" id="products-grid-{{ $loop->index }}">
+                        @foreach($subcategory['products'] as $index => $product)
+                            <a href="/product/{{ $product->id }}" class="product-card-link {{ $index >= 8 ? 'product-hidden' : '' }}" data-subcategory-index="{{ $loop->parent->index }}">
                                 <div class="product-card">
                                 @php
                                     $discount = 0;
@@ -451,15 +495,18 @@
                                             Экономия {{ round($originalPrice - $currentPrice, 2) }}€
                                         </div>
                                     @endif
-                                    
-                                    <button class="add-to-cart-btn" onclick="addToCartNew({{ $product->id }}, '{{ $product->title ?? '' }}', '{{ $product->price ?? 0 }}', '{{ is_array($product->images ?? null) ? ($product->images[0] ?? '') : ($product->image ?? '') }}', event)">
-                                        Добавить в корзину
-                                    </button>
                                 </div>
                                 </div>
                             </a>
                         @endforeach
                     </div>
+                    @if(count($subcategory['products']) > 8)
+                        <div class="show-more-container" data-subcategory-index="{{ $loop->index }}">
+                            <button class="show-more-btn" onclick="showMoreProducts({{ $loop->index }})">
+                                Смотреть остальное ({{ count($subcategory['products']) - 8 }})
+                            </button>
+                        </div>
+                    @endif
                 @else
                     <div class="empty-subcategory">
                         <p>Товары в этой подкатегории скоро появятся</p>
@@ -754,6 +801,23 @@
     `;
     document.head.appendChild(style);
 
+    // Функция показа остальных товаров
+    function showMoreProducts(subcategoryIndex) {
+        const grid = document.getElementById('products-grid-' + subcategoryIndex);
+        if (!grid) return;
+        
+        const hiddenProducts = grid.querySelectorAll('.product-hidden');
+        hiddenProducts.forEach(product => {
+            product.classList.remove('product-hidden');
+        });
+        
+        // Находим и скрываем кнопку для этой подкатегории
+        const container = document.querySelector('.show-more-container[data-subcategory-index="' + subcategoryIndex + '"]');
+        if (container) {
+            container.style.display = 'none';
+        }
+    }
+    
     // Инициализация при загрузке
     document.addEventListener('DOMContentLoaded', function() {
         updateProductStatuses();

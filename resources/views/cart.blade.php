@@ -424,7 +424,7 @@
     
     .notification.error {
         background: #ef4444;
-    }
+        }
     
     .notification.info {
         background: #3b82f6;

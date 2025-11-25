@@ -50,12 +50,25 @@ class ProductService
      */
     public function searchProducts($query, $perPage = null)
     {
+        $terms = collect(preg_split('/\s+/', trim((string) $query)))
+            ->filter()
+            ->values();
+
         $builder = Product::where('is_active', true)
             ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'created_at'])
-            ->where(function ($q) use ($query) {
-                $q->where('title', 'like', "%{$query}%")
-                  ->orWhere('description', 'like', "%{$query}%")
-                  ->orWhere('brand', 'like', "%{$query}%");
+            ->when($terms->isNotEmpty(), function ($queryBuilder) use ($terms) {
+                $queryBuilder->where(function ($outer) use ($terms) {
+                    $terms->each(function ($term) use ($outer) {
+                        $outer->where(function ($inner) use ($term) {
+                            $like = "%{$term}%";
+                            $inner->where('title', 'like', $like)
+                                  ->orWhere('description', 'like', $like)
+                                  ->orWhere('brand', 'like', $like)
+                                  ->orWhere('category', 'like', $like)
+                                  ->orWhere('subcat', 'like', $like);
+                        });
+                    });
+                });
             })
             ->orderBy('created_at', 'desc');
 
@@ -158,9 +171,14 @@ class ProductService
             });
         }
 
-        return $query->orderByRaw('CASE WHEN original_price IS NOT NULL AND original_price > price THEN (original_price - price) / original_price ELSE 0 END DESC')
-                    ->take($perPage)
-                    ->get();
+        $query->orderByRaw('CASE WHEN original_price IS NOT NULL AND original_price > price THEN (original_price - price) / original_price ELSE 0 END DESC');
+        
+        // Если указан лимит, применяем его
+        if ($perPage !== null) {
+            $query->take($perPage);
+        }
+        
+        return $query->get();
     }
 
     /**
@@ -211,16 +229,28 @@ class ProductService
 
     /**
      * Получить похожие товары (оптимизировано)
+     * Возвращает все товары той же категории и подкатегории (если есть)
      */
-    public function getSimilarProducts($product, $limit = 3)
+    public function getSimilarProducts($product, $limit = null)
     {
-        return Product::where('category', $product->category)
+        $query = Product::where('category', $product->category)
             ->where('id', '!=', $product->id)
             ->where('is_active', true)
-            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'created_at'])
-            ->inRandomOrder() // Случайный порядок для разнообразия
-            ->limit($limit)
-            ->get();
+            ->select(['id', 'title', 'price', 'original_price', 'images', 'category', 'brand', 'subcat', 'created_at']);
+        
+        // Если у товара есть подкатегория, фильтруем по ней
+        if (!empty($product->subcat)) {
+            $query->where('subcat', $product->subcat);
+        }
+        
+        $query->inRandomOrder(); // Случайный порядок для разнообразия
+        
+        // Если указан лимит, применяем его
+        if ($limit !== null) {
+            $query->limit($limit);
+        }
+        
+        return $query->get();
     }
 
     /**
