@@ -74,14 +74,8 @@
         
         /* Main Content */
         .main {
-            padding-top: 70px;
+            padding-top: 33px;
             padding-bottom: 32px;
-        }
-        
-        @media (min-width: 769px) {
-            .main {
-                padding-top: 55px;
-            }
         }
         
         .product-grid {
@@ -544,7 +538,7 @@
         /* Responsive */
         @media (max-width: 768px) {
             .main {
-                padding-top: 70px;
+                padding-top: 33px;
                 padding-bottom: 12px;
             }
             
@@ -733,7 +727,7 @@
         
         @media (max-width: 480px) {
             .main {
-                padding-top: 70px;
+                padding-top: 33px;
                 padding-bottom: 8px;
             }
             
