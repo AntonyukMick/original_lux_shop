@@ -74,13 +74,13 @@
         
         /* Main Content */
         .main {
-            padding-top: 50px;
+            padding-top: 70px;
             padding-bottom: 32px;
         }
         
         @media (min-width: 769px) {
             .main {
-                padding-top: 40px;
+                padding-top: 55px;
             }
         }
         
@@ -101,12 +101,13 @@
             object-fit: cover;
             border-radius: 12px;
             margin-bottom: 16px;
-            cursor: pointer;
+            cursor: zoom-in;
             transition: transform 0.2s;
         }
         
         .main-image:hover {
             transform: scale(1.02);
+            opacity: 0.9;
         }
         
         .thumbnails {
@@ -120,9 +121,13 @@
             height: 80px;
             object-fit: cover;
             border-radius: 8px;
-            cursor: pointer;
+            cursor: zoom-in;
             border: 2px solid transparent;
             transition: all 0.2s;
+        }
+        
+        .thumbnail:hover {
+            opacity: 0.8;
         }
         
         .thumbnail.active {
@@ -539,7 +544,8 @@
         /* Responsive */
         @media (max-width: 768px) {
             .main {
-                padding: 12px 0;
+                padding-top: 70px;
+                padding-bottom: 12px;
             }
             
             .container {
@@ -727,7 +733,8 @@
         
         @media (max-width: 480px) {
             .main {
-                padding: 8px 0;
+                padding-top: 70px;
+                padding-bottom: 8px;
             }
             
             .container {
@@ -813,15 +820,26 @@
             <div class="product-grid">
                 <!-- Image Gallery -->
                 <div class="gallery">
-                    <img src="{{ $productData['image'] }}" alt="{{ $productData['title'] }}" class="main-image" id="mainImage">
+                    @php
+                        $allImages = isset($productData['images']) && is_array($productData['images']) && count($productData['images']) > 0 
+                            ? $productData['images'] 
+                            : (isset($productData['image']) ? [$productData['image']] : []);
+                    @endphp
+                    <img src="{{ $allImages[0] ?? '' }}" alt="{{ $productData['title'] }}" class="main-image" id="mainImage" onclick="openImageModal(0)" style="cursor:pointer;">
                     <div class="thumbnails">
-                        @foreach($productData['images'] as $index => $image)
+                        @foreach($allImages as $index => $image)
                         <img src="{{ $image }}" alt="{{ $productData['title'] }} - фото {{ $index + 1 }}" 
                              class="thumbnail {{ $index === 0 ? 'active' : '' }}" 
-                             onclick="changeMainImage('{{ $image }}', this)">
+                             onclick="changeMainImage('{{ $image }}', this); openImageModal({{ $index }})" style="cursor:pointer;">
                         @endforeach
                     </div>
                 </div>
+                
+                <script>
+                    // Сохраняем массив изображений в глобальной переменной
+                    window.productImages = @json($allImages);
+                    window.productTitle = @json($productData['title'] ?? '');
+                </script>
 
                 <!-- Product Info -->
                 <div class="product-info">
@@ -942,6 +960,19 @@
             @endif
         </div>
     </main>
+
+    <!-- Модальное окно для полноразмерного просмотра изображения -->
+    <div id="imageModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:10000;align-items:center;justify-content:center;cursor:pointer;" onclick="closeImageModal()">
+        <div style="position:relative;max-width:95%;max-height:95%;display:flex;align-items:center;justify-content:center;flex-direction:column;" onclick="event.stopPropagation();">
+            <img id="modalImage" src="" alt="" style="max-width:100%;max-height:85vh;object-fit:contain;border-radius:8px;">
+            <div style="position:absolute;top:20px;right:20px;display:flex;gap:10px;align-items:center;">
+                <button id="prevImageBtn" onclick="event.stopPropagation(); changeModalImage(-1)" style="background:rgba(255,255,255,0.9);border:none;color:#000;font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.3);">‹</button>
+                <button onclick="event.stopPropagation(); closeImageModal()" style="background:rgba(255,255,255,0.9);border:none;color:#000;font-size:32px;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.3);">&times;</button>
+                <button id="nextImageBtn" onclick="event.stopPropagation(); changeModalImage(1)" style="background:rgba(255,255,255,0.9);border:none;color:#000;font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.3);">›</button>
+            </div>
+            <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;background:rgba(0,0,0,0.6);padding:8px 16px;border-radius:20px;font-size:14px;" id="imageCounter"></div>
+        </div>
+    </div>
 
     <script>
         // Функция "Назад" с сохранением позиции скролла
@@ -1093,6 +1124,93 @@
             updateProductStatus(productId, 'cart');
             updateProductStatus(productId, 'favorites');
         }
+
+        // Переменные для модального окна изображений
+        let currentImageIndex = 0;
+
+        // Функция открытия модального окна с изображением
+        function openImageModal(imageIndex) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const imageCounter = document.getElementById('imageCounter');
+            const prevBtn = document.getElementById('prevImageBtn');
+            const nextBtn = document.getElementById('nextImageBtn');
+
+            if (!window.productImages || window.productImages.length === 0) {
+                console.error('Изображения не найдены');
+                return;
+            }
+
+            currentImageIndex = imageIndex || 0;
+            if (currentImageIndex < 0) currentImageIndex = 0;
+            if (currentImageIndex >= window.productImages.length) currentImageIndex = window.productImages.length - 1;
+
+            modalImage.src = window.productImages[currentImageIndex];
+            modalImage.alt = window.productTitle || 'Изображение товара';
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            // Обновляем счетчик изображений
+            updateImageCounter();
+
+            // Показываем/скрываем кнопки навигации
+            if (window.productImages.length > 1) {
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+            } else {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+            }
+        }
+
+        // Функция закрытия модального окна
+        function closeImageModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        // Функция переключения изображений в модальном окне
+        function changeModalImage(direction) {
+            if (!window.productImages || window.productImages.length <= 1) return;
+
+            currentImageIndex += direction;
+
+            if (currentImageIndex < 0) {
+                currentImageIndex = window.productImages.length - 1;
+            } else if (currentImageIndex >= window.productImages.length) {
+                currentImageIndex = 0;
+            }
+
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = window.productImages[currentImageIndex];
+            updateImageCounter();
+        }
+
+        // Обновление счетчика изображений
+        function updateImageCounter() {
+            const imageCounter = document.getElementById('imageCounter');
+            if (window.productImages && window.productImages.length > 1) {
+                imageCounter.textContent = `${currentImageIndex + 1} / ${window.productImages.length}`;
+                imageCounter.style.display = 'block';
+            } else {
+                imageCounter.style.display = 'none';
+            }
+        }
+
+        // Закрытие по клавише Escape и навигация стрелками
+        document.addEventListener('keydown', function(event) {
+            const modal = document.getElementById('imageModal');
+            if (modal.style.display === 'flex') {
+                if (event.key === 'Escape') {
+                    closeImageModal();
+                } else if (event.key === 'ArrowLeft') {
+                    changeModalImage(-1);
+                } else if (event.key === 'ArrowRight') {
+                    changeModalImage(1);
+                }
+            }
+        });
 
         // Переменная для хранения выбранного цвета
         let selectedColor = null;

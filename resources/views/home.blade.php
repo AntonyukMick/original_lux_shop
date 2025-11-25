@@ -3025,8 +3025,6 @@ $auth = session('auth');
     </main>
     
     <section class="container">
-        <div class="banner" style="background:rgb(220,215,242)">СКИДКИ ДО -20%</div>
-
         <div class="small-tiles">
             <div class="tile" style="background:rgb(211,220,231);cursor:pointer" onclick="window.open('https://t.me/ols_katalog/11', '_blank')">
                 <h3>Отзывы</h3>
