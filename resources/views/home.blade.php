@@ -719,6 +719,7 @@
             box-shadow:0 20px 60px rgba(0,0,0,0.3);
             transform:scale(0.95);
             transition:transform 0.3s ease;
+            margin-top: 6px;
         }
         .modal-overlay.active .modal-dialog{
             transform:scale(1);
@@ -798,6 +799,7 @@
             .modal-dialog {
                 max-width: 95%;
                 padding: 0;
+                margin-top: 6px;
             }
             
             .modal-header {
@@ -832,6 +834,7 @@
                 max-width: 100%;
                 max-height: 95vh;
                 border-radius: 8px;
+                margin-top: 6px;
             }
             
             .modal-header {

@@ -61,13 +61,13 @@
     }
     
     .main {
-        padding-top: 57px;
+        padding-top: 50px;
         padding-bottom: 16px;
     }
     
     @media (min-width: 769px) {
         .main {
-            padding-top: 47px;
+            padding-top: 40px;
         }
     }
     
@@ -468,7 +468,7 @@
         /* Responsive */
         @media (max-width: 768px) {
             .main {
-                padding-top: 57px;
+                padding-top: 50px;
                 padding-bottom: 12px;
             }
             
@@ -517,7 +517,7 @@
         
         @media (max-width: 480px) {
             .main {
-                padding-top: 57px;
+                padding-top: 50px;
                 padding-bottom: 8px;
             }
             

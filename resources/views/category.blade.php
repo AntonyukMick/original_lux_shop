@@ -23,13 +23,13 @@
     }
     
     .main {
-        padding-top: 57px;
+        padding-top: 50px;
         padding-bottom: 32px;
     }
     
     @media (min-width: 769px) {
         .main {
-            padding-top: 47px;
+            padding-top: 40px;
         }
     }
     
