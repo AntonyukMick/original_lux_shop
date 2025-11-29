@@ -719,6 +719,7 @@
             box-shadow:0 20px 60px rgba(0,0,0,0.3);
             transform:scale(0.95);
             transition:transform 0.3s ease;
+            margin-top: 6px;
         }
         .modal-overlay.active .modal-dialog{
             transform:scale(1);
@@ -794,6 +795,8 @@
         @media (max-width: 768px) {
             .modal-dialog {
                 max-width: 95%;
+                padding: 0;
+                margin-top: 6px;
             }
             
             .modal-header-new {
@@ -835,6 +838,7 @@
                 max-width: 100%;
                 max-height: 95vh;
                 border-radius: 8px;
+                margin-top: 6px;
             }
             
             .modal-header-new {
@@ -3027,8 +3031,6 @@ $auth = session('auth');
     </main>
     
     <section class="container">
-        <div class="banner" style="background:rgb(220,215,242)">СКИДКИ ДО -20%</div>
-
         <div class="small-tiles">
             <div class="tile" style="background:rgb(211,220,231);cursor:pointer" onclick="window.open('https://t.me/ols_katalog/11', '_blank')">
                 <h3>Отзывы</h3>

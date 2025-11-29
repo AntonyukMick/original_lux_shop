@@ -15,7 +15,7 @@ $auth = session('auth');
     <div class="desktop-header">
         <div class="container bar">
             <button class="btn" onclick="window.location.href='/'">Закрыть</button>
-            <div style="margin-left:auto;display:flex;gap:6px;align-items:center;">
+            <div style="margin-left:auto;display:flex;gap:7.8px;align-items:center;">
                 <!-- Иконка FAQ -->
                 <div class="icon-container" onclick="document.getElementById('faqModal').style.display='block'; document.body.style.overflow='hidden';" title="FAQ">
                     <img src="{{ asset('image/icon-quest.jpg') }}" alt="FAQ" class="icon-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">

@@ -7,16 +7,16 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%;position:fi
 .mobile-header{display:none}
 
 /* Десктопный хедер (старый стиль) */
-.desktop-header .bar{display:flex;align-items:center;gap:3px;padding:4px 6px;width:100%;flex-wrap:nowrap;overflow:hidden}
+.desktop-header .bar{display:flex;align-items:center;gap:3.9px;padding:4px 6px;width:100%;flex-wrap:nowrap;overflow:hidden}
 
 /* Мобильный хедер - показываем только на мобильных */
-.mobile-header .bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;width:100%;flex-wrap:nowrap}
+.mobile-header .bar{display:flex;align-items:center;justify-content:space-between;gap:10.4px;padding:8px 12px;width:100%;flex-wrap:nowrap}
 
 /* Новая структура для мобильного хедера */
-.mobile-header .header-left{display:flex;align-items:center;gap:4px;flex-shrink:0;z-index:2;min-width:fit-content}
+.mobile-header .header-left{display:flex;align-items:center;gap:5.2px;flex-shrink:0;z-index:2;min-width:fit-content}
 .mobile-header .header-center{display:flex;align-items:center;justify-content:center;flex:1;flex-shrink:1;min-width:0;pointer-events:none;z-index:1;position:absolute;left:50%;transform:translateX(-50%)}
 .mobile-header .header-center .brand{pointer-events:auto;flex-shrink:0}
-.mobile-header .header-right{display:flex;align-items:center;gap:4px;flex-shrink:0;z-index:2;min-width:fit-content}
+.mobile-header .header-right{display:flex;align-items:center;gap:5.2px;flex-shrink:0;z-index:2;min-width:fit-content}
 
 /* Скрываем название на мобильном хедере и делаем равномерное расположение всех кнопок */
 @media (max-width: 768px) {
@@ -31,14 +31,14 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%;position:fi
     
     .mobile-header .header-left {
         flex: 0 0 auto;
-        gap: 14px !important;
-        margin-right: 14px !important;
+        gap: 18.2px !important;
+        margin-right: 18.2px !important;
         margin-left: 0 !important;
     }
     
     .mobile-header .header-right {
         flex: 0 0 auto;
-        gap: 14px !important;
+        gap: 18.2px !important;
         margin-left: 0 !important;
     }
     
@@ -144,7 +144,7 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%;position:fi
     cursor: pointer;
     flex-shrink: 0;
     transition: all 0.2s ease;
-    margin: 0 2px;
+    margin: 0 2.6px;
     line-height: 1;
 }
 
@@ -331,13 +331,13 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%;position:fi
     
     /* Устанавливаем одинаковый gap для всех кнопок */
     .mobile-header .header-left {
-        gap: 14px !important;
-        margin-right: 14px !important;
+        gap: 18.2px !important;
+        margin-right: 18.2px !important;
         margin-left: 0 !important;
     }
     
     .mobile-header .header-right {
-        gap: 14px !important;
+        gap: 18.2px !important;
         margin-left: 0 !important;
     }
     
@@ -454,13 +454,13 @@ header{background:#d1d5db;border-bottom:1px solid #cbd5e1;width:100%;position:fi
     
     /* Устанавливаем одинаковый gap для всех кнопок */
     .mobile-header .header-left {
-        gap: 12px !important;
-        margin-right: 12px !important;
+        gap: 15.6px !important;
+        margin-right: 15.6px !important;
         margin-left: 0 !important;
     }
     
     .mobile-header .header-right {
-        gap: 12px !important;
+        gap: 15.6px !important;
         margin-left: 0 !important;
     }
     
