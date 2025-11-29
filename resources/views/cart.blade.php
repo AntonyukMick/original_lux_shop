@@ -13,6 +13,30 @@
         color: #0f172a;
     }
     
+    .main {
+        padding-top: 80px !important;
+        margin-top: 0 !important;
+    }
+    
+    .main > .container:first-child {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+    
+    @media (max-width: 768px) {
+        .main {
+            padding-top: 80px !important;
+            margin-top: 0 !important;
+        }
+    }
+    
+    @media (min-width: 769px) {
+        .main {
+            padding-top: 80px !important;
+            margin-top: 0 !important;
+        }
+    }
+    
     .container {
         max-width: 1200px;
         margin: 0 auto;
