@@ -10,6 +10,7 @@
 
 <div class="container">
         <div class="panel">
+            <h1>Избранное</h1>
             <!-- Контейнер для товаров избранного -->
             <div id="favorites-items">
                 <!-- Товары будут загружены через JavaScript -->
@@ -53,86 +54,173 @@
     </div>
 
     <style>
-    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,"Noto Sans",sans-serif;background:#f1f5f9;color:#0f172a}
+    :root { --bg:#f1f5f9; --card:#ffffff; --muted:#e2e8f0; --text:#0f172a; --accent:#527ea6; }
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,"Noto Sans",sans-serif;background:var(--bg);color:var(--text)}
     .container{max-width:1200px;margin:0 auto;padding:12px}
     .panel{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:24px;text-align:left}
-    .panel h1{margin:0 0 24px 0;font-size:28px;font-weight:700;color:#0f172a}
-    .row{display:grid;grid-template-columns:1fr 120px 120px 40px;gap:10px;align-items:center;border-bottom:1px solid #e2e8f0;padding:12px 0;text-align:left}
-    .row:last-child{border-bottom:none}
-    .thumb{width:70px;height:70px;border-radius:8px;background:#e5e7eb;object-fit:cover;margin-right:10px;flex-shrink:0}
-    .title{font-weight:600;font-size:16px;word-wrap:break-word;overflow-wrap:break-word}
-    .price{font-weight:700;font-size:16px;text-align:center}
-    .panel .btn{height:34px;padding:0 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer;color:#000;font-weight:600;font-size:14px;white-space:nowrap;flex-shrink:0}
+    .panel h1{margin:0 0 24px 0;font-size:28px;font-weight:700;color:#0f172a;background:linear-gradient(135deg, #527ea6, #3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    
+    /* Сетка карточек товаров */
+    .favorites-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 16px;
+        margin-top: 24px;
+    }
+    
+    /* Карточка товара */
+    .favorite-card {
+        background: var(--card);
+        border: 2px solid #000;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: all 0.2s ease;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    
+    .favorite-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .favorite-image-container {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        background: var(--muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    
+    .favorite-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .favorite-remove-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #cbd5e1;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 16px;
+        z-index: 2;
+        color: #ef4444;
+    }
+    
+    .favorite-remove-btn:hover {
+        background: #fff;
+        transform: scale(1.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .favorite-info {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+    
+    .favorite-title {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #1e293b;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .favorite-price {
+        font-size: 20px;
+        font-weight: 700;
+        color: #527ea6;
+        margin-bottom: 12px;
+    }
+    
+    .favorite-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: auto;
+    }
+    
+    .favorite-add-cart-btn {
+        flex: 1;
+        height: 36px;
+        padding: 0 16px;
+        border-radius: 18px;
+        border: 1px solid var(--muted);
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        color: #475569;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 14px;
+    }
+    
+    .favorite-add-cart-btn:hover {
+        background: linear-gradient(135deg, #527ea6 0%, #3b82f6 100%);
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .favorite-add-cart-btn:active {
+        transform: translateY(0);
+    }
+    
+    .favorite-add-cart-btn.added {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: #fff;
+    }
     
     /* Мобильная адаптация для избранного */
     @media (max-width: 768px) {
         .container{padding:8px}
         .panel{padding:16px}
         .panel h1{font-size:24px;margin-bottom:16px}
-        .row{
-            grid-template-columns: auto 1fr;
-            grid-template-rows: auto auto;
-            gap: 10px;
-            padding: 12px 0;
-            align-items: start;
+        .favorites-grid {
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
         }
-        .row > div:first-child {
-            grid-column: 1 / 3;
-            grid-row: 1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 4px;
-            min-width: 0;
-            overflow: hidden;
+        .favorite-image-container {
+            height: 160px;
         }
-        .row > div:nth-child(2) {
-            grid-column: 1;
-            grid-row: 2;
-            text-align: left;
-            align-self: center;
-            min-width: 0;
+        .favorite-title {
+            font-size: 14px;
         }
-        .row > div:nth-child(3) {
-            grid-column: 2;
-            grid-row: 2;
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-            min-width: 0;
+        .favorite-price {
+            font-size: 18px;
         }
-        .thumb{width:50px;height:50px;margin-right:0;flex-shrink:0}
-        .title{font-size:14px;line-height:1.3;word-wrap:break-word;overflow-wrap:break-word}
-        .price{font-size:14px;font-weight:700;text-align:left}
-        .panel .btn{
-            height:32px;
-            padding:0 12px;
-            font-size:12px;
-            border-radius:6px;
-            white-space:nowrap;
-            min-width:auto;
-            flex-shrink:0;
+        .favorite-remove-btn {
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
+            font-size: 14px;
         }
-        
-        /* Компактные кнопки для мобильных */
-        .panel .btn.primary{
-            height:32px;
-            padding:0 12px;
-            font-size:12px;
-            border-radius:6px;
+        .favorite-info {
+            padding: 12px;
         }
-        .panel .btn[style*="background:#ef4444"]{
-            height:32px;
-            width:32px;
-            padding:0;
-            font-size:14px;
-            border-radius:6px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            flex-shrink:0;
+        .favorite-add-cart-btn {
+            height: 32px;
+            font-size: 13px;
         }
     }
     
@@ -140,54 +228,32 @@
         .container{padding:6px}
         .panel{padding:12px}
         .panel h1{font-size:20px;margin-bottom:12px}
-        .row{
-            grid-template-columns: auto 1fr;
-            grid-template-rows: auto auto;
-            gap: 8px;
-            padding: 10px 0;
+        .favorites-grid {
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
         }
-        .row > div:first-child {
-            grid-column: 1 / 3;
-            grid-row: 1;
-            gap: 8px;
-            min-width: 0;
-            overflow: hidden;
+        .favorite-image-container {
+            height: 140px;
         }
-        .row > div:nth-child(2) {
-            grid-column: 1;
-            grid-row: 2;
-            min-width: 0;
+        .favorite-title {
+            font-size: 13px;
         }
-        .row > div:nth-child(3) {
-            grid-column: 2;
-            grid-row: 2;
-            gap: 6px;
-            flex-wrap: wrap;
-            min-width: 0;
+        .favorite-price {
+            font-size: 16px;
         }
-        .thumb{width:45px;height:45px;margin-right:0}
-        .title{font-size:13px;line-height:1.2}
-        .price{font-size:13px}
-        .panel .btn{
-            height:28px;
-            padding:0 10px;
-            font-size:11px;
-            border-radius:5px;
+        .favorite-remove-btn {
+            top: 6px;
+            right: 6px;
+            width: 26px;
+            height: 26px;
+            font-size: 12px;
         }
-        
-        /* Еще более компактные кнопки для маленьких экранов */
-        .panel .btn.primary{
-            height:28px;
-            padding:0 10px;
-            font-size:11px;
-            border-radius:5px;
+        .favorite-info {
+            padding: 10px;
         }
-        .panel .btn[style*="background:#ef4444"]{
-            height:28px;
-            width:28px;
-            padding:0;
-            font-size:12px;
-            border-radius:5px;
+        .favorite-add-cart-btn {
+            height: 30px;
+            font-size: 12px;
         }
     }
     .panel .btn.primary{background:#527ea6;color:#ffffff;border-color:#527ea6;font-weight:600}
@@ -271,36 +337,43 @@
                 return;
             }
             
-            let favoritesHTML = '';
+            let favoritesHTML = '<div class="favorites-grid">';
             
             favorites.forEach((item, index) => {
                 // Проверяем наличие цены и изображения
                 const price = item.price ? parseFloat(item.price) : 0;
-                const image = item.image || 'https://via.placeholder.com/100x100?text=No+Image';
+                const image = item.image || 'https://via.placeholder.com/200x200?text=No+Image';
                 const displayPrice = price > 0 ? `${price.toFixed(2)}€` : 'Цена не указана';
                 
+                // Экранируем кавычки в названии для безопасности
+                const safeTitle = item.title.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+                
+                // Экранируем для использования в JavaScript
+                const jsSafeTitle = item.title.replace(/'/g, "\\'").replace(/"/g, '\\"');
+                
                 favoritesHTML += `
-                    <div class="row">
-                        <div style="display:flex;align-items:center;flex:1;min-width:0">
-                            <img src="${image}" alt="${item.title}" class="thumb" onerror="this.src='https://via.placeholder.com/100x100?text=No+Image'">
-                            <div style="flex:1;min-width:0">
-                                <div class="title">${item.title}</div>
-                            </div>
+                    <div class="favorite-card">
+                        <div class="favorite-image-container">
+                            <img src="${image}" alt="${safeTitle}" onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'">
+                            <button class="favorite-remove-btn" onclick="removeFromFavoritesByTitle('${jsSafeTitle}')" title="Удалить из избранного">✕</button>
                         </div>
-                        <div class="price">${displayPrice}</div>
-                        <div style="display:flex;gap:8px;align-items:center">
-                            <button class="btn primary" onclick="addToCart('${item.title}', '${item.price || 0}', '${item.image || ''}')">В корзину</button>
-                            <button class="btn" onclick="removeFromFavorites(${index})" style="background:#ef4444;color:#fff;border-color:#ef4444">✕</button>
+                        <div class="favorite-info">
+                            <div class="favorite-title">${safeTitle}</div>
+                            <div class="favorite-price">${displayPrice}</div>
+                            <div class="favorite-actions">
+                                <button class="favorite-add-cart-btn" onclick="addToCart('${jsSafeTitle}', '${item.price || 0}', '${item.image || ''}', this)">В корзину</button>
+                            </div>
                         </div>
                     </div>
                 `;
             });
             
+            favoritesHTML += '</div>';
             favoritesContainer.innerHTML = favoritesHTML;
         }
         
         // Функция для добавления товара в корзину
-        function addToCart(title, price, image) {
+        function addToCart(title, price, image, buttonElement) {
             console.log('addToCart called from favorites:', {title, price, image});
             
             let cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -314,6 +387,20 @@
             
             localStorage.setItem('cart', JSON.stringify(cart));
             console.log('Cart updated:', cart);
+            
+            // Визуальная обратная связь на кнопке
+            if (buttonElement) {
+                const originalText = buttonElement.textContent;
+                buttonElement.textContent = 'Добавлено ✓';
+                buttonElement.classList.add('added');
+                buttonElement.disabled = true;
+                
+                setTimeout(() => {
+                    buttonElement.textContent = originalText;
+                    buttonElement.classList.remove('added');
+                    buttonElement.disabled = false;
+                }, 2000);
+            }
             
             // Показываем уведомление
             showNotification('Товар добавлен в корзину', 'success');
@@ -360,13 +447,27 @@
             }, 3000);
         }
         
-        // Функция для удаления товара из избранного
+        // Функция для удаления товара из избранного по индексу (legacy)
         function removeFromFavorites(index) {
             const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
             favorites.splice(index, 1);
             localStorage.setItem('favorites', JSON.stringify(favorites));
             loadFavorites(); // Перезагружаем избранное
             updateHeaderCounters(); // Обновляем счетчики в хедере
+            showNotification('Товар удален из избранного', 'info');
+        }
+        
+        // Функция для удаления товара из избранного по названию
+        function removeFromFavoritesByTitle(title) {
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const index = favorites.findIndex(item => item.title === title);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                loadFavorites(); // Перезагружаем избранное
+                updateHeaderCounters(); // Обновляем счетчики в хедере
+                showNotification('Товар удален из избранного', 'info');
+            }
         }
         
         // Функция для очистки избранного

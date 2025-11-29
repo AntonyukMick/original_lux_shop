@@ -467,7 +467,7 @@
             .good .price{font-size:13px;flex-shrink:0}
             .section-title{font-size:16px;margin:12px 0 8px 0}
             .good .btn{height:28px;padding:0 12px;font-size:11px;border-radius:14px}
-            .favorite-btn{width:24px;height:24px;font-size:12px;top:6px;right:6px}
+            .favorite-btn{top:4px !important;left:4px !important;width:26px !important;height:26px !important;min-width:26px !important;min-height:26px !important;max-width:26px !important;max-height:26px !important;font-size:12px !important;padding:0 !important;margin:0 !important}
             
             /* Унифицированная высота кнопок для мобильных */
             .good .btn[style*="background:#48bb78"], 
@@ -560,7 +560,7 @@
             .good .price{font-size:12px;font-weight:600;flex-shrink:0}
             .section-title{font-size:14px;margin:10px 0 6px 0}
             .good .btn{height:24px;padding:0 8px;font-size:10px;border-radius:12px}
-            .favorite-btn{width:20px;height:20px;font-size:10px;top:4px;right:4px}
+            .favorite-btn{top:4px !important;left:4px !important;width:24px !important;height:24px !important;min-width:24px !important;min-height:24px !important;max-width:24px !important;max-height:24px !important;font-size:11px !important;padding:0 !important;margin:0 !important}
             
             /* Унифицированная высота кнопок для маленьких экранов */
             .good .btn[style*="background:#48bb78"], 
@@ -1206,36 +1206,37 @@
         
         /* Стили для кнопок избранного */
         .favorite-btn {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 32px;
-            height: 32px;
-            border: none;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.9);
-            color: #64748b;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            transition: all 0.2s;
-            z-index: 10;
+            position: absolute !important;
+            top: 8px !important;
+            left: 8px !important;
+            background: rgba(255, 255, 255, 0.9) !important;
+            border: 1px solid var(--muted) !important;
+            border-radius: 50% !important;
+            width: 30px !important;
+            height: 30px !important;
+            min-width: 30px !important;
+            min-height: 30px !important;
+            max-width: 30px !important;
+            max-height: 30px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            font-size: 14px !important;
+            z-index: 2 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            line-height: 1 !important;
         }
         
         .favorite-btn:hover {
-            background: rgba(255, 255, 255, 1);
+            background: #fff;
             transform: scale(1.1);
         }
         
-        .favorite-btn.active {
+        .favorite-btn.favorited {
             color: #ef4444;
-            background: rgba(255, 255, 255, 1);
-        }
-        
-        .favorite-btn.active:hover {
-            transform: scale(1.1);
         }
         
         /* Стили для кнопок корзины */
@@ -1478,14 +1479,14 @@
         
         // Функции для работы с избранным
         function toggleFavorite(button, title, price, image) {
-            button.classList.toggle('active');
+            button.classList.toggle('favorited');
             
-            if (button.classList.contains('active')) {
-                button.innerHTML = '❤';
+            if (button.classList.contains('favorited')) {
+                button.innerHTML = '❤️';
                 button.title = 'Удалить из избранного';
                 addToFavorites(title, price, image);
             } else {
-                button.innerHTML = '♡';
+                button.innerHTML = '🤍';
                 button.title = 'Добавить в избранное';
                 removeFromFavorites(title);
             }
@@ -1578,8 +1579,8 @@
             // Обновляем состояние кнопки на странице
             const button = document.querySelector(`[onclick*="${title}"]`);
             if (button) {
-                button.classList.remove('active');
-                button.innerHTML = '♡';
+                button.classList.remove('favorited');
+                button.innerHTML = '🤍';
                 button.title = 'Добавить в избранное';
             }
         }
@@ -1591,8 +1592,8 @@
                 // Сбрасываем все кнопки сердечек на странице
                 const favoriteButtons = document.querySelectorAll('.favorite-btn');
                 favoriteButtons.forEach(button => {
-                    button.classList.remove('active');
-                    button.innerHTML = '♡';
+                    button.classList.remove('favorited');
+                    button.innerHTML = '🤍';
                     button.title = 'Добавить в избранное';
                 });
                 
@@ -1611,8 +1612,8 @@
                 // Сбрасываем все кнопки сердечек
                 const favoriteButtons = document.querySelectorAll('.favorite-btn');
                 favoriteButtons.forEach(button => {
-                    button.classList.remove('active');
-                    button.innerHTML = '♡';
+                    button.classList.remove('favorited');
+                    button.innerHTML = '🤍';
                     button.title = 'Добавить в избранное';
                 });
                 
@@ -1879,6 +1880,29 @@
         async function updateProductStatusesNew() {
             try {
                 console.log('updateProductStatusesNew called');
+                
+                // Обновляем кнопки избранного
+                const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                document.querySelectorAll('.favorite-btn').forEach(button => {
+                    const form = button.closest('form');
+                    if (form) {
+                        const titleInput = form.querySelector('input[name="title"]');
+                        if (titleInput) {
+                            const title = titleInput.value;
+                            const isFavorite = favorites.some(item => item.title === title);
+                            
+                            if (isFavorite) {
+                                button.classList.add('favorited');
+                                button.innerHTML = '❤️';
+                                button.title = 'Удалить из избранного';
+                            } else {
+                                button.classList.remove('favorited');
+                                button.innerHTML = '🤍';
+                                button.title = 'Добавить в избранное';
+                            }
+                        }
+                    }
+                });
                 
                 // Получаем количество товаров в корзине
                 const cartCountResponse = await fetch('/cart/count');
@@ -2436,7 +2460,7 @@ $auth = session('auth');
 
 <div class="container">
     <div class="grid-top">
-        <div class="tile tile-intro" style="background:rgb(226,223,244);cursor:pointer" onclick="showModal('order')">
+        <div class="tile tile-intro" style="background:rgb(226,223,244);cursor:pointer" onclick="window.open('https://t.me/c/2036046092/1252')">
             <h3>Знакомство. Оформление заказа</h3>
     
             </div>
@@ -3102,12 +3126,12 @@ $auth = session('auth');
                     @if(isset($featuredProducts) && $featuredProducts->count() > 0)
                         @foreach($featuredProducts as $product)
                             <article class="good product-card" data-category="{{ $product->category }}" data-brand="{{ $product->brand }}" data-subcat="{{ $product->subcat }}" data-price="{{ $product->price }}">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;right:8px;z-index:10">
+                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;left:8px;z-index:2">
                             <?php echo csrf_field(); ?>
                                     <input type="hidden" name="title" value="{{ $product->title }}">
                                     <input type="hidden" name="price" value="{{ $product->price }}">
                                     <input type="hidden" name="image" value="{{ is_array($product->images) ? $product->images[0] : $product->image }}">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">♡</button>
+                            <button type="submit" class="favorite-btn" title="Добавить в избранное">🤍</button>
                         </form>
                                 <a href="/product/{{ $product->id }}" style="text-decoration:none;color:inherit;display:block">
                                     <img src="{{ is_array($product->images) ? $product->images[0] : $product->image }}" alt="{{ $product->title }}">

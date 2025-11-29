@@ -423,7 +423,7 @@
             background: rgba(82, 126, 166, 0.8);
         }
         
-        /* Similar Products */
+        /* Similar Products - используем стили каталога */
         .similar-section {
             margin-top: 48px;
         }
@@ -437,72 +437,209 @@
         
         .similar-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            align-items: stretch;
         }
         
+        /* Используем те же стили, что и для товаров в каталоге */
         .similar-card {
             background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .similar-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        
-        .similar-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        
-        .similar-card-content {
-            padding: 16px;
-        }
-        
-        .similar-card-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #0f172a;
-        }
-        
-        .similar-card-price {
-            font-weight: 700;
-            color: #0f172a;
-        }
-        
-        .similar-original-price {
-            font-size: 14px;
-            color: #64748b;
-            text-decoration: line-through;
-            margin-left: 8px;
-        }
-        
-        .similar-discount-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: #3b82f6;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            z-index: 10;
-        }
-        
-        .similar-card {
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 280px;
             position: relative;
             text-decoration: none;
             color: inherit;
         }
         
+        .similar-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .similar-card img {
+            width: 100%;
+            border-radius: 8px;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            background: #f1f5f9;
+            flex-shrink: 0;
+        }
+        
+        .similar-card .meta {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 8px 0 10px 0;
+            font-size: 12px;
+            color: #475569;
+            flex-grow: 1;
+            min-height: 40px;
+        }
+        
+        .similar-card .meta > div {
+            width: 100%;
+        }
+        
+        .similar-card .meta > div:first-child {
+            margin-bottom: 4px;
+        }
+        
+        .similar-card .product-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+        }
+        
+        .similar-card .product-brand {
+            color: #64748b;
+            font-size: 12px;
+            margin: 4px 0;
+        }
+        
+        .similar-card .price {
+            font-weight: 700;
+            color: #0f172a;
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+        
+        .similar-original-price {
+            font-size: 12px;
+            color: #94a3b8;
+            text-decoration: line-through;
+            margin-left: 8px;
+        }
+        
+        
+        .similar-discount-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #527ea6;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 2;
+        }
+        
         .similar-product-hidden {
             display: none !important;
+        }
+        
+        /* Стили для кнопки избранного в похожих товарах - точно как в category.blade.php */
+        .similar-card .favorite-btn {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #cbd5e1;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 16px;
+            z-index: 2;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .similar-card .favorite-btn:hover {
+            background: #fff;
+            transform: scale(1.1);
+        }
+        
+        .similar-card .favorite-btn.favorited {
+            color: #ef4444;
+        }
+        
+        /* Десктопная версия - сетка из 2 колонок */
+        @media (min-width: 900px) {
+            .similar-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Стили для элементов товара (пол, размеры, цвета) */
+        .similar-card .product-gender {
+            margin: 4px 0;
+        }
+        
+        .similar-card .gender-badge {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #374151;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 4px;
+            font-weight: 500;
+        }
+        
+        .similar-card .product-sizes {
+            margin: 4px 0;
+            font-size: 12px;
+        }
+        
+        .similar-card .sizes-label {
+            color: #64748b;
+            margin-right: 4px;
+        }
+        
+        .similar-card .size-badge {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #475569;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 10px;
+            margin-right: 2px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .similar-card .size-more {
+            color: #64748b;
+            font-size: 10px;
+        }
+        
+        .similar-card .product-colors {
+            margin: 4px 0;
+            font-size: 12px;
+        }
+        
+        .similar-card .colors-label {
+            color: #64748b;
+            margin-right: 4px;
+        }
+        
+        .similar-card .color-swatch {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid #e2e8f0;
+            margin-right: 3px;
+            vertical-align: middle;
+        }
+        
+        .similar-card .color-more {
+            color: #64748b;
+            font-size: 10px;
         }
         
         .show-more-container {
@@ -687,40 +824,49 @@
                 padding-top: 24px;
             }
             
-            .similar-title {
-                font-size: 18px;
-                margin-bottom: 16px;
-            }
-            
             .similar-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
+                gap: 8px;
+                align-items: stretch;
             }
             
-            .similar-product {
+            .similar-card {
+                padding: 8px;
                 border-radius: 8px;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                min-height: 240px;
             }
             
-            .similar-product img {
-                height: 180px;
-                border-radius: 8px 8px 0 0;
+            .similar-card img {
+                border-radius: 6px;
+                aspect-ratio: 1/1;
+                flex-shrink: 0;
             }
             
-            .similar-info {
-                padding: 10px;
+            .similar-card .meta {
+                font-size: 11px;
+                margin: 6px 0 8px 0;
+                gap: 8px;
+                flex-grow: 1;
+                min-height: 35px;
             }
             
-            .similar-title-text {
+            .similar-card .product-title {
                 font-size: 13px;
-                margin-bottom: 6px;
-                line-height: 1.3;
             }
             
-            .similar-price {
-                font-size: 15px;
+            .similar-card .price {
+                font-size: 13px;
+                flex-shrink: 0;
             }
             
-            .similar-original-price {
+            .similar-card .favorite-btn {
+                top: 6px;
+                left: 6px;
+                width: 26px;
+                height: 26px;
                 font-size: 12px;
             }
         }
@@ -770,23 +916,56 @@
             
             .similar-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
+                gap: 6px;
+                align-items: stretch;
             }
             
-            .similar-product img {
-                height: 150px;
+            .similar-card {
+                padding: 6px;
+                border-radius: 6px;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                min-height: 200px;
             }
             
-            .similar-info {
-                padding: 8px;
+            .similar-card img {
+                border-radius: 4px;
+                aspect-ratio: 1/1;
+                flex-shrink: 0;
             }
             
-            .similar-title-text {
+            .similar-card .meta {
+                font-size: 10px;
+                margin: 4px 0 6px 0;
+                gap: 6px;
+                flex-direction: column;
+                align-items: flex-start;
+                flex-grow: 1;
+                min-height: 30px;
+            }
+            
+            .similar-card .meta > div:first-child {
+                line-height: 1.2;
+                margin-bottom: 2px;
+            }
+            
+            .similar-card .product-title {
                 font-size: 12px;
             }
             
-            .similar-price {
-                font-size: 14px;
+            .similar-card .price {
+                font-size: 12px;
+                font-weight: 600;
+                flex-shrink: 0;
+            }
+            
+            .similar-card .favorite-btn {
+                top: 6px;
+                left: 6px;
+                width: 24px;
+                height: 24px;
+                font-size: 11px;
             }
             
             .show-more-container {
@@ -920,27 +1099,74 @@
                 <div class="similar-grid" id="similarProductsGrid">
                     @foreach($similarProducts as $index => $similarProduct)
                         @php
-                            $productImage = is_array($similarProduct->images) ? ($similarProduct->images[0] ?? '') : '';
+                            $productImage = is_array($similarProduct->images) ? ($similarProduct->images[0] ?? '') : ($similarProduct->image ?? '');
                             $discount = 0;
                             if ($similarProduct->original_price && $similarProduct->price && $similarProduct->original_price > $similarProduct->price) {
                                 $discount = round((($similarProduct->original_price - $similarProduct->price) / $similarProduct->original_price) * 100);
                             }
                         @endphp
-                        <a href="/product/{{ $similarProduct->id }}" class="similar-card {{ $index >= 8 ? 'similar-product-hidden' : '' }}">
+                        <article class="similar-card good {{ $index >= 8 ? 'similar-product-hidden' : '' }}">
                             @if($discount > 0)
                                 <div class="similar-discount-badge">-{{ $discount }}%</div>
                             @endif
+                            
+                            <form method="post" action="/favorites/add" style="position:absolute;top:8px;left:8px;z-index:10">
+                                <?php echo csrf_field(); ?>
+                                <input type="hidden" name="title" value="{{ $similarProduct->title }}">
+                                <input type="hidden" name="price" value="{{ $similarProduct->price }}">
+                                <input type="hidden" name="image" value="{{ $productImage }}">
+                                <button type="submit" class="favorite-btn" title="Добавить в избранное">🤍</button>
+                            </form>
+                            
+                            <a href="/product/{{ $similarProduct->id }}" style="text-decoration:none;color:inherit;display:block">
                             <img src="{{ $productImage }}" alt="{{ $similarProduct->title }}">
-                            <div class="similar-card-content">
-                                <div class="similar-card-title">{{ $similarProduct->title }}</div>
-                                <div class="similar-card-price">
+                                <div class="meta">
+                                    <div class="product-title">{{ $similarProduct->title }}</div>
+                                    <div class="product-brand">{{ $similarProduct->brand ?? '' }}</div>
+                                    <div class="price">
                                     {{ number_format($similarProduct->price, 2) }}€
                                     @if($similarProduct->original_price && $similarProduct->original_price > $similarProduct->price)
                                         <span class="similar-original-price">{{ number_format($similarProduct->original_price, 2) }}€</span>
                                     @endif
                                 </div>
+                                    
+                                    <!-- Отображение пола -->
+                                    @if($similarProduct->gender && is_array($similarProduct->gender) && count($similarProduct->gender) > 0)
+                                        <div class="product-gender">
+                                            @foreach($similarProduct->gender as $g)
+                                                <span class="gender-badge">{{ $g }}</span>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                    
+                                    <!-- Отображение размеров -->
+                                    @if($similarProduct->sizes && is_array($similarProduct->sizes) && count($similarProduct->sizes) > 0)
+                                        <div class="product-sizes">
+                                            <span class="sizes-label">Размеры:</span>
+                                            @foreach(array_slice($similarProduct->sizes, 0, 3) as $size)
+                                                <span class="size-badge">{{ $size }}</span>
+                                            @endforeach
+                                            @if(count($similarProduct->sizes) > 3)
+                                                <span class="size-more">+{{ count($similarProduct->sizes) - 3 }}</span>
+                                            @endif
+                                        </div>
+                                    @endif
+                                    
+                                    <!-- Отображение цветов -->
+                                    @if($similarProduct->colors && is_array($similarProduct->colors) && count($similarProduct->colors) > 0)
+                                        <div class="product-colors">
+                                            <span class="colors-label">Цвета:</span>
+                                            @foreach(array_slice($similarProduct->colors, 0, 4) as $color)
+                                                <span class="color-swatch" style="background-color: {{ $color }}" title="{{ $color }}"></span>
+                                            @endforeach
+                                            @if(count($similarProduct->colors) > 4)
+                                                <span class="color-more">+{{ count($similarProduct->colors) - 4 }}</span>
+                                            @endif
+                                        </div>
+                                    @endif
                             </div>
                         </a>
+                        </article>
                     @endforeach
                 </div>
                 @if($similarProducts->count() > 8)
@@ -957,16 +1183,43 @@
 
     <!-- Модальное окно для полноразмерного просмотра изображения -->
     <div id="imageModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:10000;align-items:center;justify-content:center;cursor:pointer;" onclick="closeImageModal()">
-        <div style="position:relative;max-width:95%;max-height:95%;display:flex;align-items:center;justify-content:center;flex-direction:column;" onclick="event.stopPropagation();">
-            <img id="modalImage" src="" alt="" style="max-width:100%;max-height:85vh;object-fit:contain;border-radius:8px;">
-            <div style="position:absolute;top:20px;right:20px;display:flex;gap:10px;align-items:center;">
-                <button id="prevImageBtn" onclick="event.stopPropagation(); changeModalImage(-1)" style="background:rgba(255,255,255,0.9);border:none;color:#000;font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.3);">‹</button>
-                <button onclick="event.stopPropagation(); closeImageModal()" style="background:rgba(255,255,255,0.9);border:none;color:#000;font-size:32px;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.3);">&times;</button>
-                <button id="nextImageBtn" onclick="event.stopPropagation(); changeModalImage(1)" style="background:rgba(255,255,255,0.9);border:none;color:#000;font-size:24px;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:bold;box-shadow:0 2px 8px rgba(0,0,0,0.3);">›</button>
-            </div>
-            <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;background:rgba(0,0,0,0.6);padding:8px 16px;border-radius:20px;font-size:14px;" id="imageCounter"></div>
+        <div style="position:relative;max-width:95%;max-height:95%;display:flex;align-items:center;justify-content:center;flex-direction:column;width:100%;height:100%;" onclick="event.stopPropagation();">
+            <!-- Минималистичный крестик закрытия (только для десктопа) -->
+            <button id="closeImageBtn" onclick="event.stopPropagation(); closeImageModal()" class="image-modal-close" style="position:absolute;top:20px;right:20px;background:none;border:none;color:#fff;font-size:24px;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10001;opacity:0.8;transition:opacity 0.2s;">✕</button>
+            
+            <!-- Стрелка влево (только для десктопа) -->
+            <button id="prevImageBtn" onclick="event.stopPropagation(); changeModalImage(-1)" class="image-modal-arrow image-modal-arrow-left" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:none;color:#fff;font-size:28px;width:50px;height:50px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10001;opacity:0.7;transition:all 0.2s;backdrop-filter:blur(4px);">‹</button>
+            
+            <!-- Изображение -->
+            <img id="modalImage" src="" alt="" style="max-width:100%;max-height:85vh;object-fit:contain;border-radius:8px;user-select:none;pointer-events:none;">
+            
+            <!-- Стрелка вправо (только для десктопа) -->
+            <button id="nextImageBtn" onclick="event.stopPropagation(); changeModalImage(1)" class="image-modal-arrow image-modal-arrow-right" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:none;color:#fff;font-size:28px;width:50px;height:50px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10001;opacity:0.7;transition:all 0.2s;backdrop-filter:blur(4px);">›</button>
+            
+            <!-- Счетчик изображений -->
+            <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;background:rgba(0,0,0,0.6);padding:8px 16px;border-radius:20px;font-size:14px;backdrop-filter:blur(4px);" id="imageCounter"></div>
         </div>
     </div>
+    
+    <style>
+        /* Стили для модального окна изображений */
+        .image-modal-close:hover {
+            opacity: 1 !important;
+        }
+        
+        .image-modal-arrow:hover {
+            opacity: 1 !important;
+            background: rgba(255,255,255,0.2) !important;
+        }
+        
+        /* Скрываем кнопки на мобильных устройствах */
+        @media (max-width: 768px) {
+            .image-modal-close,
+            .image-modal-arrow {
+                display: none !important;
+            }
+        }
+    </style>
 
     <script>
         // Функция "Назад" с сохранением позиции скролла
@@ -1121,6 +1374,10 @@
 
         // Переменные для модального окна изображений
         let currentImageIndex = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
 
         // Функция открытия модального окна с изображением
         function openImageModal(imageIndex) {
@@ -1147,8 +1404,9 @@
             // Обновляем счетчик изображений
             updateImageCounter();
 
-            // Показываем/скрываем кнопки навигации
-            if (window.productImages.length > 1) {
+            // Показываем/скрываем кнопки навигации только для десктопа
+            const isMobile = window.innerWidth <= 768;
+            if (window.productImages.length > 1 && !isMobile) {
                 prevBtn.style.display = 'flex';
                 nextBtn.style.display = 'flex';
             } else {
@@ -1206,6 +1464,57 @@
             }
         });
 
+        // Инициализация обработчиков свайпов для мобильных устройств
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageModal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            
+            if (imageModal && modalImage) {
+                // Начало касания
+                modalImage.addEventListener('touchstart', function(e) {
+                    touchStartX = e.changedTouches[0].screenX;
+                    touchStartY = e.changedTouches[0].screenY;
+                }, { passive: true });
+                
+                // Конец касания
+                modalImage.addEventListener('touchend', function(e) {
+                    touchEndX = e.changedTouches[0].screenX;
+                    touchEndY = e.changedTouches[0].screenY;
+                    handleSwipe();
+                }, { passive: true });
+            }
+        });
+        
+        // Обработка свайпа
+        function handleSwipe() {
+            const modal = document.getElementById('imageModal');
+            if (modal.style.display !== 'flex') return;
+            
+            const swipeThreshold = 50; // Минимальное расстояние для свайпа
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
+            
+            // Определяем направление свайпа (горизонтальный или вертикальный)
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                // Горизонтальный свайп - переключение изображений
+                if (Math.abs(diffX) > swipeThreshold) {
+                    if (diffX > 0) {
+                        // Свайп влево - следующее изображение
+                        changeModalImage(1);
+                    } else {
+                        // Свайп вправо - предыдущее изображение
+                        changeModalImage(-1);
+                    }
+                }
+            } else {
+                // Вертикальный свайп - закрытие модального окна
+                if (diffY > swipeThreshold && diffY > 100) {
+                    // Свайп вниз - закрыть модальное окно
+                    closeImageModal();
+                }
+            }
+        }
+
         // Переменная для хранения выбранного цвета
         let selectedColor = null;
         
@@ -1225,6 +1534,89 @@
                     addToCartBtn.setAttribute('data-color-image', selectedColor.image);
                 }
             }
+            
+            // Обработчики для кнопок избранного в похожих товарах
+            const similarFavoriteForms = document.querySelectorAll('.similar-card form[action="/favorites/add"]');
+            similarFavoriteForms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const button = form.querySelector('.favorite-btn');
+                    const titleInput = form.querySelector('input[name="title"]');
+                    const priceInput = form.querySelector('input[name="price"]');
+                    const imageInput = form.querySelector('input[name="image"]');
+                    
+                    if (!titleInput || !priceInput || !imageInput) {
+                        console.error('Не найдены необходимые поля формы');
+                        return;
+                    }
+                    
+                    const title = titleInput.value;
+                    const price = priceInput.value;
+                    const image = imageInput.value;
+                    
+                    // Используем функцию toggleFavoriteSimple из common-functions.js (как в category.blade.php)
+                    if (typeof toggleFavoriteSimple === 'function') {
+                        toggleFavoriteSimple(null, title, price, image, e);
+                        
+                        // Обновляем все кнопки избранного на странице
+                        setTimeout(() => {
+                            updateSimilarFavoriteButtons();
+                        }, 100);
+                    } else {
+                        console.error('Функция toggleFavoriteSimple не найдена');
+                        // Fallback: используем localStorage напрямую
+                        let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                        const existingIndex = favorites.findIndex(item => item.title === title);
+                        
+                        if (existingIndex > -1) {
+                            favorites.splice(existingIndex, 1);
+                            button.classList.remove('favorited');
+                            button.innerHTML = '🤍';
+                            button.title = 'Добавить в избранное';
+                        } else {
+                            favorites.push({ productId: null, title, price, image });
+                            button.classList.add('favorited');
+                            button.innerHTML = '❤️';
+                            button.title = 'Удалить из избранного';
+                        }
+                        
+                        localStorage.setItem('favorites', JSON.stringify(favorites));
+                        
+                        // Обновляем счетчики
+                        if (typeof updateHeaderCountersSimple === 'function') {
+                            updateHeaderCountersSimple();
+                        }
+                    }
+                });
+            });
+            
+            // Функция обновления кнопок избранного в похожих товарах (как в category.blade.php)
+            function updateSimilarFavoriteButtons() {
+                const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+                similarFavoriteForms.forEach(form => {
+                    const titleInput = form.querySelector('input[name="title"]');
+                    if (titleInput) {
+                        const title = titleInput.value;
+                        const isFavorite = favorites.some(item => item.title === title);
+                        const button = form.querySelector('.favorite-btn');
+                        
+                        if (isFavorite && button) {
+                            button.classList.add('favorited');
+                            button.innerHTML = '❤️';
+                            button.title = 'Удалить из избранного';
+                        } else if (button) {
+                            button.classList.remove('favorited');
+                            button.innerHTML = '🤍';
+                            button.title = 'Добавить в избранное';
+                        }
+                    }
+                });
+            }
+            
+            // Восстанавливаем состояние кнопок избранного при загрузке страницы
+            updateSimilarFavoriteButtons();
         });
         
         // Select color image - новая функция для работы с изображениями цветов

@@ -273,6 +273,100 @@ async function toggleFavorite(productId, title = null) {
 }
 
 /**
+ * Простая версия переключения избранного (для совместимости с home.blade.php, product.blade.php и category.blade.php)
+ * @param {number|string|null} productId - ID товара (может быть null)
+ * @param {string} title - Название товара
+ * @param {string|number} price - Цена товара
+ * @param {string} image - URL изображения товара
+ * @param {Event} event - Событие клика (опционально)
+ */
+function toggleFavoriteSimple(productId, title, price, image, event) {
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    console.log('toggleFavoriteSimple called:', {productId, title, price, image});
+    
+    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const existingIndex = favorites.findIndex(item => item.title === title);
+    
+    if (existingIndex > -1) {
+        favorites.splice(existingIndex, 1);
+        showNotification('Товар удален из избранного', 'info');
+    } else {
+        favorites.push({ productId, title, price, image });
+        showNotification('Товар добавлен в избранное', 'success');
+    }
+    
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    console.log('Favorites updated:', favorites);
+    
+    // Обновляем счетчики
+    updateHeaderCountersSimple();
+    
+    // Обновляем статусы кнопок на странице
+    updateAllFavoriteButtons();
+}
+
+/**
+ * Обновляет все кнопки избранного на странице
+ */
+function updateAllFavoriteButtons() {
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    
+    // Обновляем кнопки в похожих товарах (как в category.blade.php)
+    const similarFavoriteButtons = document.querySelectorAll('.similar-card .favorite-btn');
+    similarFavoriteButtons.forEach(button => {
+        const form = button.closest('form');
+        if (form) {
+            const titleInput = form.querySelector('input[name="title"]');
+            if (titleInput) {
+                const title = titleInput.value;
+                const isFavorite = favorites.some(item => item.title === title);
+                
+                if (isFavorite) {
+                    button.classList.add('favorited');
+                    button.innerHTML = '❤️';
+                    button.title = 'Удалить из избранного';
+                } else {
+                    button.classList.remove('favorited');
+                    button.innerHTML = '🤍';
+                    button.title = 'Добавить в избранное';
+                }
+            }
+        }
+    });
+    
+    // Обновляем другие кнопки избранного на странице (не в похожих товарах)
+    const allFavoriteButtons = document.querySelectorAll('.favorite-btn');
+    allFavoriteButtons.forEach(button => {
+        // Пропускаем кнопки в похожих товарах (они уже обновлены выше)
+        if (button.closest('.similar-card')) {
+            return;
+        }
+        
+        const form = button.closest('form');
+        if (form) {
+            const titleInput = form.querySelector('input[name="title"]');
+            if (titleInput) {
+                const title = titleInput.value;
+                const isFavorite = favorites.some(item => item.title === title);
+                
+                if (isFavorite) {
+                    button.classList.add('active');
+                    button.innerHTML = '❤';
+                    button.title = 'Удалить из избранного';
+                } else {
+                    button.classList.remove('active');
+                    button.innerHTML = '♡';
+                    button.title = 'Добавить в избранное';
+                }
+            }
+        }
+    });
+}
+
+/**
  * Показывает уведомление пользователю
  * @param {string} message - Текст сообщения
  * @param {string} type - Тип уведомления ('success', 'error', 'info', 'warning')
@@ -669,6 +763,8 @@ window.addToCart = addToCart;
 window.addToCartNew = addToCartNew;
 window.removeFromCart = removeFromCart;
 window.toggleFavorite = toggleFavorite;
+window.toggleFavoriteSimple = toggleFavoriteSimple;
+window.updateAllFavoriteButtons = updateAllFavoriteButtons;
 window.showNotification = showNotification;
 window.validateEmail = validateEmail;
 window.validatePhone = validatePhone;
@@ -686,5 +782,7 @@ console.log('Functions exported to window:', {
     updateHeaderCountersSimple: typeof window.updateHeaderCountersSimple,
     addToCart: typeof window.addToCart,
     toggleFavorite: typeof window.toggleFavorite,
+    toggleFavoriteSimple: typeof window.toggleFavoriteSimple,
+    updateAllFavoriteButtons: typeof window.updateAllFavoriteButtons,
     showNotification: typeof window.showNotification
 });
