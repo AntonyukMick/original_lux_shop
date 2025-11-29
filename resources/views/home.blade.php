@@ -723,38 +723,35 @@
         .modal-overlay.active .modal-dialog{
             transform:scale(1);
         }
-        .modal-header{
-            padding:20px 60px 20px 20px;
-            border-bottom:1px solid #e2e8f0;
-            position:relative;
+        /* Новый хедер модального окна с Grid */
+        .modal-header-new {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
         }
-        .modal-header h2{
-            margin:0;
-            font-size:20px;
-            color:#0f172a;
+        
+        .modal-title-new {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.3;
         }
-        .modal-close{
-            position:absolute;
-            top:15px;
-            right:15px;
-            width:40px;
-            height:40px;
-            border:none;
-            background:none;
-            font-size:28px;
-            color:#94a3b8;
-            cursor:pointer;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            border-radius:50%;
-            transition:all 0.2s ease;
-            line-height:1;
-        }
-        .modal-close:hover{
-            background:#fee;
-            color:#ef4444;
-            transform:rotate(90deg);
+        
+        .modal-close-new {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #64748b;
+            cursor: pointer;
+            line-height: 1;
+            user-select: none;
         }
         .modal-body{
             padding:20px;
@@ -793,23 +790,29 @@
             display: block;
         }
         
-        /* Адаптивные стили для модального окна с акциями */
+        /* Адаптивные стили для модального окна */
         @media (max-width: 768px) {
             .modal-dialog {
                 max-width: 95%;
-                padding: 0;
             }
             
-            .modal-header {
-                padding: 15px 50px 15px 15px;
+            .modal-header-new {
+                padding: 16px;
+                gap: 12px;
             }
             
-            .modal-header h2 {
+            .modal-title-new {
                 font-size: 18px;
             }
             
+            .modal-close-new {
+                width: 30px;
+                height: 30px;
+                font-size: 26px;
+            }
+            
             .modal-body {
-                padding: 15px;
+                padding: 16px;
             }
             
             .promotions-images {
@@ -834,20 +837,19 @@
                 border-radius: 8px;
             }
             
-            .modal-header {
-                padding: 12px 40px 12px 12px;
+            .modal-header-new {
+                padding: 12px;
+                gap: 10px;
             }
             
-            .modal-header h2 {
+            .modal-title-new {
                 font-size: 16px;
             }
             
-            .modal-close {
-                width: 32px;
-                height: 32px;
-                font-size: 24px;
-                top: 10px;
-                right: 10px;
+            .modal-close-new {
+                width: 26px;
+                height: 26px;
+                font-size: 22px;
             }
             
             .modal-body {
@@ -860,8 +862,8 @@
             
             .promotion-image {
                 border-radius: 6px;
-                width: 37.5%;
-                max-width: 37.5%;
+                width: 50%;
+                max-width: 50%;
             }
         }
         
@@ -2441,12 +2443,12 @@ $auth = session('auth');
             </div>
         </div>
 
-        <!-- Модальные окна для кнопок - НОВАЯ СТРУКТУРА -->
+        <!-- Модальное окно "Знакомство. Оформление заказа" -->
         <div id="modal-order" class="modal-overlay">
             <div class="modal-dialog">
-                <div class="modal-header">
-                    <h2>Знакомство. Оформление заказа</h2>
-                    <button class="modal-close" data-modal="modal-order" type="button">&times;</button>
+                <div class="modal-header-new">
+                    <h2 class="modal-title-new">Знакомство. Оформление заказа</h2>
+                    <span class="modal-close-new" onclick="closeModal('order')">&times;</span>
                 </div>
                 <div class="modal-body">
                     <h3>Как мы работаем:</h3>

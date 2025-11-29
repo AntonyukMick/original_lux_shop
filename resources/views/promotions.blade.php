@@ -101,38 +101,35 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
     
-    .modal-header {
-        display: flex;
-        justify-content: space-between;
+    /* Новый хедер модального окна с Grid */
+    .modal-header-new {
+        display: grid;
+        grid-template-columns: 1fr auto;
         align-items: center;
+        gap: 16px;
         padding: 20px;
         border-bottom: 1px solid #e2e8f0;
     }
     
-    .modal-header h2 {
+    .modal-title-new {
         margin: 0;
         font-size: 24px;
         font-weight: 700;
         color: #1e293b;
+        line-height: 1.3;
     }
     
-    .modal-close {
-        background: none;
-        border: none;
+    .modal-close-new {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         font-size: 32px;
         color: #64748b;
         cursor: pointer;
-        padding: 0;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: color 0.2s ease;
-    }
-    
-    .modal-close:hover {
-        color: #1e293b;
+        line-height: 1;
+        user-select: none;
     }
     
     .modal-body {
@@ -151,12 +148,19 @@
             max-width: 95%;
         }
         
-        .modal-header {
-            padding: 15px;
+        .modal-header-new {
+            padding: 16px;
+            gap: 12px;
         }
         
-        .modal-header h2 {
+        .modal-title-new {
             font-size: 20px;
+        }
+        
+        .modal-close-new {
+            width: 30px;
+            height: 30px;
+            font-size: 28px;
         }
         
         .modal-body {
@@ -174,18 +178,19 @@
             border-radius: 8px;
         }
         
-        .modal-header {
+        .modal-header-new {
             padding: 12px;
+            gap: 10px;
         }
         
-        .modal-header h2 {
+        .modal-title-new {
             font-size: 18px;
         }
         
-        .modal-close {
-            font-size: 28px;
-            width: 28px;
-            height: 28px;
+        .modal-close-new {
+            width: 26px;
+            height: 26px;
+            font-size: 24px;
         }
         
         .modal-body {
@@ -671,9 +676,9 @@
         <!-- Модальное окно для первой акции -->
         <div id="promotionModal1" class="modal-overlay" onclick="closePromotionModal(event)">
             <div class="modal-dialog" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <h2>🎉 Специальное предложение</h2>
-                    <button class="modal-close" onclick="closePromotionModal()" type="button">&times;</button>
+                <div class="modal-header-new">
+                    <h2 class="modal-title-new">🎉 Специальное предложение</h2>
+                    <span class="modal-close-new" onclick="closePromotionModal()">&times;</span>
                 </div>
                 <div class="modal-body">
                     <p>В честь появления нашего сайта и грядущего Нового Года мы дарим скидку 5% на любой первый заказ для наших клиентов.</p>
@@ -684,9 +689,9 @@
         <!-- Модальное окно для второй акции -->
         <div id="promotionModal2" class="modal-overlay" onclick="closePromotionModal(event)">
             <div class="modal-dialog" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <h2>👥 Реферальная программа</h2>
-                    <button class="modal-close" onclick="closePromotionModal()" type="button">&times;</button>
+                <div class="modal-header-new">
+                    <h2 class="modal-title-new">👥 Реферальная программа</h2>
+                    <span class="modal-close-new" onclick="closePromotionModal()">&times;</span>
                 </div>
                 <div class="modal-body">
                     <p>В нашем магазине действует «реферальная скидка». Вы можете пригласить любого друга и он перед заказам обязать сообщить, что он пришел именно от вас, отметив телеграмм-тегом @. В таком случае вы получаете скидку 2% при заказе. Количество приглашенных неограниченно. Срок действия скидки - 3 месяца.</p>
@@ -697,9 +702,9 @@
         <!-- Модальное окно для третьей акции -->
         <div id="promotionModal3" class="modal-overlay" onclick="closePromotionModal(event)">
             <div class="modal-dialog" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <h2>⭐ Отзывы с выгодой</h2>
-                    <button class="modal-close" onclick="closePromotionModal()" type="button">&times;</button>
+                <div class="modal-header-new">
+                    <h2 class="modal-title-new">⭐ Отзывы с выгодой</h2>
+                    <span class="modal-close-new" onclick="closePromotionModal()">&times;</span>
                 </div>
                 <div class="modal-body">
                     <p>После полученного Вами заказа, мы всегда рады обратной связи наших клиентов. А теперь это будет еще и выгодно. После оставленного отзыва клиент получает скидку 3%. Срок действия скидки - 3 месяца.</p>

@@ -292,7 +292,7 @@
         }
         
         .main {
-            padding: 20px 0;
+            padding-top: 40px;
         }
         
         .page-title {

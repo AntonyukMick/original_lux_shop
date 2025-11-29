@@ -1270,7 +1270,7 @@
                 showMoreBtn.style.display = 'none';
             }
         }
-        
+
         // Обновляем статусы при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
             updateProductStatuses();
