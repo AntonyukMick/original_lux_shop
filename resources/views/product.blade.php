@@ -132,8 +132,8 @@
             border-color: #94a3b8;
         }
         
-        /* Product Info */
-        .product-info {
+        /* Product Info - основная информация о товаре */
+        .product-grid > .product-info {
             padding: 24px;
             background: #fff;
             border-radius: 12px;
@@ -435,116 +435,175 @@
             color: #0f172a;
         }
         
+        /* Точные стили из category.blade.php - скопированы полностью */
         .similar-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 14px;
-            align-items: stretch;
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 16px !important;
+            margin-bottom: 32px;
         }
         
-        /* Используем те же стили, что и для товаров в каталоге */
-        .similar-card {
-            background: #fff;
-            border: 1px solid #cbd5e1;
+        .product-card {
+            background: var(--card);
+            border: 2px solid #000;
             border-radius: 10px;
-            padding: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            position: relative;
             display: flex;
             flex-direction: column;
             height: 100%;
-            min-height: 280px;
-            position: relative;
-            text-decoration: none;
-            color: inherit;
         }
         
-        .similar-card:hover {
+        .product-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
-        .similar-card img {
-            width: 100%;
-            border-radius: 8px;
-            aspect-ratio: 4/3;
-            object-fit: cover;
-            background: #f1f5f9;
-            flex-shrink: 0;
+        .product-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
         
-        .similar-card .meta {
+        .product-card-link:hover {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .discount-badge {
+            position: absolute !important;
+            top: 12px !important;
+            right: 12px !important;
+            background: #527ea6 !important;
+            color: #fff !important;
+            padding: 6px 12px !important;
+            border-radius: 16px !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            z-index: 2 !important;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #64748b;
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 12px;
-            margin: 8px 0 10px 0;
-            font-size: 12px;
-            color: #475569;
             flex-grow: 1;
-            min-height: 40px;
+            border: none !important;
+            background: transparent !important;
         }
         
-        .similar-card .meta > div {
-            width: 100%;
+        /* Стили для похожих товаров - точно как в каталоге */
+        .similar-grid .product-info {
+            padding: 16px;
+            border: none !important;
+            background: transparent !important;
         }
         
-        .similar-card .meta > div:first-child {
-            margin-bottom: 4px;
-        }
-        
-        .similar-card .product-title {
+        .similar-grid .product-title {
             font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            margin: 0;
-        }
-        
-        .similar-card .product-brand {
-            color: #64748b;
-            font-size: 12px;
-            margin: 4px 0;
-        }
-        
-        .similar-card .price {
             font-weight: 700;
-            color: #0f172a;
-            flex-shrink: 0;
-            font-size: 16px;
+            margin-bottom: 6px;
+            color: #1e293b;
         }
         
-        .similar-original-price {
+        .similar-grid .product-brand {
             font-size: 12px;
-            color: #94a3b8;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        
+        .similar-grid .price-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .similar-grid .original-price {
             text-decoration: line-through;
-            margin-left: 8px;
+            color: #9ca3af;
+            font-size: 14px;
         }
         
+        .similar-grid .current-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #527ea6;
+        }
         
-        .similar-discount-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #527ea6;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 16px;
-            font-size: 12px;
+        .similar-grid .savings {
+            font-size: 11px;
+            color: #10b981;
             font-weight: 600;
-            z-index: 2;
         }
         
-        .similar-product-hidden {
-            display: none !important;
+        .product-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1e293b;
         }
         
-        /* Стили для кнопки избранного в похожих товарах - точно как в category.blade.php */
-        .similar-card .favorite-btn {
+        .product-brand {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        
+        .price-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+        
+        .current-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #527ea6;
+        }
+        
+        .savings {
+            font-size: 11px;
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .add-to-favorite-btn {
             position: absolute;
             top: 12px;
             left: 12px;
             background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #cbd5e1;
+            border: 1px solid var(--muted);
             border-radius: 50%;
             width: 32px;
             height: 32px;
@@ -555,91 +614,19 @@
             transition: all 0.2s ease;
             font-size: 16px;
             z-index: 2;
-            padding: 0;
-            line-height: 1;
         }
         
-        .similar-card .favorite-btn:hover {
+        .add-to-favorite-btn:hover {
             background: #fff;
             transform: scale(1.1);
         }
         
-        .similar-card .favorite-btn.favorited {
+        .add-to-favorite-btn.favorited {
             color: #ef4444;
         }
         
-        /* Десктопная версия - сетка из 2 колонок */
-        @media (min-width: 900px) {
-            .similar-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        /* Стили для элементов товара (пол, размеры, цвета) */
-        .similar-card .product-gender {
-            margin: 4px 0;
-        }
-        
-        .similar-card .gender-badge {
-            display: inline-block;
-            background: #e2e8f0;
-            color: #374151;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 11px;
-            margin-right: 4px;
-            font-weight: 500;
-        }
-        
-        .similar-card .product-sizes {
-            margin: 4px 0;
-            font-size: 12px;
-        }
-        
-        .similar-card .sizes-label {
-            color: #64748b;
-            margin-right: 4px;
-        }
-        
-        .similar-card .size-badge {
-            display: inline-block;
-            background: #f1f5f9;
-            color: #475569;
-            padding: 1px 4px;
-            border-radius: 3px;
-            font-size: 10px;
-            margin-right: 2px;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .similar-card .size-more {
-            color: #64748b;
-            font-size: 10px;
-        }
-        
-        .similar-card .product-colors {
-            margin: 4px 0;
-            font-size: 12px;
-        }
-        
-        .similar-card .colors-label {
-            color: #64748b;
-            margin-right: 4px;
-        }
-        
-        .similar-card .color-swatch {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            border: 1px solid #e2e8f0;
-            margin-right: 3px;
-            vertical-align: middle;
-        }
-        
-        .similar-card .color-more {
-            color: #64748b;
-            font-size: 10px;
+        .product-hidden {
+            display: none !important;
         }
         
         .show-more-container {
@@ -670,6 +657,114 @@
         
         .show-more-btn:active {
             transform: translateY(0);
+        }
+        
+        @media (min-width: 900px) {
+            .similar-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .similar-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+            
+            .similar-grid .product-card {
+                border-width: 1px;
+            }
+            
+            .similar-grid .product-image {
+                height: 140px;
+                font-size: 30px;
+            }
+            
+            .similar-grid .product-info {
+                padding: 10px;
+            }
+            
+            .similar-grid .product-title {
+                font-size: 13px;
+                line-height: 1.3;
+            }
+            
+            .similar-grid .product-brand {
+                font-size: 10px;
+                margin-bottom: 8px;
+            }
+            
+            .similar-grid .price-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+                margin-bottom: 8px;
+            }
+            
+            .similar-grid .original-price {
+                font-size: 11px;
+            }
+            
+            .similar-grid .current-price {
+                font-size: 16px;
+            }
+            
+            .similar-grid .savings {
+                font-size: 9px;
+            }
+            
+            .similar-grid .discount-badge {
+                top: 6px !important;
+                right: 6px !important;
+                padding: 4px 8px !important;
+                font-size: 10px !important;
+                border-radius: 12px !important;
+            }
+            
+            .similar-grid .add-to-favorite-btn {
+                top: 6px;
+                left: 6px;
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+            
+            .show-more-container {
+                margin-top: 20px;
+                padding: 16px 0;
+            }
+            
+            .show-more-btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .similar-grid {
+                gap: 6px !important;
+            }
+            
+            .similar-grid .product-image {
+                height: 120px;
+                font-size: 24px;
+            }
+            
+            .similar-grid .product-info {
+                padding: 8px;
+            }
+            
+            .similar-grid .product-title {
+                font-size: 12px;
+            }
+            
+            .similar-grid .current-price {
+                font-size: 14px;
+            }
+            
+            .similar-grid .current-price {
+                font-size: 14px;
+            }
         }
         
         /* Responsive */
@@ -824,51 +919,7 @@
                 padding-top: 24px;
             }
             
-            .similar-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-                align-items: stretch;
-            }
-            
-            .similar-card {
-                padding: 8px;
-                border-radius: 8px;
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-                min-height: 240px;
-            }
-            
-            .similar-card img {
-                border-radius: 6px;
-                aspect-ratio: 1/1;
-                flex-shrink: 0;
-            }
-            
-            .similar-card .meta {
-                font-size: 11px;
-                margin: 6px 0 8px 0;
-                gap: 8px;
-                flex-grow: 1;
-                min-height: 35px;
-            }
-            
-            .similar-card .product-title {
-                font-size: 13px;
-            }
-            
-            .similar-card .price {
-                font-size: 13px;
-                flex-shrink: 0;
-            }
-            
-            .similar-card .favorite-btn {
-                top: 6px;
-                left: 6px;
-                width: 26px;
-                height: 26px;
-                font-size: 12px;
-            }
+            /* Стили для похожих товаров уже определены выше в общих медиа-запросах */
         }
         
         @media (max-width: 480px) {
@@ -914,64 +965,7 @@
                 font-size: 12px;
             }
             
-            .similar-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 6px;
-                align-items: stretch;
-            }
-            
-            .similar-card {
-                padding: 6px;
-                border-radius: 6px;
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-                min-height: 200px;
-            }
-            
-            .similar-card img {
-                border-radius: 4px;
-                aspect-ratio: 1/1;
-                flex-shrink: 0;
-            }
-            
-            .similar-card .meta {
-                font-size: 10px;
-                margin: 4px 0 6px 0;
-                gap: 6px;
-                flex-direction: column;
-                align-items: flex-start;
-                flex-grow: 1;
-                min-height: 30px;
-            }
-            
-            .similar-card .meta > div:first-child {
-                line-height: 1.2;
-                margin-bottom: 2px;
-            }
-            
-            .similar-card .product-title {
-                font-size: 12px;
-            }
-            
-            .similar-card .price {
-                font-size: 12px;
-                font-weight: 600;
-                flex-shrink: 0;
-            }
-            
-            .similar-card .favorite-btn {
-                top: 6px;
-                left: 6px;
-                width: 24px;
-                height: 24px;
-                font-size: 11px;
-            }
-            
-            .show-more-container {
-                margin-top: 20px;
-                padding: 16px 0;
-            }
+            /* Стили для похожих товаров уже определены выше в общих медиа-запросах */
             
             .show-more-btn {
                 padding: 12px 24px;
@@ -1105,68 +1099,49 @@
                                 $discount = round((($similarProduct->original_price - $similarProduct->price) / $similarProduct->original_price) * 100);
                             }
                         @endphp
-                        <article class="similar-card good {{ $index >= 8 ? 'similar-product-hidden' : '' }}">
+                            @php
+                                $originalPrice = $similarProduct->original_price ?? 0;
+                                $currentPrice = $similarProduct->price ?? 0;
+                            @endphp
+                            <a href="/product/{{ $similarProduct->id }}" class="product-card-link {{ $index >= 8 ? 'product-hidden' : '' }}">
+                                <div class="product-card">
                             @if($discount > 0)
-                                <div class="similar-discount-badge">-{{ $discount }}%</div>
+                                    <div class="discount-badge">-{{ $discount }}%</div>
                             @endif
-                            
-                            <form method="post" action="/favorites/add" style="position:absolute;top:8px;left:8px;z-index:10">
-                                <?php echo csrf_field(); ?>
-                                <input type="hidden" name="title" value="{{ $similarProduct->title }}">
-                                <input type="hidden" name="price" value="{{ $similarProduct->price }}">
-                                <input type="hidden" name="image" value="{{ $productImage }}">
-                                <button type="submit" class="favorite-btn" title="Добавить в избранное">🤍</button>
-                            </form>
-                            
-                            <a href="/product/{{ $similarProduct->id }}" style="text-decoration:none;color:inherit;display:block">
+                                
+                                <button class="add-to-favorite-btn" onclick="toggleFavoriteSimple({{ $similarProduct->id }}, '{{ $similarProduct->title ?? '' }}', '{{ $currentPrice }}', '{{ $productImage }}', event)" title="Добавить в избранное">
+                                    🤍
+                                </button>
+                                
+                                <div class="product-image">
+                                    @if($productImage)
                             <img src="{{ $productImage }}" alt="{{ $similarProduct->title }}">
-                                <div class="meta">
-                                    <div class="product-title">{{ $similarProduct->title }}</div>
-                                    <div class="product-brand">{{ $similarProduct->brand ?? '' }}</div>
-                                    <div class="price">
-                                    {{ number_format($similarProduct->price, 2) }}€
-                                    @if($similarProduct->original_price && $similarProduct->original_price > $similarProduct->price)
-                                        <span class="similar-original-price">{{ number_format($similarProduct->original_price, 2) }}€</span>
+                                    @else
+                                        🛍️
                                     @endif
                                 </div>
+                                
+                                <div class="product-info">
+                                    @if(isset($similarProduct->brand))
+                                        <div class="product-brand">{{ $similarProduct->brand }}</div>
+                                    @endif
+                                    <h3 class="product-title">{{ $similarProduct->title ?? 'Название не указано' }}</h3>
                                     
-                                    <!-- Отображение пола -->
-                                    @if($similarProduct->gender && is_array($similarProduct->gender) && count($similarProduct->gender) > 0)
-                                        <div class="product-gender">
-                                            @foreach($similarProduct->gender as $g)
-                                                <span class="gender-badge">{{ $g }}</span>
-                                            @endforeach
+                                    <div class="price-section">
+                                        @if($originalPrice > $currentPrice && $originalPrice > 0)
+                                            <div class="original-price">{{ $originalPrice }}€</div>
+                                        @endif
+                                        <div class="current-price">{{ $currentPrice }}€</div>
+                                    </div>
+                                    
+                                    @if($discount > 0)
+                                        <div class="savings">
+                                            Экономия {{ round($originalPrice - $currentPrice, 2) }}€
                                         </div>
                                     @endif
-                                    
-                                    <!-- Отображение размеров -->
-                                    @if($similarProduct->sizes && is_array($similarProduct->sizes) && count($similarProduct->sizes) > 0)
-                                        <div class="product-sizes">
-                                            <span class="sizes-label">Размеры:</span>
-                                            @foreach(array_slice($similarProduct->sizes, 0, 3) as $size)
-                                                <span class="size-badge">{{ $size }}</span>
-                                            @endforeach
-                                            @if(count($similarProduct->sizes) > 3)
-                                                <span class="size-more">+{{ count($similarProduct->sizes) - 3 }}</span>
-                                            @endif
-                                        </div>
-                                    @endif
-                                    
-                                    <!-- Отображение цветов -->
-                                    @if($similarProduct->colors && is_array($similarProduct->colors) && count($similarProduct->colors) > 0)
-                                        <div class="product-colors">
-                                            <span class="colors-label">Цвета:</span>
-                                            @foreach(array_slice($similarProduct->colors, 0, 4) as $color)
-                                                <span class="color-swatch" style="background-color: {{ $color }}" title="{{ $color }}"></span>
-                                            @endforeach
-                                            @if(count($similarProduct->colors) > 4)
-                                                <span class="color-more">+{{ count($similarProduct->colors) - 4 }}</span>
-                                            @endif
-                                        </div>
-                                    @endif
+                                </div>
                             </div>
                         </a>
-                        </article>
                     @endforeach
                 </div>
                 @if($similarProducts->count() > 8)
@@ -1590,81 +1565,27 @@
                 }
             }
             
-            // Обработчики для кнопок избранного в похожих товарах
-            const similarFavoriteForms = document.querySelectorAll('.similar-card form[action="/favorites/add"]');
-            similarFavoriteForms.forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const button = form.querySelector('.favorite-btn');
-                    const titleInput = form.querySelector('input[name="title"]');
-                    const priceInput = form.querySelector('input[name="price"]');
-                    const imageInput = form.querySelector('input[name="image"]');
-                    
-                    if (!titleInput || !priceInput || !imageInput) {
-                        console.error('Не найдены необходимые поля формы');
-                        return;
-                    }
-                    
-                    const title = titleInput.value;
-                    const price = priceInput.value;
-                    const image = imageInput.value;
-                    
-                    // Используем функцию toggleFavoriteSimple из common-functions.js (как в category.blade.php)
-                    if (typeof toggleFavoriteSimple === 'function') {
-                        toggleFavoriteSimple(null, title, price, image, e);
-                        
-                        // Обновляем все кнопки избранного на странице
-                        setTimeout(() => {
-                            updateSimilarFavoriteButtons();
-                        }, 100);
-                    } else {
-                        console.error('Функция toggleFavoriteSimple не найдена');
-                        // Fallback: используем localStorage напрямую
-                        let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-                        const existingIndex = favorites.findIndex(item => item.title === title);
-                        
-                        if (existingIndex > -1) {
-                            favorites.splice(existingIndex, 1);
-                            button.classList.remove('favorited');
-                            button.innerHTML = '🤍';
-                            button.title = 'Добавить в избранное';
-                        } else {
-                            favorites.push({ productId: null, title, price, image });
-                            button.classList.add('favorited');
-                            button.innerHTML = '❤️';
-                            button.title = 'Удалить из избранного';
-                        }
-                        
-                        localStorage.setItem('favorites', JSON.stringify(favorites));
-                        
-                        // Обновляем счетчики
-                        if (typeof updateHeaderCountersSimple === 'function') {
-                            updateHeaderCountersSimple();
-                        }
-                    }
-                });
-            });
-            
             // Функция обновления кнопок избранного в похожих товарах (как в category.blade.php)
             function updateSimilarFavoriteButtons() {
                 const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-                similarFavoriteForms.forEach(form => {
-                    const titleInput = form.querySelector('input[name="title"]');
-                    if (titleInput) {
-                        const title = titleInput.value;
-                        const isFavorite = favorites.some(item => item.title === title);
-                        const button = form.querySelector('.favorite-btn');
-                        
-                        if (isFavorite && button) {
-                            button.classList.add('favorited');
-                            button.innerHTML = '❤️';
-                            button.title = 'Удалить из избранного';
-                        } else if (button) {
-                            button.classList.remove('favorited');
-                            button.innerHTML = '🤍';
-                            button.title = 'Добавить в избранное';
+                const similarFavoriteButtons = document.querySelectorAll('.similar-grid .add-to-favorite-btn');
+                similarFavoriteButtons.forEach(button => {
+                    const onclick = button.getAttribute('onclick');
+                    if (onclick) {
+                        const titleMatch = onclick.match(/'([^']+)'/);
+                        if (titleMatch) {
+                            const title = titleMatch[1];
+                            const isFavorite = favorites.some(item => item.title === title);
+                            
+                            if (isFavorite) {
+                                button.classList.add('favorited');
+                                button.innerHTML = '❤️';
+                                button.title = 'Удалить из избранного';
+                            } else {
+                                button.classList.remove('favorited');
+                                button.innerHTML = '🤍';
+                                button.title = 'Добавить в избранное';
+                            }
                         }
                     }
                 });
@@ -1672,6 +1593,15 @@
             
             // Восстанавливаем состояние кнопок избранного при загрузке страницы
             updateSimilarFavoriteButtons();
+            
+            // Обновляем кнопки после изменения избранного
+            if (typeof updateAllFavoriteButtons === 'function') {
+                const originalUpdateAll = updateAllFavoriteButtons;
+                window.updateAllFavoriteButtons = function() {
+                    originalUpdateAll();
+                    updateSimilarFavoriteButtons();
+                };
+            }
         });
         
         // Select color image - новая функция для работы с изображениями цветов

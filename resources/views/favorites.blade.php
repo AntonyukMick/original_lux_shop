@@ -56,20 +56,24 @@
     <style>
     :root { --bg:#f1f5f9; --card:#ffffff; --muted:#e2e8f0; --text:#0f172a; --accent:#527ea6; }
     body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,"Noto Sans",sans-serif;background:var(--bg);color:var(--text)}
+    .main{padding-top:80px !important;margin-top:0 !important}
+    .main > .container:first-child{margin-top:0 !important;padding-top:0 !important}
+    @media (max-width:768px){.main{padding-top:80px !important;margin-top:0 !important}}
+    @media (min-width:769px){.main{padding-top:80px !important;margin-top:0 !important}}
     .container{max-width:1200px;margin:0 auto;padding:12px}
     .panel{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:24px;text-align:left}
     .panel h1{margin:0 0 24px 0;font-size:28px;font-weight:700;color:#0f172a;background:linear-gradient(135deg, #527ea6, #3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     
-    /* Сетка карточек товаров */
-    .favorites-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 16px;
-        margin-top: 24px;
+    /* Точные стили из category.blade.php - скопированы полностью */
+    .products-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+        margin-bottom: 32px;
     }
     
-    /* Карточка товара */
-    .favorite-card {
+    /* Стандартизированные стили карточек товаров как в category.blade.php */
+    .product-card {
         background: var(--card);
         border: 2px solid #000;
         border-radius: 10px;
@@ -81,23 +85,49 @@
         height: 100%;
     }
     
-    .favorite-card:hover {
+    .product-card:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
-    .favorite-image-container {
-        position: relative;
+    .product-card-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+    
+    .product-card-link:hover {
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .discount-badge {
+        position: absolute !important;
+        top: 12px !important;
+        right: 12px !important;
+        background: #527ea6 !important;
+        color: #fff !important;
+        padding: 6px 12px !important;
+        border-radius: 16px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        z-index: 2 !important;
+    }
+    
+    .product-image {
         width: 100%;
         height: 200px;
         background: var(--muted);
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 40px;
+        color: #64748b;
         overflow: hidden;
+        position: relative;
     }
     
-    .favorite-image-container img {
+    .product-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -118,7 +148,7 @@
         cursor: pointer;
         transition: all 0.2s ease;
         font-size: 16px;
-        z-index: 2;
+        z-index: 3;
         color: #ef4444;
     }
     
@@ -128,40 +158,57 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     
-    .favorite-info {
+    .product-info {
         padding: 16px;
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+        border: none !important;
+        background: transparent !important;
     }
     
-    .favorite-title {
+    .product-title {
         font-size: 16px;
         font-weight: 700;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         color: #1e293b;
-        line-height: 1.4;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
     }
     
-    .favorite-price {
-        font-size: 20px;
-        font-weight: 700;
-        color: #527ea6;
+    .product-brand {
+        font-size: 12px;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
         margin-bottom: 12px;
     }
     
-    .favorite-actions {
+    .price-section {
         display: flex;
+        align-items: center;
         gap: 8px;
-        margin-top: auto;
+        margin-bottom: 12px;
     }
     
-    .favorite-add-cart-btn {
-        flex: 1;
+    .original-price {
+        text-decoration: line-through;
+        color: #9ca3af;
+        font-size: 14px;
+    }
+    
+    .current-price {
+        font-size: 20px;
+        font-weight: 700;
+        color: #527ea6;
+    }
+    
+    .savings {
+        font-size: 11px;
+        color: #10b981;
+        font-weight: 600;
+    }
+    
+    .add-to-cart-btn {
+        width: 100%;
         height: 36px;
         padding: 0 16px;
         border-radius: 18px;
@@ -172,20 +219,21 @@
         cursor: pointer;
         transition: all 0.2s ease;
         font-size: 14px;
+        margin-top: auto;
     }
     
-    .favorite-add-cart-btn:hover {
+    .add-to-cart-btn:hover {
         background: linear-gradient(135deg, #527ea6 0%, #3b82f6 100%);
         color: #fff;
         transform: translateY(-1px);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     
-    .favorite-add-cart-btn:active {
+    .add-to-cart-btn:active {
         transform: translateY(0);
     }
     
-    .favorite-add-cart-btn.added {
+    .add-to-cart-btn.added {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: #fff;
     }
@@ -195,51 +243,49 @@
         .container{padding:8px}
         .panel{padding:16px}
         .panel h1{font-size:24px;margin-bottom:16px}
-        .favorites-grid {
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 12px;
+        .products-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 8px !important;
         }
-        .favorite-image-container {
-            height: 160px;
+        .product-card {
+            border-width: 1px;
         }
-        .favorite-title {
-            font-size: 14px;
-        }
-        .favorite-price {
-            font-size: 18px;
-        }
-        .favorite-remove-btn {
-            top: 8px;
-            right: 8px;
-            width: 28px;
-            height: 28px;
-            font-size: 14px;
-        }
-        .favorite-info {
-            padding: 12px;
-        }
-        .favorite-add-cart-btn {
-            height: 32px;
-            font-size: 13px;
-        }
-    }
-    
-    @media (max-width: 480px) {
-        .container{padding:6px}
-        .panel{padding:12px}
-        .panel h1{font-size:20px;margin-bottom:12px}
-        .favorites-grid {
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
-        }
-        .favorite-image-container {
+        .product-image {
             height: 140px;
+            font-size: 30px;
         }
-        .favorite-title {
+        .product-info {
+            padding: 10px;
+        }
+        .product-title {
             font-size: 13px;
+            line-height: 1.3;
         }
-        .favorite-price {
+        .product-brand {
+            font-size: 10px;
+            margin-bottom: 8px;
+        }
+        .price-section {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        .original-price {
+            font-size: 11px;
+        }
+        .current-price {
             font-size: 16px;
+        }
+        .savings {
+            font-size: 9px;
+        }
+        .discount-badge {
+            top: 6px !important;
+            right: 6px !important;
+            padding: 4px 8px !important;
+            font-size: 10px !important;
+            border-radius: 12px !important;
         }
         .favorite-remove-btn {
             top: 6px;
@@ -248,12 +294,35 @@
             height: 26px;
             font-size: 12px;
         }
-        .favorite-info {
-            padding: 10px;
-        }
-        .favorite-add-cart-btn {
-            height: 30px;
+        .add-to-cart-btn {
+            height: 32px;
             font-size: 12px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .container{padding:6px}
+        .panel{padding:12px}
+        .panel h1{font-size:20px;margin-bottom:12px}
+        .products-grid {
+            gap: 6px !important;
+        }
+        .product-image {
+            height: 120px;
+            font-size: 24px;
+        }
+        .product-info {
+            padding: 8px;
+        }
+        .product-title {
+            font-size: 12px;
+        }
+        .current-price {
+            font-size: 14px;
+        }
+        .add-to-cart-btn {
+            height: 28px;
+            font-size: 11px;
         }
     }
     .panel .btn.primary{background:#527ea6;color:#ffffff;border-color:#527ea6;font-weight:600}
@@ -337,7 +406,7 @@
                 return;
             }
             
-            let favoritesHTML = '<div class="favorites-grid">';
+            let favoritesHTML = '<div class="products-grid">';
             
             favorites.forEach((item, index) => {
                 // Проверяем наличие цены и изображения
@@ -352,17 +421,17 @@
                 const jsSafeTitle = item.title.replace(/'/g, "\\'").replace(/"/g, '\\"');
                 
                 favoritesHTML += `
-                    <div class="favorite-card">
-                        <div class="favorite-image-container">
+                    <div class="product-card">
+                        <div class="product-image">
                             <img src="${image}" alt="${safeTitle}" onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'">
                             <button class="favorite-remove-btn" onclick="removeFromFavoritesByTitle('${jsSafeTitle}')" title="Удалить из избранного">✕</button>
                         </div>
-                        <div class="favorite-info">
-                            <div class="favorite-title">${safeTitle}</div>
-                            <div class="favorite-price">${displayPrice}</div>
-                            <div class="favorite-actions">
-                                <button class="favorite-add-cart-btn" onclick="addToCart('${jsSafeTitle}', '${item.price || 0}', '${item.image || ''}', this)">В корзину</button>
+                        <div class="product-info">
+                            <h3 class="product-title">${safeTitle}</h3>
+                            <div class="price-section">
+                                <div class="current-price">${displayPrice}</div>
                             </div>
+                            <button class="add-to-cart-btn" onclick="addToCart('${jsSafeTitle}', '${item.price || 0}', '${item.image || ''}', this)">В корзину</button>
                         </div>
                     </div>
                 `;

@@ -358,116 +358,255 @@
         .promo h3{margin:0 0 6px 0;font-size:18px}
         .promo p{margin:0;color:#475569;font-size:13px}
         .section-title{margin:18px 0 10px 0;font-weight:700;font-size:18px}
-        .goods{display:grid;grid-template-columns:1fr;gap:14px;align-items:stretch}
-        .good{background:#fff;border:1px solid #cbd5e1;border-radius:10px;padding:12px;display:flex;flex-direction:column;height:100%;min-height:280px}
-        .good img{width:100%;border-radius:8px;aspect-ratio:4/3;object-fit:cover;background:#f1f5f9;flex-shrink:0}
-        .good .meta{display:flex;justify-content:space-between;gap:12px;margin:8px 0 10px 0;font-size:12px;color:#475569;flex-grow:1;min-height:40px}
-        .good form{margin-top:auto;flex-shrink:0}
-        .good .price{font-weight:700;color:#0f172a;flex-shrink:0}
         
-        /* Дополнительные стили для выравнивания кнопок */
-        .good .meta {
+        /* Точные стили из category.blade.php - скопированы полностью */
+        .products-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 16px !important;
+            margin-bottom: 32px;
+        }
+        
+        .product-card {
+            background: var(--card);
+            border: 2px solid #000;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            position: relative;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            align-items: flex-start;
+            height: 100%;
         }
         
-        .good .meta > div {
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .product-card-link:hover {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .discount-badge {
+            position: absolute !important;
+            top: 12px !important;
+            right: 12px !important;
+            background: #527ea6 !important;
+            color: #fff !important;
+            padding: 6px 12px !important;
+            border-radius: 16px !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            z-index: 2 !important;
+        }
+        
+        .product-image {
             width: 100%;
-        }
-        
-        .good .meta > div:first-child {
-            margin-bottom: 4px;
-        }
-        
-        .good form {
-            width: 100%;
-        }
-        
-        .good .btn {
-            width: 100%;
+            height: 200px;
+            background: var(--muted);
+            display: flex;
+            align-items: center;
             justify-content: center;
+            font-size: 40px;
+            color: #64748b;
+            overflow: hidden;
         }
         
-        /* Стили для новых элементов товара */
-        .product-gender {
-            margin: 4px 0;
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
-        .gender-badge {
-            display: inline-block;
-            background: #e2e8f0;
-            color: #374151;
-            padding: 2px 6px;
-            border-radius: 4px;
+        .product-info {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            border: none !important;
+            background: transparent !important;
+        }
+        
+        .product-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1e293b;
+        }
+        
+        .product-brand {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        
+        .price-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+        
+        .current-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #527ea6;
+        }
+        
+        .savings {
             font-size: 11px;
-            margin-right: 4px;
-            font-weight: 500;
+            color: #10b981;
+            font-weight: 600;
         }
         
-        .product-sizes {
-            margin: 4px 0;
-            font-size: 12px;
-        }
-        
-        .sizes-label {
-            color: #64748b;
-            margin-right: 4px;
-        }
-        
-        .size-badge {
-            display: inline-block;
-            background: #f1f5f9;
+        .add-to-cart-btn {
+            width: 100%;
+            height: 36px;
+            padding: 0 16px;
+            border-radius: 18px;
+            border: 1px solid var(--muted);
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
             color: #475569;
-            padding: 1px 4px;
-            border-radius: 3px;
-            font-size: 10px;
-            margin-right: 2px;
-            border: 1px solid #e2e8f0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            margin-top: auto;
         }
         
-        .size-more {
-            color: #64748b;
-            font-size: 10px;
+        .add-to-cart-btn:hover {
+            background: linear-gradient(135deg, #527ea6 0%, #3b82f6 100%);
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
-        .product-colors {
-            margin: 4px 0;
-            font-size: 12px;
+        .add-to-cart-btn:active {
+            transform: translateY(0);
         }
         
-        .colors-label {
-            color: #64748b;
-            margin-right: 4px;
+        .add-to-cart-btn.added {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
         }
         
-        .color-swatch {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
+        .product-hidden {
+            display: none !important;
+        }
+        
+        .add-to-favorite-btn {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--muted);
             border-radius: 50%;
-            border: 1px solid #e2e8f0;
-            margin-right: 3px;
-            vertical-align: middle;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 16px;
+            z-index: 2;
         }
         
-        .color-more {
-            color: #64748b;
+        .add-to-favorite-btn:hover {
+            background: #fff;
+            transform: scale(1.1);
+        }
+        
+        .add-to-favorite-btn.favorited {
+            color: #ef4444;
+        }
+        
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px !important;
+            }
+            
+            .product-card {
+                border-width: 1px;
+            }
+            
+            .product-image {
+                height: 140px;
+                font-size: 30px;
+            }
+            
+            .product-info {
+                padding: 10px;
+            }
+            
+            .product-title {
+                font-size: 13px;
+                line-height: 1.3;
+            }
+            
+            .product-brand {
             font-size: 10px;
-        }
-        
-        /* Мобильная адаптация для товаров */
-        @media (max-width:768px){
-            .goods{grid-template-columns:repeat(2,1fr);gap:8px;align-items:stretch}
-            .good{padding:8px;border-radius:8px;display:flex;flex-direction:column;height:100%;min-height:240px}
-            .good img{border-radius:6px;aspect-ratio:1/1;flex-shrink:0}
-            .good .meta{font-size:11px;margin:6px 0 8px 0;gap:8px;flex-grow:1;min-height:35px}
-            .good form{margin-top:auto;flex-shrink:0}
-            .good .price{font-size:13px;flex-shrink:0}
+                margin-bottom: 8px;
+            }
+            
+            .price-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+                margin-bottom: 8px;
+            }
+            
+            .original-price {
+                font-size: 11px;
+            }
+            
+            .current-price {
+                font-size: 16px;
+            }
+            
+            .savings {
+                font-size: 9px;
+            }
+            
+            .discount-badge {
+                top: 6px !important;
+                right: 6px !important;
+                padding: 4px 8px !important;
+                font-size: 10px !important;
+                border-radius: 12px !important;
+            }
+            
+            .add-to-favorite-btn {
+                top: 6px;
+                left: 6px;
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+            
+            .add-to-cart-btn {
+                height: 32px;
+                font-size: 12px;
+            }
+            
             .section-title{font-size:16px;margin:12px 0 8px 0}
-            .good .btn{height:28px;padding:0 12px;font-size:11px;border-radius:14px}
-            .favorite-btn{top:4px !important;left:4px !important;width:26px !important;height:26px !important;min-width:26px !important;min-height:26px !important;max-width:26px !important;max-height:26px !important;font-size:12px !important;padding:0 !important;margin:0 !important}
             
             /* Унифицированная высота кнопок для мобильных */
             .good .btn[style*="background:#48bb78"], 
@@ -550,17 +689,34 @@
             .more-products-btn{padding:10px 20px;font-size:13px;border-radius:7px}
         }
         
-        @media (max-width:480px){
-            .goods{grid-template-columns:repeat(2,1fr);gap:6px;align-items:stretch}
-            .good{padding:6px;border-radius:6px;display:flex;flex-direction:column;height:100%;min-height:200px}
-            .good img{border-radius:4px;aspect-ratio:1/1;flex-shrink:0}
-            .good .meta{font-size:10px;margin:4px 0 6px 0;gap:6px;flex-direction:column;align-items:flex-start;flex-grow:1;min-height:30px}
-            .good .meta > div:first-child{line-height:1.2;margin-bottom:2px}
-            .good form{margin-top:auto;flex-shrink:0}
-            .good .price{font-size:12px;font-weight:600;flex-shrink:0}
+        @media (max-width: 480px) {
+            .products-grid {
+                gap: 6px !important;
+            }
+            
+            .product-image {
+                height: 120px;
+                font-size: 24px;
+            }
+            
+            .product-info {
+                padding: 8px;
+            }
+            
+            .product-title {
+                font-size: 12px;
+            }
+            
+            .current-price {
+                font-size: 14px;
+            }
+            
+            .add-to-cart-btn {
+                height: 28px;
+                font-size: 11px;
+            }
+            
             .section-title{font-size:14px;margin:10px 0 6px 0}
-            .good .btn{height:24px;padding:0 8px;font-size:10px;border-radius:12px}
-            .favorite-btn{top:4px !important;left:4px !important;width:24px !important;height:24px !important;min-width:24px !important;min-height:24px !important;max-width:24px !important;max-height:24px !important;font-size:11px !important;padding:0 !important;margin:0 !important}
             
             /* Унифицированная высота кнопок для маленьких экранов */
             .good .btn[style*="background:#48bb78"], 
@@ -640,7 +796,7 @@
         }
         
         @media (min-width:900px){
-            .goods{grid-template-columns:repeat(2,1fr)}
+            .products-grid{grid-template-columns:repeat(2,1fr);gap:16px}
         }
         /* Фильтры */
         .shop-layout{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
@@ -886,39 +1042,39 @@
         
         /* Карточки товаров в модальных окнах */
         .modal-products{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:20px}
-        .product-card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;transition:transform 0.2s}
-        .product-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
-        .product-card img{width:100%;height:120px;object-fit:cover;max-width:100%;max-height:120px}
+        .modal-products .product-card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;transition:transform 0.2s}
+        .modal-products .product-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+        .modal-products .product-card img{width:100%;height:120px;object-fit:cover;max-width:100%;max-height:120px}
         
         /* Уменьшенные размеры для карточек в модальных окнах */
-        .modal .product-card {
+        .modal .modal-products .product-card {
             min-width: 140px;
             max-width: 180px;
         }
         
-        .modal .product-card img {
+        .modal .modal-products .product-card img {
             width: 100%;
             height: 80px; /* Уменьшено с 120px до 80px */
             object-fit: cover;
         }
         
-        .modal .product-info {
+        .modal .modal-products .product-info {
             padding: 6px; /* Уменьшено с 8px до 6px */
         }
         
-        .modal .product-info h4 {
+        .modal .modal-products .product-info h4 {
             margin: 0 0 3px 0; /* Уменьшено с 4px до 3px */
             font-size: 11px; /* Уменьшено с 12px до 11px */
             font-weight: 600;
         }
         
-        .modal .product-info .brand {
+        .modal .modal-products .product-info .brand {
             margin: 0 0 2px 0; /* Уменьшено с 3px до 2px */
             font-size: 9px; /* Уменьшено с 10px до 9px */
             color: #64748b;
         }
         
-        .modal .product-info .price {
+        .modal .modal-products .product-info .price {
             margin: 0 0 4px 0; /* Уменьшено с 6px до 4px */
             font-size: 12px; /* Уменьшено с 14px до 12px */
             font-weight: 700;
@@ -1138,15 +1294,15 @@
             }
         }
         
-        /* Общие стили для карточек товаров */
-        .product-info{padding:8px}
-        .product-info h4{margin:0 0 4px 0;font-size:12px;font-weight:600}
-        .product-info .brand{margin:0 0 3px 0;font-size:10px;color:#64748b}
-        .product-info .price{margin:0 0 6px 0;font-size:14px;font-weight:700;color:#0f172a}
-        .original-price{font-size:12px;color:#94a3b8;text-decoration:line-through;margin-left:8px}
-        .custom-note{font-size:11px;color:#059669;margin:0 0 8px 0}
-        .add-to-cart-btn{width:100%;height:28px;background:#527ea6;color:#ffffff;border:none;border-radius:6px;font-size:11px;cursor:pointer;transition:background 0.2s;font-weight:600}
-        .add-to-cart-btn:hover{background:#3b5a7a}
+        /* Общие стили для карточек товаров в модальных окнах */
+        .modal-products .product-info{padding:8px}
+        .modal-products .product-info h4{margin:0 0 4px 0;font-size:12px;font-weight:600}
+        .modal-products .product-info .brand{margin:0 0 3px 0;font-size:10px;color:#64748b}
+        .modal-products .product-info .price{margin:0 0 6px 0;font-size:14px;font-weight:700;color:#0f172a}
+        .modal-products .original-price{font-size:12px;color:#94a3b8;text-decoration:line-through;margin-left:8px}
+        .modal-products .custom-note{font-size:11px;color:#059669;margin:0 0 8px 0}
+        .modal-products .add-to-cart-btn{width:100%;height:28px;background:#527ea6;color:#ffffff;border:none;border-radius:6px;font-size:11px;cursor:pointer;transition:background 0.2s;font-weight:600}
+        .modal-products .add-to-cart-btn:hover{background:#3b5a7a}
         
         /* Стили для кнопки "В корзине" */
         .add-to-cart-btn[style*="background:#48bb78"], 
@@ -1175,78 +1331,6 @@
         }
         .tile{cursor:pointer;transition:transform 0.2s,box-shadow 0.2s}
         .tile:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15);border-color:#527ea6}
-        
-        /* Стили для избранного */
-        .good{position:relative}
-        
-        /* Стили для кликабельных карточек товаров */
-        .good {
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-        }
-        
-        .good:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        
-        .good a {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-        }
-        
-        .good a:hover {
-            text-decoration: none;
-        }
-        
-        /* Стили для кнопок избранного */
-        .favorite-btn {
-            position: absolute !important;
-            top: 8px !important;
-            left: 8px !important;
-            background: rgba(255, 255, 255, 0.9) !important;
-            border: 1px solid var(--muted) !important;
-            border-radius: 50% !important;
-            width: 30px !important;
-            height: 30px !important;
-            min-width: 30px !important;
-            min-height: 30px !important;
-            max-width: 30px !important;
-            max-height: 30px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            cursor: pointer !important;
-            transition: all 0.2s ease !important;
-            font-size: 14px !important;
-            z-index: 2 !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            line-height: 1 !important;
-        }
-        
-        .favorite-btn:hover {
-            background: #fff;
-            transform: scale(1.1);
-        }
-        
-        .favorite-btn.favorited {
-            color: #ef4444;
-        }
-        
-        /* Стили для кнопок корзины */
-        .btn[type="submit"] {
-            transition: all 0.2s ease;
-        }
-        
-        .btn[type="submit"]:disabled {
-            opacity: 0.7;
-        }
         
         .btn[type="submit"]:disabled:hover {
             transform: none;
@@ -1650,7 +1734,11 @@
             updateProductStatuses();
         }
         
-        function toggleFavoriteSimple(productId, title, price, image) {
+        function toggleFavoriteSimple(productId, title, price, image, event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
             console.log('toggleFavoriteSimple called:', {productId, title, price, image});
             
             let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
@@ -1883,12 +1971,12 @@
                 
                 // Обновляем кнопки избранного
                 const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-                document.querySelectorAll('.favorite-btn').forEach(button => {
-                    const form = button.closest('form');
-                    if (form) {
-                        const titleInput = form.querySelector('input[name="title"]');
-                        if (titleInput) {
-                            const title = titleInput.value;
+                document.querySelectorAll('.add-to-favorite-btn').forEach(button => {
+                    const onclick = button.getAttribute('onclick');
+                    if (onclick) {
+                        const titleMatch = onclick.match(/'([^']+)'/);
+                        if (titleMatch) {
+                            const title = titleMatch[1];
                             const isFavorite = favorites.some(item => item.title === title);
                             
                             if (isFavorite) {
@@ -2080,7 +2168,7 @@
             const tabMen = document.getElementById('tab-men');
             const tabWomen = document.getElementById('tab-women');
             const cards = document.querySelectorAll('[data-section]');
-            const goods = Array.from(document.querySelectorAll('#goods .good'));
+            const goods = Array.from(document.querySelectorAll('#goods .product-card-link'));
             const categoryList = document.getElementById('categoryList');
             const brandList = document.getElementById('brandList');
             const priceMin = document.getElementById('priceMin');
@@ -3122,61 +3210,57 @@ $auth = session('auth');
 
             <div>
                 <div class="section-title">ПОПУЛЯРНОЕ</div>
-                <div class="goods" id="goods">
+                <div class="products-grid" id="goods">
                     @if(isset($featuredProducts) && $featuredProducts->count() > 0)
                         @foreach($featuredProducts as $product)
-                            <article class="good product-card" data-category="{{ $product->category }}" data-brand="{{ $product->brand }}" data-subcat="{{ $product->subcat }}" data-price="{{ $product->price }}">
-                        <form method="post" action="/favorites/add" style="position:absolute;top:8px;left:8px;z-index:2">
-                            <?php echo csrf_field(); ?>
-                                    <input type="hidden" name="title" value="{{ $product->title }}">
-                                    <input type="hidden" name="price" value="{{ $product->price }}">
-                                    <input type="hidden" name="image" value="{{ is_array($product->images) ? $product->images[0] : $product->image }}">
-                            <button type="submit" class="favorite-btn" title="Добавить в избранное">🤍</button>
-                        </form>
-                                <a href="/product/{{ $product->id }}" style="text-decoration:none;color:inherit;display:block">
-                                    <img src="{{ is_array($product->images) ? $product->images[0] : $product->image }}" alt="{{ $product->title }}">
-                            <div class="meta">
-                                        <div class="product-title">{{ $product->title }}</div>
+                            @php
+                                $discount = 0;
+                                $originalPrice = $product->original_price ?? 0;
+                                $currentPrice = $product->price ?? 0;
+                                if ($originalPrice > 0 && $currentPrice > 0 && $originalPrice > $currentPrice) {
+                                    $discount = round((($originalPrice - $currentPrice) / $originalPrice) * 100);
+                                }
+                                $productImage = is_array($product->images) ? ($product->images[0] ?? '') : ($product->image ?? '');
+                            @endphp
+                            <a href="/product/{{ $product->id }}" class="product-card-link" data-category="{{ $product->category }}" data-brand="{{ $product->brand }}" data-subcat="{{ $product->subcat }}" data-price="{{ $product->price }}">
+                                <div class="product-card">
+                                @if($discount > 0)
+                                    <div class="discount-badge">-{{ $discount }}%</div>
+                                        @endif
+                                        
+                                <button class="add-to-favorite-btn" onclick="toggleFavoriteSimple({{ $product->id }}, '{{ $product->title ?? '' }}', '{{ $currentPrice }}', '{{ $productImage }}', event)" title="Добавить в избранное">
+                                    🤍
+                                </button>
+                                
+                                <div class="product-image">
+                                    @if($productImage)
+                                        <img src="{{ $productImage }}" alt="{{ $product->title }}">
+                                    @else
+                                        🛍️
+                                                @endif
+                                            </div>
+                                
+                                <div class="product-info">
+                                    @if(isset($product->brand))
                                         <div class="product-brand">{{ $product->brand }}</div>
-                                        <div class="price">{{ $product->price }}€</div>
-                                        
-                                        <!-- Отображение пола -->
-                                        @if($product->gender && is_array($product->gender) && count($product->gender) > 0)
-                                            <div class="product-gender">
-                                                @foreach($product->gender as $g)
-                                                    <span class="gender-badge">{{ $g }}</span>
-                                                @endforeach
-                                            </div>
                                         @endif
-                                        
-                                        <!-- Отображение размеров -->
-                                        @if($product->sizes && is_array($product->sizes) && count($product->sizes) > 0)
-                                            <div class="product-sizes">
-                                                <span class="sizes-label">Размеры:</span>
-                                                @foreach(array_slice($product->sizes, 0, 3) as $size)
-                                                    <span class="size-badge">{{ $size }}</span>
-                                                @endforeach
-                                                @if(count($product->sizes) > 3)
-                                                    <span class="size-more">+{{ count($product->sizes) - 3 }}</span>
+                                    <h3 class="product-title">{{ $product->title ?? 'Название не указано' }}</h3>
+                                    
+                                    <div class="price-section">
+                                        @if($originalPrice > $currentPrice && $originalPrice > 0)
+                                            <div class="original-price">{{ $originalPrice }}€</div>
                                                 @endif
-                                            </div>
-                                        @endif
-                                        
-                                        <!-- Отображение цветов -->
-                                        @if($product->colors && is_array($product->colors) && count($product->colors) > 0)
-                                            <div class="product-colors">
-                                                <span class="colors-label">Цвета:</span>
-                                                @foreach(array_slice($product->colors, 0, 4) as $color)
-                                                    <span class="color-swatch" style="background-color: {{ $color }}" title="{{ $color }}"></span>
-                                                @endforeach
-                                                @if(count($product->colors) > 4)
-                                                    <span class="color-more">+{{ count($product->colors) - 4 }}</span>
-                                                @endif
+                                        <div class="current-price">{{ $currentPrice }}€</div>
+                                    </div>
+                                    
+                                    @if($discount > 0)
+                                        <div class="savings">
+                                            Экономия {{ round($originalPrice - $currentPrice, 2) }}€
                                             </div>
                                         @endif
                             </div>
+                                </div>
                         </a>
-                    </article>
                         @endforeach
                     @else
                         <div style="text-align: center; padding: 40px; color: #666;">
