@@ -1182,16 +1182,16 @@
     </main>
 
     <!-- Модальное окно для полноразмерного просмотра изображения -->
-    <div id="imageModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:10000;align-items:center;justify-content:center;cursor:pointer;" onclick="closeImageModal()">
-        <div style="position:relative;max-width:95%;max-height:95%;display:flex;align-items:center;justify-content:center;flex-direction:column;width:100%;height:100%;" onclick="event.stopPropagation();">
-            <!-- Минималистичный крестик закрытия (только для десктопа) -->
-            <button id="closeImageBtn" onclick="event.stopPropagation(); closeImageModal()" class="image-modal-close" style="position:absolute;top:20px;right:20px;background:none;border:none;color:#fff;font-size:24px;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10001;opacity:0.8;transition:opacity 0.2s;">✕</button>
+    <div id="imageModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:10000;align-items:center;justify-content:center;cursor:pointer;" onclick="if(!isSwiping) closeImageModal()">
+        <div id="imageModalContainer" style="position:relative;max-width:95%;max-height:95%;display:flex;align-items:center;justify-content:center;flex-direction:column;width:100%;height:100%;" onclick="event.stopPropagation();">
+            <!-- Крестик закрытия (для десктопа и мобильных) -->
+            <button id="closeImageBtn" onclick="event.stopPropagation(); closeImageModal()" class="image-modal-close" style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.6);border:2px solid rgba(255,255,255,0.8);border-radius:50%;color:#fff;font-size:20px;width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10001;opacity:0.9;transition:all 0.2s;backdrop-filter:blur(4px);">✕</button>
             
             <!-- Стрелка влево (только для десктопа) -->
             <button id="prevImageBtn" onclick="event.stopPropagation(); changeModalImage(-1)" class="image-modal-arrow image-modal-arrow-left" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:none;color:#fff;font-size:28px;width:50px;height:50px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10001;opacity:0.7;transition:all 0.2s;backdrop-filter:blur(4px);">‹</button>
             
             <!-- Изображение -->
-            <img id="modalImage" src="" alt="" style="max-width:100%;max-height:85vh;object-fit:contain;border-radius:8px;user-select:none;pointer-events:none;">
+            <img id="modalImage" src="" alt="" style="max-width:100%;max-height:85vh;object-fit:contain;border-radius:8px;user-select:none;touch-action:pan-y;">
             
             <!-- Стрелка вправо (только для десктопа) -->
             <button id="nextImageBtn" onclick="event.stopPropagation(); changeModalImage(1)" class="image-modal-arrow image-modal-arrow-right" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);border:none;color:#fff;font-size:28px;width:50px;height:50px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10001;opacity:0.7;transition:all 0.2s;backdrop-filter:blur(4px);">›</button>
@@ -1212,11 +1212,32 @@
             background: rgba(255,255,255,0.2) !important;
         }
         
-        /* Скрываем кнопки на мобильных устройствах */
+        /* Скрываем только стрелки на мобильных устройствах, крестик оставляем */
         @media (max-width: 768px) {
-            .image-modal-close,
             .image-modal-arrow {
                 display: none !important;
+            }
+            
+            /* Улучшаем видимость крестика на мобильных */
+            .image-modal-close {
+                top: 8px !important;
+                right: 8px !important;
+                width: 44px !important;
+                height: 44px !important;
+                font-size: 24px !important;
+                background: rgba(0,0,0,0.7) !important;
+                border: 2px solid rgba(255,255,255,0.9) !important;
+                opacity: 1 !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .image-modal-close {
+                top: 6px !important;
+                right: 6px !important;
+                width: 40px !important;
+                height: 40px !important;
+                font-size: 20px !important;
             }
         }
     </style>
@@ -1378,6 +1399,7 @@
         let touchEndX = 0;
         let touchStartY = 0;
         let touchEndY = 0;
+        let isSwiping = false;
 
         // Функция открытия модального окна с изображением
         function openImageModal(imageIndex) {
@@ -1468,19 +1490,52 @@
         document.addEventListener('DOMContentLoaded', function() {
             const imageModal = document.getElementById('imageModal');
             const modalImage = document.getElementById('modalImage');
+            const modalContainer = document.getElementById('imageModalContainer');
             
-            if (imageModal && modalImage) {
-                // Начало касания
-                modalImage.addEventListener('touchstart', function(e) {
-                    touchStartX = e.changedTouches[0].screenX;
-                    touchStartY = e.changedTouches[0].screenY;
+            if (imageModal && modalImage && modalContainer) {
+                // Начало касания - привязываем к контейнеру изображения
+                modalContainer.addEventListener('touchstart', function(e) {
+                    // Проверяем, что клик не на кнопку закрытия
+                    if (e.target.id === 'closeImageBtn' || e.target.closest('#closeImageBtn')) {
+                        return;
+                    }
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                    touchEndX = touchStartX;
+                    touchEndY = touchStartY;
+                }, { passive: true });
+                
+                // Движение касания
+                modalContainer.addEventListener('touchmove', function(e) {
+                    // Проверяем, что клик не на кнопку закрытия
+                    if (e.target.id === 'closeImageBtn' || e.target.closest('#closeImageBtn')) {
+                        return;
+                    }
+                    // Обновляем конечные координаты во время движения
+                    touchEndX = e.touches[0].clientX;
+                    touchEndY = e.touches[0].clientY;
+                    // Помечаем, что идет свайп
+                    if (Math.abs(touchEndX - touchStartX) > 10 || Math.abs(touchEndY - touchStartY) > 10) {
+                        isSwiping = true;
+                    }
                 }, { passive: true });
                 
                 // Конец касания
-                modalImage.addEventListener('touchend', function(e) {
-                    touchEndX = e.changedTouches[0].screenX;
-                    touchEndY = e.changedTouches[0].screenY;
+                modalContainer.addEventListener('touchend', function(e) {
+                    // Проверяем, что клик не на кнопку закрытия
+                    if (e.target.id === 'closeImageBtn' || e.target.closest('#closeImageBtn')) {
+                        return;
+                    }
+                    // Если координаты не обновились во время touchmove, используем changedTouches
+                    if (touchEndX === touchStartX && touchEndY === touchStartY && e.changedTouches.length > 0) {
+                        touchEndX = e.changedTouches[0].clientX;
+                        touchEndY = e.changedTouches[0].clientY;
+                    }
                     handleSwipe();
+                    // Сбрасываем флаг свайпа через небольшую задержку
+                    setTimeout(function() {
+                        isSwiping = false;
+                    }, 100);
                 }, { passive: true });
             }
         });
