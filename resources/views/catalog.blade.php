@@ -1074,35 +1074,35 @@
 
 @section('scripts')
 <script>
-    // Данные для фильтров по категориям
+    // Данные для фильтров по категориям (бренды взяты из формы добавления товаров)
         const filterData = {
             'Обувь': {
-                brands: ['Nike', 'Adidas', 'Gucci', 'Puma', 'Dr. Martens', 'Birkenstock', 'Church\'s'],
+                brands: ['Nike', 'Asics', 'New Balance', 'Puma', 'Balenciaga', 'Louis Vuitton', 'Dior', 'Prada', 'MM6', 'Alex McQueen', 'Valentino', 'Loro Piana', 'Brunello', 'Hermes', 'Miu Miu', 'Rick Owens', 'Off White', 'Golden Goose', 'Gucci', 'Yeezy'],
                 subcategories: ['Кроссовки', 'Кеды', 'Лоферы', 'Ботинки', 'Сандалии', 'Туфли'],
                 priceRange: { min: 90, max: 320 }
             },
             'Одежда': {
-                brands: ['Balenciaga', 'Stone Island', 'Nike', 'Levi\'s', 'Burberry', 'Moncler', 'Ralph Lauren', 'Tommy Hilfiger'],
+                brands: ['Louis Vuitton', 'Balenciaga', 'Prada', 'Dior', 'Givenchy', 'Miu Miu', 'Loro Piana', 'Brunello Cucinelli', 'Zegna', 'Burberry', 'Moncler', 'Canada Goose', 'Gucci', 'Hermes', 'Chrome Hearts', 'Ralph Lauren', 'Maison Margiela', 'Essential (Fear of God)', 'Supreme', 'Stone Island', 'CP Company', 'The North Face', 'Arc\'teryx', 'Vetements', 'Nike', 'AMI', 'Loewe', 'YSL', 'Fendi', 'Amiri', 'Represent', 'Off White', 'Kiton', 'Palace', 'Mertra', 'Dolce & Gabbana', 'Celine', 'Chanel'],
                 subcategories: ['Зип-худи', 'Шорты', 'Футболки', 'Джинсы', 'Пальто', 'Куртки', 'Рубашки', 'Свитера'],
                 priceRange: { min: 45, max: 450 }
             },
             'Сумки': {
-                brands: ['Goyard', 'Gucci', 'Chanel', 'Louis Vuitton', 'Rimowa'],
+                brands: ['Balenciaga', 'Bottega Veneta', 'Celine', 'Chanel', 'Dior', 'Prada', 'Hermes', 'Loewe', 'Louis Vuitton', 'Burberry', 'Miu Miu', 'YSL', 'Goyard', 'Coach', 'Gucci', 'Loro Piana'],
                 subcategories: ['Кошелек', 'Рюкзак', 'Клатч', 'Торба', 'Дорожная сумка', 'Мессенджеры'],
                 priceRange: { min: 60, max: 350 }
             },
             'Часы': {
-                brands: ['Rolex', 'Omega', 'Cartier', 'Patek Philippe', 'Apple'],
+                brands: ['Cartier', 'Omega', 'Rolex', 'Tissot', 'Patek Philippe', 'Audemars Piguet'],
                 subcategories: ['Механические', 'Кварцевые', 'Автоматические', 'Хронограф', 'Смарт-часы'],
                 priceRange: { min: 450, max: 12500 }
             },
             'Украшения': {
-                brands: ['Cartier', 'Tiffany & Co.', 'Hermès', 'Van Cleef & Arpels', 'Bvlgari', 'Chanel'],
+                brands: ['Cartier', 'Van Cleef', 'Chrome Hearts', 'Louis Vuitton', 'Bulgari', 'Tiffany'],
                 subcategories: ['Кольца', 'Браслеты', 'Цепочки', 'Серьги', 'Подвески', 'Броши'],
                 priceRange: { min: 950, max: 3200 }
             },
             'Аксессуары': {
-                brands: ['Ray-Ban', 'Hermès', 'Tom Ford', 'Burberry', 'Gucci', 'Swaine Adeney Brigg'],
+                brands: ['Louis Vuitton', 'Burberry', 'Hermes', 'Dior', 'Prada', 'Gucci', 'Coach', 'Maison Margiela', 'Bottega Veneta', 'Supreme', 'Givenchy', 'Miu Miu', 'Balenciaga', 'Valentino', 'YSL', 'Loro Piana', 'Brunello Cucinelli', 'Chrome Hearts', 'Dolce & Gabbana', 'Fendi'],
                 subcategories: ['Очки', 'Ремни', 'Галстуки', 'Шарфы', 'Перчатки', 'Зонты'],
                 priceRange: { min: 180, max: 420 }
             }
