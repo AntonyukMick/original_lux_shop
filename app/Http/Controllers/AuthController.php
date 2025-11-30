@@ -70,12 +70,31 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {
-        $validated = $request->validated();
+        try {
+            $validated = $request->validated();
+            
+            \Illuminate\Support\Facades\Log::info('Registration attempt', [
+                'name' => $validated['name'] ?? 'N/A',
+                'telegram_tag' => $validated['telegram_tag'] ?? 'N/A'
+            ]);
 
-        $authData = $this->authService->register($validated);
-        session(['auth' => $authData]);
+            $authData = $this->authService->register($validated);
+            session(['auth' => $authData]);
 
-        return redirect('/')->with('success', 'Регистрация успешна!');
+            \Illuminate\Support\Facades\Log::info('Registration successful', [
+                'user_id' => $authData['id'] ?? 'N/A'
+            ]);
+
+            return redirect('/')->with('success', 'Регистрация успешна!');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Registration failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return back()->withErrors(['telegram_tag' => 'Ошибка регистрации: ' . $e->getMessage()])
+                ->withInput();
+        }
     }
 
     /**
