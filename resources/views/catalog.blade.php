@@ -1091,7 +1091,7 @@
     // Данные для фильтров по категориям (бренды взяты из формы добавления товаров)
         const filterData = {
             'Обувь': {
-                brands: ['Nike', 'Adidas', 'Asics', 'New Balance', 'Puma', 'Balenciaga', 'Louis Vuitton', 'Dior', 'Prada', 'MM6', 'Alex McQueen', 'Valentino', 'Loro Piana', 'Brunello Cucinelli', 'Hermes', 'Miu Miu', 'Rick Owens', 'Off White', 'Golden Goose', 'Gucci', 'Yeezy'],
+                brands: ['Nike', 'Adidas', 'Asics', 'New Balance', 'Puma', 'Balenciaga', 'Louis Vuitton', 'Dior', 'Prada', 'MM6', 'Alex McQueen', 'Valentino', 'Loro Piana', 'Brunello Cucinelli', 'Hermes', 'Miu Miu', 'Rick Owens', 'Off White', 'Golden Goose', 'Gucci', 'Yeezy', 'Timberland', 'Raf Simons', 'Zegna', 'Kiton', 'Santoni'],
                 subcategories: ['Кроссовки', 'Кеды', 'Лоферы', 'Ботинки', 'Сандалии', 'Туфли'],
                 priceRange: { min: 10, max: 1000 }
             },
@@ -1102,7 +1102,7 @@
             },
             'Сумки': {
                 brands: ['Balenciaga', 'Bottega Veneta', 'Celine', 'Chanel', 'Dior', 'Prada', 'Hermes', 'Loewe', 'Louis Vuitton', 'Burberry', 'Miu Miu', 'YSL', 'Goyard', 'Coach', 'Gucci', 'Loro Piana'],
-                subcategories: ['Кошелек', 'Рюкзак', 'Клатч', 'Торба', 'Дорожная сумка', 'Мессенджеры'],
+                subcategories: ['Кошелек', 'Рюкзак', 'Клатч', 'Торба', 'Дорожная сумка'],
                 priceRange: { min: 10, max: 1000 }
             },
             'Часы': {
@@ -1777,8 +1777,7 @@
                     {name: 'Косметички'},
                     {name: 'Клатчи'},
                     {name: 'Сумки'},
-                    {name: 'Дорожные сумки'},
-                    {name: 'Мессенджеры'}
+                    {name: 'Дорожные сумки'}
                 ]
             },
             'Часы': {
