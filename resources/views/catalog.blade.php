@@ -198,6 +198,16 @@
             white-space: nowrap;
         }
         
+        .subcategory-filter-input {
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        
+        .subcategory-filter-input:hover {
+            border-color: #527ea6;
+            background: #f8fafc;
+        }
+        
         .price-inputs {
             display: flex;
             gap: 6px;
@@ -881,7 +891,11 @@
                     </div>
                     <div class="filter-group">
                         <label class="filter-label">Подкатегория</label>
-                        <select class="filter-select" id="subcategoryFilter">
+                        <div class="filter-select subcategory-filter-input" id="subcategoryFilterInput" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+                            <span id="subcategoryFilterText">Все подкатегории</span>
+                            <span style="color: #64748b;">▼</span>
+                        </div>
+                        <select class="filter-select" id="subcategoryFilter" style="display: none;">
                             <option value="">Все подкатегории</option>
                         </select>
                     </div>
@@ -1128,9 +1142,33 @@
 
         // Filters
         document.getElementById('brandFilter').addEventListener('change', filterProducts);
-        document.getElementById('subcategoryFilter').addEventListener('change', filterProducts);
+        document.getElementById('subcategoryFilter').addEventListener('change', function() {
+            const selectedValue = this.value;
+            const filterText = document.getElementById('subcategoryFilterText');
+            if (filterText) {
+                filterText.textContent = selectedValue || 'Все подкатегории';
+            }
+            filterProducts();
+        });
         document.getElementById('minPrice').addEventListener('input', filterProducts);
         document.getElementById('maxPrice').addEventListener('input', filterProducts);
+        
+        // Обработчик клика на поле подкатегории для открытия модального окна
+        document.getElementById('subcategoryFilterInput').addEventListener('click', function() {
+            // Определяем активную категорию
+            const activeCategoryTab = document.querySelector('.category-tab.active');
+            const activeCategory = activeCategoryTab ? activeCategoryTab.dataset.category : 'all';
+            
+            // Если выбрана категория "Все товары", показываем модальное окно для выбора категории
+            if (activeCategory === 'all') {
+                // Показываем уведомление, что нужно выбрать категорию
+                showNotification('Сначала выберите категорию товаров', 'info');
+                return;
+            }
+            
+            // Открываем модальное окно с подкатегориями для активной категории
+            openSubcategoryModalForFilter(activeCategory);
+        });
 
         function updateFilters(category) {
             const brandSelect = document.getElementById('brandFilter');
@@ -1141,6 +1179,12 @@
             // Очищаем текущие опции
             brandSelect.innerHTML = '<option value="">Все бренды</option>';
             subcategorySelect.innerHTML = '<option value="">Все подкатегории</option>';
+            
+            // Сбрасываем текст в поле подкатегории
+            const subcategoryFilterText = document.getElementById('subcategoryFilterText');
+            if (subcategoryFilterText && category === 'all') {
+                subcategoryFilterText.textContent = 'Все подкатегории';
+            }
 
             if (category !== 'all' && filterData[category]) {
                 const data = filterData[category];
@@ -1258,6 +1302,10 @@
         function resetFilters() {
             document.getElementById('brandFilter').value = '';
             document.getElementById('subcategoryFilter').value = '';
+            const subcategoryFilterText = document.getElementById('subcategoryFilterText');
+            if (subcategoryFilterText) {
+                subcategoryFilterText.textContent = 'Все подкатегории';
+            }
             document.getElementById('minPrice').value = '';
             document.getElementById('maxPrice').value = '';
             document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
@@ -1787,6 +1835,9 @@
                     </div>
                     <div class="subcategory-modal-body">
                         <div class="subcategory-grid">
+                            <div class="subcategory-item" data-subcategory="" style="border: 2px dashed #cbd5e1;">
+                                <div class="subcategory-name">Все подкатегории</div>
+                            </div>
                             ${data.subcategories.map(sub => `
                                 <div class="subcategory-item" data-subcategory="${sub.name}">
                                     <div class="subcategory-name">${sub.name}</div>
@@ -1828,8 +1879,22 @@
             // Обработка клика по подкатегории
             modal.querySelectorAll('.subcategory-item').forEach(item => {
                 item.addEventListener('click', () => {
-                    const subcategory = item.dataset.subcategory;
-                    applySubcategoryFilter(category, subcategory);
+                    const subcategory = item.dataset.subcategory || '';
+                    if (subcategory === '') {
+                        // Сбрасываем фильтр подкатегории
+                        const subcategoryFilter = document.getElementById('subcategoryFilter');
+                        const subcategoryFilterText = document.getElementById('subcategoryFilterText');
+                        if (subcategoryFilter) {
+                            subcategoryFilter.value = '';
+                        }
+                        if (subcategoryFilterText) {
+                            subcategoryFilterText.textContent = 'Все подкатегории';
+                        }
+                        filterProducts();
+                        showNotification('Фильтр подкатегории сброшен', 'info');
+                    } else {
+                        applySubcategoryFilter(category, subcategory);
+                    }
                     closeSubcategoryModal(modal);
                 });
             });
@@ -1860,6 +1925,7 @@
             
             // Затем устанавливаем подкатегорию в фильтр
             const subcategoryFilter = document.getElementById('subcategoryFilter');
+            const subcategoryFilterText = document.getElementById('subcategoryFilterText');
             if (subcategoryFilter) {
                 // Ищем опцию с таким значением
                 let option = Array.from(subcategoryFilter.options).find(opt => opt.value === subcategory);
@@ -1871,6 +1937,11 @@
                 subcategoryFilter.value = subcategory;
             }
             
+            // Обновляем текст в поле фильтра
+            if (subcategoryFilterText) {
+                subcategoryFilterText.textContent = subcategory || 'Все подкатегории';
+            }
+            
             // Применяем фильтры - фильтруем товары
             filterProducts();
             
@@ -1879,6 +1950,132 @@
             
             // Показываем уведомление
             showNotification(`Фильтр применён: ${category} → ${subcategory}`, 'success');
+        }
+        
+        // Функция для открытия модального окна подкатегорий из фильтра
+        function openSubcategoryModalForFilter(category) {
+            const data = subcategoryData[category];
+            if (!data) {
+                showNotification('Подкатегории для этой категории не найдены', 'error');
+                return;
+            }
+            
+            // Создаем модальное окно
+            const modal = document.createElement('div');
+            modal.className = 'subcategory-modal-overlay';
+            modal.innerHTML = `
+                <div class="subcategory-modal">
+                    <div class="subcategory-modal-header">
+                        <h2 class="subcategory-modal-title">${data.emoji} ${data.title}</h2>
+                        <p class="subcategory-modal-subtitle">${data.subtitle}</p>
+                        <button class="subcategory-modal-close">&times;</button>
+                    </div>
+                    <div class="subcategory-modal-body">
+                        <div class="subcategory-grid">
+                            ${data.subcategories.map(sub => `
+                                <div class="subcategory-item" data-subcategory="${sub.name}">
+                                    <div class="subcategory-name">${sub.name}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Показываем модальное окно с анимацией
+            setTimeout(() => modal.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+            
+            // Закрытие по крестику
+            modal.querySelector('.subcategory-modal-close').addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeSubcategoryModal(modal);
+            });
+            
+            // Закрытие по клику на фон
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeSubcategoryModal(modal);
+                }
+            });
+            
+            // Закрытие по Escape
+            const escapeHandler = (e) => {
+                if (e.key === 'Escape') {
+                    closeSubcategoryModal(modal);
+                    document.removeEventListener('keydown', escapeHandler);
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
+            
+            // Обработка клика по подкатегории
+            modal.querySelectorAll('.subcategory-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const subcategory = item.dataset.subcategory || '';
+                    if (subcategory === '') {
+                        // Сбрасываем фильтр подкатегории
+                        resetSubcategoryFilter();
+                    } else {
+                        applySubcategoryFilterFromInput(category, subcategory);
+                    }
+                    closeSubcategoryModal(modal);
+                });
+            });
+        }
+        
+        // Функция для применения фильтра подкатегории из поля фильтра
+        function applySubcategoryFilterFromInput(category, subcategory) {
+            console.log('Применен фильтр из поля:', category, subcategory);
+            
+            // Обновляем фильтры для категории (чтобы подкатегории были доступны в select)
+            updateFilters(category);
+            
+            // Устанавливаем подкатегорию в скрытый select
+            const subcategoryFilter = document.getElementById('subcategoryFilter');
+            const subcategoryFilterText = document.getElementById('subcategoryFilterText');
+            
+            if (subcategoryFilter) {
+                // Ищем опцию с таким значением
+                let option = Array.from(subcategoryFilter.options).find(opt => opt.value === subcategory);
+                if (!option) {
+                    // Если нет, добавляем её
+                    option = new Option(subcategory, subcategory);
+                    subcategoryFilter.add(option);
+                }
+                subcategoryFilter.value = subcategory;
+            }
+            
+            // Обновляем текст в поле фильтра
+            if (subcategoryFilterText) {
+                subcategoryFilterText.textContent = subcategory;
+            }
+            
+            // Применяем фильтры - фильтруем товары
+            filterProducts();
+            
+            // Показываем уведомление
+            showNotification(`Выбрана подкатегория: ${subcategory}`, 'success');
+        }
+        
+        // Функция для сброса фильтра подкатегории
+        function resetSubcategoryFilter() {
+            const subcategoryFilter = document.getElementById('subcategoryFilter');
+            const subcategoryFilterText = document.getElementById('subcategoryFilterText');
+            
+            if (subcategoryFilter) {
+                subcategoryFilter.value = '';
+            }
+            
+            if (subcategoryFilterText) {
+                subcategoryFilterText.textContent = 'Все подкатегории';
+            }
+            
+            // Применяем фильтры
+            filterProducts();
+            
+            showNotification('Фильтр подкатегории сброшен', 'info');
         }
         
         // Добавляем обработчики на категории
