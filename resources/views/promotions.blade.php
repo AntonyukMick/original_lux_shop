@@ -668,7 +668,7 @@
         </div>
 
         <div class="promotions-images">
-            <img src="{{ asset('image/5215533247901667474.jpg') }}" alt="Акция 1" class="promotion-image clickable" onclick="showPromotionModal(1)">
+            <img src="{{ asset('image/photo_2026-01-30_18-20-56.jpg') }}" alt="Подарочный сертификат" class="promotion-image clickable" onclick="showPromotionModal(1)">
             <img src="{{ asset('image/5262616543416225323.jpg') }}" alt="Акция 2" class="promotion-image clickable" onclick="showPromotionModal(2)">
             <img src="{{ asset('image/5215533247901667486.jpg') }}" alt="Акция 3" class="promotion-image clickable" onclick="showPromotionModal(3)">
         </div>
@@ -677,11 +677,11 @@
         <div id="promotionModal1" class="modal-overlay" onclick="closePromotionModal(event)">
             <div class="modal-dialog" onclick="event.stopPropagation()">
                 <div class="modal-header-new">
-                    <h2 class="modal-title-new">🎉 Специальное предложение</h2>
+                    <h2 class="modal-title-new">🎁 Подарочный сертификат</h2>
                     <span class="modal-close-new" onclick="closePromotionModal()">&times;</span>
                 </div>
                 <div class="modal-body">
-                    <p>В честь появления нашего сайта и грядущего Нового Года мы дарим скидку 5% на любой первый заказ для наших клиентов.</p>
+                    <p>Подарочный сертификат от Original | Lux Shop. При покупке сертификата магазин добавляет 10% к сумме (при покупке сертификата на 100€, клиент сможет оформить заказ на сумму до 110€). Радуйте близких и друзей вместе с нами!</p>
                 </div>
             </div>
         </div>

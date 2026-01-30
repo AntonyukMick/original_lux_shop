@@ -1091,12 +1091,12 @@
     // Данные для фильтров по категориям (бренды взяты из формы добавления товаров)
         const filterData = {
             'Обувь': {
-                brands: ['Nike', 'Adidas', 'Asics', 'New Balance', 'Puma', 'Balenciaga', 'Louis Vuitton', 'Dior', 'Prada', 'MM6', 'Alex McQueen', 'Valentino', 'Loro Piana', 'Brunello Cucinelli', 'Hermes', 'Miu Miu', 'Rick Owens', 'Off White', 'Golden Goose', 'Gucci', 'Yeezy', 'Timberland', 'Raf Simons', 'Zegna', 'Kiton', 'Santoni'],
+                brands: ['Nike', 'Adidas', 'Asics', 'New Balance', 'Puma', 'Balenciaga', 'Louis Vuitton', 'Dior', 'Prada', 'MM6', 'Alex McQueen', 'Valentino', 'Loro Piana', 'Brunello Cucinelli', 'Hermes', 'Miu Miu', 'Rick Owens', 'Off White', 'Golden Goose', 'Gucci', 'Yeezy', 'Timberland', 'Raf Simons', 'Zegna', 'Kiton', 'Santoni', 'ON', 'Numeris', 'Premiata'],
                 subcategories: ['Кроссовки', 'Кеды', 'Лоферы', 'Ботинки', 'Сандалии', 'Туфли'],
                 priceRange: { min: 10, max: 1000 }
             },
             'Одежда': {
-                brands: ['Louis Vuitton', 'Balenciaga', 'Prada', 'Dior', 'Givenchy', 'Miu Miu', 'Loro Piana', 'Brunello Cucinelli', 'Zegna', 'Burberry', 'Moncler', 'Canada Goose', 'Gucci', 'Hermes', 'Chrome Hearts', 'Ralph Lauren', 'Maison Margiela', 'Essential (Fear of God)', 'Supreme', 'Stone Island', 'CP Company', 'The North Face', 'Arc\'teryx', 'Vetements', 'Nike', 'AMI', 'Loewe', 'YSL', 'Fendi', 'Amiri', 'Represent', 'Off White', 'Kiton', 'Palace', 'Mertra', 'Dolce & Gabbana', 'Celine', 'Chanel'],
+                brands: ['Louis Vuitton', 'Balenciaga', 'Prada', 'Dior', 'Givenchy', 'Miu Miu', 'Loro Piana', 'Brunello Cucinelli', 'Zegna', 'Burberry', 'Moncler', 'Canada Goose', 'Gucci', 'Hermes', 'Chrome Hearts', 'Ralph Lauren', 'Maison Margiela', 'Essential (Fear of God)', 'Supreme', 'Stone Island', 'CP Company', 'The North Face', 'Arc\'teryx', 'Vetements', 'Nike', 'AMI', 'Loewe', 'YSL', 'Fendi', 'Amiri', 'Represent', 'Off White', 'Kiton', 'Palace', 'Mertra', 'Dolce & Gabbana', 'Celine', 'Chanel', 'Acne Studios', 'Gallery Dept'],
                 subcategories: ['Зип-худи', 'Шорты', 'Футболки', 'Джинсы', 'Пальто', 'Куртки', 'Рубашки', 'Свитера'],
                 priceRange: { min: 10, max: 1000 }
             },
@@ -1116,7 +1116,7 @@
                 priceRange: { min: 10, max: 1000 }
             },
             'Аксессуары': {
-                brands: ['Louis Vuitton', 'Burberry', 'Hermes', 'Dior', 'Prada', 'Gucci', 'Coach', 'Maison Margiela', 'Bottega Veneta', 'Supreme', 'Givenchy', 'Miu Miu', 'Balenciaga', 'Valentino', 'YSL', 'Loro Piana', 'Brunello Cucinelli', 'Chrome Hearts', 'Dolce & Gabbana', 'Fendi'],
+                brands: ['Louis Vuitton', 'Burberry', 'Hermes', 'Dior', 'Prada', 'Gucci', 'Coach', 'Maison Margiela', 'Bottega Veneta', 'Supreme', 'Givenchy', 'Miu Miu', 'Balenciaga', 'Valentino', 'YSL', 'Loro Piana', 'Brunello Cucinelli', 'Chrome Hearts', 'Dolce & Gabbana', 'Fendi', 'Tom Ford', 'Philipp Plein'],
                 subcategories: ['Очки', 'Ремни', 'Галстуки', 'Шарфы', 'Перчатки', 'Зонты'],
                 priceRange: { min: 10, max: 1000 }
             }
